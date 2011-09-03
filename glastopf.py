@@ -1,15 +1,13 @@
 
 import sys
 import logging
-import random
-import struct
 logging.basicConfig(level=logging.DEBUG)
 
 from evnet import loop, unloop, listenplain
 from evnet.util import EventGen
 from evnet.promise import Promise
 
-# WebSocket based on Mark Schloessers example.
+# WebSocket based on Mark Schloessers evnet example.
 
 class WebSockListener(EventGen):
 	def __init__(self, port):
@@ -39,7 +37,10 @@ class WebSock(EventGen):
 
 	def read(self, d):
 		print 'read', repr(d)
-
+		self.send(d)
+		
+	def send(self, s):
+		self.c.write(s)
 
 if __name__ == '__main__':
 	a = WebSockListener(int(sys.argv[2]))
