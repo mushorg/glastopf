@@ -1,15 +1,11 @@
-import modules.HTTPUtil as HTTPUtil
-import modules.HTTPMethodHandler as HTTPMethodHandler
+import modules.HTTP.util as util
+import modules.HTTP.method_handler as method_handler
 
-class Glastopf(object):
-	def __init__(self):
-		pass
-	
-	def HandleRequest(self, d):
-		Server = HTTPUtil.HTTPParser()
-		parsed_request = Server.parse_request(d)
-		print parsed_request.method, parsed_request.url, parsed_request.header["Host"]
-		MethodHandlers = HTTPMethodHandler.HTTPMethods()
-		response =HTTPUtil.HTTPServerResponse.response_header
-		response += getattr(MethodHandlers, parsed_request.method, "GET")()
-		return response
+def handle_request(raw_request):
+	Server = util.HTTPParser()
+	parsed_request = Server.parse_request(raw_request)
+	print parsed_request.method, parsed_request.url, parsed_request.header["Host"]
+	MethodHandlers = method_handler.HTTPMethods()
+	response = util.HTTPServerResponse.response_header
+	response += getattr(MethodHandlers, parsed_request.method, "GET")(parsed_request)
+	return response

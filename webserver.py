@@ -7,7 +7,7 @@ from evnet import loop, unloop, listenplain
 from evnet.util import EventGen
 from evnet.promise import Promise
 
-from glastopf import Glastopf
+import glastopf
 
 # WebSocket based on Mark Schloessers evnet example.
 
@@ -39,8 +39,7 @@ class WebSock(EventGen):
 
 	def read(self, d):
 		#print 'read', repr(d)
-		GlastopfHandler = Glastopf()
-		response = GlastopfHandler.HandleRequest(d)
+		response = glastopf.handle_request(d)
 		self.send(response)
 		self.c.close()
 		
@@ -49,7 +48,7 @@ class WebSock(EventGen):
 
 if __name__ == '__main__':
 	a = WebSockListener(sys.argv[1], int(sys.argv[2]))
-	print "Glastopf running on:", sys.argv[1] + ":" + sys.argv[2], "waiting for connections..."
+	print "Webserver running on:", sys.argv[1] + ":" + sys.argv[2], "waiting for connections..."
 	print ""
 	
 	def new_conn(c):
