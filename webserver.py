@@ -7,8 +7,7 @@ from evnet import loop, unloop, listenplain
 from evnet.util import EventGen
 from evnet.promise import Promise
 
-import modules.HTTPUtil as HTTPUtil
-import modules.HTTPMethodHandler as HTTPMethodHandler 
+from glastopf import Glastopf
 
 # WebSocket based on Mark Schloessers evnet example.
 
@@ -40,13 +39,9 @@ class WebSock(EventGen):
 
 	def read(self, d):
 		#print 'read', repr(d)
-		Server = HTTPUtil.HTTPParser()
-		parsed_request = Server.parse_request(d)
-		print parsed_request.method, parsed_request.url, parsed_request.header["Host"]
-		MethodHandlers = HTTPMethodHandler.HTTPMethods()
-		response = getattr(MethodHandlers, parsed_request.method, "GET")()
-		self.send(HTTPUtil.HTTPServerResponse.response_header)
-		self.send("abc")
+		GlastopfHandler = Glastopf()
+		response = GlastopfHandler.HandleRequest(d)
+		self.send(response)
 		self.c.close()
 		
 	def send(self, s):

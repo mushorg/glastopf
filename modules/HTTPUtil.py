@@ -35,4 +35,4 @@ class HTTPParser(object):
 		return parsed_request
 	
 class HTTPServerResponse():
-	response_header = "HTTP/1.1 200 OK\nConnection: close\nContent-Type: text/html; charset=UTF-8\n\n"
+	response_header = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"

@@ -3,10 +3,10 @@ class HTTPMethods(object):
 		pass
 	
 	def GET(self):
-		pass
+		return "GET"
 	
 	def POST(self):
-		pass
+		return "POST"
 	
 	def HEAD(self):
-		pass
+		return "HEAD"
