@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<requests>
+  <request>
+    <id>0</id>
+    <patternDescription>unknown</patternDescription>
+    <patternString></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>1</id>
+    <patternDescription>remote file inclusion</patternDescription>
+    <patternString><![CDATA[.*(=.*(http(s){0,1}|ftp(s){0,1}):).*]]></patternString>
+    <module>rfi</module>
+  </request>
+  <request>
+    <id>2</id>
+    <patternDescription>php code injection</patternDescription>
+    <patternString><![CDATA[.*(define|eval|file_get_contents|include|require|require_once|set|shell_exec|phpinfo|system|passthru|preg_|execute|echo|print|print_r|var_dump|[fp]open)\(.*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>3</id>
+    <patternDescription>basic php code execution</patternDescription>
+    <patternString><![CDATA[.*(<\?php).*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>4</id>
+    <patternDescription>SQL benchmark and sleep</patternDescription>
+    <patternString><![CDATA[.*((select|;)\s+(benchmark|if|sleep)).*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>5</id>
+    <patternDescription>SQL injection</patternDescription>
+    <patternString><![CDATA[.*(select|drop|update|union|insert|alter|declare|cast)( |\().*]]></patternString>
+    <module>sql</module>
+  </request>
+  <request>
+    <id>6</id>
+    <patternDescription>html injection</patternDescription>
+    <patternString><![CDATA[.*(<|%3c)(frame|applet|isindex|marquee|keygen|script|audio|video|input|button|textarea|style|base|body|meta|link|object|embed|param|plaintext|xml|image).*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>7</id>
+    <patternDescription>xml entity injection</patternDescription>
+    <patternString><![CDATA[.*(element|entity|\[CDATA).*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>8</id>
+    <patternDescription>basic XSS</patternDescription>
+    <patternString><![CDATA[.*(alert|eval|msgbox|showmodaldialog|prompt|write|confirm|dialog|open).*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>9</id>
+    <patternDescription>JS properties and objects</patternDescription>
+    <patternString><![CDATA[.*(hash|href|navigateandfind|source|pathname|close|constructor|port|protocol|assign|replace|back|forward|document|ownerdocument|window|self|parent|frames|cookie|innerhtml|innertext|resizeto|createstylesheet)\(.*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>10</id>
+    <patternDescription>local file inclusion</patternDescription>
+    <patternString><![CDATA[.*(/\.\.)*/(home|conf|usr|etc|proc|opt|s?bin|local|dev|tmp|kern|root|sys|system|windows|winnt|program|inetpub/boot\.ini)/.*]]></patternString>
+    <module>lfi</module>
+  </request>
+  <request>
+    <id>11</id>
+    <patternDescription>XSS</patternDescription>
+    <patternString><![CDATA[.*(script).*]]></patternString>
+    <module>unknown</module>
+  </request>
+  <request>
+    <id>12</id>
+    <patternDescription>favicon.ico</patternDescription>
+    <patternString><![CDATA[.*(favicon.ico).*]]></patternString>
+    <module>unknown</module>
+  </request>
+</requests>

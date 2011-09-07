@@ -19,7 +19,7 @@ class WebSockListener(EventGen):
 		self.l._on('connection', self.connection)
 
 	def connection(self, c, addr):
-		print 'cli', addr
+		#print 'cli', addr
 		self._event('connection', WebSock(c, addr))
 
 class WebSock(EventGen):
@@ -39,7 +39,7 @@ class WebSock(EventGen):
 
 	def read(self, d):
 		#print 'read', repr(d)
-		response = glastopf.handle_request(d)
+		response = glastopf.handle_request(d, self.addr)
 		self.send(response)
 		self.c.close()
 		
