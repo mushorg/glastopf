@@ -42,3 +42,4 @@ class Classifier(object):
 				matched_patterns.append(parsed_pattern.id)
 		for id in matched_patterns:
 			print id
+		return matched_patterns

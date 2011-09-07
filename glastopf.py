@@ -8,8 +8,8 @@ def handle_request(raw_request, addr):
 	parsed_request = HTTP_parser.parse_request(raw_request)
 	attack_event.parsed_request = parsed_request
 	attack_event.source_addr = addr
-	print addr[0] + ": " + parsed_request.method, parsed_request.url, parsed_request.header["Host"]
-	MethodHandlers = method_handler.HTTPMethods()
+	print attack_event.source_addr[0] + ": " + parsed_request.method, parsed_request.url, parsed_request.header["Host"]
 	response = util.HTTPServerResponse.response_header
-	response += getattr(MethodHandlers, parsed_request.method, "GET")(parsed_request)
+	MethodHandlers = method_handler.HTTPMethods()
+	matched_patterns = getattr(MethodHandlers, parsed_request.method, "GET")(parsed_request)
 	return response
