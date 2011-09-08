@@ -1,4 +1,3 @@
-
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -9,7 +8,7 @@ from evnet.promise import Promise
 
 import glastopf
 
-# WebSocket based on Mark Schloessers evnet example.
+# WebSocket based on Mark Schloessers evnet example https://github.com/rep/evnet
 
 class WebSockListener(EventGen):
 	def __init__(self, host, port):

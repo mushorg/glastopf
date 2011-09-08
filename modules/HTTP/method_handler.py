@@ -6,8 +6,8 @@ class HTTPMethods(object):
 	
 	def GET(self, parsed_request):
 		RequestClassifier = request_classifier.Classifier()
-		matched_patterns = RequestClassifier.classify_request(parsed_request)
-		return matched_patterns
+		matched_pattern = RequestClassifier.classify_request(parsed_request)
+		return matched_pattern
 	
 	def POST(self, parsed_request):
 		return "POST"
