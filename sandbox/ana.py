@@ -5,6 +5,7 @@ def parse_fn(line):
     return fn, args
 
 def parse_ret(line):
+    print line
     call, res = line.split(')=', 1)
     fn, args = parse_fn(call)
     res = res.strip()

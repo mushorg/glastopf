@@ -12,7 +12,7 @@ class pBot
 
 {
 
- var $config = array("server"=>"irc",
+ var $config = array("server"=>"chat.freenode.org",
 
                      "port"=>6667,
 
@@ -22,7 +22,7 @@ class pBot
 
                      "maxrand"=>8,
 
-                     "chan"=>"#lolz",
+                     "chan"=>"#glastopf",
 
                      "key"=>"",
 

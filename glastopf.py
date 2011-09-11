@@ -4,8 +4,10 @@ import modules.events.attack as attack
 from modules.handlers import request_handler
 
 def print_info(attack_event):
-	print attack_event.source_addr[0] + ": " + attack_event.parsed_request.method, 
-	print attack_event.parsed_request.url, 
+	print attack_event.event_time,
+	print attack_event.source_addr[0] + " requested",
+	print attack_event.parsed_request.method, 
+	print attack_event.parsed_request.url, "on", 
 	print attack_event.parsed_request.header["Host"]
 
 def handle_request(raw_request, addr):
