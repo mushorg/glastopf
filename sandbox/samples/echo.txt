@@ -1,4 +1,4 @@
 <?php
-
-echo("test");
+fwrite("test");
+exit(0);
 ?>

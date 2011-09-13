@@ -2,6 +2,7 @@ import modules.HTTP.util as util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
+import modules.reporting.log_sqlite as log_sqlite
 
 def print_info(attack_event):
 	print attack_event.event_time,
@@ -26,3 +27,8 @@ def handle_request(raw_request, addr):
 	# Handle the request with the specific vulnerability module
 	response += getattr(request_handler, matched_pattern, request_handler.unknown)(attack_event)
 	return response
+
+if __name__ == "__main__":
+	pass
+else:
+	pass

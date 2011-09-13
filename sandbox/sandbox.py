@@ -86,6 +86,7 @@ def sandbox(prog, secs):
     finally:
         end = time.time()
     output = distill_out(prog, start, end, stdout_value)
+    print output
     processes, connections, unknown_tcp_traffic = distill_err(prog, start, end, stderr_value)
     return output
     #sys.exit(0)
