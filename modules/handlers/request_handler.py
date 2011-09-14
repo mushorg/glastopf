@@ -1,11 +1,12 @@
 import sandbox.apd_sandbox as sandbox
+import modules.handlers.emulators.rfi as rfi_emulator
 
 def unknown(attack_event):
 	response = "unknown handled"
 	return response
 
 def rfi(attack_event):
-	response = "rfi handler"
-	attack_event.parsed_request.url
-	response = sandbox.run("sandbox/samples/id.txt")
+	emulator = rfi_emulator.RFIEmulator()
+	file = emulator.download_file(attack_event.parsed_request.url)
+	response = sandbox.run(file)
 	return response
