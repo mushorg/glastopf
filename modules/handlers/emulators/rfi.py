@@ -18,7 +18,6 @@ class RFIEmulator(object):
         if not os.path.exists("files/" + filename):
             local_file = open("files/" + filename, 'w+')
             for line in file.split("\n"):
-                print "line", line
                 local_file.write(line)
             local_file.close()
     
@@ -28,13 +27,10 @@ class RFIEmulator(object):
     
     def download_file(self, url):
         injectd_url = self.extract_url(url)
-        print injectd_url
         try:
             req = urllib2.Request(injectd_url)
             file = urllib2.urlopen(req).read()
-            print file
         except IOError, e:
-            print e
             f = open("sandbox/samples/id.txt")
             file = f.read()
             f.close()
