@@ -10,3 +10,11 @@ def rfi(attack_event):
 	file_name = emulator.download_file(attack_event.parsed_request.url)
 	response = sandbox.run(file_name)
 	return response
+
+def lfil (attack_event):
+	response = "lfi-linux handled"
+	return response
+
+def lfiw (attack_event):
+	response = "lfi-windows handled"
+	return response

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <requests>
   <request>
     <id>0</id>
@@ -62,18 +62,24 @@
   </request>
   <request>
     <id>10</id>
-    <patternDescription>local file inclusion</patternDescription>
+    <patternDescription>local file inclusion linux</patternDescription>
     <patternString><![CDATA[.*(/\.\.)*/(home|conf|usr|etc|proc|opt|s?bin|local|dev|tmp|kern|root|sys|system|windows|winnt|program|inetpub/boot\.ini)/.*]]></patternString>
-    <module>lfi</module>
+    <module>lfil</module>
   </request>
   <request>
     <id>11</id>
+    <patternDescription>local file inclusion windows</patternDescription>
+    <patternString><![CDATA[.*[a-zA-Z]:((([\\/]+(.{0,2}))|[\\/]+)[^\\/:*?"<>|,]+)+.*]]></patternString>
+    <module>lfiw</module>
+  </request>
+  <request>
+    <id>12</id>
     <patternDescription>XSS</patternDescription>
     <patternString><![CDATA[.*(script).*]]></patternString>
     <module>unknown</module>
   </request>
   <request>
-    <id>12</id>
+    <id>13</id>
     <patternDescription>favicon.ico</patternDescription>
     <patternString><![CDATA[.*(favicon.ico).*]]></patternString>
     <module>unknown</module>
