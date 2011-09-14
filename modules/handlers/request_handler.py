@@ -7,6 +7,6 @@ def unknown(attack_event):
 
 def rfi(attack_event):
 	emulator = rfi_emulator.RFIEmulator()
-	file = emulator.download_file(attack_event.parsed_request.url)
-	response = sandbox.run(file)
+	file_name = emulator.download_file(attack_event.parsed_request.url)
+	response = sandbox.run(file_name)
 	return response

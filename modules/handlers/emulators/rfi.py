@@ -14,27 +14,26 @@ class RFIEmulator(object):
         return injected_url.strip("=")
     
     def store_file(self, file):
-        filename = self.get_filename(file)
-        if not os.path.exists("files/" + filename):
-            local_file = open("files/" + filename, 'w+')
+        file_name = self.get_filename(file)
+        if not os.path.exists("files/" + file_name):
+            local_file = open("files/" + file_name, 'w+')
             for line in file.split("\n"):
                 local_file.write(line)
             local_file.close()
+        return file_name
     
     def get_filename(self, file):
-        filename = hashlib.md5(file).hexdigest()
-        return filename
+        file_name = hashlib.md5(file).hexdigest()
+        return file_name
     
     def download_file(self, url):
         injectd_url = self.extract_url(url)
         try:
             req = urllib2.Request(injectd_url)
             file = urllib2.urlopen(req).read()
-        except IOError, e:
-            f = open("sandbox/samples/id.txt")
-            file = f.read()
-            f.close()
-            file = None
+        except IOError, error:
+            print "Failed to fetch injected file, I/O error: %s" % error.reason
+            file_name = "sandbox/samples/id.txt"
         else:
-            self.store_file(file)
-        return file
+            file_name = self.store_file(file)
+        return file_name
