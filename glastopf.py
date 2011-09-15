@@ -20,13 +20,14 @@ def handle_request(raw_request, addr):
 	print_info(attack_event)
 	# Start response with the server header
 	# TODO: Add msg length header
-	response = util.HTTPServerResponse.response_header
+	attack_event.response = util.HTTPServerResponse.response_header
 	MethodHandlers = method_handler.HTTPMethods()
 	# Handle the HTTP request method
-	matched_pattern = getattr(MethodHandlers, attack_event.parsed_request.method, "GET")(attack_event.parsed_request)
+	attack_event.matched_pattern = getattr(MethodHandlers, attack_event.parsed_request.method, "GET")(attack_event.parsed_request)
 	# Handle the request with the specific vulnerability module
-	response += getattr(request_handler, matched_pattern, request_handler.unknown)(attack_event)
-	return response
+	attack_event = getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
+	# TODO: Log the event
+	return attack_event.response
 
 if __name__ == "__main__":
 	pass
