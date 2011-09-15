@@ -13,17 +13,18 @@ import glastopf
 class WebSockListener(EventGen):
 	def __init__(self, host, port):
 		EventGen.__init__(self)
-
+		self.glastopf_honeypot = glastopf.GlastopfHoneypot()
 		self.l = listenplain(host=host, port=port)
 		self.l._on('connection', self.connection)
 
 	def connection(self, c, addr):
 		#print 'cli', addr
-		self._event('connection', WebSock(c, addr))
+		self._event('connection', WebSock(c, addr, self.glastopf_honeypot))
 
 class WebSock(EventGen):
-	def __init__(self, c, addr):
+	def __init__(self, c, addr, glastopf):
 		EventGen.__init__(self)
+		self.glastopf_honeypot = glastopf
 		self.c, self.addr = c, addr
 	
 		self.c._on('ready', self.ready)
@@ -38,7 +39,7 @@ class WebSock(EventGen):
 
 	def read(self, d):
 		#print 'read', repr(d)
-		response = glastopf.handle_request(d, self.addr)
+		response = self.glastopf_honeypot.handle_request(d, self.addr)
 		self.send(response)
 		self.c.close()
 		

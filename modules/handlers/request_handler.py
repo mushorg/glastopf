@@ -3,7 +3,7 @@ import modules.handlers.emulators.rfi as rfi_emulator
 
 def unknown(attack_event):
 	attack_event.response += "unknown handled"
-	return attack_event.response
+	return attack_event
 
 def rfi(attack_event):
 	emulator = rfi_emulator.RFIEmulator()
