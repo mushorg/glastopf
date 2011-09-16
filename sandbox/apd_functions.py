@@ -1,4 +1,4 @@
-import replacement.execute as execute
+from replacement import execute, shell_exec, system, passthru, popen
 
 FUNCTIONS = {
              "getcwd;" : "\treturn '%s';" % "/var/www", 
@@ -8,18 +8,16 @@ FUNCTIONS = {
              "disk_total_space;" : "\treturn '%s';" % "51221590016", 
              "diskfreespace;" : "\treturn '%s';" % "36698988544", 
              "exec;$cmd;&$ret;" : execute.call(),
-             "shell_exec;" : "\treturn '%s';" % "",
-             "system;" : "\treturn '%s';" % "",
-             "passthru;" : "\treturn '%s';" % "",
-             "popen;" : "\treturn '%s';" % "",
+             "shell_exec;$cmd;" : shell_exec.call(),
+             "system;$cmd;&$ret;" : system.call(),
+             "passthru;$cmd;&$ret;" : passthru.call(),
+             "popen;$cmd;" : popen.call(),
              }
 
 FUNCTIONS2 = {
              "dl;" : "", 
              "escapeshellarg;" : "", 
              "escapeshellcmd;" : "", 
-             "exec;" : "", 
-             "passthru;" : "", 
              "proc_close;" : "", 
              "proc_get_status;" : "", 
              "proc_nice;" : "", 
