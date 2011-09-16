@@ -11,10 +11,14 @@ def rfi(attack_event):
 	attack_event.response += sandbox.run(attack_event.file_name)
 	return attack_event
 
-def lfil (attack_event):
+def lfil(attack_event):
 	attack_event.response += "lfi-linux handled"
 	return attack_event
 
-def lfiw (attack_event):
+def lfiw(attack_event):
 	attack_event.response += "lfi-windows handled"
+	return attack_event
+
+def sql(attack_event):
+	attack_event.response += "sql handled"
 	return attack_event

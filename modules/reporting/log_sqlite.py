@@ -9,7 +9,7 @@ class LogSQLite(object):
     def create(self):
         self.cursor = self.connection.cursor()
         self.cursor.execute("""
-                CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY, timestamp TEXT, source_ip TEXT, request TEXT, module INTEGER, filename TEXT, response TEXT)""")
+                CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY, timestamp TEXT, source_addr TEXT, request TEXT, module INTEGER, filename TEXT, response TEXT)""")
         self.connection.commit()
         self.cursor.close()
         

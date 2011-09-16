@@ -16,9 +16,9 @@ def killer(proc, secs):
     except OSError:
         pass
 
-def sandbox(prog, secs):
+def sandbox(script, secs):
     try:
-        proc = subprocess.Popen(["php", "sandbox/apd_sandbox.php", prog], 
+        proc = subprocess.Popen(["php", "sandbox/apd_sandbox.php", script], 
                 shell = False,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
@@ -35,12 +35,12 @@ def sandbox(prog, secs):
         stdout_value, stderr_value = proc.communicate()
     except Exception as e:
         print "Communication error:", e.message
+    else:
+        print "Successfully parsed with sandbox"
     finally:
         end = time.time()
-    output = stdout_value
-    return output
+    return stdout_value
     
 def run(script):
     secs = 10
-    output = sandbox(script, secs)
-    return output
+    return sandbox(script, secs)

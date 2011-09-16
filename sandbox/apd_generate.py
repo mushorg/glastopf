@@ -2,12 +2,12 @@
 
 import random
 
-import functions
+import apd_functions
 
 def output(s):
     print s
 
-FUNCTIONS = functions.FUNCTIONS
+FUNCTIONS = apd_functions.FUNCTIONS
 
 output("<?php\nif(!extension_loaded('apd')) {\n\tdl('apd.so');\n}\n")
 output("$PHP_OS = 'Uber-Linux';")
@@ -21,10 +21,10 @@ for function, return_val in FUNCTIONS.items():
     output("override_function('%s', '%s', 'return %s_rep(%s);');" % (function_name, function_args, function_name, function_args))
     output("function %s_rep(%s) {" % (function_name, function_args))
     if return_val == "":
-        return_val = function_name
+        return_val = "\treturn '%s';" % function_name
     elif return_val == "None":
-        return_val = ""
-    output("\treturn '%s';" % return_val)
+        return_val = "\treturn;"
+    output(return_val)
     #output("\terror_log(\"ret:%s(\" . join(', ', $args) . \")= \" . $result);" % function_name)
     output("}")
     output("rename_function('__overridden__', '%s');\n" % int)
