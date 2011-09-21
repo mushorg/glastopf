@@ -32,7 +32,7 @@ class RFIEmulator(object):
             req = urllib2.Request(injectd_url)
             file = urllib2.urlopen(req).read()
         except IOError, error:
-            print "Failed to fetch injected file, I/O error: %s" % error.reason
+            print "Failed to fetch injected file, I/O error:", error
             file_name = "sandbox/samples/id.txt"
         else:
             file_name = self.store_file(file)
