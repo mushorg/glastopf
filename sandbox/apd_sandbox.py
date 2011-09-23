@@ -18,7 +18,7 @@ def killer(proc, secs):
 
 def sandbox(script, secs):
     try:
-        proc = subprocess.Popen(["php", "sandbox/apd_sandbox.php", script], 
+        proc = subprocess.Popen(["php", "sandbox/apd_sandbox.php", "files/"+script], 
                 shell = False,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
