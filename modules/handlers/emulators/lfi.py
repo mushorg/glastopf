@@ -7,15 +7,15 @@ class LFIEmulator(object):
     def getVirtualPath(self, injected_path):
         """Sanitises and simulates a file path with a virtual root of the corresponding virtualdocs directory."""
         
-        # Strip leading ../
-        pass
+        
 
     def getContents(self, injected_path):
         preg = re.compile(r'/.*\?.*=(.*)&?')
         result = preg.match(injected_path)
+        file_path = "virtualdocs/linux/%s" % result.group(1)
         read_data = ""
         try:
-            with open("virtualdocs/linux/" + result.group(1), "r") as f:
+            with open(file_path, "r") as f:
                 read_data = f.read()
         except IOError:
             # Placeholder file not found error
