@@ -10,6 +10,7 @@ def output(s):
 FUNCTIONS = apd_functions.FUNCTIONS
 
 output("<?php\nif(!extension_loaded('apd')) {\n\tdl('apd.so');\n}\n")
+output("error_reporting(0);\n")
 int = 0
 for function, return_val in FUNCTIONS.items():
     parts = function.split(";")

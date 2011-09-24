@@ -5,9 +5,9 @@ import subprocess
 import threading
 from functools import partial   
 
-VERSION='1.1'
+VERSION='1.0'
 
-"""Copyright by Jose Nazario, extended/modified by Lukas Rist"""
+"""Inspired by Jose Nazario PHP sandbox, extended/modified by Lukas Rist"""
 
 def killer(proc, secs):
     time.sleep(secs)
@@ -18,7 +18,7 @@ def killer(proc, secs):
 
 def sandbox(script, secs):
     try:
-        proc = subprocess.Popen(["php", "sandbox/apd_sandbox.php", "files/"+script], 
+        proc = subprocess.Popen(["php", "sandbox/apd_sandbox.php", "files/" + script], 
                 shell = False,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
@@ -30,15 +30,12 @@ def sandbox(script, secs):
     stdout_value = ""
     stderr_value = ""
     try:
-        start = time.time()
         threading.Thread(target=partial(killer, proc, secs)).start()
         stdout_value, stderr_value = proc.communicate()
     except Exception as e:
-        print "Communication error:", e.message
+        print "Sandbox communication error:", e.message
     else:
         print "Successfully parsed with sandbox"
-    finally:
-        end = time.time()
     return stdout_value
     
 def run(script):

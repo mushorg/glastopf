@@ -6,6 +6,7 @@ FUNCTIONS = {
              "diskfreespace;" : "\treturn '%s';" % "36698988544", 
              "exec;$cmd;&$ret;" : execute.call(),
              "function_exists;" : "\treturn true;",
+             "fsockopen;" : "\treturn false;",
              "getcwd;" : "\treturn '%s';" % "/var/www",
              "getenv;$varname;" : getenv.call(),
              "get_current_user;" : "\treturn '%s';" % "root", 
