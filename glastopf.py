@@ -30,7 +30,7 @@ class GlastopfHoneypot(object):
 		# Handle the HTTP request method
 		attack_event.matched_pattern = getattr(MethodHandlers, attack_event.parsed_request.method, "GET")(attack_event.parsed_request)
 		# Handle the request with the specific vulnerability module
-		attack_event = getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
-		# TODO: Log the event
+		getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
+		# Logging the event
 		self.sqlite_logger.insert(attack_event)
 		return attack_event.response
