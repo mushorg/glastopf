@@ -14,41 +14,46 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import urllib
+
 class HTTPRequest(object):
 
-	def __init__(self, method, url, version, header, body):
-		self.method = method
-		self.url = url
-		self.version = version
-		self.header = header
-		self.body = body
+    def __init__(self):
+        self.method = "GET"
+        self.url = "/"
+        self.parameters = ""
+        self.version = "HTTP/1.1"
+        self.header = ""
+        self.body = ""
 
 class HTTPParser(object):
-	
-	def __init__(self, ):
-		pass
-	
-	def parse_header(self, header_list):
-		header_dict = {}
-		for header_item in header_list:
-			item_parts = header_item.split(":", 1)
-			if len(item_parts) > 1 and item_parts[0].strip() != "":
-				key, value = item_parts
-				header_dict[key] = value.strip()
-			else:
-				continue
-		return header_dict
-	
-	def parse_request(self, request):
-		request, body = request.split("\r\n\r\n")
-		request = request.split("\r\n")
-		request_line = request[0].split()
-		request_method = request_line[0]
-		request_url = request_line[1]
-		request_version = request_line[2]
-		request_header = self.parse_header(request[1:]) 
-		parsed_request = HTTPRequest(request_method, request_url, request_version, request_header, body)
-		return parsed_request
-	
+    
+    def __init__(self, ):
+        pass
+    
+    def parse_header(self, header_list):
+        header_dict = {}
+        for header_item in header_list:
+            item_parts = header_item.split(":", 1)
+            if len(item_parts) > 1 and item_parts[0].strip() != "":
+                key, value = item_parts
+                header_dict[key] = value.strip()
+            else:
+                continue
+        return header_dict
+    
+    def parse_request(self, request):
+        request = urllib.unquote(request)
+        parsed_request = HTTPRequest()
+        request, parsed_request.body = request.split("\r\n\r\n")
+        request = request.split("\r\n")
+        request_line = request[0].split()
+        parsed_request.method = request_line[0]
+        parsed_request.url = request_line[1]
+        parsed_request.parameters = parsed_request.url.split("?") 
+        parsed_request.version = request_line[2]
+        parsed_request.header = self.parse_header(request[1:]) 
+        return parsed_request
+    
 class HTTPServerResponse():
-	response_header = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
+    response_header = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
