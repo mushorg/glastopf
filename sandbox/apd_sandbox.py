@@ -7,7 +7,7 @@ from functools import partial
 
 VERSION='1.0'
 
-"""Inspired by Jose Nazario PHP sandbox, extended/modified by Lukas Rist"""
+"""Inspired by Jose Nazario's PHP sandbox, extended/modified by Lukas Rist"""
 
 def killer(proc, secs):
     time.sleep(secs)
