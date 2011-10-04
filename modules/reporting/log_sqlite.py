@@ -17,6 +17,7 @@
 import sqlite3
 
 class LogSQLite(object):
+    # TODO: Add SQLite error handling
     
     def __init__(self):
         self.connection = sqlite3.connect("glastopf.db")

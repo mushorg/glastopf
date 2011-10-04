@@ -1,0 +1,10 @@
+Glaspot v. 0.1
+
+* Collecting dorks from requests
+* Ability to provide the dork list
+* Securing the PHP sandbox
+* Finishing the LFI vulnerability emulation
+* Rudimentary SQLi vulnerability emulation
+* Improving the SQLite logging
+* Support for POST requests
+* HPFeed (central logging) support
