@@ -34,6 +34,6 @@ class LFIEmulator(object):
             with open(file_path, "r") as f:
                 read_data = f.read()
         except IOError:
-            # Placeholder file not found error
+            # Place holder file not found error
             read_data = "Warning: include(vars1.php): failed to open stream: No such file or directory in /var/www/html/anonymous/test.php on line 6 Warning: include(): Failed opening 'vars1.php' for inclusion (include_path='.:/usr/share/pear:/usr/share/php') in /var/www/html/anonymous/test.php on line 6" 
         return read_data

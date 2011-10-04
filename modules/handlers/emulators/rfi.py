@@ -26,6 +26,7 @@ class RFIEmulator(object):
     def extract_url(self, url):
         protocol_pattern = re.compile("=(ht|f)tps?", re.IGNORECASE)
         matched_protocol = protocol_pattern.search(url).group(0)
+        # FIXME: Check if the extracted url is actually a url
         injected_url = matched_protocol + url.partition(matched_protocol)[2].split("?")[0]
         return injected_url.strip("=")
     
@@ -46,6 +47,7 @@ class RFIEmulator(object):
         injectd_url = self.extract_url(url)
         try:
             req = urllib2.Request(injectd_url)
+            # FIXME: We need a timeout on read here
             file = urllib2.urlopen(req).read()
         except IOError, error:
             print "Failed to fetch injected file, I/O error:", error
