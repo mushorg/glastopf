@@ -43,6 +43,7 @@ class HTTPParser(object):
         return header_dict
     
     def parse_request(self, request):
+        # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
         parsed_request = HTTPRequest()
         request, parsed_request.body = request.split("\r\n\r\n")
@@ -56,4 +57,5 @@ class HTTPParser(object):
         return parsed_request
     
 class HTTPServerResponse():
+    # TODO: Make header customizable
     response_header = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
