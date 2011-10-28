@@ -35,8 +35,8 @@ class RFIEmulator(object):
         if not os.path.exists("files/" + file_name):
             local_file = open("files/" + file_name, 'w+')
             for line in file.split("\n"):
-                # Remove ^M symbol by Julia Cheng
-                line = line.replace('\r', '\r\n')
+                # Remove ^M symbol using re by Julia Cheng
+                line = re.sub(r'(\r\n)|\r', r'\r\n', line)
                 local_file.write(line)
             local_file.close()
         return file_name
