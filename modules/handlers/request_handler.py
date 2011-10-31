@@ -15,13 +15,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sandbox.apd_sandbox as sandbox
+
+import modules.handlers.emulators.unknown as unknown_emulator
 import modules.handlers.emulators.rfi as rfi_emulator
 import modules.handlers.emulators.lfi as lfi_emulator
 import modules.handlers.emulators.sqli as sqli_emulator
 
+
 def unknown(attack_event):
     # TODO: Implement dynamic dork list
-    attack_event.response += "unknown handled"
+    emulator = unknown_emulator.DorkList()
+    attack_event.response += emulator.get_response()
     return attack_event
 
 def rfi(attack_event):
