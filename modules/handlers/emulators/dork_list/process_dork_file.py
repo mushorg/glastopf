@@ -1,6 +1,13 @@
 import codecs
 from collections import defaultdict
 import re
+from pprint import pprint
+
+import sys
+if sys.version_info < (2, 7):  #work around for the unicode decoding.
+       if sys.getdefaultencoding() != 'utf-8':
+           reload(sys)
+       sys.setdefaultencoding('utf-8')
 
 class DorkFileProcessor(object):
     
