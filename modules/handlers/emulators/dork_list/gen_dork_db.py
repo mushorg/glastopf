@@ -34,6 +34,6 @@ class LogDork(object):
 
 	def closeHandle(self):
 		self.conn.commit()
-		self.conn.close()
+		self.cursor.close()
 			
 
