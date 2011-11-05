@@ -2,7 +2,7 @@ import codecs
 from collections import defaultdict
 import re
 from pprint import pprint
-
+import gen_dork_db
 import sys
 if sys.getdefaultencoding() != 'utf-8':
     reload(sys)
@@ -38,27 +38,28 @@ class DorkFileProcessor(object):
         return term
     
     def parse_lines(self, dork_lines):
-        dork_dict = defaultdict(list)
+	dork_db = LogDork()
+	dork_db.create()
         for dork_line in dork_lines:
             if "intitle:" in dork_line:
                 dork_line_split = dork_line.partition('intitle:')[2]
-                dork_dict["intitle"].append(self.extract_term(dork_line_split))
+		dork_db.insert("intitle", self.extract(dork_line_split))
             if "inurl:" in dork_line:
                 dork_line_split = dork_line.partition('inurl:')[2]
-                dork_dict["inurl"].append(self.extract_term(dork_line_split))
+		dork_db.insert("inurl", self.extract(dork_line_split))
             if "intext:" in dork_line:
                 dork_line_split = dork_line.partition('intext:')[2]
-                dork_dict["intext"].append(self.extract_term(dork_line_split))
+		dork_db.insert("intext", self.extract(dork_line_split))
             if "filetype:" in dork_line:
                 dork_line_split = dork_line.partition('filetype:')[2]
-                dork_dict["filetype"].append(self.extract_term(dork_line_split))
+		dork_db.insert("filetype", self.extract(dork_line_split))
             #ext is an filetype alias
             if "ext:" in dork_line:
                 dork_line_split = dork_line.partition('ext:')[2]
-                dork_dict["filetype"].append(self.extract_term(dork_line_split))
+		dork_db.insert("ext", self.extract(dork_line_split))
             if "allinurl:" in dork_line:
                 dork_line_split = dork_line.partition('allinurl:')[2]
-                dork_dict["allinurl"].append(self.extract_term(dork_line_split))
+		dork_db.insert("allinurl", self.extract(dork_line_split))
         return dork_dict
     
     def process_dorks(self):
