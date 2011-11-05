@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 class LogDork(object): 
 
@@ -9,18 +10,27 @@ class LogDork(object):
 			print "Please locate dork.db file"
 			exit(1)
 		self.cursor = self.conn.cursor()
-		self.create()
 
 	def create(self):
 		tablename = ["intitle", "inttext", "inurl", "filetype", "ext", "allinurl"]
-		cmd = "CREATE TABLE IF NOT EXISTS"
-		tableform = "(id INTEGER PRIMARY KEY, content TEXT, firsttime TEXT, lasttime TEXT)"
 		for i in tablename:
-			self.cursor.execute(cmd+i+tableform)
+			self.cursor.execute("""CREATE TABLE IF NOT EXISTS 
+			?(id INTEGER PRIMARY KEY, content TEXT, firsttime TEXT, lasttime TEXT)""", i)
 		self.conn.commit()
 
-	def insert(self):
-		cmd = "INSERT INTO"
+	def insert(self, table, content):
+		try:
+			self.cursor.execute("INSERT INTO ? VALUES( ?, ?, ?, ?)",
+			(table, None, content, str(datetime.datetime.now()), str(datetime.datetime.now())))
+		except sqlite3.OperationalError:
+			print "***** Insert into database Error!! *****"
+	
+	def updatetime(self, table, content):
+		try:
+			self.cursor.execute("UPDATE ? SET 'lasttime' = ? WHERE 'content' = ?", 
+			(table, str(datetime.datetime.now()), content))
+		except sqlite3.OperationalError:
+			print "***** Update column failure!! *****"
 
 	def closeHandle(self):
 		self.conn.commit()
