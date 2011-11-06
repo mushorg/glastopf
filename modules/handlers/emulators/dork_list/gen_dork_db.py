@@ -4,11 +4,7 @@ import datetime
 class LogDork(object): 
 
     def __init__(self):
-        try:
-            self.conn = sqlite3.connect("dork.db")
-        except sqlite3.OperationalError: # can't locate database
-            print "Please locate dork.db file"
-            exit(1)
+        self.conn = sqlite3.connect("dork.db")
         self.cursor = self.conn.cursor()
 
     def create(self):
