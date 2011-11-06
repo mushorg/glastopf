@@ -10,8 +10,7 @@ class LogDork(object):
     def create(self):
         tablename = ["intitle", "inttext", "inurl", "filetype", "ext", "allinurl"]
         for i in tablename:
-            self.cursor.execute("""CREATE TABLE IF NOT EXISTS 
-            ?(id INTEGER PRIMARY KEY, content TEXT, firsttime TEXT, lasttime TEXT)""", i)
+            self.cursor.execute("CREATE TABLE IF NOT EXISTS "+i+"(id INTEGER PRIMARY KEY, content TEXT, firsttime TEXT, lasttime TEXT)")
         self.conn.commit()
 
     def insert(self, table, content):

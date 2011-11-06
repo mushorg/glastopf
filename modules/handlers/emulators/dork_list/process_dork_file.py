@@ -43,23 +43,23 @@ class DorkFileProcessor(object):
         for dork_line in dork_lines:
             if "intitle:" in dork_line:
                 dork_line_split = dork_line.partition('intitle:')[2]
-                dork_db.insert("intitle", self.extract(dork_line_split))
+                dork_db.insert("intitle", self.extract_term(dork_line_split))
             if "inurl:" in dork_line:
                 dork_line_split = dork_line.partition('inurl:')[2]
-                dork_db.insert("inurl", self.extract(dork_line_split))
+                dork_db.insert("inurl", self.extract_term(dork_line_split))
             if "intext:" in dork_line:
                 dork_line_split = dork_line.partition('intext:')[2]
-                dork_db.insert("intext", self.extract(dork_line_split))
+                dork_db.insert("intext", self.extract_term(dork_line_split))
             if "filetype:" in dork_line:
                 dork_line_split = dork_line.partition('filetype:')[2]
-                dork_db.insert("filetype", self.extract(dork_line_split))
+                dork_db.insert("filetype", self.extract_term(dork_line_split))
             #ext is an filetype alias
             if "ext:" in dork_line:
                 dork_line_split = dork_line.partition('ext:')[2]
-                dork_db.insert("ext", self.extract(dork_line_split))
+                dork_db.insert("ext", self.extract_term(dork_line_split))
             if "allinurl:" in dork_line:
                 dork_line_split = dork_line.partition('allinurl:')[2]
-                dork_db.insert("allinurl", self.extract(dork_line_split))
+                dork_db.insert("allinurl", self.extract_term(dork_line_split))
         return dork_dict
     
     def process_dorks(self):
