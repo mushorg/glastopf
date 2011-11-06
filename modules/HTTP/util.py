@@ -25,6 +25,17 @@ class HTTPRequest(object):
         self.version = "HTTP/1.1"
         self.header = ""
         self.body = ""
+        
+    def request_dict(self):
+        request_dict = {
+                        "method" : self.method,
+                        "url" : self.url,
+                        "parameters" : self.parameters,
+                        "version" : self.version,
+                        "header" : self.header,
+                        "body" : self.body
+                        }
+        return request_dict
 
 class HTTPParser(object):
     

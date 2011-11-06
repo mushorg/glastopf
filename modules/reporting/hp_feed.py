@@ -56,15 +56,15 @@ class HPFeedClient(object):
 		conf_parser.read("glastopf.cfg")
 		self.options = {
 			"host" : conf_parser.get("hpfeed", "host"),
-			"port" : conf_parser.getint("hpfeed", "port"),
+			"port" : int(conf_parser.getint("hpfeed", "port")),
 			"secret" : conf_parser.get("hpfeed", "secret").encode('latin1'),
 			"chan" : conf_parser.get("hpfeed", "chan").encode('latin1'),
 			"ident" : conf_parser.get("hpfeed", "ident").encode('latin1'),
 		}
 		self.connect()
-		self.unpacker = FeedUnpack()
 
 	def broker_read(self):
+		self.unpacker = FeedUnpack()
 		data = self.socket.recv(1024)
 		while data:
 			self.unpacker.feed(data)
@@ -94,7 +94,7 @@ class HPFeedClient(object):
 			self.socket.close()
 		else:
 			log('Connected to hpfeed broker.')
-		self.socket.settimeout(None)
+		#self.socket.settimeout(None)
 		self.broker_read()
 	
 	def handle_send(self, data):

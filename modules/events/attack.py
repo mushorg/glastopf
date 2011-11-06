@@ -24,3 +24,14 @@ class AttackEvent(object):
 		self.matched_pattern = "unknown"
 		self.file_name = None
 		self.response = None
+		
+	def event_dict(self):
+		event_dict = {
+					"time" : self.event_time,
+					"source" : self.source_addr,
+					"request" : self.parsed_request.request_dict(),
+					"pattern" : self.matched_pattern,
+					"filename" : self.file_name,
+					"response" : self.response
+					}
+		return event_dict

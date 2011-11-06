@@ -14,16 +14,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import json
+
 import modules.HTTP.util as util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
 import modules.reporting.log_sqlite as log_sqlite
+import modules.reporting.hp_feed as hpfeeds
 
 class GlastopfHoneypot(object):
 
     def __init__(self):
         self.sqlite_logger = log_sqlite.LogSQLite()
+        self.hpfeeds_logger = hpfeeds.HPFeedClient()
 
     def print_info(self, attack_event):
         print attack_event.event_time,
@@ -49,4 +53,5 @@ class GlastopfHoneypot(object):
         getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
         # Logging the event
         self.sqlite_logger.insert(attack_event)
+        self.hpfeeds_logger.handle_send(json.dumps(attack_event.event_dict()))
         return attack_event.response
