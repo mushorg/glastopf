@@ -30,8 +30,6 @@ class DorkDB(object):
         except sqlite3.ProgrammingError, e:
             print "In finding error:", e
 
-
-
     def trueInsert(self, table, content):
         self.cursor = self.conn.cursor()
         print "insert:", content
