@@ -42,8 +42,9 @@ def html_template(titlename, formURLname, bodycontent, footstr, csstemp):
     return template.substitute(dict(title=titlename, form_URL=formURLname, bodystr=bodycontent), footer=footstr, css_file=csstemp)
 
 def css():
+    color = "#333"
     css_str = u"""/*Defaults Styling*/
-body {font:14px/17px Arial, Helvetica, sans-serif; color:#333; background:#ccc; padding:40px 20px 20px 20px;}
+body {font:14px/17px Arial, Helvetica, sans-serif; color:#333 ; background:#ccc; padding:40px 20px 20px 20px;}
 fieldset {background:#9da2a6; padding:10px; border:1px solid #aaa; border-color:#fff #666661 #666661 #fff; margin-bottom:36px; width:80%;}
 input, textarea, select {font:14px/14px Arial, Helvetica, sans-serif; padding:0;}
 fieldset.action {background:#C9BE62; border-color:#e5e5e5 #797c80 #797c80 #e5e5e5; margin-top:-20px;}
@@ -71,6 +72,7 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
     margin: 0;
     padding: 0;
 }
+a:link, a:visited, a:hover, a:hover{color:#333 ;text-decoration:none;cursor:text;}
 """
     return css_str
 
