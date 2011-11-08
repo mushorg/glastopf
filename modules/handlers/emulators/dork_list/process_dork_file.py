@@ -1,12 +1,7 @@
 import codecs
-from collections import defaultdict
 import re
-from pprint import pprint
 import gen_dork_db
-import sys
-if sys.getdefaultencoding() != 'utf-8':
-    reload(sys)
-sys.setdefaultencoding('utf-8') # for the different python version unicode problem
+import unicodedata
 
 class DorkFileProcessor(object):
     
@@ -15,11 +10,11 @@ class DorkFileProcessor(object):
     
     def get_lines(self):
         dork_lines = []
-        with codecs.open("dorks.txt", mode = "r", encoding = "utf-8") as dork_list:
+        with codecs.open("dorks.txt", "r", "utf-8") as dork_list:
             for dork_line in dork_list.readlines():
                 dork_line = dork_line.strip()
                 if dork_line != "":
-                    dork_lines.append(dork_line.encode("utf-8"))
+                    dork_lines.append(unicodedata.normalize('NFKD', dork_line).encode('ascii', 'ignore'))
         return dork_lines
     
     def extract_term(self, dork_line):
@@ -34,7 +29,7 @@ class DorkFileProcessor(object):
         else:
             term = dork_line.split(" ")[0]
         if term:
-            term = term.strip().encode("utf-8")
+            term = term.strip()
         return term
     
     def parse_lines(self, dork_lines):
@@ -61,9 +56,7 @@ class DorkFileProcessor(object):
                 dork_line_split = dork_line.partition('allinurl:')[2]
                 dork_db.insert("allinurl", self.extract_term(dork_line_split))
         dork_db.closeHandle()
-        return dork_db
     
     def process_dorks(self):
         dork_lines = self.get_lines()
-        dork_db = self.parse_lines(dork_lines)
-        return dork_db
+        self.parse_lines(dork_lines)
