@@ -84,4 +84,10 @@
     <patternString><![CDATA[.*(favicon.ico).*]]></patternString>
     <module>unknown</module>
   </request>
+  <request>
+    <id>14</id>
+    <patternDescription>favicon.ico</patternDescription>
+    <patternString><![CDATA[^/style\.css$]]></patternString>
+    <module>style_css</module>
+  </request>
 </requests>
