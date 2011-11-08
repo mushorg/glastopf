@@ -86,7 +86,7 @@
   </request>
   <request>
     <id>14</id>
-    <patternDescription>favicon.ico</patternDescription>
+    <patternDescription>style.css</patternDescription>
     <patternString><![CDATA[^/style\.css$]]></patternString>
     <module>style_css</module>
   </request>
