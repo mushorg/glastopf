@@ -1,6 +1,6 @@
 import codecs
 import re
-import gen_dork_db
+import dork_db
 import unicodedata
 
 class DorkFileProcessor(object):
@@ -33,29 +33,29 @@ class DorkFileProcessor(object):
         return term
     
     def parse_lines(self, dork_lines):
-        dork_db = gen_dork_db.LogDork()
-        dork_db.create()
+        dorkdb = dork_db.DorkDB()
+        dorkdb.create()
         for dork_line in dork_lines:
             if "intitle:" in dork_line:
                 dork_line_split = dork_line.partition('intitle:')[2]
-                dork_db.insert("intitle", self.extract_term(dork_line_split))
+                dorkdb.insert("intitle", self.extract_term(dork_line_split))
             if "inurl:" in dork_line:
                 dork_line_split = dork_line.partition('inurl:')[2]
-                dork_db.insert("inurl", self.extract_term(dork_line_split))
+                dorkdb.insert("inurl", self.extract_term(dork_line_split))
             if "intext:" in dork_line:
                 dork_line_split = dork_line.partition('intext:')[2]
-                dork_db.insert("intext", self.extract_term(dork_line_split))
+                dorkdb.insert("intext", self.extract_term(dork_line_split))
             if "filetype:" in dork_line:
                 dork_line_split = dork_line.partition('filetype:')[2]
-                dork_db.insert("filetype", self.extract_term(dork_line_split))
+                dorkdb.insert("filetype", self.extract_term(dork_line_split))
             #ext is an filetype alias
             if "ext:" in dork_line:
                 dork_line_split = dork_line.partition('ext:')[2]
-                dork_db.insert("ext", self.extract_term(dork_line_split))
+                dorkdb.insert("ext", self.extract_term(dork_line_split))
             if "allinurl:" in dork_line:
                 dork_line_split = dork_line.partition('allinurl:')[2]
-                dork_db.insert("allinurl", self.extract_term(dork_line_split))
-        dork_db.closeHandle()
+                dorkdb.insert("allinurl", self.extract_term(dork_line_split))
+        dorkdb.closeHandle()
     
     def process_dorks(self):
         dork_lines = self.get_lines()

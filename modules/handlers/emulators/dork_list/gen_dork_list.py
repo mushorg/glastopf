@@ -5,7 +5,7 @@ import unicodedata
 
 import gen_html
 import process_dork_file
-import read_dork_db
+import dork_db
 
 def prepare_text():
     line_list = []
@@ -22,7 +22,7 @@ def generate_dork_pages():
     processor = process_dork_file.DorkFileProcessor()
     processor.process_dorks()
     shuffle(line_list)
-    dork_reader = read_dork_db.ReadDork()
+    dork_reader = dork_db.DorkDB()
     inurl_list = dork_reader.get_dork_list('inurl')
     intext_list = dork_reader.get_dork_list('intext')
     intitle_list = dork_reader.get_dork_list('intitle')
