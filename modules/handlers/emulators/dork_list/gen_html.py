@@ -1,6 +1,6 @@
 from string import Template
 
-def html_template(titlename, formURLname, bodycontent, footstr, csstemp):
+def html_template(titlename, formURLname, bodycontent, footstr):
     template = Template(u"""
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -37,7 +37,7 @@ def html_template(titlename, formURLname, bodycontent, footstr, csstemp):
 </div></body>
 </html>"""
 )
-    return template.substitute(dict(title=titlename, form_URL=formURLname, bodystr=bodycontent), footer=footstr, css_file=csstemp)
+    return template.substitute(dict(title=titlename, form_URL=formURLname, bodystr=bodycontent), footer=footstr)
 
 
 

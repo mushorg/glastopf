@@ -31,7 +31,7 @@ def generate_dork_pages():
         body = ''
         for i in range(0,49):
             body += line_list[i] + " <a href='%s'>%s</a> " % (inurl_list.pop()[0], choice(intext_list)[0])
-        dork_page = gen_html.html_template(choice(intitle_list)[0], "http://www.google.com", body, "Epic Footer Powered By", gen_html.css())
+        dork_page = gen_html.html_template(choice(intitle_list)[0], "http://www.google.com", body, "Epic Footer Powered By")
         page_md5 = hashlib.md5(dork_page).hexdigest() 
         with codecs.open("pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
