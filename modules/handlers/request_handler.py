@@ -28,6 +28,11 @@ def unknown(attack_event):
     attack_event.response += emulator.get_response()
     return attack_event
 
+def style_css(attack_event):
+    with open('modules/handlers/emulators/dork_list/pages/style.css', 'r') as style_file:
+        attack_event.response = style_file.read()
+        return attack_event
+
 def rfi(attack_event):
     emulator = rfi_emulator.RFIEmulator()
     attack_event.file_name = emulator.download_file(attack_event.parsed_request.url)
