@@ -15,6 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import urllib
+import unicodedata
 
 class HTTPRequest(object):
 
@@ -56,6 +57,7 @@ class HTTPParser(object):
     def parse_request(self, request):
         # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
+        request = unicodedata.normalize('NFKD', request).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()
         request, parsed_request.body = request.split("\r\n\r\n")
         request = request.split("\r\n")
