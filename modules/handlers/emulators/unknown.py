@@ -14,7 +14,7 @@ class DorkList(object):
     
     def get_response(self):
         dork_page_list = os.listdir("modules/handlers/emulators/dork_list/pages")
-        #dork_page = choice(dork_page_list)
-        dork_page = "test"
+        dork_page_list.remove('.svn')
+        dork_page = choice(dork_page_list)
         with codecs.open("modules/handlers/emulators/dork_list/pages/" + dork_page, "r", "utf-8") as dork_page:
             return dork_page.read()
