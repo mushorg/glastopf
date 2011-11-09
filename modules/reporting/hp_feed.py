@@ -99,4 +99,4 @@ class HPFeedClient(object):
 	
 	def handle_send(self, channel, data):
 		self.socket.send(msgpublish(self.options["ident"], channel, data))
-		self.socket.settimeout(0.1)
+		self.socket.settimeout(2)
