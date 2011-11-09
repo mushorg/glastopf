@@ -53,5 +53,9 @@ class GlastopfHoneypot(object):
         getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
         # Logging the event
         self.sqlite_logger.insert(attack_event)
-        self.hpfeeds_logger.handle_send(json.dumps(attack_event.event_dict()))
+        self.hpfeeds_logger.handle_send("glastopf.events", json.dumps(attack_event.event_dict()))
+        if attack_event.file_name != None:
+            with open("files/" + attack_event.file_name) as file_handler:
+                file_content = file_handler.read() 
+            self.hpfeeds_logger.handle_send("glastopf.files", json.dumps([attack_event.file_name, file_content]))
         return attack_event.response

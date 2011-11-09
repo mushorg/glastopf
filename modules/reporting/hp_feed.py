@@ -97,7 +97,6 @@ class HPFeedClient(object):
 		#self.socket.settimeout(None)
 		self.broker_read()
 	
-	def handle_send(self, data):
-		for channel in self.options["chan"].split(","):
-			self.socket.send(msgpublish(self.options["ident"], channel, data))
-			self.socket.settimeout(0.1)
+	def handle_send(self, channel, data):
+		self.socket.send(msgpublish(self.options["ident"], channel, data))
+		self.socket.settimeout(0.1)
