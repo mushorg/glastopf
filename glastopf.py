@@ -15,6 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
+import codecs
 
 import modules.HTTP.util as util
 import modules.HTTP.method_handler as method_handler
@@ -55,7 +56,7 @@ class GlastopfHoneypot(object):
         self.sqlite_logger.insert(attack_event)
         self.hpfeeds_logger.handle_send("glastopf.events", json.dumps(attack_event.event_dict()))
         if attack_event.file_name != None:
-            with open("files/" + attack_event.file_name) as file_handler:
+            with codecs.open("files/" + attack_event.file_name, 'r', 'utf-8') as file_handler:
                 file_content = file_handler.read() 
-            self.hpfeeds_logger.handle_send("glastopf.files", json.dumps([attack_event.file_name, file_content]))
+            self.hpfeeds_logger.handle_send("glastopf.files", attack_event.file_name + " " + file_content.encode('utf-8'))
         return attack_event.response
