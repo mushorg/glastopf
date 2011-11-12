@@ -22,10 +22,8 @@ class DorkDB(object):
             cnt = len(self.cursor.execute(sql, (content,)).fetchall())
             self.cursor.close()
             if cnt == 0:
-                print cnt
                 self.trueInsert(table, content)
             else:
-                print cnt
                 self.updatetime(table,content)
         except sqlite3.ProgrammingError, e:
             print "In finding error:", e
