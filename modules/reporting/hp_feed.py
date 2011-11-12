@@ -59,13 +59,13 @@ class HPFeedClient(object):
 			"port" : int(conf_parser.getint("hpfeed", "port")),
 			"secret" : conf_parser.get("hpfeed", "secret").encode('latin1'),
 			"chan" : conf_parser.get("hpfeed", "chan").encode('latin1'),
-			"ident" : conf_parser.get("hpfeed", "ident").encode('latin1'),
+			"ident" : conf_parser.get("hpfeed", "ident").encode('latin1').strip(),
                         "enable" : conf_parser.get("hpfeed", "enable").encode('latin1'),
 		}
-                if( self.options["enable"] == "yes" ):
-                   self.connect()
-                else:
-                   print self.options["enable"]
+		if( self.options["enable"] == "yes" ):
+			self.connect()
+		else:
+			print self.options["enable"]
 
 
 
