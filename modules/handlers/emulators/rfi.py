@@ -31,14 +31,15 @@ class RFIEmulator(object):
         return injected_url.strip("=")
     
     def store_file(self, injected_file):
-        file_name = self.get_filename(injected_file)
+        cleaned_injected_file = ""
+        for line in injected_file.split("\n"):
+            line = re.sub(r'(\r\n)|\r', r'\r\n', line)
+            cleaned_injected_file = cleaned_injected_file + line + '\r\n'
+        file_name = self.get_filename(cleaned_injected_file)
         if not os.path.exists("files/" + file_name):
-            local_file = open("files/" + file_name, 'w+')
-            for line in injected_file.split("\n"):
-                # Remove ^M symbol using re by Julia Cheng
-                line = re.sub(r'(\r\n)|\r', r'\r\n', line)
-                local_file.write(line)
-            local_file.close()
+            with open("files/" + file_name, 'w+') as local_file:
+                for line in cleaned_injected_file:
+                    local_file.write(line)
         return file_name
     
     def get_filename(self, injected_file):
@@ -50,7 +51,7 @@ class RFIEmulator(object):
         try:
             req = urllib2.Request(injectd_url)
             # FIXME: We need a timeout on read here
-            injected_file = urllib2.urlopen(req).read()
+            injected_file = unicode(urllib2.urlopen(req).read()).encode('utf-8')
         except IOError, error:
             print "Failed to fetch injected file, I/O error:", error
             file_name = "sandbox/samples/id.txt"
