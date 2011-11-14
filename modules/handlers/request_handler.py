@@ -20,6 +20,7 @@ import modules.handlers.emulators.unknown as unknown_emulator
 import modules.handlers.emulators.rfi as rfi_emulator
 import modules.handlers.emulators.lfi as lfi_emulator
 import modules.handlers.emulators.sqli as sqli_emulator
+import modules.handlers.emulators.phpmyadmin as pma_emulator
 
 
 def unknown(attack_event):
@@ -52,5 +53,10 @@ def lfiw(attack_event):
 
 def sql(attack_event):
     emulator = sqli_emulator.SQLiEmulator()
+    emulator.handle(attack_event)
+    return attack_event
+
+def phpmyadmin(attack_event):
+    emulator = pma_emulator.PMAEmulator()
     emulator.handle(attack_event)
     return attack_event
