@@ -57,7 +57,7 @@ class HTTPParser(object):
     def parse_request(self, request):
         # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
-        request = unicodedata.normalize('NFKD', request).encode('ascii', 'ignore')
+        request = unicodedata.normalize('NFKD', unicode(request)).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()
         request, parsed_request.body = request.split("\r\n\r\n")
         request = request.split("\r\n")
