@@ -1,10 +1,19 @@
-Glaspot v. 0.1
+Glaspot v. 0.2
 
-* Collecting dorks from requests
-* Ability to provide the dork list
-* Securing the PHP sandbox
-* Finishing the LFI vulnerability emulation
-* Rudimentary SQLi vulnerability emulation
-* Improving the SQLite logging
-* Support for POST requests
-* HPFeed (central logging) support
+DORKS DORKS DORKS
+- YuHan Regulary generate the HTML pages
+- YuHan Extract dorks and add them to the db
+Presentation on Saturday
+- Ling, Kent Collecting dorks from requests
+
+GENERAL
+- Louis unicode error handling
+- ShanWu POST handler
+- YuHan SQL injection handler
+LFI handler testing
+- YuHan host field in the database
+
+DOCUMENTATION
+- ShanWu Database documentation
+- ShanWu Installation documentation
+- ShanWu Usage documentation
