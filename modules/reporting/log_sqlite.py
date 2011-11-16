@@ -32,6 +32,8 @@ class LogSQLite(object):
         
     def insert(self, attack_event):
         self.cursor = self.connection.cursor()
+        if attack_event.matched_pattern.strip() == "unknown":
+            attack_event.response = attack_event.response.split('\r\n\r\n')[0]
         self.cursor.execute("""
                 INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?)""", 
                 (None, attack_event.event_time, attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1]), 
