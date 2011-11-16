@@ -94,13 +94,12 @@ class HPFeedClient(object):
             self.socket.close()
         else:
             log('Connected to hpfeed broker.')
-        #self.socket.settimeout(None)
-        self.broker_read()
+            self.broker_read()
     
     def handle_send(self, channel, data):
         try:
             self.socket.send(msgpublish(self.options["ident"], channel, data))
         except Exception, e:
-            log('Connection error: {0}').format(str(e))
+            log('Connection error: {0}'.format(e))
             self.connect()
             self.socket.send(msgpublish(self.options["ident"], channel, data))
