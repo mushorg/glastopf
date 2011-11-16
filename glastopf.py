@@ -34,8 +34,8 @@ class GlastopfHoneypot(object):
         print attack_event.event_time,
         print attack_event.source_addr[0] + " requested",
         print attack_event.parsed_request.method, 
-        print attack_event.parsed_request.url, "on", 
-        print attack_event.parsed_request.header["Host"]
+        print attack_event.parsed_request.url, "on",
+        print attack_event.parsed_request.header.get('Host', "None")
     
     def handle_request(self, raw_request, addr):
         HTTP_parser = util.HTTPParser()
