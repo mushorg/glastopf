@@ -60,14 +60,8 @@ class HPFeedClient(object):
             "secret" : conf_parser.get("hpfeed", "secret").encode('latin1'),
             "chan" : conf_parser.get("hpfeed", "chan").encode('latin1'),
             "ident" : conf_parser.get("hpfeed", "ident").encode('latin1').strip(),
-                        "enable" : conf_parser.get("hpfeed", "enable").encode('latin1'),
         }
-        if( self.options["enable"] == "yes" ):
-            self.connect()
-        else:
-            print self.options["enable"]
-
-
+        self.connect()
 
     def broker_read(self):
         self.unpacker = FeedUnpack()
@@ -104,8 +98,6 @@ class HPFeedClient(object):
         self.broker_read()
     
     def handle_send(self, channel, data):
-        if( self.options["enable"] != "yes" ):
-            return 
         try:
             self.socket.send(msgpublish(self.options["ident"], channel, data))
         except Exception, e:

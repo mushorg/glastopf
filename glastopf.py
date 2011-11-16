@@ -16,6 +16,7 @@
 
 import json
 import codecs
+from ConfigParser import ConfigParser
 
 import modules.HTTP.util as util
 import modules.HTTP.method_handler as method_handler
@@ -27,8 +28,14 @@ import modules.reporting.hp_feed as hpfeeds
 class GlastopfHoneypot(object):
 
     def __init__(self):
+        conf_parser = ConfigParser()
+        conf_parser.read("glastopf.cfg")
+        self.options = {
+            "enabled" : conf_parser.get("hpfeed", "enabled").encode('latin1'),
+        }
+        if self.options["enabled"] == "True":
+            self.hpfeeds_logger = hpfeeds.HPFeedClient()
         self.sqlite_logger = log_sqlite.LogSQLite()
-        self.hpfeeds_logger = hpfeeds.HPFeedClient()
 
     def print_info(self, attack_event):
         print attack_event.event_time,
@@ -54,9 +61,12 @@ class GlastopfHoneypot(object):
         getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
         # Logging the event
         self.sqlite_logger.insert(attack_event)
-        self.hpfeeds_logger.handle_send("glastopf.events", json.dumps(attack_event.event_dict()))
-        if attack_event.file_name != None:
-            with codecs.open("files/" + attack_event.file_name, 'r', 'utf-8') as file_handler:
-                file_content = file_handler.read() 
-            self.hpfeeds_logger.handle_send("glastopf.files", attack_event.file_name + " " + file_content.encode('utf-8'))
+        try:
+            self.hpfeeds_logger.handle_send("glastopf.events", json.dumps(attack_event.event_dict()))
+            if attack_event.file_name != None:
+                with codecs.open("files/" + attack_event.file_name, 'r', 'utf-8') as file_handler:
+                    file_content = file_handler.read() 
+                self.hpfeeds_logger.handle_send("glastopf.files", attack_event.file_name + " " + file_content.encode('utf-8'))
+        except AttributeError:
+            pass
         return attack_event.response
