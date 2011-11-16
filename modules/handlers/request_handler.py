@@ -30,9 +30,14 @@ def unknown(attack_event):
     return attack_event
 
 def style_css(attack_event):
-    with open('modules/handlers/emulators/dork_list/pages/style.css', 'r') as style_file:
+    with open('modules/handlers/emulators/style/style.css', 'r') as style_file:
         attack_event.response = style_file.read()
-        return attack_event
+    return attack_event
+    
+def robots_txt(attack_event):
+    with open('modules/handlers/emulators/robots/robots.txt', 'r') as robot_file:
+        attack_event.response = robot_file.read()
+    return attack_event
 
 def rfi(attack_event):
     emulator = rfi_emulator.RFIEmulator()

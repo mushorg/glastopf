@@ -90,4 +90,10 @@
     <patternString><![CDATA[^/style\.css$]]></patternString>
     <module>style_css</module>
   </request>
+  <request>
+    <id>15</id>
+    <patternDescription>robots.txt</patternDescription>
+    <patternString><![CDATA[^/robots\.txt$]]></patternString>
+    <module>robots_txt</module>
+  </request>
 </requests>
