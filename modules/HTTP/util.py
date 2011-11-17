@@ -54,10 +54,15 @@ class HTTPParser(object):
                 continue
         return header_dict
     
+    # TODO: add body parser function
+    
     def parse_request(self, request):
         # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
-        request = unicodedata.normalize('NFKD', unicode(request)).encode('ascii', 'ignore')
+        try:
+            request = unicodedata.normalize('NFKD', request.decode('latin1')).encode('ascii', 'ignore')
+        except:
+            pass
         parsed_request = HTTPRequest()
         request, parsed_request.body = request.split("\r\n\r\n")
         request = request.split("\r\n")
