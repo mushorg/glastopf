@@ -62,9 +62,9 @@ class HTTPParser(object):
         request = urllib.unquote(request)
         encoding = chardet.detect(request)
         try:
-            request = unicodedata.normalize('NFKD', request.decode(encoding['encoding'])).encode('ascii', 'ignore')
+            request = unicodedata.normalize('NFKD', request.decode(encoding['encoding'])).encode('ascii')
         except:
-            print "request.decode(%s) failed, falt back to decode with latin1.\n" % encoding['encoding']
+            print "request.decode(%s) failed, fall back to decode with latin1.\n" % encoding['encoding']
             request = unicodedata.normalize('NFKD', request.decode('latin1')).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()
         request, parsed_request.body = request.split("\r\n\r\n")
