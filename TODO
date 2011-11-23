@@ -12,7 +12,6 @@ Do we need more dork files?
 Add Glastopf v1 dorks
 
 GENERAL
-- Louis unicode error handling
 - ShanWu POST handler
 - YuHan SQL injection handler
 LFI handler testing
@@ -21,6 +20,8 @@ Test HPFeeds file send
 Add HPFeeds dork send
 Add HPFeeds dev channel
 Support for PostgreSQL and MySQL
+Add a verbose flag for debugging
+Add a setup.py to install dependencies
 
 DOCUMENTATION
 - ShanWu Database documentation
