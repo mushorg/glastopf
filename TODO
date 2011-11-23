@@ -2,8 +2,14 @@ Glaspot v. 0.2
 
 DORKS DORKS DORKS
 - YuHan Regulary generate the HTML pages
-- YuHan Extract dorks and add them to the db
+- YuHan Clean dorks in the db
 - Ling, Kent Collecting dorks from requests
+Weight dorks and their appearance
+Clean search engine index data?
+Improve dork html page
+What are we missing from the dork file?
+Do we need more dork files?
+Add Glastopf v1 dorks
 
 GENERAL
 - Louis unicode error handling
@@ -11,6 +17,10 @@ GENERAL
 - YuHan SQL injection handler
 LFI handler testing
 - YuHan host field in the database
+Test HPFeeds file send
+Add HPFeeds dork send
+Add HPFeeds dev channel
+Support for PostgreSQL and MySQL
 
 DOCUMENTATION
 - ShanWu Database documentation
@@ -18,4 +28,4 @@ DOCUMENTATION
 - ShanWu Usage documentation
 
 MISC
-Presentation on Saturday
+Presentation on Sunday
