@@ -96,4 +96,10 @@
     <patternString><![CDATA[^/robots\.txt$]]></patternString>
     <module>robots_txt</module>
   </request>
+  <request>
+    <id>16</id>
+    <patternDescription>PHPMyAdmin</patternDescription>
+    <patternString><![CDATA[^/phpmyadmin]]></patternString>
+    <module>phpmyadmin</module>
+  </request>
 </requests>
