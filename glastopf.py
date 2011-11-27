@@ -38,9 +38,9 @@ class GlastopfHoneypot(object):
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
         self.sqlite_logger = log_sqlite.LogSQLite()
-#        self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_gen_dork,args=(30,))
-#        self.regular_gen_dork.daemon = True
-#        self.regular_gen_dork.start()
+        self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_generate_dork,args=(30,))
+        self.regular_gen_dork.daemon = True
+        self.regular_gen_dork.start()
 
     def print_info(self, attack_event):
         print attack_event.event_time,
