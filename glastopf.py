@@ -16,6 +16,7 @@
 
 import json
 import codecs
+import threading
 from ConfigParser import ConfigParser
 
 import modules.HTTP.util as util
@@ -24,6 +25,7 @@ import modules.events.attack as attack
 from modules.handlers import request_handler
 import modules.reporting.log_sqlite as log_sqlite
 import modules.reporting.hp_feed as hpfeeds
+from modules.handlers.emulator.dork_list import gen_dork_list
 
 class GlastopfHoneypot(object):
 
@@ -36,6 +38,9 @@ class GlastopfHoneypot(object):
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
         self.sqlite_logger = log_sqlite.LogSQLite()
+        regular_gen_dork = threading.Thread(target=gen_dork_list.regular_gen_dork,args=(30,))
+        regular_gen_dork.daemon = True
+        regular_gen_dork.start()
 
     def print_info(self, attack_event):
         print attack_event.event_time,

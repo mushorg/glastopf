@@ -4,7 +4,7 @@ import datetime
 class DorkDB(object): 
 
     def __init__(self):
-        self.conn = sqlite3.connect("dork.db")
+        self.conn = sqlite3.connect("db/dork.db")
 
     def create(self):
         self.cursor = self.conn.cursor()
@@ -30,7 +30,6 @@ class DorkDB(object):
 
     def trueInsert(self, table, content):
         self.cursor = self.conn.cursor()
-        print "insert:", content
         try:
             sql = "INSERT INTO %s VALUES( ?, ?, ?, ?)" % table
             self.cursor.execute(sql, (None, content, str(datetime.datetime.now()), str(datetime.datetime.now())))

@@ -10,7 +10,7 @@ class DorkFileProcessor(object):
     
     def get_lines(self):
         dork_lines = []
-        with codecs.open("dorks.txt", "r", "utf-8") as dork_list:
+        with codecs.open("modules/handlers/emulators/dork_list/dorks.txt", "r", "utf-8") as dork_list:
             for dork_line in dork_list.readlines():
                 dork_line = dork_line.strip()
                 if dork_line != "":

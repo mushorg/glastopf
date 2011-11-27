@@ -6,21 +6,22 @@ import unicodedata
 import gen_html
 import process_dork_file
 import dork_db
+import time
 
 def prepare_text():
     line_list = []
-    with codecs.open("pride.txt", "r", "utf-8") as text_file:
+    with codecs.open("modules/handlers/emulators/dork_list/pride.txt", "r", "utf-8") as text_file:
         for text_line in text_file.readlines():
             text_line = text_line.strip()
             if text_line != "":
                 line_list.append(unicodedata.normalize('NFKD', text_line).encode('ascii', 'ignore'))
     return line_list
 
-def generate_dork_pages():
-    
+def generate_dork_pages(first):
+    if True == first:
+        processor = process_dork_file.DorkFileProcessor()
+        processor.process_dorks()
     line_list = prepare_text()
-    processor = process_dork_file.DorkFileProcessor()
-    processor.process_dorks()
     shuffle(line_list)
     dork_reader = dork_db.DorkDB()
     inurl_list = dork_reader.get_dork_list('inurl')
@@ -33,6 +34,18 @@ def generate_dork_pages():
             body += line_list[i] + " <a href='%s'>%s</a> " % (inurl_list.pop()[0], choice(intext_list)[0])
         dork_page = gen_html.html_template(choice(intitle_list)[0], "http://www.google.com", body, "Epic Footer Powered By")
         page_md5 = hashlib.md5(dork_page).hexdigest() 
-        with codecs.open("pages/%s" % page_md5, "w", "utf-8") as dork_file:
+        with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
-generate_dork_pages()
+
+def remove_old_dork_pages():
+    pass
+
+def regular_generate_dork(sleep_time):
+    generate_dork_pages(True)
+    if sleep_time <= 0:
+        return "sleep time too short!"
+    while True:
+        time.sleep(sleep_time)
+        remove_old_dork_pages()
+        generate_dork_pages(False)
+
