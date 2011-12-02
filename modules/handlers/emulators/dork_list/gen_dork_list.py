@@ -7,6 +7,7 @@ import gen_html
 import process_dork_file
 import dork_db
 import time
+import os
 
 def prepare_text():
     line_list = []
@@ -37,15 +38,20 @@ def generate_dork_pages(first):
         with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
 
-def remove_old_dork_pages():
-    pass
+def remove_old_dork_pages(args, pathname, filenames):
+    if pathname != args[0]:
+        return
+    for i in filenames:
+        if os.path.isfile(pathname+i):
+            os.remove(pathname+i)
 
 def regular_generate_dork(sleep_time):
+    dirname = 'modules/handlers/emulators/dork_list/pages/'
     generate_dork_pages(True)
     if sleep_time <= 0:
         return "sleep time too short!"
     while True:
         time.sleep(sleep_time)
-        remove_old_dork_pages()
+        remove_old_dork = os.path.walk(dirname, remove_old_dork_pages, (dirname,))
         generate_dork_pages(False)
 
