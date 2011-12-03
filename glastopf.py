@@ -54,6 +54,7 @@ class GlastopfHoneypot(object):
         attack_event = attack.AttackEvent()
         # Parse the request
         attack_event.parsed_request = HTTP_parser.parse_request(raw_request)
+        gen_dork_list.collect_dork(attack_event.parsed_request)
         attack_event.source_addr = addr
         self.print_info(attack_event)
         # Start response with the server header

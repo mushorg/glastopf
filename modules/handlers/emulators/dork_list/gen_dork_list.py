@@ -9,6 +9,8 @@ import dork_db
 import time
 import os
 
+dork_reader = dork_db.DorkDB()
+
 def prepare_text():
     line_list = []
     with codecs.open("modules/handlers/emulators/dork_list/pride.txt", "r", "utf-8") as text_file:
@@ -24,7 +26,7 @@ def generate_dork_pages(first):
         processor.process_dorks()
     line_list = prepare_text()
     shuffle(line_list)
-    dork_reader = dork_db.DorkDB()
+    
     inurl_list = dork_reader.get_dork_list('inurl')
     intext_list = dork_reader.get_dork_list('intext')
     intitle_list = dork_reader.get_dork_list('intitle')
@@ -54,4 +56,12 @@ def regular_generate_dork(sleep_time):
         time.sleep(sleep_time)
         remove_old_dork = os.path.walk(dirname, remove_old_dork_pages, (dirname,))
         generate_dork_pages(False)
+        
+def collect_dork(self, parsed_request):
+    try:
+        dork = parsed_request.url.split('?')
+        dork_reader.insert("inurl", dork)
+    except:
+        print("parsed_request split error for '?'")
+        pass
 
