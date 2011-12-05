@@ -56,7 +56,7 @@ def regular_generate_dork(sleep_time):
         remove_old_dork = os.path.walk(dirname, remove_old_dork_pages, (dirname,))
         generate_dork_pages(False)
         
-def collect_dork(self, parsed_request):
+def collect_dork(parsed_request):
     dork_reader = dork_db.DorkDB()
     try:
         dork = parsed_request.url.split('?')
