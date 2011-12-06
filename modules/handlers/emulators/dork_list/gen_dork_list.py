@@ -20,7 +20,7 @@ def prepare_text():
     return line_list
 
 def generate_dork_pages(first):
-    if True == first:
+    if first:
         processor = process_dork_file.DorkFileProcessor()
         processor.process_dorks()
     line_list = prepare_text()
@@ -39,21 +39,25 @@ def generate_dork_pages(first):
         with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
 
-def remove_old_dork_pages(args, pathname, filenames):
-    if pathname != args[0]:
-        return
-    for i in filenames:
-        if os.path.isfile(pathname+i):
-            os.remove(pathname+i)
+def remove_old_dork_pages(folder):
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        if os.path.isfile(file_path):
+            try:
+                os.unlink(file_path)
+            except Exception, e:
+                print "Error deleting old dork pages:", e
 
 def regular_generate_dork(sleep_time):
+    sleep_time = sleep_time * 60
     dirname = 'modules/handlers/emulators/dork_list/pages/'
+    remove_old_dork_pages(dirname)
     generate_dork_pages(True)
-    if sleep_time <= 0:
+    if sleep_time < 60:
         return "sleep time too short!"
     while True:
         time.sleep(sleep_time)
-        remove_old_dork = os.path.walk(dirname, remove_old_dork_pages, (dirname,))
+        remove_old_dork_pages(dirname)
         generate_dork_pages(False)
         
 def collect_dork(parsed_request):
