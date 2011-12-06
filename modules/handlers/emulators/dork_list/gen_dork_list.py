@@ -61,8 +61,8 @@ def collect_dork(parsed_request):
     try:
         dork = parsed_request.url.split('?')
         dork_reader.insert("inurl", dork)
-        dork_reader.closeHandle()
     except:
         print("parsed_request split error for '?'")
-        pass
+    else:
+        dork_reader.closeHandle()
 
