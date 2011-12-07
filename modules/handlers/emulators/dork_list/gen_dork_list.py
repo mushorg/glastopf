@@ -63,10 +63,11 @@ def regular_generate_dork(sleep_time):
 def collect_dork(parsed_request):
     dork_reader = dork_db.DorkDB()
     try:
-        dork = parsed_request.url.split('?')
+        dork = parsed_request.url.split('?')[0]
         dork_reader.insert("inurl", dork)
-    except:
+    except Exception as e:
         print("parsed_request split error for '?'")
+        print e
     else:
         dork_reader.closeHandle()
 
