@@ -68,6 +68,6 @@ def collect_dork(parsed_request):
     except Exception as e:
         print("parsed_request split error for '?'")
         print e
-    else:
+    finally:
         dork_reader.closeHandle()
 
