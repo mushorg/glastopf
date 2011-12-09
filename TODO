@@ -1,7 +1,6 @@
 Glaspot v. 0.2
 
 DORKS DORKS DORKS
-- YuHan Regulary generate the HTML pages
 - YuHan Clean dorks in the db
 - Ling, Kent Collecting dorks from requests
 Weight dorks and their appearance
@@ -15,7 +14,7 @@ GENERAL
 - ShanWu POST handler
 - YuHan SQL injection handler
 LFI handler testing
-- YuHan host field in the database
+- YuHan host field in the database and convert script
 Test HPFeeds file send
 Add HPFeeds dork send
 Add HPFeeds dev channel
