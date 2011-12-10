@@ -60,14 +60,14 @@ def regular_generate_dork(sleep_time):
         remove_old_dork_pages(dirname)
         generate_dork_pages(False)
         
-def collect_dork(parsed_request):
-    dork_reader = dork_db.DorkDB()
-    try:
-        dork = parsed_request.url.split('?')[0]
-        dork_reader.insert("inurl", dork)
-    except Exception as e:
-        print("parsed_request split error for '?'")
-        print e
-    finally:
-        dork_reader.closeHandle()
+def collect_dork(attack_event):
+    if attack_event.matched_pattern != "unknown":
+        dork_reader = dork_db.DorkDB()
+        try:
+            dork = attack_event.parsed_request.url.split('?')[0]
+            dork_reader.insert("inurl", dork)
+        except Exception as e:
+            print "parsed_request split error for '?':", e
+        finally:
+            dork_reader.closeHandle()
 
