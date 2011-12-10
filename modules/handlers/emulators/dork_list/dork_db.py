@@ -19,9 +19,9 @@ class DorkDB(object):
         self.cursor = self.conn.cursor()
         try:
             sql = "SELECT * FROM %s WHERE content = ?" % table
-            cnt = len(self.cursor.execute(sql, (content,)).fetchall())
+            cnt = self.cursor.execute(sql, (content,)).fetchall()
             self.cursor.close()
-            if cnt == 0:
+            if len(cnt) == 0:
                 self.trueInsert(table, content)
             else:
                 self.update_entry(table, cnt)
@@ -32,7 +32,7 @@ class DorkDB(object):
         self.cursor = self.conn.cursor()
         try:
             sql = "INSERT INTO %s VALUES( ?, ?, ?, ?, ?)" % table
-            self.cursor.execute(sql, (None, content, 1 , str(datetime.datetime.now()), str(datetime.datetime.now())))
+            self.cursor.execute(sql, (None, content, 1 , datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         except sqlite3.OperationalError, e:
             print "Insert into database Error:", e
         except sqlite3.ProgrammingError, e:
@@ -43,7 +43,7 @@ class DorkDB(object):
         self.cursor = self.conn.cursor()
         try:
             sql = "UPDATE %s SET lasttime = ? , count = count + 1 WHERE content = ?" % table
-            self.cursor.execute(sql, (str(datetime.datetime.now()), cnt[1]))
+            self.cursor.execute(sql, (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), cnt[0][1]))
         except sqlite3.OperationalError, e:
             print "Update column failure:", e
         self.cursor.close()
