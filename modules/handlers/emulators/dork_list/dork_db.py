@@ -10,7 +10,7 @@ class DorkDB(object):
         self.cursor = self.conn.cursor()
         tablename = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablename:
-            sql = "CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY, content TEXT, firsttime TEXT, lasttime TEXT)" % table
+            sql = "CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY, content TEXT, count INTEGER, firsttime TEXT, lasttime TEXT)" % table
             self.cursor.execute(sql)
         self.conn.commit()
         self.cursor.close()
@@ -24,26 +24,26 @@ class DorkDB(object):
             if cnt == 0:
                 self.trueInsert(table, content)
             else:
-                self.updatetime(table,content)
+                self.update_entry(table, cnt)
         except sqlite3.ProgrammingError, e:
             print "In finding error:", e
 
     def trueInsert(self, table, content):
         self.cursor = self.conn.cursor()
         try:
-            sql = "INSERT INTO %s VALUES( ?, ?, ?, ?)" % table
-            self.cursor.execute(sql, (None, content, str(datetime.datetime.now()), str(datetime.datetime.now())))
+            sql = "INSERT INTO %s VALUES( ?, ?, ?, ?, ?)" % table
+            self.cursor.execute(sql, (None, content, 1 , str(datetime.datetime.now()), str(datetime.datetime.now())))
         except sqlite3.OperationalError, e:
             print "Insert into database Error:", e
         except sqlite3.ProgrammingError, e:
             print "Insert into database Error:", e
         self.cursor.close()
 
-    def updatetime(self, table, content):
+    def update_entry(self, table, cnt):
         self.cursor = self.conn.cursor()
         try:
-            sql = "UPDATE %s SET lasttime = ? WHERE content = ?" % table
-            self.cursor.execute(sql, (str(datetime.datetime.now()), content))
+            sql = "UPDATE %s SET lasttime = ? , count = count + 1 WHERE content = ?" % table
+            self.cursor.execute(sql, (str(datetime.datetime.now()), cnt[1]))
         except sqlite3.OperationalError, e:
             print "Update column failure:", e
         self.cursor.close()
