@@ -6,7 +6,7 @@ cursor = conn.cursor()
 num_of_item = len(cursor.execute("SELECT * FROM events").fetchone())
 if num_of_item == 7:
     try:
-        cursor.execute("ALTER TABLE events ADD COLUMN ")
+        cursor.execute("ALTER TABLE events ADD COLUMN host TEXT")
     except sqlite3.OperationalError, e:
         print "Add Column Failed ", e
     except sqlite3.ProgrammingError, e:
