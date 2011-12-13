@@ -38,6 +38,7 @@ class GlastopfHoneypot(object):
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
         self.sqlite_logger = log_sqlite.LogSQLite()
+        gen_dork_list.regular_generate_dork(0)
         self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_generate_dork,args=(30,))
         self.regular_gen_dork.daemon = True
         self.regular_gen_dork.start()

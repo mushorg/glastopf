@@ -39,26 +39,37 @@ def generate_dork_pages(first):
         with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
 
-def remove_old_dork_pages(folder):
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
+def remove_old_dork_pages(old_dork_list):
+    for file_path in old_dork_list:
+        try:
+            os.unlink(file_path)
+        except Exception, e:
+            print "Error deleting old dork pages:", e
+
+def get_old_dork_pages_list(folder):
+    dork_lists = []
+    for f in os.listdir(folder):
+        file_path = os.path.join(folder, f)
         if os.path.isfile(file_path):
-            try:
-                os.unlink(file_path)
-            except Exception, e:
-                print "Error deleting old dork pages:", e
+            dork_lists.append(file_path)
+    return dork_lists
+
 
 def regular_generate_dork(sleep_time):
     sleep_time = sleep_time * 60
     dirname = 'modules/handlers/emulators/dork_list/pages/'
-    remove_old_dork_pages(dirname)
+    old_dork_list = get_old_dork_pages_list(dirname)
     generate_dork_pages(True)
+    remove_old_dork_pages(old_dork_list)
+    if sleep_time == 0:
+        return
     if sleep_time < 60:
         return "sleep time too short!"
     while True:
         time.sleep(sleep_time)
-        remove_old_dork_pages(dirname)
+        old_dork_list = get_old_dork_pages_list(dirname)
         generate_dork_pages(False)
+        remove_old_dork_pages(old_dork_list)
         
 def collect_dork(attack_event):
     if attack_event.matched_pattern != "unknown":
