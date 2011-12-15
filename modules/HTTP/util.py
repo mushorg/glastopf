@@ -16,7 +16,6 @@
 
 import urllib
 import unicodedata
-import chardet
 
 class HTTPRequest(object):
 
@@ -60,14 +59,16 @@ class HTTPParser(object):
     def parse_request(self, request):
         # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
-        encoding = chardet.detect(request)
         try:
-            request = unicodedata.normalize('NFKD', request.decode(encoding['encoding'])).encode('ascii')
-        except:
-            print "request.decode(%s) failed, fall back to decode with latin1.\n" % encoding['encoding']
             request = unicodedata.normalize('NFKD', request.decode('latin1')).encode('ascii', 'ignore')
+        except:
+            pass
         parsed_request = HTTPRequest()
-        request, parsed_request.body = request.split("\r\n\r\n")
+        try:
+            request, parsed_request.body = request.split("\r\n\r\n", 1)
+        except ValueError:
+            # TODO: Maybe this is to powerful
+            request = request
         request = request.split("\r\n")
         request_line = request[0].split()
         parsed_request.method = request_line[0]
