@@ -72,9 +72,9 @@ class Classifier(object):
             #      And some forms would send data in GET and POST methods.
             if(parsed_request.method == "GET"):
                 match = re_pattern.search(parsed_request.url)
-            elif( parsed_request == "POST"):
+            elif( parsed_request.method == "POST"):
                 match = re_pattern.search(parsed_request.body)
-            elif(parsed_request == "HEAD"):
+            elif(parsed_request.method == "HEAD"):
                 pass
             if match != None:
                 matched_patterns.append(parsed_pattern.module)
