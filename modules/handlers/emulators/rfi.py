@@ -54,7 +54,7 @@ class RFIEmulator(object):
             injected_file = unicode(urllib2.urlopen(req).read()).encode('utf-8')
         except IOError, error:
             print "Failed to fetch injected file, I/O error:", error
-            file_name = "sandbox/samples/id.txt"
+            file_name = "id.txt"
         else:
             file_name = self.store_file(injected_file)
         return file_name
