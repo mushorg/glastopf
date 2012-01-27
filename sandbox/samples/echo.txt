@@ -1,4 +1,0 @@
-<?php
-fwrite("test");
-exit(0);
-?>
