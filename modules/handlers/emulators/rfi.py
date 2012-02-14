@@ -30,20 +30,15 @@ class RFIEmulator(object):
         injected_url = matched_protocol + url.partition(matched_protocol)[2].split("?")[0]
         return injected_url.strip("=")
     
-    def store_file(self, injected_file):
-        cleaned_injected_file = ""
-        for line in injected_file.split("\n"):
-            line = re.sub(r'(\r\n)|\r', r'\r\n', line)
-            cleaned_injected_file = cleaned_injected_file + line + '\r\n'
-        file_name = self.get_filename(cleaned_injected_file)
-        if not os.path.exists("files/" + file_name):
-            with open("files/" + file_name, 'w+') as local_file:
-                for line in cleaned_injected_file:
-                    local_file.write(line)
-        return file_name
-    
     def get_filename(self, injected_file):
         file_name = hashlib.md5(injected_file).hexdigest()
+        return file_name
+    
+    def store_file(self, injected_file):
+        file_name = self.get_filename(injected_file)
+        if not os.path.exists("files/" + file_name):
+            with open("files/" + file_name, 'w+') as local_file:
+                local_file.write(injected_file)
         return file_name
     
     def download_file(self, url):
@@ -54,7 +49,8 @@ class RFIEmulator(object):
             injected_file = unicode(urllib2.urlopen(req).read()).encode('utf-8')
         except IOError, error:
             print "Failed to fetch injected file, I/O error:", error
-            file_name = "id.txt"
+            # TODO: We want to handle the case where we can't download the injected file but pretend to be vulnerable.
+            file_name = None
         else:
             file_name = self.store_file(injected_file)
         return file_name

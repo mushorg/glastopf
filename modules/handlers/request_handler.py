@@ -42,7 +42,8 @@ def robots_txt(attack_event):
 def rfi(attack_event):
     emulator = rfi_emulator.RFIEmulator()
     attack_event.file_name = emulator.download_file(attack_event.parsed_request.url)
-    attack_event.response += sandbox.run(attack_event.file_name)
+    if attack_event.file_name:
+        attack_event.response += sandbox.run(attack_event.file_name)
     return attack_event
 
 def lfil(attack_event):
