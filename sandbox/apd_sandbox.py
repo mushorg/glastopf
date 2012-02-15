@@ -25,15 +25,14 @@ def sandbox(script, secs):
                 stderr=subprocess.PIPE,
                 )
     except Exception as e:
-        print "PARENT : error executing the sandbox:"
-        print e.message
+        print "PARENT : error executing the sandbox:", e
     stdout_value = ""
     stderr_value = ""
     try:
         threading.Thread(target=partial(killer, proc, secs)).start()
         stdout_value, stderr_value = proc.communicate()
     except Exception as e:
-        print "Sandbox communication error:", e.message
+        print "Sandbox communication error:", e
     else:
         print "Successfully parsed with sandbox"
     return stdout_value
