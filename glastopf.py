@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
-import codecs
+import base64
 import threading
 from ConfigParser import ConfigParser
 
@@ -68,12 +68,10 @@ class GlastopfHoneypot(object):
         getattr(request_handler, attack_event.matched_pattern, request_handler.unknown)(attack_event)
         # Logging the event
         self.sqlite_logger.insert(attack_event)
-        try:
+        if self.options["enabled"] == "True":
             self.hpfeeds_logger.handle_send("glastopf.events", json.dumps(attack_event.event_dict()))
             if attack_event.file_name != None:
-                with codecs.open("files/" + attack_event.file_name, 'r', 'utf-8') as file_handler:
+                with file("files/" + attack_event.file_name, 'r') as file_handler:
                     file_content = file_handler.read() 
-                self.hpfeeds_logger.handle_send("glastopf.files", attack_event.file_name + " " + file_content.encode('utf-8'))
-        except AttributeError:
-            pass
+                self.hpfeeds_logger.handle_send("glastopf.files", attack_event.file_name + " " + base64.b64encode(file_content))
         return attack_event.response

@@ -46,7 +46,7 @@ class RFIEmulator(object):
         try:
             req = urllib2.Request(injectd_url)
             # FIXME: We need a timeout on read here
-            injected_file = unicode(urllib2.urlopen(req).read()).encode('utf-8')
+            injected_file = urllib2.urlopen(req, timeout=4).read()
         except IOError, error:
             print "Failed to fetch injected file, I/O error:", error
             # TODO: We want to handle the case where we can't download the injected file but pretend to be vulnerable.
