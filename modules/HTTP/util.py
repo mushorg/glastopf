@@ -18,6 +18,7 @@ import urllib
 import unicodedata
 import chardet
 
+
 class HTTPRequest(object):
 
     def __init__(self):
@@ -27,23 +28,24 @@ class HTTPRequest(object):
         self.version = "HTTP/1.1"
         self.header = ""
         self.body = ""
-        
+
     def request_dict(self):
         request_dict = {
-                        "method" : self.method,
-                        "url" : self.url,
-                        "parameters" : self.parameters,
-                        "version" : self.version,
-                        "header" : self.header,
-                        "body" : self.body
+                        "method": self.method,
+                        "url": self.url,
+                        "parameters": self.parameters,
+                        "version": self.version,
+                        "header": self.header,
+                        "body": self.body
                         }
         return request_dict
 
+
 class HTTPParser(object):
-    
+
     def __init__(self, ):
         pass
-    
+
     def parse_header(self, header_list):
         header_dict = {}
         for header_item in header_list:
@@ -54,18 +56,19 @@ class HTTPParser(object):
             else:
                 continue
         return header_dict
-    
     # TODO: add body parser function
-    
+
     def parse_request(self, request):
         # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
         encoding = chardet.detect(request)
         try:
-            request = unicodedata.normalize('NFKD', request.decode(encoding['encoding'])).encode('ascii')
+            request = unicodedata.normalize('NFKD',
+                        request.decode(encoding['encoding'])).encode('ascii')
         except:
             print "request.decode(%s) failed, fall back to decode with latin1.\n" % encoding['encoding']   
-            request = unicodedata.normalize('NFKD', request.decode('latin1')).encode('ascii', 'ignore')
+            request = unicodedata.normalize('NFKD',
+                        request.decode('latin1')).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()
         try:
             request, parsed_request.body = request.split("\r\n\r\n", 1)
@@ -80,7 +83,8 @@ class HTTPParser(object):
         parsed_request.version = request_line[2]
         parsed_request.header = self.parse_header(request[1:]) 
         return parsed_request
-    
+
+
 class HTTPServerResponse():
     # TODO: Make header customizable
     response_header = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"

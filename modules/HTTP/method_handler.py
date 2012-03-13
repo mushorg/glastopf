@@ -16,22 +16,24 @@
 
 import modules.classification.request as request_classifier
 
+
 class HTTPMethods(object):
     # TODO: Add more method handler
-    
+
     def __init__(self):
         pass
-    
+
     def GET(self, parsed_request):
         RequestClassifier = request_classifier.Classifier()
         matched_pattern = RequestClassifier.classify_request(parsed_request)
         return matched_pattern
-   
+
     def POST(self, parsed_request):
         RequestClassifier = request_classifier.Classifier()
         matched_pattern = RequestClassifier.classify_request(parsed_request)
+        #parsed_request.body -> File('files/payloads')
         return matched_pattern
-    
+
     def HEAD(self, parsed_request):
         # TODO: Return the proper HEAD respone
         return "unknown"
