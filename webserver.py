@@ -9,12 +9,13 @@ from evnet.promise import Promise
 
 import glastopf
 
-# WebSocketListener based on Mark Schloessers evnet example https://github.com/rep/evnet
+# WebSocketListener based on Mark Schloessers evnet 
+# example https://github.com/rep/evnet
+
 
 class WebSockListener(EventGen):
     def __init__(self):
         EventGen.__init__(self)
-        self.glastopf_honeypot = glastopf.GlastopfHoneypot()
         conf_parser = ConfigParser()
         conf_parser.read("glastopf.cfg")
         host = conf_parser.get("webserver", "host")
@@ -33,16 +34,18 @@ class WebSockListener(EventGen):
         else:
             print "Webserver running on:", host + ":" + str(port), "waiting for connections...\n"
             self.l._on('connection', self.connection)
+            self.glastopf_honeypot = glastopf.GlastopfHoneypot()
 
     def connection(self, c, addr):
         self._event('connection', WebSock(c, addr, self.glastopf_honeypot))
+
 
 class WebSock(EventGen):
     def __init__(self, c, addr, glastopf):
         EventGen.__init__(self)
         self.glastopf_honeypot = glastopf
         self.c, self.addr = c, addr
-    
+
         self.c._on('ready', self.ready)
         self.c._on('close', self.closed)
         self.c._on('read', self.read)
@@ -58,13 +61,13 @@ class WebSock(EventGen):
         response = self.glastopf_honeypot.handle_request(d, self.addr)
         self.send(response)
         self.c.close()
-        
+
     def send(self, s):
         self.c.write(s)
 
 if __name__ == '__main__':
     a = WebSockListener()
-    
+
     def new_conn(c):
         def onready():
             def dbgprint(r):
