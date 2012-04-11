@@ -33,7 +33,6 @@ import modules.privileges as privileges
 class GlastopfHoneypot(object):
 
     def __init__(self):
-        privileges.drop('nobody', 'nogroup')
         conf_parser = ConfigParser()
         conf_parser.read("glastopf.cfg")
         self.options = {
@@ -46,6 +45,7 @@ class GlastopfHoneypot(object):
         self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_generate_dork,args=(30,))
         self.regular_gen_dork.daemon = True
         self.regular_gen_dork.start()
+        privileges.drop('nobody', 'nogroup')
 
     def print_info(self, attack_event):
         print attack_event.event_time,

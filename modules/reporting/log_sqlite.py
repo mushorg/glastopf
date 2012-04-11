@@ -16,20 +16,21 @@
 
 import sqlite3
 
+
 class LogSQLite(object):
     # TODO: Add SQLite error handling
-    
+
     def __init__(self):
         self.connection = sqlite3.connect("db/glastopf.db")
         self.create()
-        
+
     def create(self):
         self.cursor = self.connection.cursor()
         self.cursor.execute("""
                 CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY, timestamp TEXT, source_addr TEXT, request TEXT, module INTEGER, filename TEXT, response TEXT, host TEXT)""")
         self.connection.commit()
         self.cursor.close()
-        
+
     def insert(self, attack_event):
         self.cursor = self.connection.cursor()
         if attack_event.matched_pattern.strip() == "unknown":
@@ -39,7 +40,7 @@ class LogSQLite(object):
         self.cursor.execute("""
                 INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?)""", 
                 (None, attack_event.event_time, attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1]), 
-                attack_event.parsed_request.url, attack_event.matched_pattern, 
+                attack_event.parsed_request.url, attack_event.matched_pattern,
                 attack_event.file_name, response, attack_event.parsed_request.header.get('Host', "None")))
         self.connection.commit()
         self.cursor.close()
