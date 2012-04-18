@@ -1,7 +1,8 @@
 import sqlite3
 import datetime
 
-class DorkDB(object): 
+
+class DorkDB(object):
 
     def __init__(self):
         self.conn = sqlite3.connect("db/dork.db")
