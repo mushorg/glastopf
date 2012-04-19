@@ -15,25 +15,41 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import re
+import os
+
 
 class LFIEmulator(object):
+
     def __init__(self):
         pass
-    
-    def getVirtualPath(self, injected_path):
-        """
-        Sanitises and simulates a file path with a virtual root of the corresponding virtualdocs directory.
-        """
-        
-    def getContents(self, injected_path):
-        preg = re.compile(r'/.*\?.*=(.*)&?')
-        result = preg.match(injected_path)
-        file_path = "virtualdocs/linux/%s" % result.group(1)
-        read_data = ""
+
+    def virtualdocs_whitelist(self):
+        whitelist = []
+        for root, subFolders, files in os.walk('virtualdocs/'):
+            if ".svn" in root:
+                continue
+            for dir_file in files:
+                whitelist.append(os.path.join(root, dir_file))
+        return whitelist
+
+    def file_path(self, attack_event):
         try:
-            with open(file_path, "r") as f:
-                read_data = f.read()
+            pattern = re.compile(r'(\.\./)*')
+            result = pattern.split(attack_event.parsed_request.url, maxsplit=1)
+            path = "virtualdocs/linux/%s" % result[2]
+        except:
+            path = None
+        return path
+
+    def handle(self, attack_event):
+        path = self.file_path(attack_event)
+        try:
+            if path in self.virtualdocs_whitelist():
+                with open(path, "r") as f:
+                    attack_event.response += f.read()
+            else:
+                raise IOError
         except IOError:
+            # TODO: Make it not finger printable
             # Place holder file not found error
-            read_data = "Warning: include(vars1.php): failed to open stream: No such file or directory in /var/www/html/anonymous/test.php on line 6 Warning: include(): Failed opening 'vars1.php' for inclusion (include_path='.:/usr/share/pear:/usr/share/php') in /var/www/html/anonymous/test.php on line 6" 
-        return read_data
+            attack_event.response += "Warning: include(vars1.php): failed to open stream: No such file or directory in /var/www/html/anonymous/test.php on line 6 Warning: include(): Failed opening 'vars1.php' for inclusion (include_path='.:/usr/share/pear:/usr/share/php') in /var/www/html/anonymous/test.php on line 6" 

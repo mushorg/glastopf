@@ -52,14 +52,13 @@ def rfi(attack_event):
 
 def lfil(attack_event):
     emulator = lfi_emulator.LFIEmulator()
-    file_contents = emulator.getContents(attack_event.parsed_request.url)
-    attack_event.response += file_contents
+    emulator.handle(attack_event)
     return attack_event
 
 
 def lfiw(attack_event):
-    # TODO: Implement Windows local file incusion handler  
-    attack_event.response += "lfi-windows handled"
+    # TODO: Implement Windows local file incusion handler
+    attack_event.response += ""
     return attack_event
 
 
