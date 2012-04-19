@@ -32,17 +32,20 @@ class LFIEmulator(object):
                 whitelist.append(os.path.join(root, dir_file))
         return whitelist
 
-    def file_path(self, attack_event):
+    def clean_path(self, attack_event):
+        return attack_event.parsed_request.url.split('\0', 1)[0]
+
+    def file_path(self, cleaned_path):
         try:
             pattern = re.compile(r'(\.\./)*')
-            result = pattern.split(attack_event.parsed_request.url, maxsplit=1)
+            result = pattern.split(cleaned_path, maxsplit=1)
             path = "virtualdocs/linux/%s" % result[2]
         except:
             path = None
         return path
 
     def handle(self, attack_event):
-        path = self.file_path(attack_event)
+        path = self.file_path(self.clean_path(attack_event))
         try:
             if path in self.virtualdocs_whitelist():
                 with open(path, "r") as f:
