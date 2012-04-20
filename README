@@ -2,3 +2,10 @@ ABOUT
 
 Glastopf is a Python web application honeypot written by Lukas Rist. 
 You can find detailed information on: http://dev.glastopf.org/projects/glaspot
+
+HPFEEDS
+
+The honeypot has hpfeeds, our central logging feature enabled by default. If you
+don't want to report your events, turn of hpfeeds in glastopf.cfg.
+If you are interested in the data collected by Glastopf instances, please
+contact Lukas at <glaslos@gmail.com>
