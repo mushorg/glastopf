@@ -41,6 +41,8 @@ class GlastopfHoneypot(object):
         conf_parser.read("glastopf.cfg")
         self.options = {
             "enabled": conf_parser.get("hpfeed", "enabled").encode('latin1'),
+            "uid": conf_parser.get("webserver", "uid").encode('latin1'),
+            "gid": conf_parser.get("webserver", "gid").encode('latin1'),
         }
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
@@ -50,7 +52,7 @@ class GlastopfHoneypot(object):
         self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_generate_dork,args=(30,))
         self.regular_gen_dork.daemon = True
         self.regular_gen_dork.start()
-        privileges.drop('nobody', 'nogroup')
+        privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
 
     def print_info(self, attack_event):
