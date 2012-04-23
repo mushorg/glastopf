@@ -23,8 +23,10 @@ def drop(new_uid='nobody', new_gid='nogroup'):
         try:
             os.chown("files", run_uid, run_gid)
             os.chown("db", run_uid, run_gid)
+            os.chown("log", run_uid, run_gid)
             recursive_chown("files", run_uid, run_gid)
             recursive_chown("db", run_uid, run_gid)
+            recursive_chown("log", run_uid, run_gid)
             os.chown("modules/handlers/emulators/dork_list/pages",
                      run_uid, run_gid)
         except OSError, e:
