@@ -17,7 +17,7 @@ class SQLiEmulator(object):
         preg = re.compile(hex_pattern)
         hex_str = ""
         return hex_str
-    
+
     def hex_to_ascii(self, hex_encoded):
         """
         Decodes the hex encoded string into ascii.
@@ -25,7 +25,7 @@ class SQLiEmulator(object):
         # TODO: Decode HEX encoded string
         ascii_str = ""
         return ascii_str
-    
+
     def handle(self, attack_event):
         """
         Attackers are testing for a SQL vulnerability by injecting a string

@@ -36,4 +36,8 @@ class HTTPMethods(object):
 
     def HEAD(self, parsed_request):
         # TODO: Return the proper HEAD respone
-        return "unknown"
+        return "head"
+
+    def OPTIONS(self, parsed_request):
+        # TODO: Return the proper OPTIONS respone
+        return "options"

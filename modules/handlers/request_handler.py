@@ -22,11 +22,25 @@ import modules.handlers.emulators.lfi as lfi_emulator
 import modules.handlers.emulators.sqli as sqli_emulator
 import modules.handlers.emulators.phpmyadmin as pma_emulator
 import modules.handlers.emulators.file_server as fs_emulator
+import modules.handlers.emulators.head as head_emulator
+import modules.handlers.emulators.options as options_emulator
 
 
 def unknown(attack_event):
     emulator = unknown_emulator.DorkList()
     attack_event.response += emulator.get_response()
+    return attack_event
+
+
+def head(attack_event):
+    emulator = head_emulator.HEADRequest()
+    emulator.handle(attack_event)
+    return attack_event
+
+
+def options(attack_event):
+    emulator = options_emulator.OPTIONSRequest()
+    emulator.handle(attack_event)
     return attack_event
 
 
