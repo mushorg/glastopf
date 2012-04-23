@@ -1,5 +1,3 @@
-Glaspot
-
 Clean dorks in the db
 Collecting dorks from requests
 Weight dorks and their appearance
@@ -7,12 +5,5 @@ Clean search engine index data?
 Improve dork html page
 
 POST handler
-LFI handler testing
-host field in the database and convert script
-Test HPFeeds file send
-Add HPFeeds dork send
-Add HPFeeds dev channel
-Support for PostgreSQL and MySQL
-Add a verbose flag for debugging
+host field in sqlite database
 Add a setup.py to install dependencies
-See if using apd from svn has improvements
