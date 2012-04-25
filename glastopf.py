@@ -24,11 +24,11 @@ import modules.HTTP.util as util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
-import modules.reporting.log_sqlite as log_sqlite
 import modules.reporting.hp_feed as hpfeeds
 from modules.handlers.emulators.dork_list import gen_dork_list
 
 import modules.reporting.file_logger as file_logger
+from modules import logging_handler
 import modules.privileges as privileges
 
 
@@ -47,7 +47,6 @@ class GlastopfHoneypot(object):
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
             self.log.info('HPFeeds started')
-        self.sqlite_logger = log_sqlite.LogSQLite()
         gen_dork_list.regular_generate_dork(0)
         self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_generate_dork,args=(30,))
         self.regular_gen_dork.daemon = True
@@ -85,7 +84,8 @@ class GlastopfHoneypot(object):
         getattr(request_handler, attack_event.matched_pattern,
                 request_handler.unknown)(attack_event)
         # Logging the event
-        self.sqlite_logger.insert(attack_event)
+        for logger in logging_handler.get_loggers():
+            logger.insert(attack_event)
         if self.options["enabled"] == "True":
             self.hpfeeds_logger.handle_send("glastopf.events",
                                         json.dumps(attack_event.event_dict()))

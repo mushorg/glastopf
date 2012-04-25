@@ -20,25 +20,36 @@ from ConfigParser import ConfigParser
 
 import MySQLdb
 
+from modules.reporting.base_logger import BaseLogger
 
-class LogMySQL(object):
+
+class LogMySQL(BaseLogger):
 
     def __init__(self, config="glastopf.cfg"):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
+            "enabled": conf_parser.get("mysql", "enabled"),
             "host": conf_parser.get("mysql", "host"),
             "port": conf_parser.getint("mysql", "port"),
             "user": conf_parser.get("mysql", "user"),
             "password": conf_parser.get("mysql", "password"),
             "database": conf_parser.get("mysql", "database"),
             }
-        self.connection = MySQLdb.connect(self.options['host'],
+        if self.options['enabled'] == 'True':
+            try:
+                self.connection = MySQLdb.connect(self.options['host'],
                                           self.options['user'],
                                           self.options['password'],
                                           self.options['database']
                                           )
-        self.create()
+            except:
+                print "Unable to connect to MySQL service"
+                self.options['enabled'] = 'False'
+            else:
+                self.create()
+        else:
+            return None
 
     def create(self):
         cursor = self.connection.cursor()

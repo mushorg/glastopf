@@ -17,13 +17,31 @@
 
 import sqlite3
 
+from ConfigParser import ConfigParser
 
-class LogSQLite(object):
+from modules.reporting.base_logger import BaseLogger
+
+
+class LogSQLite(BaseLogger):
     # TODO: Add SQLite error handling
 
-    def __init__(self):
-        self.connection = sqlite3.connect("db/glastopf.db")
-        self.create()
+    def __init__(self, config="glastopf.cfg"):
+        conf_parser = ConfigParser()
+        conf_parser.read(config)
+        self.options = {
+            "enabled": conf_parser.get("sqlite", "enabled"),
+            "database": conf_parser.get("sqlite", "database"),
+            }
+        if self.options['enabled'] == "True":
+            try:
+                self.connection = sqlite3.connect("db/%s" % self.options['database'])
+            except:
+                print "Unable to connect to MySQL service"
+                self.options['enabled'] = 'False'
+            else:
+                self.create()
+        else:
+            return None
 
     def create(self):
         self.cursor = self.connection.cursor()

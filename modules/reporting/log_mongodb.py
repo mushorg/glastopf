@@ -19,13 +19,16 @@ from ConfigParser import ConfigParser
 
 from pymongo import Connection
 
+from modules.reporting.base_logger import BaseLogger
 
-class LogMongoDB(object):
+
+class LogMongoDB(BaseLogger):
 
     def __init__(self, config="glastopf.cfg"):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
+            "enabled": conf_parser.get("mongodb", "enabled"),
             "host": conf_parser.get("mongodb", "host"),
             "port": conf_parser.getint("mongodb", "port"),
             "user": conf_parser.get("mongodb", "user"),
@@ -33,12 +36,20 @@ class LogMongoDB(object):
             "database": conf_parser.get("mongodb", "database"),
             "collection": conf_parser.get("mongodb", "collection"),
             }
-        self.connection = Connection(self.options['host'],
+        if self.options['enabled'] == 'True':
+            try:
+                self.connection = Connection(self.options['host'],
                                      self.options['port'])
-        self.db = self.connection[self.options['database']]
-        self.db.authenticate(self.options['user'],
-                             self.options['password'])
-        self.collection = self.db[self.options['collection']]
+            except:
+                print "Unable to connect to MongoDB service"
+                self.options['enabled'] = 'False'
+            else:
+                self.db = self.connection[self.options['database']]
+                self.db.authenticate(self.options['user'],
+                                 self.options['password'])
+                self.collection = self.db[self.options['collection']]
+        else:
+            return None
 
     def insert(self, attack_event):
         self.collection.insert(attack_event.event_dict())

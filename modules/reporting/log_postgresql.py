@@ -16,30 +16,42 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
+
 from ConfigParser import ConfigParser
+
+from modules.reporting.base_logger import BaseLogger
 
 import psycopg2
 
 
-class LogPostgreSQL(object):
+class LogPostgreSQL(BaseLogger):
 
     def __init__(self, config="glastopf.cfg"):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
+            "enabled": conf_parser.get("postgresql", "enabled"),
             "host": conf_parser.get("postgresql", "host"),
             "port": conf_parser.getint("postgresql", "port"),
             "user": conf_parser.get("postgresql", "user"),
             "password": conf_parser.get("postgresql", "password"),
             "database": conf_parser.get("postgresql", "database"),
             }
-        self.connection = psycopg2.connect("dbname=%s user=%s" %
+        if self.options['enabled'] == 'True':
+            try:
+                self.connection = psycopg2.connect("dbname=%s user=%s" %
                                            (
                                             self.options['database'],
                                             self.options['user'],
                                             )
                                            )
-        self.create()
+            except:
+                print "Unable to connect to MySQL service"
+                self.options['enabled'] = 'False'
+            else:
+                self.create()
+        else:
+            return None
 
     def create(self):
         cursor = self.connection.cursor()
