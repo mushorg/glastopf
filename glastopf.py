@@ -35,6 +35,7 @@ import modules.privileges as privileges
 class GlastopfHoneypot(object):
 
     def __init__(self):
+        self.loggers = logging_handler.get_loggers()
         self.log = file_logger.FileLogger(name="honeypot").log()
         self.log.info('Starting Glastopf')
         conf_parser = ConfigParser()
@@ -84,7 +85,7 @@ class GlastopfHoneypot(object):
         getattr(request_handler, attack_event.matched_pattern,
                 request_handler.unknown)(attack_event)
         # Logging the event
-        for logger in logging_handler.get_loggers():
+        for logger in self.loggers:
             logger.insert(attack_event)
         if self.options["enabled"] == "True":
             self.hpfeeds_logger.handle_send("glastopf.events",

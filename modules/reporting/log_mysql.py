@@ -57,10 +57,10 @@ class LogMySQL(BaseLogger):
                        CREATE TABLE IF NOT EXISTS events(
                        id INT PRIMARY KEY AUTO_INCREMENT,
                        timestamp VARCHAR(19),
-                       source_addr VARCHAR(15),
+                       source_addr VARCHAR(21),
                        request VARCHAR(255),
-                       header VARCHAR(255),
-                       module INT,
+                       header VARCHAR(64000),
+                       module VARCHAR(23),
                        filename VARCHAR(32),
                        host VARCHAR(255))
                        """)

@@ -59,10 +59,10 @@ class LogPostgreSQL(BaseLogger):
                        CREATE TABLE IF NOT EXISTS events(
                        id serial PRIMARY KEY,
                        timestamp VARCHAR(19),
-                       source_addr VARCHAR(15),
-                       request VARCHAR(255),
-                       header VARCHAR(255),
-                       module INT,
+                       source_addr VARCHAR(21),
+                       request VARCHAR,
+                       header VARCHAR,
+                       module VARCHAR(23),
                        filename VARCHAR(32),
                        host VARCHAR(255))
                        """)
