@@ -43,8 +43,8 @@ class LogMySQL(BaseLogger):
                                           self.options['password'],
                                           self.options['database']
                                           )
-            except:
-                print "Unable to connect to MySQL service"
+            except Exception as e:
+                print "Unable to connect to MySQL service: {}".format(e)
                 self.options['enabled'] = 'False'
             else:
                 self.create()
@@ -53,17 +53,19 @@ class LogMySQL(BaseLogger):
 
     def create(self):
         cursor = self.connection.cursor()
+        cursor.execute("""SET sql_notes = 0""")
         cursor.execute("""
                        CREATE TABLE IF NOT EXISTS events(
                        id INT PRIMARY KEY AUTO_INCREMENT,
                        timestamp VARCHAR(19),
                        source_addr VARCHAR(21),
                        request VARCHAR(255),
-                       header VARCHAR(64000),
+                       header VARCHAR(21844),
                        module VARCHAR(23),
                        filename VARCHAR(32),
                        host VARCHAR(255))
                        """)
+        cursor.execute("""SET sql_notes = 1""")
         self.connection.commit()
 
     def insert(self, attack_event):
