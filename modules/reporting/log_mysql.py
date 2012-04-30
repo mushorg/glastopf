@@ -18,8 +18,6 @@
 import json
 from ConfigParser import ConfigParser
 
-import MySQLdb
-
 from modules.reporting.base_logger import BaseLogger
 
 
@@ -38,6 +36,7 @@ class LogMySQL(BaseLogger):
             }
         if self.options['enabled'] == 'True':
             try:
+                import MySQLdb
                 self.connection = MySQLdb.connect(self.options['host'],
                                           self.options['user'],
                                           self.options['password'],

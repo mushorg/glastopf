@@ -21,8 +21,6 @@ from ConfigParser import ConfigParser
 
 from modules.reporting.base_logger import BaseLogger
 
-import psycopg2
-
 
 class LogPostgreSQL(BaseLogger):
 
@@ -39,6 +37,7 @@ class LogPostgreSQL(BaseLogger):
             }
         if self.options['enabled'] == 'True':
             try:
+                import psycopg2
                 self.connection = psycopg2.connect("dbname=%s user=%s" %
                                            (
                                             self.options['database'],

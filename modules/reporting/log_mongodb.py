@@ -17,8 +17,6 @@
 
 from ConfigParser import ConfigParser
 
-from pymongo import Connection
-
 from modules.reporting.base_logger import BaseLogger
 
 
@@ -38,6 +36,7 @@ class LogMongoDB(BaseLogger):
             }
         if self.options['enabled'] == 'True':
             try:
+                from pymongo import Connection
                 self.connection = Connection(self.options['host'],
                                      self.options['port'])
             except:
