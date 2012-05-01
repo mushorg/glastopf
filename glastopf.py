@@ -65,9 +65,10 @@ class GlastopfHoneypot(object):
                       attack_event.parsed_request.method,
                       attack_event.parsed_request.url]))
 
-    def handle_request(self, raw_request, addr):
+    def handle_request(self, raw_request, addr, connection):
         HTTP_parser = util.HTTPParser()
         attack_event = attack.AttackEvent()
+        attack_event.sensor_addr = connection.sock.getsockname()
         # Parse the request
         attack_event.parsed_request = HTTP_parser.parse_request(raw_request)
         attack_event.source_addr = addr

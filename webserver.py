@@ -58,7 +58,7 @@ class WebSock(EventGen):
 
     def read(self, d):
         #print 'read', repr(d)
-        response = self.glastopf_honeypot.handle_request(d, self.addr)
+        response = self.glastopf_honeypot.handle_request(d, self.addr, self.c)
         self.send(response)
         self.c.close()
 
