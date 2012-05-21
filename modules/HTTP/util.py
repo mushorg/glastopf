@@ -73,15 +73,15 @@ class HTTPParser(object):
         try:
             request, parsed_request.body = request.split("\r\n\r\n", 1)
         except ValueError:
-            # TODO: Maybe this is to powerful
-            request = request
+            # TODO: Maybe this is too powerful
+            pass
         request = request.split("\r\n")
         request_line = request[0].split()
         parsed_request.method = request_line[0]
         parsed_request.url = request_line[1]
-        parsed_request.parameters = parsed_request.url.split("?") 
+        parsed_request.parameters = parsed_request.url.split("?")
         parsed_request.version = request_line[2]
-        parsed_request.header = self.parse_header(request[1:]) 
+        parsed_request.header = self.parse_header(request[1:])
         return parsed_request
 
 

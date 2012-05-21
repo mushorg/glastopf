@@ -78,9 +78,11 @@ class GlastopfHoneypot(object):
         attack_event.response = util.HTTPServerResponse.response_header
         MethodHandlers = method_handler.HTTPMethods()
         # Handle the HTTP request method
-        attack_event.matched_pattern = getattr(MethodHandlers,
-                                    attack_event.parsed_request.method,
-                                    "GET")(attack_event.parsed_request)
+        attack_event.matched_pattern = getattr(
+                                MethodHandlers,
+                                attack_event.parsed_request.method,
+                                MethodHandlers.GET
+                                )(attack_event.parsed_request)
         gen_dork_list.collect_dork(attack_event)
         # Handle the request with the specific vulnerability module
         getattr(request_handler, attack_event.matched_pattern,

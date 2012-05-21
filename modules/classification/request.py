@@ -79,6 +79,7 @@ class Classifier(object):
         patterns = self.get_patterns()
         matched_patterns = []
         for pattern in patterns:
+            match = None
             parsed_pattern = self.parse_pattern(pattern)
             re_pattern = re.compile(parsed_pattern.string)
             #TODO: Rules for specific method. We should add a tag in the
@@ -89,7 +90,11 @@ class Classifier(object):
             elif parsed_request.method == "POST":
                 match = re_pattern.search(parsed_request.body)
             elif parsed_request.method == "HEAD":
-                pass
+                parsed_pattern.module = 'head'
+                match = True
+            else:
+                parsed_pattern.module = 'unknown'
+                match = True
             if match != None:
                 matched_patterns.append(parsed_pattern.module)
         matched_pattern = self.select_pattern(matched_patterns)
