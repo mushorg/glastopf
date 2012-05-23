@@ -87,4 +87,17 @@ class HTTPParser(object):
 
 class HTTPServerResponse():
     # TODO: Make header customizable
-    response_header = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
+    def __init__(self):
+        self.response_header = (
+                            "HTTP/1.1 200 OK\r\n"
+                            "Connection: close\r\n"
+                            "Content-Type: text/html; charset=UTF-8\r\n\r\n")
+        self.trace_header = (
+                         "HTTP/1.1 200 OK \r\n"
+                         "Connection: close\r\n"
+                         "Content-Type: message/http\r\n\r\n")
+    def get_header(self,parsed_request):
+        if parsed_request.method.lower() == 'trace':
+            return self.trace_header
+        return self.response_header
+

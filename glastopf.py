@@ -44,6 +44,7 @@ class GlastopfHoneypot(object):
             "enabled": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
+            "squid": conf_parser.get("webserver","squid").encode('latin1')
         }
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
@@ -69,13 +70,26 @@ class GlastopfHoneypot(object):
         HTTP_parser = util.HTTPParser()
         attack_event = attack.AttackEvent()
         attack_event.sensor_addr = connection.sock.getsockname()
+        attack_event.raw_request = raw_request
         # Parse the request
         attack_event.parsed_request = HTTP_parser.parse_request(raw_request)
-        attack_event.source_addr = addr
+        if self.options["squid"] == "True":
+           # Changes to make the log work when running glaspot behind Squid
+            client_addr = []
+            client_addr.append(attack_event.\
+                                  parsed_request.header['X-Forwarded-For'])
+            client_addr.append(addr[1]) #Note: This is a bogus port number!
+            client_addr = tuple(client_addr)
+            attack_event.source_addr = client_addr
+        else:
+            attack_event.source_addr = addr
+                       
         self.print_info(attack_event)
         # Start response with the server header
         # TODO: Add msg length header
-        attack_event.response = util.HTTPServerResponse.response_header
+        response = util.HTTPServerResponse()
+        attack_event.response = response.get_header\
+                                             (attack_event.parsed_request)
         MethodHandlers = method_handler.HTTPMethods()
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(

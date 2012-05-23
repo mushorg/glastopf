@@ -37,6 +37,9 @@ def head(attack_event):
     emulator.handle(attack_event)
     return attack_event
 
+def trace(attack_event):
+    attack_event.response += attack_event.raw_request
+    return attack_event
 
 def options(attack_event):
     emulator = options_emulator.OPTIONSRequest()

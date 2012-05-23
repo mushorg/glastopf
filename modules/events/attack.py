@@ -22,6 +22,7 @@ class AttackEvent(object):
     def __init__(self):
         self.sensor_add = ("127.0.0.1", "8080")
         self.parsed_request = None
+        self.raw_request = None
         self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.source_addr = None
         self.matched_pattern = "unknown"

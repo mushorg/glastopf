@@ -92,6 +92,9 @@ class Classifier(object):
             elif parsed_request.method == "HEAD":
                 parsed_pattern.module = 'head'
                 match = True
+            elif parsed_request.method == "TRACE":
+                parsed_pattern.module = 'trace'
+                match = True 
             else:
                 parsed_pattern.module = 'unknown'
                 match = True
