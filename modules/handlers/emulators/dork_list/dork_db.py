@@ -17,6 +17,8 @@ class DorkDB(object):
         self.cursor.close()
 
     def insert(self, table, content):
+        if (content == '') or (content is None):                                       
+            return  
         self.cursor = self.conn.cursor()
         try:
             sql = "SELECT * FROM %s WHERE content = ?" % table
