@@ -58,7 +58,9 @@ class LogMySQL(BaseLogger):
                        id INT PRIMARY KEY AUTO_INCREMENT,
                        timestamp VARCHAR(19),
                        source_addr VARCHAR(21),
+                       method VARCHAR(7),
                        request VARCHAR(255),
+                       request_body VARCHAR(21844),
                        header VARCHAR(21844),
                        module VARCHAR(23),
                        filename VARCHAR(32),
@@ -70,14 +72,16 @@ class LogMySQL(BaseLogger):
     def insert(self, attack_event):
         cursor = self.connection.cursor()
         cursor.execute("""
-            INSERT INTO events VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO events VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
             None,
             attack_event.event_time,
             ":".join((attack_event.source_addr[0],
                       str(attack_event.source_addr[1]))),
+            attack_event.parsed_request.method,
             attack_event.parsed_request.url,
+            attack_event.parsed_request.body,
             json.dumps(attack_event.parsed_request.header),
             attack_event.matched_pattern,
             attack_event.file_name,

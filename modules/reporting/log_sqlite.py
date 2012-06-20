@@ -50,7 +50,9 @@ class LogSQLite(BaseLogger):
                 id INTEGER PRIMARY KEY,
                 timestamp TEXT,
                 source_addr TEXT,
+                method TEXT,
                 request TEXT,
+                request_body TEXT,
                 module INTEGER,
                 filename TEXT,
                 response TEXT,
@@ -66,10 +68,13 @@ class LogSQLite(BaseLogger):
         else:
             response = attack_event.response
         self.cursor.execute("""
-                INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (None, attack_event.event_time,
                  attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1]),
-                 attack_event.parsed_request.url, attack_event.matched_pattern,
+                 attack_event.parsed_request.method, 
+                 attack_event.parsed_request.url, 
+                 attack_event.parsed_request.body,
+                 attack_event.matched_pattern,
                  attack_event.file_name, response,
                  attack_event.parsed_request.header.get('Host', "None")))
         self.connection.commit()

@@ -21,6 +21,13 @@ from ConfigParser import ConfigParser
 
 from modules.reporting.base_logger import BaseLogger
 
+try:
+    import psycopg2
+except ImportError as e:
+    import_error = e
+else:
+    import_error = None
+
 
 class LogPostgreSQL(BaseLogger):
 
@@ -35,17 +42,21 @@ class LogPostgreSQL(BaseLogger):
             "password": conf_parser.get("postgresql", "password"),
             "database": conf_parser.get("postgresql", "database"),
             }
+        if self.options['enabled'] == 'True' and import_error:
+            print "Unable to connect to PostgreSQL service:", import_error
+            self.options['enabled'] = 'False'
         if self.options['enabled'] == 'True':
             try:
-                import psycopg2
-                self.connection = psycopg2.connect("dbname=%s user=%s" %
+                self.connection = psycopg2.connect("dbname=%s user=%s "
+                                           "password =%s" %
                                            (
                                             self.options['database'],
                                             self.options['user'],
+                                            self.options['password']
                                             )
                                            )
-            except:
-                print "Unable to connect to MySQL service"
+            except Exception as e:
+                print "Unable to connect to PostgreSQL service:", e
                 self.options['enabled'] = 'False'
             else:
                 self.create()
@@ -54,31 +65,42 @@ class LogPostgreSQL(BaseLogger):
 
     def create(self):
         cursor = self.connection.cursor()
-        cursor.execute("""
-                       CREATE TABLE IF NOT EXISTS events(
+        try:
+            cursor.execute("""
+                       CREATE TABLE events(
                        id serial PRIMARY KEY,
-                       timestamp VARCHAR(19),
-                       source_addr VARCHAR(21),
+                       timestamp TIMESTAMP,
+                       source_ip INET,
+                       source_port INT,
+                       method VARCHAR(7),
                        request VARCHAR,
+                       request_body VARCHAR,
                        header VARCHAR,
                        module VARCHAR(23),
                        filename VARCHAR(32),
                        host VARCHAR(255))
                        """)
+        except psycopg2.ProgrammingError as e:
+            print "Exception in creating events table:", e
         self.connection.commit()
 
     def insert(self, attack_event):
         cursor = self.connection.cursor()
+        # Use the first IP as there could be multiple IP addresses
+        attack_event.source_addr = (attack_event.source_addr[0].split(',')[0],
+                                    attack_event.source_addr[1])
         cursor.execute("""
-            INSERT INTO events(timestamp, source_addr, request,
-            header, module, filename, host)
-            VALUES(%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO events(timestamp, source_ip, source_port, method, 
+            request, request_body, header, module, filename, host)
+            VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
             attack_event.event_time,
-            ":".join((attack_event.source_addr[0],
-                      str(attack_event.source_addr[1]))),
+            attack_event.source_addr[0],
+            attack_event.source_addr[1],
+            attack_event.parsed_request.method,
             attack_event.parsed_request.url,
+            attack_event.parsed_request.body,
             json.dumps(attack_event.parsed_request.header),
             attack_event.matched_pattern,
             attack_event.file_name,
