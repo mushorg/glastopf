@@ -38,7 +38,7 @@ def generate_dork_pages(first):
             body += " <a href='%s'>%s</a> " % (inurl_list.pop()[0],
                                                choice(intext_list)[0])
         dork_page = gen_html.html_template(choice(intitle_list)[0],
-                                           "http://www.google.com",
+                                           "login",
                                            body, 
                                            "Epic Footer Powered By")
         page_md5 = hashlib.md5(dork_page).hexdigest()
