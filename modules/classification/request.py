@@ -88,7 +88,9 @@ class Classifier(object):
             if parsed_request.method == "GET":
                 match = re_pattern.search(parsed_request.url)
             elif parsed_request.method == "POST":
-                match = re_pattern.search(parsed_request.body)
+                match = re_pattern.search(parsed_request.url)
+                if match == 'unknown':
+                    match = re_pattern.search(parsed_request.body)
             elif parsed_request.method == "HEAD":
                 parsed_pattern.module = 'head'
                 match = True

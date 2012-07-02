@@ -24,6 +24,7 @@ import modules.handlers.emulators.phpmyadmin as pma_emulator
 import modules.handlers.emulators.file_server as fs_emulator
 import modules.handlers.emulators.head as head_emulator
 import modules.handlers.emulators.options as options_emulator
+import modules.handlers.emulators.comments as comment_post_emulator
 
 
 def unknown(attack_event):
@@ -60,6 +61,8 @@ def robots_txt(attack_event):
 
 
 def rfi(attack_event):
+    if attack_event.file_name:
+        attack_event.response += sandbox.run(attack_event.file_name)
     if attack_event.parsed_request.method == 'GET':
         emulator = rfi_emulator.RFIEmulator()
         attack_event.file_name = emulator.download_file(
@@ -101,3 +104,9 @@ def file_server(attack_event):
     emulator = fs_emulator.FileServer()
     emulator.handle(attack_event)
     return attack_event
+
+def comments(attack_event):
+    emulator = comment_post_emulator.CommentPoster()
+    emulator.handle(attack_event)
+    return attack_event
+

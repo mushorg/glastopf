@@ -102,4 +102,11 @@
     <patternString><![CDATA[^/phpmyadmin]]></patternString>
     <module>phpmyadmin</module>
   </request>
+  <request>
+    <id>17</id>
+    <patternDescription>comment spam</patternDescription>
+    <patternString><![CDATA[^/comments]]></patternString>
+    <module>comments</module>
+  </request>
+
 </requests>
