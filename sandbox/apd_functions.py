@@ -156,3 +156,16 @@ FUNCTIONS2 = {
              "umask;" : "", 
              "unlink;" : "", 
              }
+
+WHITELIST = [
+              "rename_function",
+              "override_function",
+              "fwrite",
+              "array",
+              "rand",
+              "tmpfile",
+              "echo",
+              "print",
+              "get_defined_functions",
+              "print_r"
+            ]
