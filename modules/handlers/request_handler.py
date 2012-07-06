@@ -25,6 +25,7 @@ import modules.handlers.emulators.file_server as fs_emulator
 import modules.handlers.emulators.head as head_emulator
 import modules.handlers.emulators.options as options_emulator
 import modules.handlers.emulators.comments as comment_post_emulator
+import modules.handlers.emulators.login as login_emulator
 
 
 def unknown(attack_event):
@@ -110,3 +111,7 @@ def comments(attack_event):
     emulator.handle(attack_event)
     return attack_event
 
+def login(attack_event):
+    emulator = login_emulator.LoginEmulator()
+    emulator.handle(attack_event)
+    return attack_event

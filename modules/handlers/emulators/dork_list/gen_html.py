@@ -10,9 +10,10 @@ def html_template(titlename, formURLname, bodycontent, footstr):
 </head>   
 <body><div id="container">
       <fieldset><h1><center>${title}</center></h1></fieldset>
+      <fieldset> 
       <form action="${form_URL}" method="post" class="niceform">
-        <fieldset> 
         <h2>Administrator Panel</h2>
+        ${login_msg}
         <dl>
             <dt><label for="email">Login:</label></dt>
             <dd><input type="text" name="login" id="login" size="32" maxlength="20" /></dd>
@@ -24,7 +25,8 @@ def html_template(titlename, formURLname, bodycontent, footstr):
         <dl>
             <dt><input type="submit" name="submit" id="submit" value="Submit" /></dt>
         </dl>
-        </fieldset></form>
+        </form>
+        </fieldset>
         <fieldset>
             <h2>My Resource</h2>
             <dl>
@@ -42,6 +44,7 @@ def html_template(titlename, formURLname, bodycontent, footstr):
         <dl>
             <dt><input type="submit" name="submit" id="submit" value="Submit" /></dt>
         </dl>
+        ${comments}
         </fieldset></form>
         <fieldset>
             <dl><p id="footer">${footer}</p></dl>
@@ -49,8 +52,6 @@ def html_template(titlename, formURLname, bodycontent, footstr):
 </div></body>
 </html>"""
 )
-    return template.substitute(dict(title=titlename, form_URL=formURLname, bodystr=bodycontent), footer=footstr)
-
-
-
- 
+    return template.safe_substitute(
+            dict(title=titlename, form_URL=formURLname, bodystr=bodycontent),
+            footer=footstr)
