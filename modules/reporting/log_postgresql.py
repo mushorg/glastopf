@@ -23,6 +23,8 @@ from modules.reporting.base_logger import BaseLogger
 
 try:
     import psycopg2
+    import psycopg2.extras
+
 except ImportError as e:
     import_error = e
 else:
@@ -60,6 +62,7 @@ class LogPostgreSQL(BaseLogger):
                 self.options['enabled'] = 'False'
             else:
                 self.create()
+                self.create_profiles_table()
         else:
             return None
 
@@ -84,13 +87,33 @@ class LogPostgreSQL(BaseLogger):
             print "Exception in creating events table:", e
         self.connection.commit()
 
+    def create_profiles_table(self):
+        cursor = self.connection.cursor()
+        try:
+                cursor.execute("""
+                        CREATE TABLE ip_profiles(
+                        ip VARCHAR(15) PRIMARY KEY,
+                        as_number INT,
+                        as_name VARCHAR,
+                        country_code VARCHAR(2),
+                        bgp_prefix INET,
+                        total_scans INT DEFAULT 0,
+                        total_requests INT DEFAULT 0,
+                        requests_per_scan FLOAT,
+                        avg_scan_duration INTERVAL DEFAULT '0',
+                        scan_time_period INTERVAL DEFAULT '0')
+                    """)
+        except psycopg2.ProgrammingError as e:
+            print "Exception in creating ip_profiles table:", e
+        self.connection.commit()
+
     def insert(self, attack_event):
         cursor = self.connection.cursor()
         # Use the first IP as there could be multiple IP addresses
         attack_event.source_addr = (attack_event.source_addr[0].split(',')[0],
                                     attack_event.source_addr[1])
         cursor.execute("""
-            INSERT INTO events(timestamp, source_ip, source_port, method, 
+            INSERT INTO events(timestamp, source_ip, source_port, method,
             request, request_body, header, module, filename, host)
             VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
@@ -122,6 +145,48 @@ class LogPostgreSQL(BaseLogger):
         cursor.execute("DROP TABLE %s" % table)
         self.connection.commit()
         cursor.close()
+
+    def insert_profile(self, ip_address):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+                INSERT INTO ip_profiles(ip) VALUES (%s)""", (ip_address,))
+        self.connection.commit()
+        cursor.close()
+
+    def update_profile(self, ip_profile):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+                UPDATE ip_profiles SET
+                as_number = %s,
+                as_name = %s,
+                country_code = %s,
+                total_requests = %s,
+                total_scans = %s,
+                bgp_prefix = %s,
+                requests_per_scan = %s,
+                avg_scan_duration = %s,
+                scan_time_period = %s
+                where ip = %s""",
+                (ip_profile.as_number, ip_profile.as_name,
+                ip_profile.country_code, ip_profile.total_requests,
+                ip_profile.total_scans, ip_profile.bgp_prefix,
+                ip_profile.requests_per_scan, ip_profile.avg_scan_duration,
+                ip_profile.scan_time_period, ip_profile.ip))
+        self.connection.commit()
+        cursor.close()
+
+    def get_profile(self, ip_profile):
+        dict_cur = self.connection.cursor(
+                        cursor_factory=psycopg2.extras.DictCursor)
+        dict_cur.execute("""SELECT * from  ip_profiles
+                        WHERE ip = %s""", (ip_profile.ip,))
+        if dict_cur.rowcount == 0:
+            return None
+        else:
+            profile_dict = dict_cur.fetchone()
+            for key, value in profile_dict.items():
+                setattr(ip_profile, key, value)
+            return ip_profile
 
     def close(self):
         if self.connection:
