@@ -3,11 +3,15 @@ from random import choice
 import codecs
 from urlparse import parse_qs
 from string import Template
+import cgi
 
 
 class CommentPoster(object):
     def __init__(self):
         pass
+
+    def html_escape(self, comment):
+        return cgi.escape(comment)
 
     def handle(self, attack_event):
         dork_page_list = os.listdir("modules/handlers/emulators/"
@@ -18,9 +22,10 @@ class CommentPoster(object):
         with codecs.open("modules/handlers/emulators/dork_list/pages/" +
                             dork_page, "r", "utf-8") as dork_page:
             try:
-                comment = ("<br/><br/>" +
-                           (parse_qs(attack_event.parsed_request.body)
-                            ['comment'][0]))
+                comment = (parse_qs(attack_event.parsed_request.body)
+                            ['comment'][0])
+                comment = self.html_escape(comment)
+                comment = "<br/><br/>" + comment
             except KeyError:
                 comment = ""
             else:
