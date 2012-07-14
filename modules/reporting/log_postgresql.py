@@ -20,6 +20,7 @@ import json
 from ConfigParser import ConfigParser
 
 from modules.reporting.base_logger import BaseLogger
+from modules.processing.ip_profile import IPProfile
 
 try:
     import psycopg2
@@ -175,14 +176,15 @@ class LogPostgreSQL(BaseLogger):
         self.connection.commit()
         cursor.close()
 
-    def get_profile(self, ip_profile):
+    def get_profile(self, source_ip):
         dict_cur = self.connection.cursor(
                         cursor_factory=psycopg2.extras.DictCursor)
         dict_cur.execute("""SELECT * from  ip_profiles
-                        WHERE ip = %s""", (ip_profile.ip,))
+                        WHERE ip = %s""", (source_ip,))
         if dict_cur.rowcount == 0:
             return None
         else:
+            ip_profile = IPProfile()
             profile_dict = dict_cur.fetchone()
             for key, value in profile_dict.items():
                 setattr(ip_profile, key, value)
