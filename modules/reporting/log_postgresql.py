@@ -102,7 +102,7 @@ class LogPostgreSQL(BaseLogger):
                         total_requests INT DEFAULT 0,
                         requests_per_scan FLOAT,
                         avg_scan_duration INTERVAL DEFAULT '0',
-                        scan_time_period INTERVAL DEFAULT '0'
+                        scan_time_period INTERVAL DEFAULT '0',
                         last_event_time TIMESTAMP)
                     """)
         except psycopg2.ProgrammingError as e:
