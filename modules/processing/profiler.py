@@ -1,11 +1,13 @@
 import collections
 import thread
 import time
+import subprocess
 from datetime import datetime, timedelta
 
-from scans_table import ScansTable
-from scan import Scan
+from modules.processing.scans_table import ScansTable
+from modules.processing.scan import Scan
 from modules import logging_handler
+from modules.processing.ip_profile import IPProfile
 
 
 class Profiler(object):
@@ -41,8 +43,51 @@ class Profiler(object):
             scan.requests += 1
             scan.last_event_time = event.event_time
 
+    def fetch_as_number(self, ip_profile):
+        cmd = subprocess.Popen(
+                    ['dig', '+short', self.reverse_ip(ip_profile.ip) +
+                    '.origin.asn.cymru.com', 'TXT'], stdout=subprocess.PIPE)
+        time.sleep(self.CYMRU_MIN_TIMEOUT)
+        if cmd.poll() is not None:
+            time.sleep(self.CYMRU_TIMEOUT)
+        if cmd.poll() is None:
+            cmd.kill()
+            return False
+        as_info = cmd.stdout.readline()
+        as_info = as_info.strip().strip('"').split('|')
+        # .split()[0] is added to deal with multiple ASNs
+        as_info = [word.strip().split()[0] for word in as_info]
+        try:
+            ip_profile.as_number = as_info[0]
+            ip_profile.bgp_prefix = as_info[1]
+            ip_profile.country_code = as_info[2]
+        except IndexError:
+            return False
+
+    def fetch_as_name(self, ip_profile):
+        cmd = subprocess.Popen(
+                    ['dig', '+short', ('AS' + ip_profile.as_number +
+                     '.asn.cymru.com'), 'TXT'], stdout=subprocess.PIPE)
+        as_info = cmd.stdout.readline()
+        time.sleep(self.CYMRU_MIN_TIMEOUT)
+        if cmd.poll() is not None:
+            time.sleep(self.CYMRU_TIMEOUT)
+        if cmd.poll() is None:
+            cmd.kill()
+            return
+        as_name_info = cmd.stdout.readline()
+        as_name_info = as_info.strip().strip('"').split('|')
+        try:
+            ip_profile.as_number = as_name_info[4].strip()
+        except IndexError:
+            pass
+
     def create_new_profile(self, source_ip):
-        pass
+        ip_profile = IPProfile()
+        ip_profile.ip = source_ip
+        if self.fetch_basic_as_number(ip_profile):
+            self.fetch_as_name(ip_profile)
+        return ip_profile
 
     def update_profile_with_scan(self, scan):
         pass
