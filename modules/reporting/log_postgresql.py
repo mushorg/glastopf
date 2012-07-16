@@ -102,7 +102,8 @@ class LogPostgreSQL(BaseLogger):
                         total_requests INT DEFAULT 0,
                         requests_per_scan FLOAT,
                         avg_scan_duration INTERVAL DEFAULT '0',
-                        scan_time_period INTERVAL DEFAULT '0')
+                        scan_time_period INTERVAL DEFAULT '0'
+                        last_event_time TIMESTAMP)
                     """)
         except psycopg2.ProgrammingError as e:
             print "Exception in creating ip_profiles table:", e
@@ -166,13 +167,15 @@ class LogPostgreSQL(BaseLogger):
                 bgp_prefix = %s,
                 requests_per_scan = %s,
                 avg_scan_duration = %s,
-                scan_time_period = %s
+                scan_time_period = %s,
+                last_event_time = %s
                 where ip = %s""",
                 (ip_profile.as_number, ip_profile.as_name,
                 ip_profile.country_code, ip_profile.total_requests,
                 ip_profile.total_scans, ip_profile.bgp_prefix,
                 ip_profile.requests_per_scan, ip_profile.avg_scan_duration,
-                ip_profile.scan_time_period, ip_profile.ip))
+                ip_profile.scan_time_period, ip_profile.last_event_time,
+                ip_profile.ip))
         self.connection.commit()
         cursor.close()
 

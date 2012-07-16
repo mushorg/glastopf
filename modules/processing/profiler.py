@@ -63,6 +63,8 @@ class Profiler(object):
             ip_profile.country_code = as_info[2]
         except IndexError:
             return False
+        else:
+            return True
 
     def fetch_as_name(self, ip_profile):
         cmd = subprocess.Popen(
@@ -85,12 +87,24 @@ class Profiler(object):
     def create_new_profile(self, source_ip):
         ip_profile = IPProfile()
         ip_profile.ip = source_ip
-        if self.fetch_basic_as_number(ip_profile):
+        if self.fetch_as_number(ip_profile):
             self.fetch_as_name(ip_profile)
         return ip_profile
 
-    def update_profile_with_scan(self, scan):
-        pass
+    def update_profile_with_scan(self, profile, scan):
+        profile.total_requests += scan.requests
+        profile.total_scans += 1
+        profile.requests_per_scan = (profile.total_requests /
+                                     profile.total_scans)
+        profile.avg_scan_duration = (
+                ((profile.avg_scan_duration * (profile.total_scans - 1)) +
+                 (scan.last_event_time - scan.start_time)) /
+                (profile.total_scans))
+        if profile.total_scans > 1:
+            profile.scan_time_period = (
+                ((profile.scan_time_period * (profile.total_scans - 2)) +
+                (scan.start_time - profile.last_event_time)) /
+                (profile.total_scans - 1))
 
     def update_profiles(self, loggers):
         self.scans_table.close_old_scans(self.scan_threshold)
@@ -101,7 +115,7 @@ class Profiler(object):
                     logger.insert_profile(source_ip)
                 ip_profile = self.create_new_profile(source_ip)
             for scan in self.scans[source_ip]['closed']:
-                ip_profile = self.update_profile_with_scan(scan)
+                ip_profile = self.update_profile_with_scan(ip_profile, scan)
             for logger in loggers:
                 logger.update_profile(ip_profile)
 
