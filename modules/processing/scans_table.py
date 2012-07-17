@@ -7,8 +7,8 @@ class ScansTable():
 
     def insert_scan(self, scan):
         if scan.source_ip not in self.scans:
-            self.scan[scan.source_ip] = {}
-            self.scan[scan.source_ip]['closed'] = []
+            self.scans[scan.source_ip] = {}
+            self.scans[scan.source_ip]['closed'] = []
         self.scans[scan.source_ip]['current'] = scan
 
     def get_current_scan(self, source_ip):

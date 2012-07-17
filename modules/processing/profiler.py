@@ -3,6 +3,7 @@ import thread
 import time
 import subprocess
 from datetime import datetime, timedelta
+import re
 
 from modules.processing.scans_table import ScansTable
 from modules.processing.scan import Scan
@@ -14,14 +15,27 @@ class Profiler(object):
     def __init__(self):
         self.scans_table = ScansTable()
         self.events_deque = collections.deque()
-        self.deque_read_interval = 30
+        self.deque_read_interval = 15
         self.scan_threshold = 3600
+        #self.scan_threshold = 60
+        self.cymru_min_timeout = 2
+        self.cymru_timeout = 3
         self.profile_update_time = datetime.now() + timedelta(hours=24)
+        #self.profile_update_time = datetime.now() + timedelta(minutes=1)
         self.loggers = logging_handler.get_loggers()
-        thread.start_new_thread(self.run)
+        thread.start_new_thread(self.run, ())
+
+    # Reverse the IP address for querying origin.asn.cymru.com
+    def reverse_ip(self, ip):
+        ipreg = re.compile("([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})"
+                                    "\.([0-9]{1,3})$")
+        m = ipreg.match(ip)
+        if m is not None:
+            return (m.group(4) + "." + m.group(3) + "." + m.group(2) +
+                    "." + m.group(1))
 
     def handle_event(self, event):
-        self.events_deque.appendleft()
+        self.events_deque.appendleft(event)
 
     def update_scan(self, event):
         source_ip = event.source_addr[0].split(',')[0]
@@ -41,18 +55,22 @@ class Profiler(object):
             self.scans_table.insert_scan(scan)
         else:
             scan.requests += 1
-            scan.last_event_time = event.event_time
+            scan.last_event_time = event_time
 
     def fetch_as_number(self, ip_profile):
         cmd = subprocess.Popen(
                     ['dig', '+short', self.reverse_ip(ip_profile.ip) +
                     '.origin.asn.cymru.com', 'TXT'], stdout=subprocess.PIPE)
-        time.sleep(self.CYMRU_MIN_TIMEOUT)
-        if cmd.poll() is not None:
-            time.sleep(self.CYMRU_TIMEOUT)
+        time.sleep(self.cymru_min_timeout)
         if cmd.poll() is None:
-            cmd.kill()
-            return False
+            time.sleep(self.cymru_timeout)
+            if cmd.poll() is None:
+                try:
+                    cmd.kill()
+                except:
+                    pass
+                else:
+                    return False
         as_info = cmd.stdout.readline()
         as_info = as_info.strip().strip('"').split('|')
         # .split()[0] is added to deal with multiple ASNs
@@ -71,16 +89,20 @@ class Profiler(object):
                     ['dig', '+short', ('AS' + ip_profile.as_number +
                      '.asn.cymru.com'), 'TXT'], stdout=subprocess.PIPE)
         as_info = cmd.stdout.readline()
-        time.sleep(self.CYMRU_MIN_TIMEOUT)
-        if cmd.poll() is not None:
-            time.sleep(self.CYMRU_TIMEOUT)
+        time.sleep(self.cymru_min_timeout)
         if cmd.poll() is None:
-            cmd.kill()
-            return
+            time.sleep(self.cymru_timeout)
+            if cmd.poll() is None:
+            try:
+                cmd.kill()
+            except:
+                pass
+            else:
+                return
         as_name_info = cmd.stdout.readline()
         as_name_info = as_info.strip().strip('"').split('|')
         try:
-            ip_profile.as_number = as_name_info[4].strip()
+            ip_profile.as_name = as_name_info[4].strip()
         except IndexError:
             pass
 
@@ -105,32 +127,35 @@ class Profiler(object):
                 ((profile.scan_time_period * (profile.total_scans - 2)) +
                 (scan.start_time - profile.last_event_time)) /
                 (profile.total_scans - 1))
+        profile.last_event_time = scan.last_event_time
 
     def update_profiles(self, loggers):
         self.scans_table.close_old_scans(self.scan_threshold)
-        for source_ip in self.scans:
+        for source_ip in self.scans_table.scans:
             ip_profile = loggers[0].get_profile(source_ip)
             if ip_profile is None:
                 for logger in loggers:
                     logger.insert_profile(source_ip)
                 ip_profile = self.create_new_profile(source_ip)
-            for scan in self.scans[source_ip]['closed']:
-                ip_profile = self.update_profile_with_scan(ip_profile, scan)
+            for scan in self.scans_table.scans[source_ip]['closed']:
+                self.update_profile_with_scan(ip_profile, scan)
             for logger in loggers:
                 logger.update_profile(ip_profile)
+        self.scans_table.delete_closed_scans()
 
     def run(self):
         while True:
             if len(self.events_deque) == 0:
+                if datetime.now() > self.profile_update_time:
+                    # Should change this after adding ip_profile code to other
+                    # reporting modules
+                    supported_loggers = []
+                    for logger in self.loggers:
+                        if logger.__class__.__name__ in ('LogPostgreSQL',):
+                            supported_loggers.append(logger)
+                    self.update_profiles(supported_loggers)
+                    #self.profile_update_time += timedelta(hours=24)
+                    self.profile_update_time += timedelta(minutes=2)
                 time.sleep(self.deque_read_interval)
                 continue
             self.update_scan(self.events_deque.pop())
-            if datetime.now() > self.profile_update_time:
-                # Should change this after adding ip_profile code to other
-                # reporting modules
-                supported_loggers = []
-                for logger in self.loggers:
-                    if logger.__class__.__name__ in ('LogPostgreSQL',):
-                        supported_loggers.append(logger)
-                self.update_profiles(supported_loggers)
-            self.profile_update_time += timedelta(hours=24)

@@ -30,6 +30,7 @@ from modules.handlers.emulators.dork_list import gen_dork_list
 import modules.reporting.file_logger as file_logger
 from modules import logging_handler
 import modules.privileges as privileges
+import modules.processing.profiler as profiler
 
 
 class GlastopfHoneypot(object):
@@ -55,6 +56,7 @@ class GlastopfHoneypot(object):
         self.regular_gen_dork.start()
         privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
+        self.profiler = profiler.Profiler()
 
     def print_info(self, attack_event):
         print attack_event.event_time,
@@ -84,6 +86,7 @@ class GlastopfHoneypot(object):
         else:
             attack_event.source_addr = addr
                        
+        self.profiler.handle_event(attack_event)
         self.print_info(attack_event)
         # Start response with the server header
         # TODO: Add msg length header

@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+
 class IPProfile(object):
     def __init__(self):
         self.ip = None
@@ -8,6 +11,6 @@ class IPProfile(object):
         self.total_scans = 0
         self.bgp_prefix = None
         self.requests_per_scan = None
-        self.avg_scan_duration = 0
-        self.scan_time_period = 0
+        self.avg_scan_duration = timedelta()
+        self.scan_time_period = timedelta()
         self.last_event_time = None
