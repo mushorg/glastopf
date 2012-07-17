@@ -93,12 +93,12 @@ class Profiler(object):
         if cmd.poll() is None:
             time.sleep(self.cymru_timeout)
             if cmd.poll() is None:
-            try:
-                cmd.kill()
-            except:
-                pass
-            else:
-                return
+                try:
+                    cmd.kill()
+                except:
+                    pass
+                else:
+                    return
         as_name_info = cmd.stdout.readline()
         as_name_info = as_info.strip().strip('"').split('|')
         try:
