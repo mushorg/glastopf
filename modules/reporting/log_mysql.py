@@ -23,7 +23,7 @@ from modules.reporting.base_logger import BaseLogger
 
 class LogMySQL(BaseLogger):
 
-    def __init__(self, config="glastopf.cfg"):
+    def __init__(self, config="glastopf.cfg", create_tables=True):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
@@ -40,13 +40,13 @@ class LogMySQL(BaseLogger):
                 self.connection = MySQLdb.connect(self.options['host'],
                                           self.options['user'],
                                           self.options['password'],
-                                          self.options['database']
-                                          )
+                                          self.options['database'])
             except Exception as e:
                 print "Unable to connect to MySQL service: {}".format(e)
                 self.options['enabled'] = 'False'
             else:
-                self.create()
+                if create_tables:
+                    self.create()
         else:
             return None
 
@@ -85,9 +85,7 @@ class LogMySQL(BaseLogger):
             json.dumps(attack_event.parsed_request.header),
             attack_event.matched_pattern,
             attack_event.file_name,
-            attack_event.parsed_request.header.get('Host', "None")
-            )
-                       )
+            attack_event.parsed_request.header.get('Host', "None")))
         self.connection.commit()
         cursor.close()
 

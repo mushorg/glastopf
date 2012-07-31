@@ -25,6 +25,25 @@ class Profiler(object):
         self.loggers = logging_handler.get_loggers()
         thread.start_new_thread(self.run, ())
 
+    @staticmethod
+    def add_comment(ip_address, comment):
+        loggers = logging_handler.get_loggers(create_tables=False)
+        supported_loggers = []
+        for logger in loggers:
+            if logger.__class__.__name__ in ('LogPostgreSQL',):
+                supported_loggers.append(logger)
+        for logger in supported_loggers:
+            logger.add_comment(ip_address, comment)
+
+    @staticmethod
+    def get_comments(ip_address):
+        loggers = logging_handler.get_loggers(create_tables=False)
+        supported_loggers = []
+        for logger in loggers:
+            if logger.__class__.__name__ in ('LogPostgreSQL',):
+                supported_loggers.append(logger)
+        return supported_loggers[0].get_comments(ip_address)
+
     # Reverse the IP address for querying origin.asn.cymru.com
     def reverse_ip(self, ip):
         ipreg = re.compile("([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})"

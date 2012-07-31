@@ -32,9 +32,10 @@ class FileLogger(object):
         self.log_format = log_format
 
     def set_handler(self):
-        self.log_handler = logging.handlers.TimedRotatingFileHandler(self.logfile_name,
-                                                                     when="midnight",
-                                                                     backupCount=31)
+        self.log_handler = logging.handlers.TimedRotatingFileHandler(
+                                                    self.logfile_name,
+                                                    when="midnight",
+                                                    backupCount=31)
 
     def set_format(self):
         # TODO: change format

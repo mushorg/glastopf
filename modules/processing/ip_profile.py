@@ -14,3 +14,4 @@ class IPProfile(object):
         self.avg_scan_duration = timedelta()
         self.scan_time_period = timedelta()
         self.last_event_time = None
+        self.comments = None

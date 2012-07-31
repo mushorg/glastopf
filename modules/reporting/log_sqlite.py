@@ -25,7 +25,7 @@ from modules.reporting.base_logger import BaseLogger
 class LogSQLite(BaseLogger):
     # TODO: Add SQLite error handling
 
-    def __init__(self, config="glastopf.cfg"):
+    def __init__(self, config="glastopf.cfg", create_tables=True):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
@@ -34,12 +34,14 @@ class LogSQLite(BaseLogger):
             }
         if self.options['enabled'] == "True":
             try:
-                self.connection = sqlite3.connect("db/%s" % self.options['database'])
+                self.connection = sqlite3.connect("db/%s" %
+                                    self.options['database'])
             except:
                 print "Unable to connect to MySQL service"
                 self.options['enabled'] = 'False'
             else:
-                self.create()
+                if create_tables:
+                    self.create()
         else:
             return None
 
@@ -70,9 +72,10 @@ class LogSQLite(BaseLogger):
         self.cursor.execute("""
                 INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (None, attack_event.event_time,
-                 attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1]),
-                 attack_event.parsed_request.method, 
-                 attack_event.parsed_request.url, 
+                 (attack_event.source_addr[0] + ":" +
+                 str(attack_event.source_addr[1])),
+                 attack_event.parsed_request.method,
+                 attack_event.parsed_request.url,
                  attack_event.parsed_request.body,
                  attack_event.matched_pattern,
                  attack_event.file_name, response,

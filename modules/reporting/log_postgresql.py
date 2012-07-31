@@ -34,7 +34,7 @@ else:
 
 class LogPostgreSQL(BaseLogger):
 
-    def __init__(self, config="glastopf.cfg"):
+    def __init__(self, config="glastopf.cfg", create_tables=True):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
@@ -62,8 +62,9 @@ class LogPostgreSQL(BaseLogger):
                 print "Unable to connect to PostgreSQL service:", e
                 self.options['enabled'] = 'False'
             else:
-                self.create()
-                self.create_profiles_table()
+                if create_tables:
+                    self.create()
+                    self.create_profiles_table()
         else:
             return None
 
@@ -103,7 +104,9 @@ class LogPostgreSQL(BaseLogger):
                         requests_per_scan FLOAT,
                         avg_scan_duration INTERVAL DEFAULT '0',
                         scan_time_period INTERVAL DEFAULT '0',
-                        last_event_time TIMESTAMP)
+                        last_event_time TIMESTAMP,
+                        comments TEXT,
+                        is_new BOOLEAN DEFAULT TRUE)
                     """)
         except psycopg2.ProgrammingError as e:
             print "Exception in creating ip_profiles table:", e
@@ -150,8 +153,11 @@ class LogPostgreSQL(BaseLogger):
 
     def insert_profile(self, ip_address):
         cursor = self.connection.cursor()
-        cursor.execute("""
+        try:
+            cursor.execute("""
                 INSERT INTO ip_profiles(ip) VALUES (%s)""", (ip_address,))
+        except psycopg2.Error:
+            pass
         self.connection.commit()
         cursor.close()
 
@@ -169,6 +175,7 @@ class LogPostgreSQL(BaseLogger):
                 avg_scan_duration = %s,
                 scan_time_period = %s,
                 last_event_time = %s
+                is_new = FALSE
                 where ip = %s""",
                 (ip_profile.as_number, ip_profile.as_name,
                 ip_profile.country_code, ip_profile.total_requests,
@@ -179,11 +186,37 @@ class LogPostgreSQL(BaseLogger):
         self.connection.commit()
         cursor.close()
 
+    def add_comment(self, ip_address, comment):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+                UPDATE ip_profiles SET
+                comments = comments || %s
+                where ip = %s""",
+                (comment, ip_address))
+        if cursor.rowcount == 0:
+            cursor.execute("""
+                INSERT INTO ip_profiles(ip, comments)
+                VALUES (%s, %s)""", (ip_address, comment))
+        self.connection.commit()
+        cursor.close()
+
+    def get_comments(self, ip_address):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+                SELECT comments
+                FROM ip_profiles
+                WHERE ip = %s""",
+                (ip_address, ))
+        if cursor.rowcount != 0:
+            return cursor.fetchone()[0]
+        return ''
+        cursor.close()
+
     def get_profile(self, source_ip):
         dict_cur = self.connection.cursor(
                         cursor_factory=psycopg2.extras.DictCursor)
         dict_cur.execute("""SELECT * from  ip_profiles
-                        WHERE ip = %s""", (source_ip,))
+                        WHERE ip = %s and is_new = FALSE""", (source_ip,))
         if dict_cur.rowcount == 0:
             return None
         else:

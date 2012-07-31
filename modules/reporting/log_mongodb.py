@@ -22,7 +22,7 @@ from modules.reporting.base_logger import BaseLogger
 
 class LogMongoDB(BaseLogger):
 
-    def __init__(self, config="glastopf.cfg"):
+    def __init__(self, config="glastopf.cfg", create_tables=True):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {

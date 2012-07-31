@@ -30,7 +30,7 @@ def _get_logger_names(path='modules/reporting/'):
     return names
 
 
-def get_loggers():
+def get_loggers(create_tables=True):
     loggers = []
     try:
         BaseLogger()
@@ -43,7 +43,7 @@ def get_loggers():
         return None
     else:
         for logger_class in logger_classes:
-            logger = logger_class()
+            logger = logger_class(create_tables=create_tables)
             if logger.options['enabled'] == 'True':
                 loggers.append(logger)
         return loggers

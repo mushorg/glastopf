@@ -30,7 +30,7 @@ import modules.handlers.emulators.login as login_emulator
 
 def unknown(attack_event):
     emulator = unknown_emulator.DorkList()
-    attack_event.response += emulator.get_response()
+    attack_event.response += emulator.get_response(attack_event)
     return attack_event
 
 
