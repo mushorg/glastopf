@@ -42,7 +42,10 @@ class Profiler(object):
         for logger in loggers:
             if logger.__class__.__name__ in ('LogPostgreSQL',):
                 supported_loggers.append(logger)
-        return supported_loggers[0].get_comments(ip_address)
+        if len(supported_loggers) > 0:
+            return supported_loggers[0].get_comments(ip_address)
+        else:
+            return ''
 
     # Reverse the IP address for querying origin.asn.cymru.com
     def reverse_ip(self, ip):
