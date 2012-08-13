@@ -94,7 +94,7 @@ class LogPostgreSQL(BaseLogger):
         try:
                 cursor.execute("""
                         CREATE TABLE ip_profiles(
-                        ip VARCHAR(15) PRIMARY KEY,
+                        ip INET PRIMARY KEY,
                         as_number INT,
                         as_name VARCHAR,
                         country_code VARCHAR(2),
@@ -174,7 +174,7 @@ class LogPostgreSQL(BaseLogger):
                 requests_per_scan = %s,
                 avg_scan_duration = %s,
                 scan_time_period = %s,
-                last_event_time = %s
+                last_event_time = %s,
                 is_new = FALSE
                 where ip = %s""",
                 (ip_profile.as_number, ip_profile.as_name,
