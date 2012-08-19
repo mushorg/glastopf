@@ -16,12 +16,12 @@ class Profiler(object):
         self.scans_table = ScansTable()
         self.events_deque = collections.deque()
         self.deque_read_interval = 15
-        self.scan_threshold = 3600
+        self.scan_threshold = 300
         #self.scan_threshold = 60
         self.cymru_min_timeout = 2
         self.cymru_timeout = 3
-        self.profile_update_time = datetime.now() + timedelta(hours=24)
-        #self.profile_update_time = datetime.now() + timedelta(minutes=1)
+        #self.profile_update_time = datetime.now() + timedelta(hours=24)
+        self.profile_update_time = datetime.now() + timedelta(minutes=30)
         self.loggers = logging_handler.get_loggers()
         thread.start_new_thread(self.run, ())
 
@@ -55,6 +55,8 @@ class Profiler(object):
         if m is not None:
             return (m.group(4) + "." + m.group(3) + "." + m.group(2) +
                     "." + m.group(1))
+        else:
+            return ""
 
     def handle_event(self, event):
         self.events_deque.appendleft(event)
@@ -151,6 +153,10 @@ class Profiler(object):
                 (profile.total_scans - 1))
         profile.last_event_time = scan.last_event_time
 
+    def update_profile_with_current_scan(self, profile, scan):
+        profile.total_requests += scan.requests - scan.requests_posted
+        scan.requests_posted = scan.requests
+
     def update_profiles(self, loggers):
         self.scans_table.close_old_scans(self.scan_threshold)
         for source_ip in self.scans_table.scans:
@@ -161,6 +167,9 @@ class Profiler(object):
                 ip_profile = self.create_new_profile(source_ip)
             for scan in self.scans_table.scans[source_ip]['closed']:
                 self.update_profile_with_scan(ip_profile, scan)
+            if 'current' in self.scans_table.scans[source_ip]:
+                scan = self.scans_table.scans[source_ip]['current']
+                self.update_profile_with_current_scan(ip_profile, scan)
             for logger in loggers:
                 logger.update_profile(ip_profile)
         self.scans_table.delete_closed_scans()
@@ -177,7 +186,7 @@ class Profiler(object):
                             supported_loggers.append(logger)
                     self.update_profiles(supported_loggers)
                     #self.profile_update_time += timedelta(hours=24)
-                    self.profile_update_time += timedelta(minutes=2)
+                    self.profile_update_time += timedelta(minutes=30)
                 time.sleep(self.deque_read_interval)
                 continue
             self.update_scan(self.events_deque.pop())

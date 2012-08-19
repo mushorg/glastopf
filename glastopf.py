@@ -45,7 +45,7 @@ class GlastopfHoneypot(object):
             "enabled": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
-            "squid": conf_parser.get("webserver","squid").encode('latin1')
+            "squid": conf_parser.get("webserver", "squid").encode('latin1')
         }
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
@@ -76,16 +76,14 @@ class GlastopfHoneypot(object):
         # Parse the request
         attack_event.parsed_request = HTTP_parser.parse_request(raw_request)
         if self.options["squid"] == "True":
-           # Changes to make the log work when running glaspot behind Squid
-            client_addr = []
-            client_addr.append(attack_event.\
-                                  parsed_request.header['X-Forwarded-For'])
-            client_addr.append(addr[1]) #Note: This is a bogus port number!
-            client_addr = tuple(client_addr)
-            attack_event.source_addr = client_addr
+            client_ip = attack_event.parsed_request.header['X-Forwarded-For']
+            client_ip = client_ip.split(',')[-1]
+            if client_ip == 'unknown':
+                client_ip = '0.0.0.0'
+            # Note: the port number is not relevant in this case
+            attack_event.source_addr = (client_ip, addr[1])
         else:
             attack_event.source_addr = addr
-                       
         self.profiler.handle_event(attack_event)
         self.print_info(attack_event)
         # Start response with the server header
