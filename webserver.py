@@ -49,6 +49,7 @@ class WebSock(EventGen):
         self.c._on('ready', self.ready)
         self.c._on('close', self.closed)
         self.c._on('read', self.read)
+        self.c._on('allsent', self.close)
 
     def ready(self):
         self._event('ready')
@@ -60,10 +61,12 @@ class WebSock(EventGen):
         #print 'read', repr(d)
         response = self.glastopf_honeypot.handle_request(d, self.addr, self.c)
         self.send(response)
-        self.c.close()
 
     def send(self, s):
         self.c.write(s)
+
+    def close(self, s):
+        self.c.close(s)
 
 if __name__ == '__main__':
     a = WebSockListener()
