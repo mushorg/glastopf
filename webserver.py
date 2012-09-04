@@ -65,8 +65,8 @@ class WebSock(EventGen):
     def send(self, s):
         self.c.write(s)
 
-    def close(self, s):
-        self.c.close(s)
+    def close(self):
+        self.c.close()
 
 if __name__ == '__main__':
     a = WebSockListener()

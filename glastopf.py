@@ -77,7 +77,7 @@ class GlastopfHoneypot(object):
         attack_event.parsed_request = HTTP_parser.parse_request(raw_request)
         if self.options["squid"] == "True":
             client_ip = attack_event.parsed_request.header['X-Forwarded-For']
-            client_ip = client_ip.split(',')[-1]
+            client_ip = client_ip.split(',')[-1].strip()
             if client_ip == 'unknown':
                 client_ip = '0.0.0.0'
             # Note: the port number is not relevant in this case

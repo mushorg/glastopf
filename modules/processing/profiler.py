@@ -184,6 +184,8 @@ class Profiler(object):
                     for logger in self.loggers:
                         if logger.__class__.__name__ in ('LogPostgreSQL',):
                             supported_loggers.append(logger)
+                    if len(supported_loggers) == 0:
+                        break
                     self.update_profiles(supported_loggers)
                     #self.profile_update_time += timedelta(hours=24)
                     self.profile_update_time += timedelta(minutes=30)
