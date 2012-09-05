@@ -29,6 +29,8 @@ def drop(new_uid='nobody', new_gid='nogroup'):
             recursive_chown("log", run_uid, run_gid)
             os.chown("modules/handlers/emulators/dork_list/pages",
                      run_uid, run_gid)
+            os.chown("modules/handlers/emulators/dork_list/comments.txt",
+                     run_uid, run_gid)
         except OSError, e:
             print "Could not change file owner: %s" % (e)
         try:
