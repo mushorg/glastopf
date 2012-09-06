@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<responses>
+	<response>
+		<id>mysql_error</id>
+		<description>MySQL error message</description>
+		<content>Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PAYLOAD' at line 1</content>
+	</response>
+</responses>

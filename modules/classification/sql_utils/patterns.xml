@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<patterns>
+  <pattern>
+    <id>0</id>
+    <!-- Single quote -->
+    <string><![CDATA[(\%27)|(\')]]></string>
+    <db>mysql,postgresql,oracle,mssql</db>
+    <response>error</response>
+  </pattern>
+  <pattern>
+    <id>1</id>
+    <!-- Executes stored MSSQL procedure -->
+    <string><![CDATA[exec(\s|\+)+(s|x)p\w+]]></string>
+    <db>mssql</db>
+    <response>None</response>
+  </pattern>
+  <pattern>
+    <id>2</id>
+    <!-- Simple HTML script injection -->
+    <string><![CDATA[((\%3C)|<)((\%2F)|\/)*[a-z0-9\%]+((\%3E)|>)]]></string>
+    <db>mysql,postgresql,oracle,mssql</db>
+    <response>error</response>
+  </pattern>
+  <pattern>
+    <id>3</id>
+    <!-- Pound symbol -->
+    <string><![CDATA[(\%23)|(#)]]></string>
+    <db></db>
+    <response>error</response>
+  </pattern>
+  <pattern>
+    <id>4</id>
+    <!-- Query terminating -->
+    <string><![CDATA[(\-\-)]]></string>
+    <db></db>
+    <response>None</response>
+  </pattern>
+  <pattern>
+    <id>5</id>
+    <!-- Semicolon -->
+    <string><![CDATA[(;)]]></string>
+    <db></db>
+    <response>None</response>
+  </pattern>
+  <pattern>
+    <id>6</id>
+    <!-- Right parenthesis -->
+    <string><![CDATA[(\))]]></string>
+    <db>mysql,postgresql,oracle,mssql</db>
+    <response>error</response>
+  </pattern>
+  <pattern>
+    <id>7</id>
+    <!-- Semicolon and bracked -->
+    <string><![CDATA[(\'\))]]></string>
+    <db>mysql,postgresql,oracle,mssql</db>
+    <response>error</response>
+  </pattern>
+  <pattern>
+    <id>8</id>
+    <!-- Two right and left parenthesis -->
+    <string><![CDATA[(\)\)*?\(\()|(\(\(*?\)\))]]></string>
+    <db>mysql,postgresql,oracle,mssql</db>
+    <response>error</response>
+  </pattern>
+  <pattern>
+    <id>9</id>
+    <!-- A single white space and an SQL "AND" -->
+    <string><![CDATA[( AND)]]></string>
+    <db>mysql,postgresql,oracle,mssql</db>
+    <response>error</response>
+  </pattern>
+</patterns>
