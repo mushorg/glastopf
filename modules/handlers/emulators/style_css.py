@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Phani Vadrevu
+# Copyright (C) 2012  Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,20 +15,16 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os
-
 from modules.handlers import base_emulator
 
 
-class FileServer(base_emulator.BaseEmulator):
+class StyleHandler(base_emulator.BaseEmulator):
+
     def __init__(self):
         pass
 
     def handle(self, attack_event):
-        server_path = 'modules/handlers/emulators/server_files'
-        request_file = attack_event.parsed_request.url.lstrip('/')
-        if request_file == "":
-            request_file = "index.html"
-        if os.path.isfile(os.path.join(server_path, request_file)):
-            with open(os.path.join(server_path, request_file), 'r') as f:
-                attack_event.response += f.read()
+        style_path = 'modules/handlers/emulators/style/style.css'
+        with open(style_path, 'r') as style_file:
+            attack_event.response = style_file.read()
+        return attack_event

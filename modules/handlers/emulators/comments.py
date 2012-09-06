@@ -7,8 +7,10 @@ import cgi
 
 import modules.processing.profiler as profiler
 
+from modules.handlers import base_emulator
 
-class CommentPoster(object):
+
+class CommentPoster(base_emulator.BaseEmulator):
     def __init__(self):
         pass
 
@@ -16,8 +18,9 @@ class CommentPoster(object):
         return cgi.escape(comment)
 
     def handle(self, attack_event):
-        dork_page_list = os.listdir("modules/handlers/emulators/"
-                                    "dork_list/pages")
+        # TODO: Use the unknown emulators _get_template function.
+        pages_path = "modules/handlers/emulators/dork_list/pages"
+        dork_page_list = os.listdir(pages_path)
         if '.svn' in dork_page_list:
             dork_page_list.remove('.svn')
         dork_page = choice(dork_page_list)
