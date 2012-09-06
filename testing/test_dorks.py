@@ -27,6 +27,7 @@ from modules.handlers.emulators.dork_list import remote_exploits
 from modules.events import attack
 from modules.HTTP import util
 
+
 class TestDorks(unittest.TestCase):
     """Tests the honeypots vulnerable string selection.
     We first start with the integration test and continue with unit tests"""
@@ -42,7 +43,7 @@ class TestDorks(unittest.TestCase):
         Expected Results: Successful connected to the database.
         Notes: We check if we are connected to the right database and collection.""" 
         print "Starting database test..."
-        self.assertEqual(self.db.db.name, 'honeypot')
+        self.assertEqual(self.db.db.name, 'glastopf')
         self.assertEqual(self.db.collection.name, 'events')
         print "Database name and Collection name:",
         print self.db.db.name, 'and', self.db.collection.name

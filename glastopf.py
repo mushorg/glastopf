@@ -45,18 +45,21 @@ class GlastopfHoneypot(object):
             "enabled": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
-            "squid": conf_parser.get("webserver", "squid").encode('latin1')
+            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1')
         }
         if self.options["enabled"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
             self.log.info('HPFeeds started')
         gen_dork_list.regular_generate_dork(0)
-        self.regular_gen_dork = threading.Thread(target=gen_dork_list.regular_generate_dork,args=(30,))
+        self.regular_gen_dork = threading.Thread(
+                        target=gen_dork_list.regular_generate_dork, args=(30,))
         self.regular_gen_dork.daemon = True
         self.regular_gen_dork.start()
+        self.HTTP_parser = util.HTTPParser()
+        self.MethodHandlers = method_handler.HTTPMethods()
+        self.profiler = profiler.Profiler()
         privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
-        self.profiler = profiler.Profiler()
 
     def print_info(self, attack_event):
         print attack_event.event_time,
@@ -68,20 +71,22 @@ class GlastopfHoneypot(object):
                       attack_event.parsed_request.method,
                       attack_event.parsed_request.url]))
 
+    def _handle_proxy(self, attack_event, addr):
+        client_ip = attack_event.parsed_request.header['X-Forwarded-For']
+        client_ip = client_ip.split(',')[-1]
+        if client_ip == 'unknown':
+            client_ip = '0.0.0.0'
+        # Note: the port number is not relevant in this case
+        attack_event.source_addr = (client_ip, addr[1])
+
     def handle_request(self, raw_request, addr, connection):
-        HTTP_parser = util.HTTPParser()
         attack_event = attack.AttackEvent()
         attack_event.sensor_addr = connection.sock.getsockname()
         attack_event.raw_request = raw_request
         # Parse the request
-        attack_event.parsed_request = HTTP_parser.parse_request(raw_request)
-        if self.options["squid"] == "True":
-            client_ip = attack_event.parsed_request.header['X-Forwarded-For']
-            client_ip = client_ip.split(',')[-1].strip()
-            if client_ip == 'unknown':
-                client_ip = '0.0.0.0'
-            # Note: the port number is not relevant in this case
-            attack_event.source_addr = (client_ip, addr[1])
+        attack_event.parsed_request = self.HTTP_parser.parse_request(raw_request)
+        if self.options["proxy_enabled"] == "True":
+            self._handle_proxy(attack_event)
         else:
             attack_event.source_addr = addr
         self.profiler.handle_event(attack_event)
@@ -89,28 +94,28 @@ class GlastopfHoneypot(object):
         # Start response with the server header
         # TODO: Add msg length header
         response = util.HTTPServerResponse()
-        attack_event.response = response.get_header\
-                                             (attack_event.parsed_request)
-        MethodHandlers = method_handler.HTTPMethods()
+        attack_event.response = response.get_header(
+                                            attack_event.parsed_request
+                                            )
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
-                                MethodHandlers,
+                                self.MethodHandlers,
                                 attack_event.parsed_request.method,
-                                MethodHandlers.GET
+                                self.MethodHandlers.GET
                                 )(attack_event.parsed_request)
         gen_dork_list.collect_dork(attack_event)
         # Handle the request with the specific vulnerability module
-        getattr(request_handler, attack_event.matched_pattern,
-                request_handler.unknown)(attack_event)
+        emulator = request_handler.get_handler(attack_event.matched_pattern)
+        emulator.handle(attack_event)
         # Logging the event
         for logger in self.loggers:
             logger.insert(attack_event)
         if self.options["enabled"] == "True":
             self.hpfeeds_logger.handle_send("glastopf.events",
-                                        json.dumps(attack_event.event_dict()))
+                                json.dumps(attack_event.event_dict()))
             if attack_event.file_name != None:
                 with file("files/" + attack_event.file_name, 'r') as file_handler:
                     file_content = file_handler.read()
                 self.hpfeeds_logger.handle_send("glastopf.files",
-                                                attack_event.file_name + " " + base64.b64encode(file_content))
+                                attack_event.file_name + " " + base64.b64encode(file_content))
         return attack_event.response

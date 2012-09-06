@@ -15,20 +15,11 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from modules.handlers.base_emulator import BaseEmulator
 
+class BaseEmulator(object):
 
-def get_handler(name):
-    try:
-        BaseEmulator()
-        module_name = "modules.handlers.emulators." + name
-        __import__(module_name, globals(), locals(), [], -1)
-        emulators = BaseEmulator.__subclasses__()
-    except ImportError as e:
-        print e
-        return get_handler("unknown")
-    else:
-        for emulator in emulators:
-            if emulator.__module__.rsplit(".", 1)[1].strip() == name:
-                return emulator()
-        return get_handler("unknown")
+    def __init__(self):
+        pass
+
+    def handle(self):
+        pass
