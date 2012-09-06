@@ -1,3 +1,20 @@
+# Copyright (C) 2012  Lukas Rist
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 from random import choice, shuffle
 import hashlib
 import codecs
@@ -8,6 +25,8 @@ import process_dork_file
 import dork_db
 import time
 import os
+import database
+import cluster
 
 
 def prepare_text():
@@ -27,31 +46,31 @@ def generate_dork_pages(first):
     line_list = prepare_text()
     shuffle(line_list)
     dork_reader = dork_db.DorkDB()
-    inurl_list = dork_reader.get_dork_list('inurl')
+    #inurl_list = dork_reader.get_dork_list('inurl')
+    db = database.DorkDB()
+    inurl_list = db.select_data()
+    c = cluster.Cluster()
+    c.cluster(inurl_list, db.config)
+    inurl_cluster = choice(c.clusters)
     intext_list = dork_reader.get_dork_list('intext')
     intitle_list = dork_reader.get_dork_list('intitle')
-    shuffle(inurl_list)
-    while len(inurl_list) > 50 and len(line_list) > 50:
+    while len(inurl_list) > 50 and len(line_list) > 56:
         body = ''
         for i in range(0, 49):
             body += line_list.pop()
-            body += " <a href='%s'>%s</a> " % (inurl_list.pop()[0],
-                                               choice(intext_list)[0])
+            href = inurl_list.pop()
+            body += " <a href='%s'>%s</a> " % (href, choice(intext_list)[0])
+        for i in range(0, 5):
+            body += line_list.pop()
+            href = choice(inurl_cluster)
+            body += " <a href='%s'>%s</a> " % (href, choice(intext_list)[0])
         dork_page = gen_html.html_template(choice(intitle_list)[0],
-                                           "login",
+                                           "http://localhost:8080",
                                            body, 
-                                           "Epic Footer Powered By")
+                                           "Footer Powered By")
         page_md5 = hashlib.md5(dork_page).hexdigest()
         with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
-
-
-def remove_old_dork_pages(old_dork_list):
-    for file_path in old_dork_list:
-        try:
-            os.unlink(file_path)
-        except Exception, e:
-            print "Error deleting old dork pages:", e
 
 
 def get_old_dork_pages_list(folder):
@@ -63,16 +82,23 @@ def get_old_dork_pages_list(folder):
     return dork_lists
 
 
-def regular_generate_dork(sleep_time):
-    sleep_time = sleep_time * 60
-    dirname = 'modules/handlers/emulators/dork_list/pages/'
+def remove_old_dork_pages(old_dork_list):
+    for file_path in old_dork_list:
+        try:
+            os.unlink(file_path)
+        except Exception, e:
+            pass
+
+
+def regular_generate_dork(sleeper, dirname='modules/handlers/emulators/dork_list/pages/'):
+    sleep_time = sleeper * 60
     old_dork_list = get_old_dork_pages_list(dirname)
     generate_dork_pages(True)
     remove_old_dork_pages(old_dork_list)
-    if sleep_time == 0:
+    if sleeper == 0:
         return
     if sleep_time < 60:
-        return "sleep time too short!"
+        sleep_time = 60
     while True:
         time.sleep(sleep_time)
         old_dork_list = get_old_dork_pages_list(dirname)
