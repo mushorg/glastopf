@@ -57,18 +57,6 @@ class DorkDB():
                 #                self.options['password'])
                 self.collection = self.db[self.options['collection']]
 
-    def migrate(self):
-        import psycopg2
-        self.connection = psycopg2.connect("dbname=glastopf user=postgres password=lukullus0815")
-        cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM data")
-        for res in cursor.fetchall():
-            res = {'time': res[0],
-                   'client': res[1],
-                   'url': res[2],
-                   'pattern': res[3]}
-            self.insert_data(res)
-
     def insert_data(self, data):
         self.collection.insert(data)
 
