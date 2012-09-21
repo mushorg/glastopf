@@ -16,6 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sqlite3
+import time
+from multiprocessing import Process, Queue
 
 from ConfigParser import ConfigParser
 
@@ -45,6 +47,19 @@ class LogSQLite(BaseLogger):
         else:
             return None
 
+        #create message_queue and start worker thread
+        try:
+            LogSQLite.message_queue
+        except AttributeError:
+            LogSQLite.message_queue = Queue()
+            consumer_process = Process(target=self.consumer)
+            consumer_process.start()
+
+    def consumer(self):
+        while True:
+            self.write_insert(LogSQLite.message_queue.get())
+            time.sleep(0.1)
+
     def create(self):
         self.cursor = self.connection.cursor()
         self.cursor.execute("""
@@ -55,7 +70,7 @@ class LogSQLite(BaseLogger):
                 method TEXT,
                 request TEXT,
                 request_body TEXT,
-                module INTEGER,
+                module TEXT,
                 filename TEXT,
                 response TEXT,
                 host TEXT)
@@ -63,7 +78,12 @@ class LogSQLite(BaseLogger):
         self.connection.commit()
         self.cursor.close()
 
+    #called by multiple producers
     def insert(self, attack_event):
+        LogSQLite.message_queue.put(attack_event)
+
+    #called by single consumer
+    def write_insert(self, attack_event):
         self.cursor = self.connection.cursor()
         if attack_event.matched_pattern.strip() == "unknown":
             response = attack_event.response.split('\r\n\r\n')[0]
