@@ -52,3 +52,7 @@ class TestFileLogger(unittest.TestCase):
         with open(self.file_path) as log_file:
             self.assertEqual(log_file.read(), "test\n")
         print "Expected log entry 'test\\n' found in test log file."
+
+    def test_syslog_logging(self):
+        # TODO: Implement
+        pass
