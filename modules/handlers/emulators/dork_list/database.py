@@ -15,9 +15,13 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import cluster
+import re
 
 from ConfigParser import ConfigParser
+
+import cluster
+import dork_db
+import random
 
 
 class DorkDB():
@@ -32,6 +36,8 @@ class DorkDB():
                 import sqlite3
                 self.connection = sqlite3.connect("db/%s" %
                                 conf_parser.get("sqlite", "database"))
+                self.cursor = self.connection.cursor()
+                self.dbtype = 'sqlite'
             else:
                 self.connection = None
         else:
@@ -44,6 +50,7 @@ class DorkDB():
                 "database": conf_parser.get("mongodb", "database"),
                 "collection": conf_parser.get("mongodb", "collection"),
                 }
+            self.dbtype = 'mongodb'
             try:
                 from pymongo import Connection
                 self.connection = Connection(self.options['host'],
@@ -61,9 +68,51 @@ class DorkDB():
         self.collection.insert(data)
 
     def count_data(self):
-        self.num_entries = self.collection.count()
+        if self.dbtype == 'mongodb':
+            self.num_entries = self.collection.count()
+        else:
+            sql = "SELECT COUNT(*) FROM events"
+            self.cursor.execute(sql)
+            self.num_entries = self.cursor.fetchone()[0]
 
     def select_data(self,):
+        url_list = []
+        self.full_url_list = []
+        self.pattern = self.conf_parser.get('dork-db', 'pattern')
+        if self.dbtype == 'mongodb':
+            data = self.collection.find({'pattern': self.pattern})
+            self.num_results = data.count()
+            data = list(data.distinct('request.url'))
+        else:
+            data = self.get_pattern_requests_sql()
+            self.num_results = len(data)
+            data = list(set(data))
+        self.num_distinct_results = len(data) 
+        #seed with static data if we got too few hits in events db
+        if len(data) < 100:
+            data = data + self.get_dorks_from_dorkdb()
+        for request in data:
+            url = request.split('=', 1)[0]
+            url_list.append(url)
+        return url_list
+
+    def get_pattern_requests_sql(self):
+        return_list = []
+        sql = "SELECT request FROM events WHERE module = (?)"
+        self.cursor.execute(sql, (self.pattern,))
+        for row in self.cursor.fetchall():
+            return_list.append(row[0])
+        return return_list
+
+    def get_dorks_from_dorkdb(self):
+        return_list = []
+        dorkdb = dork_db.DorkDB()
+        entries = random.sample(dorkdb.get_dork_list('inurl'), 100)
+        for entry in entries:
+            return_list.append(entry[0])
+        return return_list
+
+    def select_data_old(self,):
         url_list = []
         self.full_url_list = []
         self.pattern = self.conf_parser.get('dork-db', 'pattern')
@@ -76,14 +125,32 @@ class DorkDB():
         self.num_distinct_results = len(url_list)
         return url_list
 
-    def select_entry(self, regx):
-        data = self.collection.find({'request.url': regx})
+    def select_entry(self, starts_with):
+        if self.dbtype == 'mongodb':
+            regx = re.compile(starts_with + ".*", re.IGNORECASE)
+            data = list(self.collection.find({'request.url': regx}))
+        else:
+            data = []
+            sql = "SELECT request FROM events WHERE request LIKE (?)"
+            self.cursor.execute(sql, (starts_with + '%',))
+            for row in self.cursor.fetchall():
+                data.append(row[0])
         return data
 
     def process(self):
         url_list = self.select_data()
         self.clusterer = cluster.Cluster()
         self.clusterer.cluster(url_list, self.config)
+
+    def conn_info(self):
+        if self.dbtype == 'mongodb':
+            return ('mongodb', self.db.name, self.collection.name)
+        else:
+            return ('sqlite',
+                    self.conf_parser.get("sqlite", "database"),
+                    'events'
+                    )
+
 
 if __name__ == "__main__":
     d = DorkDB(config="../../../../glastopf.cfg")

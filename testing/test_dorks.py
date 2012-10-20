@@ -17,7 +17,6 @@
 
 from random import choice, randint
 import unittest
-import re
 from lxml.html.soupparser import fromstring
 
 from modules.handlers.emulators.dork_list import database
@@ -43,10 +42,18 @@ class TestDorks(unittest.TestCase):
         Expected Results: Successful connected to the database.
         Notes: We check if we are connected to the right database and collection.""" 
         print "Starting database test..."
-        self.assertEqual(self.db.db.name, 'glastopf')
-        self.assertEqual(self.db.collection.name, 'events')
-        print "Database name and Collection name:",
-        print self.db.db.name, 'and', self.db.collection.name
+        dbtype, database, table = self.db.conn_info()
+        if (dbtype == 'mongodb'):
+            self.assertEqual(database, 'glastopf')
+            self.assertEqual(table, 'events')
+        elif dbtype == 'sqlite':
+            self.assertEqual(database, 'glastopf.db')
+            self.assertEqual(table, 'events')
+        else:
+            raise Exception('Database type not supported in unittest')
+        print "Database type, Database name and Collection(or table) name:",
+        print dbtype + ', ' + database + ', ' + table + '.'
+        #print self.db.db.name, 'and', self.db.collection.name
         print "equates our expectation."
 
     def test_db_data(self):
@@ -71,9 +78,9 @@ class TestDorks(unittest.TestCase):
         print "Used pattern:", self.db.pattern
         self.assertTrue(self.db.num_results >= 0)
         self.assertTrue(self.db.num_distinct_results >= 0)
-        print "Number of entries with pattern", 
+        print "Number of entries with pattern",
         print self.db.pattern, ":", self.db.num_results
-        print "Number of distinct entries with pattern", 
+        print "Number of distinct entries with pattern",
         print self.db.pattern, ":", self.db.num_distinct_results
         print "equates our expectation."
 
@@ -92,7 +99,7 @@ class TestDorks(unittest.TestCase):
         sql = "SELECT * FROM inurl WHERE content = ?"
         db = dork_db.DorkDB()
         self.cursor = db.conn.cursor()
-        cnt = self.cursor.execute(sql, 
+        cnt = self.cursor.execute(sql,
                 (attack_event.parsed_request.url.split('?')[0],)).fetchall()
         self.cursor.close()
         print "Done fetching the entries matching the request URL"
@@ -110,9 +117,10 @@ class TestDorks(unittest.TestCase):
         self.db.process()
         print "Done clustering database entries."
         self.assertTrue(len(self.db.clusterer.clusters) > 0)
-        print "Number of clusters from the database:", len(self.db.clusterer.clusters),
+        print "Number of clusters from the database:",
+        print len(self.db.clusterer.clusters),
         rand_cluster = randint(0, 5)
-        print "Example cluster no.", rand_cluster, "has", 
+        print "Example cluster no.", rand_cluster, "has",
         print len(self.db.clusterer.clusters[rand_cluster]), "element(s)."
         print "Random element from example cluster:"
         print choice(self.db.clusterer.clusters[rand_cluster])
@@ -127,12 +135,16 @@ class TestDorks(unittest.TestCase):
         gen_dork_list.regular_generate_dork(0)
         print "Done creating dork pages."
         dirname = 'modules/handlers/emulators/dork_list/pages/'
-        self.assertTrue(len(gen_dork_list.get_old_dork_pages_list(dirname)) > 0)
+        self.assertTrue(
+                len(gen_dork_list.get_old_dork_pages_list(dirname)) > 0
+                )
         print "Number of created HTML pages:",
         print len(gen_dork_list.get_old_dork_pages_list(dirname)),
         print "equates our expectation."
         print "Sample page can be found in:", dirname
-        gen_dork_list.remove_old_dork_pages(gen_dork_list.get_old_dork_pages_list(dirname))
+        gen_dork_list.remove_old_dork_pages(
+                            gen_dork_list.get_old_dork_pages_list(dirname)
+                            )
 
     def test_dork_page_content(self):
         """Objective: Testing the attack surfaces content.
@@ -167,12 +179,11 @@ class TestDorks(unittest.TestCase):
         links = data.cssselect('a')
         test_link_path = choice(links).get('href')
         print "Randomly selected path:", test_link_path
-        regx = re.compile(test_link_path + ".*", re.IGNORECASE)
-        data = self.db.select_entry(regx)
+        data = self.db.select_entry(test_link_path)
         print "Done searching for the entry."
-        self.assertTrue(data.count() > 0)
+        self.assertTrue(len(data) > 0)
         print "The dork db returned:",
-        print data.count(), "entries,",
+        print str(len(data)), "entries,",
         print "which equates our expectation."
 
     def test_dork_page_regeneration(self):

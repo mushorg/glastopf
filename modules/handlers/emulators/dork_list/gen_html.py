@@ -1,5 +1,6 @@
 from string import Template
 
+
 def html_template(titlename, formURLname, bodycontent, footstr):
     template = Template(u"""
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -7,7 +8,7 @@ def html_template(titlename, formURLname, bodycontent, footstr):
 <title>${title}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="style.css" rel="stylesheet" type="text/css" />
-</head>   
+</head>
 <body><div id="container">
       <fieldset><h1><center>${title}</center></h1></fieldset>
       <fieldset> 

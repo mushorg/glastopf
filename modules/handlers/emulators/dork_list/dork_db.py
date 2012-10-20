@@ -17,8 +17,8 @@ class DorkDB(object):
         self.cursor.close()
 
     def insert(self, table, content):
-        if (content == '') or (content is None):                                       
-            return  
+        if (content == '') or (content is None):
+            return
         self.cursor = self.conn.cursor()
         try:
             sql = "SELECT * FROM %s WHERE content = ?" % table
@@ -35,7 +35,7 @@ class DorkDB(object):
         self.cursor = self.conn.cursor()
         try:
             sql = "INSERT INTO %s VALUES( ?, ?, ?, ?, ?)" % table
-            self.cursor.execute(sql, (None, content, 1 , datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+            self.cursor.execute(sql, (None, content, 1, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         except sqlite3.OperationalError, e:
             print "Insert into database Error:", e
         except sqlite3.ProgrammingError, e:

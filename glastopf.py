@@ -91,12 +91,6 @@ class GlastopfHoneypot(object):
             attack_event.source_addr = addr
         self.profiler.handle_event(attack_event)
         self.print_info(attack_event)
-        # Start response with the server header
-        # TODO: Add msg length header
-        response = util.HTTPServerResponse()
-        attack_event.response = response.get_header(
-                                            attack_event.parsed_request
-                                            )
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
                                 self.MethodHandlers,
@@ -118,4 +112,6 @@ class GlastopfHoneypot(object):
                     file_content = file_handler.read()
                 self.hpfeeds_logger.handle_send("glastopf.files",
                                 attack_event.file_name + " " + base64.b64encode(file_content))
+        response_util = util.HTTPServerResponse()
+        attack_event.response = response_util.get_header(attack_event) + attack_event.response
         return attack_event.response

@@ -14,6 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 from datetime import datetime
 
 
@@ -27,7 +28,7 @@ class AttackEvent(object):
         self.source_addr = None
         self.matched_pattern = "unknown"
         self.file_name = None
-        self.response = None
+        self.response = ""
 
     def event_dict(self):
         event_dict = {
