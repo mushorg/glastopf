@@ -37,6 +37,7 @@ test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_emulators))
 test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_sqli))
 test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_dorks))
 
+
 if __name__ == '__main__':
     report_name = "report.html"
     outfile = open("testing/reports/" + report_name, "w")

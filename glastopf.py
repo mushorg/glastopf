@@ -35,29 +35,32 @@ import modules.processing.profiler as profiler
 
 class GlastopfHoneypot(object):
 
-    def __init__(self):
-        self.loggers = logging_handler.get_loggers()
+    def __init__(self, test=False):
+        self.test = test
+        if not self.test:
+            self.loggers = logging_handler.get_loggers()
         self.log = file_logger.FileLogger(name="honeypot").log()
         self.log.info('Starting Glastopf')
         conf_parser = ConfigParser()
         conf_parser.read("glastopf.cfg")
         self.options = {
-            "enabled": conf_parser.get("hpfeed", "enabled").encode('latin1'),
+            "hpfeeds": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1')
         }
-        if self.options["enabled"] == "True":
+        if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
             self.log.info('HPFeeds started')
-        gen_dork_list.regular_generate_dork(0)
-        self.regular_gen_dork = threading.Thread(
+        if not self.test:
+            gen_dork_list.regular_generate_dork(0)
+            self.regular_gen_dork = threading.Thread(
                         target=gen_dork_list.regular_generate_dork, args=(30,))
-        self.regular_gen_dork.daemon = True
-        self.regular_gen_dork.start()
+            self.regular_gen_dork.daemon = True
+            self.regular_gen_dork.start()
+            self.profiler = profiler.Profiler()
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
-        self.profiler = profiler.Profiler()
         privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
 
@@ -89,7 +92,6 @@ class GlastopfHoneypot(object):
             self._handle_proxy(attack_event)
         else:
             attack_event.source_addr = addr
-        self.profiler.handle_event(attack_event)
         self.print_info(attack_event)
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
@@ -97,21 +99,23 @@ class GlastopfHoneypot(object):
                                 attack_event.parsed_request.method,
                                 self.MethodHandlers.GET
                                 )(attack_event.parsed_request)
-        gen_dork_list.collect_dork(attack_event)
         # Handle the request with the specific vulnerability module
         emulator = request_handler.get_handler(attack_event.matched_pattern)
         emulator.handle(attack_event)
         # Logging the event
-        for logger in self.loggers:
-            logger.insert(attack_event)
-        if self.options["enabled"] == "True":
-            self.hpfeeds_logger.handle_send("glastopf.events",
-                                json.dumps(attack_event.event_dict()))
-            if attack_event.file_name != None:
-                with file("files/" + attack_event.file_name, 'r') as file_handler:
-                    file_content = file_handler.read()
-                self.hpfeeds_logger.handle_send("glastopf.files",
-                                attack_event.file_name + " " + base64.b64encode(file_content))
+        if not self.test:
+            self.profiler.handle_event(attack_event)
+            gen_dork_list.collect_dork(attack_event)
+            for logger in self.loggers:
+                logger.insert(attack_event)
+            if self.options["hpfeeds"] == "True":
+                self.hpfeeds_logger.handle_send("glastopf.events",
+                                    json.dumps(attack_event.event_dict()))
+                if attack_event.file_name != None:
+                    with file("files/" + attack_event.file_name, 'r') as file_handler:
+                        file_content = file_handler.read()
+                    self.hpfeeds_logger.handle_send("glastopf.files",
+                                    attack_event.file_name + " " + base64.b64encode(file_content))
         response_util = util.HTTPServerResponse()
         attack_event.response = response_util.get_header(attack_event) + attack_event.response
         return attack_event.response

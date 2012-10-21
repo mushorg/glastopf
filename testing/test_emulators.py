@@ -76,7 +76,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/test.php?p=../../../../../etc/passwd
         Expected Result: The passwd file from the virtual file system.
         Notes:"""
-        print "Starting local file inclusion test" 
+        print "Starting local file inclusion test"
         with open("virtualdocs/linux/etc/passwd", 'r') as passwd_file:
             passwd = passwd_file.read()
             local_hash = hashlib.md5(passwd).hexdigest()
@@ -119,7 +119,6 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/test.php?p=http://google.com/index.html
         Expected Result: The return value from the PHP sandbox.
         Notes: Injected file contains <?php echo("test successful"); ?>"""
-        return
         print "Starting remote file inclusion test"
         self.event.parsed_request = util.HTTPRequest()
         self.event.parsed_request.url = "/test.php?p=http://1durch0.de/test_file.txt"

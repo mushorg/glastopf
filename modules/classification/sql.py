@@ -64,11 +64,15 @@ class PreSQLiClassifier(object):
         return ''.join(rc)
 
     def _parse_pattern(self, pattern):
-        pattern_id = self._getText(pattern.getElementsByTagName("id")[0].childNodes)
-        pattern_string = self._getText(pattern.getElementsByTagName("string")[0].childNodes) 
+        pattern_id = self._getText(
+                        pattern.getElementsByTagName("id")[0].childNodes)
+        pattern_string = self._getText(
+                        pattern.getElementsByTagName("string")[0].childNodes)
         db = self._getText(pattern.getElementsByTagName("db")[0].childNodes)
-        response = self._getText(pattern.getElementsByTagName("response")[0].childNodes)
-        parsed_pattern = Pattern(pattern_id, pattern_string, db, response)
+        response = self._getText(
+                        pattern.getElementsByTagName("response")[0].childNodes)
+        parsed_pattern = Pattern(
+                        pattern_id, pattern_string, db, response)
         return parsed_pattern
 
     def _chr_rep(self, match):

@@ -43,7 +43,7 @@ class DorkList(base_emulator.BaseEmulator):
             dork_page_list.remove('.svn')
         self.dork_page = "modules/handlers/emulators/dork_list/pages/" + choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
-        with codecs.open(self.dork_page, "r", "utf-8") as dork_page:
+        with codecs.open(self.dork_page, "rb", "utf-8") as dork_page:
             with codecs.open("modules/handlers/emulators/dork_list/"
                              "comments.txt", "r", "utf-8") as comments_txt:
                 general_comments = comments_txt.read()

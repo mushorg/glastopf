@@ -44,7 +44,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         Note: This test verifies the overall functionality."""
         raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
         source_address = ["127.0.0.1", "12345"]
-        self.glastopf = glastopf.GlastopfHoneypot()
+        self.glastopf = glastopf.GlastopfHoneypot(test=True)
         self.glastopf.options["enabled"] = "False"
         print "Sending request: http://localhost:8080/"
         connection = FakeCon()
@@ -52,5 +52,6 @@ class TestHoneypotFunctionality(unittest.TestCase):
         response = self.glastopf.handle_request(raw_request,
                                                 source_address,
                                                 connection)
+        connection.sock.close()
         self.assertIsNot(response, None)
         #print "Non-empty return value equates our expectation."
