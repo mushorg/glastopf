@@ -17,6 +17,8 @@
 import urllib
 import unicodedata
 import chardet
+from urlparse import urlparse
+import re
 
 
 class HTTPRequest(object):
@@ -58,7 +60,7 @@ class HTTPParser(object):
         return header_dict
     # TODO: add body parser function
 
-    def parse_request(self, request):
+    def parse_request(self, request):        
         # FIXME: Error handling for mal formed HTTP requests
         request = urllib.unquote(request)
         encoding = chardet.detect(request)
@@ -76,11 +78,17 @@ class HTTPParser(object):
             # TODO: Maybe this is too powerful
             pass
         request = request.split("\r\n")
-        request_line = request[0].split()
-        parsed_request.method = request_line[0]
-        parsed_request.url = request_line[1]
-        parsed_request.parameters = parsed_request.url.split("?")
-        parsed_request.version = request_line[2]
+
+        # Parse the first line
+        HTTP_REQ_RE = re.compile("([A-Z0-9$-_.]{3,10})\s+(.*)\s+(HTTP/\d+.\d+)")
+        re_grp = HTTP_REQ_RE.match(request[0])
+
+        # TODO Handle invalid requests. 
+        # Improve a better error handling
+        parsed_request.method = re_grp.group(1)
+        parsed_request.url = urlparse(re_grp.group(2)).path
+        parsed_request.parameters = urlparse(re_grp.group(2)).query
+        parsed_request.version = re_grp.group(3)
         parsed_request.header = self.parse_header(request[1:])
         return parsed_request
 
