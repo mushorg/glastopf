@@ -64,13 +64,13 @@
     <id>10</id>
     <patternDescription>local file inclusion linux</patternDescription>
     <patternString><![CDATA[\?.*(/\.\.)*(home|conf|usr|etc|proc|opt|s?bin|local|dev|tmp|kern|root|sys|system|windows|winnt|program|inetpub/boot\.ini)/.*]]></patternString>
-    <module>lfil</module>
+    <module>lfi</module>
   </request>
   <request>
     <id>11</id>
     <patternDescription>local file inclusion windows</patternDescription>
     <patternString><![CDATA[\?.*[a-zA-Z]:((([\\/]+(.{0,2}))|[\\/]+)[^\\/:*?"<>|,]+)+.*]]></patternString>
-    <module>lfiw</module>
+    <module>lfi</module>
   </request>
   <request>
     <id>12</id>
