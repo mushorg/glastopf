@@ -94,7 +94,7 @@
     <id>15</id>
     <patternDescription>robots.txt</patternDescription>
     <patternString><![CDATA[^/robots\.txt$]]></patternString>
-    <module>robots_txt</module>
+    <module>robots</module>
   </request>
   <request>
     <id>16</id>
