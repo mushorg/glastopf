@@ -39,8 +39,8 @@ class DorkList(base_emulator.BaseEmulator):
         # them with utf-8 encoding
         pages_path = "modules/handlers/emulators/dork_list/pages"
         dork_page_list = os.listdir(pages_path)
-        if '.svn' in dork_page_list:
-            dork_page_list.remove('.svn')
+        if '.git' in dork_page_list:
+            dork_page_list.remove('.git')
         self.dork_page = "modules/handlers/emulators/dork_list/pages/" + choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
         with codecs.open(self.dork_page, "rb", "utf-8") as dork_page:

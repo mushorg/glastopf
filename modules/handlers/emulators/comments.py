@@ -21,8 +21,8 @@ class CommentPoster(base_emulator.BaseEmulator):
         # TODO: Use the unknown emulators _get_template function.
         pages_path = "modules/handlers/emulators/dork_list/pages"
         dork_page_list = os.listdir(pages_path)
-        if '.svn' in dork_page_list:
-            dork_page_list.remove('.svn')
+        if '.git' in dork_page_list:
+            dork_page_list.remove('.git')
         dork_page = choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
         with codecs.open("modules/handlers/emulators/dork_list/pages/" +

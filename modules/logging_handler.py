@@ -24,7 +24,7 @@ def _get_logger_names(path='modules/reporting/'):
     names = os.listdir(path)
     for name in reversed(names):
         if (name == 'base_logger.py' or name == 'file_logger.py'
-                or name == 'hp_feed.py' or name == '.svn'
+                or name == 'hp_feed.py' or name == '.git'
                 or ".pyc" in name or name == '__init__.py'):
             names.remove(name)
     return names
