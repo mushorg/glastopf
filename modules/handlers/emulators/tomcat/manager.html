@@ -1,0 +1,301 @@
+<html>
+<head>
+<style>
+H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}  table {
+    width: 100%;
+  }
+  td.page-title {
+    text-align: center;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: white;
+    color: black;
+  }
+  td.title {
+    text-align: left;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-style:italic;
+    font-weight: bold;
+    background: #D2A41C;
+  }
+  td.header-left {
+    text-align: left;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: #FFDC75;
+  }
+  td.header-center {
+    text-align: center;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: #FFDC75;
+  }
+  td.row-left {
+    text-align: left;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+  td.row-center {
+    text-align: center;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+  td.row-right {
+    text-align: right;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+  TH {
+    text-align: center;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: #FFDC75;
+  }
+  TD {
+    text-align: center;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+</style>
+<title>/manager</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table cellspacing="4" width="100%" border="0">
+ <tr>
+  <td colspan="2">
+   <a href="http://www.apache.org/">
+    <img border="0" alt="The Apache Software Foundation" align="left"
+         src="/manager/images/asf-logo.gif">
+   </a>
+   <a href="http://tomcat.apache.org/">
+    <img border="0" alt="The Tomcat Servlet/JSP Container"
+         align="right" src="/manager/images/tomcat.gif">
+   </a>
+  </td>
+ </tr>
+</table>
+<hr size="1" noshade="noshade">
+<table cellspacing="4" width="100%" border="0">
+ <tr>
+  <td class="page-title" bordercolor="#000000" align="left" nowrap>
+   <font size="+2">Tomcat Web Application Manager</font>
+  </td>
+ </tr>
+</table>
+<br>
+
+<table border="1" cellspacing="0" cellpadding="3">
+ <tr>
+  <td class="row-left" width="10%"><small><strong>Message:</strong></small>&nbsp;</td>
+  <td class="row-left"><pre>OK</pre></td>
+ </tr>
+</table>
+<br>
+
+<table border="1" cellspacing="0" cellpadding="3">
+<tr>
+ <td colspan="4" class="title">Manager</td>
+</tr>
+ <tr>
+  <td class="row-left"><a href="/manager/html/list">List Applications</a></td>
+  <td class="row-center"><a href="/manager/../docs/html-manager-howto.html">HTML Manager Help</a></td>
+  <td class="row-center"><a href="/manager/../docs/manager-howto.html">Manager Help</a></td>
+  <td class="row-right"><a href="/manager/status">Server Status</a></td>
+ </tr>
+</table>
+<br>
+
+<table border="1" cellspacing="0" cellpadding="3">
+<tr>
+ <td colspan="5" class="title">Applications</td>
+</tr>
+<tr>
+ <td class="header-left"><small>Path</small></td>
+ <td class="header-left"><small>Display Name</small></td>
+ <td class="header-center"><small>Running</small></td>
+ <td class="header-center"><small>Sessions</small></td>
+ <td class="header-left"><small>Commands</small></td>
+</tr>
+<tr>
+ <td class="row-left" bgcolor="#FFFFFF" rowspan="2"><small><a href="/">/</a></small></td>
+ <td class="row-left" bgcolor="#FFFFFF" rowspan="2"><small>&nbsp;</small></td>
+ <td class="row-center" bgcolor="#FFFFFF" rowspan="2"><small>true</small></td>
+ <td class="row-center" bgcolor="#FFFFFF" rowspan="2"><small><a href="/manager/html/sessions?path=/" target="_blank">0</a></small></td>
+ <td class="row-left" bgcolor="#FFFFFF">
+  <small>
+  &nbsp;Start&nbsp;
+  &nbsp;<a href="/manager/html/stop?path=/" onclick="return(confirm('Are you sure?'))">Stop</a>&nbsp;
+  &nbsp;<a href="/manager/html/reload?path=/" onclick="return(confirm('Are you sure?'))">Reload</a>&nbsp;
+  &nbsp;<a href="/manager/html/undeploy?path=/" onclick="return(confirm('Are you sure?'))">Undeploy</a>&nbsp;
+  </small>
+ </td>
+ </tr><tr>
+ <td class="row-left" bgcolor="#FFFFFF">
+  <form method="POST" action="/manager/html/expire?path=/">
+  <small>
+  &nbsp;<input type="submit" value="Expire sessions">&nbsp;with idle &ge;&nbsp;<input type="text" name="idle" size="5" value="30">&nbsp;minutes&nbsp;
+  </small>
+  </form>
+ </td>
+</tr>
+<tr>
+ <td class="row-left" bgcolor="#C3F3C3" rowspan="2"><small><a href="/host%2Dmanager">/host-manager</a></small></td>
+ <td class="row-left" bgcolor="#C3F3C3" rowspan="2"><small>Tomcat Manager Application</small></td>
+ <td class="row-center" bgcolor="#C3F3C3" rowspan="2"><small>true</small></td>
+ <td class="row-center" bgcolor="#C3F3C3" rowspan="2"><small><a href="/manager/html/sessions?path=/host%2Dmanager" target="_blank">0</a></small></td>
+ <td class="row-left" bgcolor="#C3F3C3">
+  <small>
+  &nbsp;Start&nbsp;
+  &nbsp;<a href="/manager/html/stop?path=/host%2Dmanager" onclick="return(confirm('Are you sure?'))">Stop</a>&nbsp;
+  &nbsp;<a href="/manager/html/reload?path=/host%2Dmanager" onclick="return(confirm('Are you sure?'))">Reload</a>&nbsp;
+  &nbsp;<a href="/manager/html/undeploy?path=/host%2Dmanager" onclick="return(confirm('Are you sure?'))">Undeploy</a>&nbsp;
+  </small>
+ </td>
+ </tr><tr>
+ <td class="row-left" bgcolor="#C3F3C3">
+  <form method="POST" action="/manager/html/expire?path=/host%2Dmanager">
+  <small>
+  &nbsp;<input type="submit" value="Expire sessions">&nbsp;with idle &ge;&nbsp;<input type="text" name="idle" size="5" value="30">&nbsp;minutes&nbsp;
+  </small>
+  </form>
+ </td>
+</tr>
+<tr>
+ <td class="row-left" bgcolor="#FFFFFF" rowspan="2"><small><a href="/manager">/manager</a></small></td>
+ <td class="row-left" bgcolor="#FFFFFF" rowspan="2"><small>Tomcat Manager Application</small></td>
+ <td class="row-center" bgcolor="#FFFFFF" rowspan="2"><small>true</small></td>
+ <td class="row-center" bgcolor="#FFFFFF" rowspan="2"><small><a href="/manager/html/sessions?path=/manager" target="_blank">1</a></small></td>
+ <td class="row-left" bgcolor="#FFFFFF">
+  <small>
+  &nbsp;Start&nbsp;
+  &nbsp;Stop&nbsp;
+  &nbsp;Reload&nbsp;
+  &nbsp;Undeploy&nbsp;
+  </small>
+ </td>
+</tr><tr>
+ <td class="row-left" bgcolor="#FFFFFF">
+  <form method="POST" action="/manager/html/expire?path=/manager">
+  <small>
+  &nbsp;<input type="submit" value="Expire sessions">&nbsp;with idle &ge;&nbsp;<input type="text" name="idle" size="5" value="30">&nbsp;minutes&nbsp;
+  </small>
+  </form>
+ </td>
+</tr>
+</table>
+<br>
+<table border="1" cellspacing="0" cellpadding="3">
+<tr>
+ <td colspan="2" class="title">Deploy</td>
+</tr>
+<tr>
+ <td colspan="2" class="header-left"><small>Deploy directory or WAR file located on server</small></td>
+</tr>
+<tr>
+ <td colspan="2">
+<form method="get" action="/manager/html/deploy">
+<table cellspacing="0" cellpadding="3">
+<tr>
+ <td class="row-right">
+  <small>Context Path (required):</small>
+ </td>
+ <td class="row-left">
+  <input type="text" name="deployPath" size="20">
+ </td>
+</tr>
+<tr>
+ <td class="row-right">
+  <small>XML Configuration file URL:</small>
+ </td>
+ <td class="row-left">
+  <input type="text" name="deployConfig" size="20">
+ </td>
+</tr>
+<tr>
+ <td class="row-right">
+  <small>WAR or Directory URL:</small>
+ </td>
+ <td class="row-left">
+  <input type="text" name="deployWar" size="40">
+ </td>
+</tr>
+<tr>
+ <td class="row-right">
+  &nbsp;
+ </td>
+ <td class="row-left">
+  <input type="submit" value="Deploy">
+ </td>
+</tr>
+</table>
+</form>
+</td>
+</tr>
+<tr>
+ <td colspan="2" class="header-left"><small>WAR file to deploy</small></td>
+</tr>
+<tr>
+ <td colspan="2">
+<form action="/manager/html/upload" method="post" enctype="multipart/form-data">
+<table cellspacing="0" cellpadding="3">
+<tr>
+ <td class="row-right">
+  <small>Select WAR file to upload</small>
+ </td>
+ <td class="row-left">
+  <input type="file" name="deployWar" size="40">
+ </td>
+</tr>
+<tr>
+ <td class="row-right">
+  &nbsp;
+ </td>
+ <td class="row-left">
+  <input type="submit" value="Deploy">
+ </td>
+</tr>
+</table>
+</form>
+</table>
+<br>
+
+<table border="1" cellspacing="0" cellpadding="3">
+<tr>
+ <td colspan="6" class="title">Server Information</td>
+</tr>
+<tr>
+ <td class="header-center"><small>Tomcat Version</small></td>
+ <td class="header-center"><small>JVM Version</small></td>
+ <td class="header-center"><small>JVM Vendor</small></td>
+ <td class="header-center"><small>OS Name</small></td>
+ <td class="header-center"><small>OS Version</small></td>
+ <td class="header-center"><small>OS Architecture</small></td>
+</tr>
+<tr>
+ <td class="row-center"><small>Apache Tomcat/6.0.24</small></td>
+ <td class="row-center"><small>1.6.0_26-b03</small></td>
+ <td class="row-center"><small>Sun Microsystems Inc.</small></td>
+ <td class="row-center"><small>Linux</small></td>
+ <td class="row-center"><small>2.6.32-31-generic</small></td>
+ <td class="row-center"><small>i386</small></td>
+</tr>
+</table>
+<br>
+
+<hr size="1" noshade="noshade">
+<center><font size="-1" color="#525D76">
+ <em>Copyright &copy; 1999-2010, Apache Software Foundation</em></font></center>
+
+</body>
+</html>

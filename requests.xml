@@ -114,5 +114,16 @@
     <patternString><![CDATA[^/login]]></patternString>
     <module>login</module>
   </request>
-
+  <request>
+    <id>19</id>
+    <patternDescription>tomcat manager</patternDescription>
+    <patternString><![CDATA[^/manager/html]]></patternString>
+    <module>tomcat_manager</module>
+  </request>
+  <request>
+    <id>20</id>
+    <patternDescription>tomcat manager status</patternDescription>
+    <patternString><![CDATA[^/manager/status]]></patternString>
+    <module>tomcat_status</module>
+  </request>
 </requests>

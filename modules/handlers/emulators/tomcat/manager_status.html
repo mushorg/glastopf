@@ -1,0 +1,139 @@
+<html>
+<head>
+<style>
+H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}  table {
+    width: 100%;
+  }
+  td.page-title {
+    text-align: center;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: white;
+    color: black;
+  }
+  td.title {
+    text-align: left;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-style:italic;
+    font-weight: bold;
+    background: #D2A41C;
+  }
+  td.header-left {
+    text-align: left;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: #FFDC75;
+  }
+  td.header-center {
+    text-align: center;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: #FFDC75;
+  }
+  td.row-left {
+    text-align: left;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+  td.row-center {
+    text-align: center;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+  td.row-right {
+    text-align: right;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+  TH {
+    text-align: center;
+    vertical-align: top;
+    font-family:sans-serif,Tahoma,Arial;
+    font-weight: bold;
+    background: #FFDC75;
+  }
+  TD {
+    text-align: center;
+    vertical-align: middle;
+    font-family:sans-serif,Tahoma,Arial;
+    color: black;
+  }
+</style>
+<title>/manager</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<table cellspacing="4" width="100%" border="0">
+ <tr>
+  <td colspan="2">
+   <a href="http://www.apache.org/">
+    <img border="0" alt="The Apache Software Foundation" align="left"
+         src="/manager/images/asf-logo.gif">
+   </a>
+   <a href="http://tomcat.apache.org/">
+    <img border="0" alt="The Tomcat Servlet/JSP Container"
+         align="right" src="/manager/images/tomcat.gif">
+   </a>
+  </td>
+ </tr>
+</table>
+<hr size="1" noshade="noshade">
+<table cellspacing="4" width="100%" border="0">
+ <tr>
+  <td class="page-title" bordercolor="#000000" align="left" nowrap>
+   <font size="+2">Server Status</font>
+  </td>
+ </tr>
+</table>
+<br>
+
+<table border="1" cellspacing="0" cellpadding="3">
+<tr>
+ <td colspan="4" class="title">Manager</td>
+</tr>
+ <tr>
+  <td class="row-left"><a href="/manager/html/list">List Applications</a></td>
+  <td class="row-center"><a href="/manager/../docs/html-manager-howto.html">HTML Manager Help</a></td>
+  <td class="row-center"><a href="/manager/../docs/manager-howto.html">Manager Help</a></td>
+  <td class="row-right"><a href="/manager/status/all">Complete Server Status</a></td>
+ </tr>
+</table>
+<br>
+
+<table border="1" cellspacing="0" cellpadding="3">
+<tr>
+ <td colspan="6" class="title">Server Information</td>
+</tr>
+<tr>
+ <td class="header-center"><small>Tomcat Version</small></td>
+ <td class="header-center"><small>JVM Version</small></td>
+ <td class="header-center"><small>JVM Vendor</small></td>
+ <td class="header-center"><small>OS Name</small></td>
+ <td class="header-center"><small>OS Version</small></td>
+ <td class="header-center"><small>OS Architecture</small></td>
+</tr>
+<tr>
+ <td class="row-center"><small>Apache Tomcat/6.0.24</small></td>
+ <td class="row-center"><small>1.6.0_26-b03</small></td>
+ <td class="row-center"><small>Sun Microsystems Inc.</small></td>
+ <td class="row-center"><small>Linux</small></td>
+ <td class="row-center"><small>2.6.32-31-generic</small></td>
+ <td class="row-center"><small>i386</small></td>
+</tr>
+</table>
+<br>
+
+<h1>JVM</h1><p> Free memory: 53.57 MB Total memory: 62.43 MB Max memory: 126.43 MB</p><h1>http-8080</h1><p> Max threads: 200 Current thread count: 2 Current thread busy: 1<br> Max processing time: 65 ms Processing time: 0.122 s Request count: 12 Error count: 7 Bytes received: 0.00 MB Bytes sent: 0.03 MB</p><table border="0"><tr><th>Stage</th><th>Time</th><th>B Sent</th><th>B Recv</th><th>Client</th><th>VHost</th><th>Request</th></tr><tr><td><strong>S</strong></td><td>3 ms</td><td>0 KB</td><td>0 KB</td><td>0:0:0:0:0:0:0:1</td><td nowrap>localhost</td><td nowrap>GET /manager/status HTTP/1.1</td></tr><tr><td><strong>R</strong></td><td>?</td><td>?</td><td>?</td><td>?</td><td>?</td><td>?</td></tr></table><p>P: Parse and prepare request S: Service F: Finishing R: Ready K: Keepalive</p><h1>jk-8009</h1><p> Max threads: 200 Current thread count: 4 Current thread busy: 1<br> Max processing time: 0 ms Processing time: 0.0 s Request count: 0 Error count: 0 Bytes received: 0.00 MB Bytes sent: 0.00 MB</p><table border="0"><tr><th>Stage</th><th>Time</th><th>B Sent</th><th>B Recv</th><th>Client</th><th>VHost</th><th>Request</th></tr></table><p>P: Parse and prepare request S: Service F: Finishing R: Ready K: Keepalive</p><hr size="1" noshade="noshade">
+<center><font size="-1" color="#525D76">
+ <em>Copyright &copy; 1999-2010, Apache Software Foundation</em></font></center>
+
+</body>
+</html>
