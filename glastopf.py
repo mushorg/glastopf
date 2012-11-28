@@ -37,10 +37,7 @@ import modules.processing.profiler as profiler
 class GlastopfHoneypot(object):
 
     def __init__(self, test=False):
-        if not os.path.isdir('db'):
-            os.mkdir('db')
-        if not os.path.isdir('log'):
-            os.mkdir('log')
+        self.create_empty_dirs()
         self.test = test
         if not self.test:
             self.loggers = logging_handler.get_loggers()
@@ -68,6 +65,13 @@ class GlastopfHoneypot(object):
         self.MethodHandlers = method_handler.HTTPMethods()
         privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
+
+    def create_empty_dirs(self):
+        dirs = ('log', 'db', 'modules/handlers/emulators/server_files/',
+                'modules/handlers/emulators/dork_list/pages')
+	for entry in dirs:
+            if not os.path.isdir(entry):
+                os.mkdir(entry)    
 
     def print_info(self, attack_event):
         print attack_event.event_time,
