@@ -27,6 +27,7 @@ from modules.handlers import request_handler
 import modules.reporting.hp_feed as hpfeeds
 from modules.handlers.emulators.dork_list import gen_dork_list
 
+import os
 import modules.reporting.file_logger as file_logger
 from modules import logging_handler
 import modules.privileges as privileges
@@ -36,6 +37,10 @@ import modules.processing.profiler as profiler
 class GlastopfHoneypot(object):
 
     def __init__(self, test=False):
+        if not os.path.isdir('db'):
+            os.mkdir('db')
+        if not os.path.isdir('log'):
+            os.mkdir('log')
         self.test = test
         if not self.test:
             self.loggers = logging_handler.get_loggers()
