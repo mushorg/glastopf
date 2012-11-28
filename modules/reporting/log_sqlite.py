@@ -39,7 +39,7 @@ class LogSQLite(BaseLogger):
                 self.connection = sqlite3.connect("db/%s" %
                                     self.options['database'])
             except:
-                print "Unable to connect to MySQL service"
+                print "Unable to connect to sqlite database."
                 self.options['enabled'] = 'False'
             else:
                 if create_tables:
