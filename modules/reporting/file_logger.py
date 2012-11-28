@@ -25,8 +25,6 @@ class FileLogger(object):
     def __init__(self, name,
                  log_format='%(asctime)s %(levelname)s %(message)s',
                  logfile_name="log/glastopf.log"):
-        if not os.path.isfile(logfile_name):
-            pass
         self.name = name
         self.logfile_name = logfile_name
         self.log_format = log_format
