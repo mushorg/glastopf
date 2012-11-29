@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
    
    development/index
+   installation/index
 
 
 
