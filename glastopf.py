@@ -69,7 +69,7 @@ class GlastopfHoneypot(object):
     def create_empty_dirs(self):
         dirs = ('log', 'db', 'modules/handlers/emulators/server_files/',
                 'modules/handlers/emulators/dork_list/pages')
-	for entry in dirs:
+        for entry in dirs:
             if not os.path.isdir(entry):
                 os.mkdir(entry)    
 
