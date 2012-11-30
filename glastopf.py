@@ -67,7 +67,7 @@ class GlastopfHoneypot(object):
         self.log.info('Glastopf instantiated and privileges dropped')
 
     def create_empty_dirs(self):
-        dirs = ('log', 'db', 'modules/handlers/emulators/server_files/',
+        dirs = ('log', 'db', 'files', 'modules/handlers/emulators/server_files/',
                 'modules/handlers/emulators/dork_list/pages')
         for entry in dirs:
             if not os.path.isdir(entry):
