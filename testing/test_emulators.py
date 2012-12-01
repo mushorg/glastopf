@@ -188,3 +188,35 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.assertEqual(remote_hash, local_hash)
         print "Return value:", remote_hash
         print "matched a generated attack surface item."
+
+    def test_phpcgi_source_code_disclosure_emulator(self):
+        """Objective: Emulator testing for PHP CGI source code disclosure CVE-2012-1823
+        Input: http://localhost:8080/index.php?-s
+        Expected Result: Source code disclosure
+        Notes:"""
+        self.event.parsed_request = util.HTTPRequest()
+        self.event.parsed_request.url = "/index.php"
+        self.event.parsed_request.parameters = "-s"
+        self.event.matched_pattern = "php_cgi_rce"
+        self.event.response = ""
+        emulator = request_handler.get_handler(self.event.matched_pattern)
+        emulator.handle(self.event)
+        self.assertEquals(self.event.response, """<code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php<br />page&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'page'</span><span style="color: #007700">];<br />include(</span><span style="color: #0000BB">page</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;<br /></span>
+</span>""")
+
+    def test_phpcgi_rce_emulator(self):
+        """Objective: Emulator testing for PHP CGI remote code execution CVE-2012-1823
+        Input: http://localhost/-d+allow_url_include=on+-d+safe_mode=off+-d+open_basedir=off-d+auto_prepend_file=php://input POST: <?php echo("rce attempt"); ?>
+        Expected Result: Remote command execution of a echo command
+        Notes:"""
+        self.event.parsed_request = util.HTTPRequest()
+        self.event.parsed_request.method = 'POST'
+        self.event.parsed_request.url = "/index.php"
+        self.event.parsed_request.parameters = "-d+allow_url_include=on+-d+safe_mode=off+-d+open_basedir=off-d+auto_prepend_file=php://input"
+        self.event.matched_pattern = "php_cgi_rce"
+        self.event.parsed_request.body = '<?php echo "testing"; ?>'
+        emulator = request_handler.get_handler(self.event.matched_pattern)
+        emulator.handle(self.event)
+        print "Return value:", self.event.response
+        self.assertTrue("""testing""" == self.event.response)

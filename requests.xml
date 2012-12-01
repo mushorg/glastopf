@@ -126,4 +126,16 @@
     <patternString><![CDATA[^/manager/status]]></patternString>
     <module>tomcat_status</module>
   </request>
+  <request>
+    <id>21</id>
+    <patternDescription>PHP CGI Source code disclosure CVE-2012-1823</patternDescription>
+    <patternString><![CDATA[\?\-[s|w](\s\%3d)?$]]></patternString>
+    <module>php_cgi_rce</module>
+  </request>
+  <request>
+    <id>22</id>
+    <patternDescription>PHP CGI Remote command execution CVE-2012-1823</patternDescription>
+    <patternString><![CDATA[\-d\sauto_prepend_file=php://input]]></patternString>
+    <module>php_cgi_rce</module>
+  </request>
 </requests>
