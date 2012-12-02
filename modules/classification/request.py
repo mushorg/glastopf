@@ -16,6 +16,7 @@
 
 import re
 import os
+import urlparse
 
 from xml.dom.minidom import parse
 
@@ -68,8 +69,10 @@ class Classifier(object):
 
     def file_exists(self, parsed_request):
         server_files_path = 'modules/handlers/emulators/server_files/'
-        requested_file = parsed_request.url.lstrip('/')
-        if requested_file in os.listdir(server_files_path):
+        # retrieve th uri path, ignoring possible url parameters
+        request_path = urlparse.urlparse(parsed_request.url).path
+        requested_file = request_path.lstrip('/')
+        if os.path.isfile(os.path.join(server_files_path, requested_file)):
             return True
         return False
 
