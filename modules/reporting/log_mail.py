@@ -17,7 +17,6 @@
 
 import smtplib
 from email.mime.text import MIMEText
-import time
 
 from ConfigParser import ConfigParser
 from modules.reporting.base_logger import BaseLogger
@@ -36,6 +35,7 @@ class LogMail(BaseLogger):
             "mail_to": conf_parser.get("mail", "mail_to"),
             "smtp_host": conf_parser.get("mail", "smtp_host"),
             "smtp_port": conf_parser.get("mail", "smtp_port"),
+            "patterns": conf_parser.get("mail", "patterns"),
         }
 
     def _build_mail_body_event(self, attack_event):
@@ -51,8 +51,7 @@ class LogMail(BaseLogger):
         msg = MIMEText(mail_msg)
         return msg
 
-    def insert(self, attack_event):
-
+    def send_mail(self, attack_event):
         msg = self._build_mail_body_event(attack_event)
         msg['Subject'] = 'Honeypot Update'
         msg['From'] = self.options["mail_from"]
@@ -65,4 +64,17 @@ class LogMail(BaseLogger):
         server.login(self.options["user"], self.options["pwd"])
         server.sendmail(self.options["user"], self.options["mail_to"], msg.as_string())
         server.quit()
+
+    def insert(self, attack_event):
+        patterns = self.options["patterns"]
+
+        # if the wildcard '*' is used, every new event will be notified by email
+        if patterns == '*':
+            self.send_mail(attack_event)
+            return
+
+        # otherwise an email notification will be sent
+        # only if a specified matched pattern is identified
+        if attack_event.matched_pattern in patterns.split(","):
+            self.send_mail(attack_event)
 
