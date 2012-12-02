@@ -90,6 +90,10 @@ class HTTPParser(object):
         parsed_request.parameters = urlparse(re_grp.group(2)).query
         parsed_request.version = re_grp.group(3)
         parsed_request.header = self.parse_header(request[1:])
+        # If the request contains parameters append to url.
+        # Some detection rules need to parse the whole url, not only the request path
+        if parsed_request.parameters:
+            parsed_request.url += '?%s' % parsed_request.parameters
         return parsed_request
 
 

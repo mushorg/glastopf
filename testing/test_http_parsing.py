@@ -37,7 +37,7 @@ class TestHTTPParsing(unittest.TestCase):
         """
         http_parser = HTTPParser()
         http_obj = http_parser.parse_request(request_with_spaces)
-        self.assertTrue(http_obj.url == "/path with spaces")
+        self.assertTrue(http_obj.url == "/path with spaces?param1=value1")
         self.assertTrue(http_obj.parameters == "param1=value1")
         self.assertTrue(http_obj.version == "HTTP/1.0")
 
