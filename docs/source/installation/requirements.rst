@@ -50,21 +50,12 @@ Import sample db which can be found here: http://dev.glastopf.org/projects/glasp
 	cd db/
 	sudo mongorestore -d glastopf -c events events.bson
 
-Additional Database client modules
+SQLAlchemy
 ------------------
 
-In case you want to use one of the listed database logging possibilities, you need the according python modules.
+Install the SQLAlchemy package::
 
-============= =============
-Database Type Python Module
-============= =============
-SQLite 		  Build-in
-MySQL 		  python-mysqldb
-MongoDB 	  python-pymongo
-PostgreSQL 	  python-psycopg2
-============= =============
-
-So all you need is @sudo apt-get install $python-module@, enabling the module in the configuration file, changing the credentials to those you defined when you created the database in your database server application.
+	sudo apt-get install sqlalchemy
 
 HTML parsing
 ------------------
