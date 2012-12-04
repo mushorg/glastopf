@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
-import sqlite3
 
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
@@ -82,8 +81,7 @@ class SQL(BaseLogger):
                 try:
                     conn = self.engine.connect()
                     conn.execute(self.events_table.insert(), insert_dicts)
-                #TODO: Be more specific here!
-                except sqlite3.OperationalError as err:
+                except sqlalchemy.exc.DBAPIError as err:
                     logging.warning("Error caught while inserting %i events into SQL, will retry in %s seconds.i (%s)" %
                                      (len(insert_dicts), self.wait_seconds), err)
                     for item in event_backup:
