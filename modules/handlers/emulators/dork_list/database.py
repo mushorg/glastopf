@@ -15,6 +15,10 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy import create_engine
+from sqlalchemy.sql import text
+
 import re
 
 from ConfigParser import ConfigParser
@@ -32,12 +36,11 @@ class DorkDB():
         self.conf_parser = conf_parser
         conf_parser.read(config)
         if conf_parser.get("mongodb", "enabled") != "True":
-            if conf_parser.get("sqlite", "enabled") == "True":
-                import sqlite3
-                self.connection = sqlite3.connect("db/%s" %
-                                conf_parser.get("sqlite", "database"))
-                self.cursor = self.connection.cursor()
-                self.dbtype = 'sqlite'
+            if conf_parser.get("sql", "enabled") == "True":
+ 
+                connectionstring = conf_parser.get("sql", "connection_string")
+                self.engine = create_engine(connectionstring, echo=False)
+                self.dbtype = 'sql'
             else:
                 self.connection = None
         else:
@@ -71,9 +74,9 @@ class DorkDB():
         if self.dbtype == 'mongodb':
             self.num_entries = self.collection.count()
         else:
-            sql = "SELECT COUNT(*) FROM events"
-            self.cursor.execute(sql)
-            self.num_entries = self.cursor.fetchone()[0]
+            sql = text("SELECT COUNT(*) FROM events")
+            result = self.engine.connect().execute(sql).fetchone()
+            self.num_entries = result[0]
 
     def select_data(self,):
         url_list = []
@@ -98,9 +101,9 @@ class DorkDB():
 
     def get_pattern_requests_sql(self):
         return_list = []
-        sql = "SELECT request FROM events WHERE module = (?)"
-        self.cursor.execute(sql, (self.pattern,))
-        for row in self.cursor.fetchall():
+        sql = "SELECT request FROM events WHERE module = :x"
+        results = self.engine.connect().execute(sql, x=self.pattern).fetchall()
+        for row in results:
             return_list.append(row[0])
         return return_list
 
@@ -112,28 +115,16 @@ class DorkDB():
             return_list.append(entry[0])
         return return_list
 
-    def select_data_old(self,):
-        url_list = []
-        self.full_url_list = []
-        self.pattern = self.conf_parser.get('dork-db', 'pattern')
-        data = self.collection.find({'pattern': self.pattern})
-        self.num_results = data.count()
-        data = data.distinct('request.url')
-        for request in data:
-            url = request.split('=', 1)[0]
-            url_list.append(url)
-        self.num_distinct_results = len(url_list)
-        return url_list
-
     def select_entry(self, starts_with):
         if self.dbtype == 'mongodb':
             regx = re.compile(starts_with + ".*", re.IGNORECASE)
             data = list(self.collection.find({'request.url': regx}))
         else:
             data = []
-            sql = "SELECT request FROM events WHERE request LIKE (?)"
-            self.cursor.execute(sql, (starts_with + '%',))
-            for row in self.cursor.fetchall():
+            sql = "SELECT request FROM events WHERE request LIKE :x"
+            results = self.engine.connect().execute(sql, x=starts_with + "%").fetchall()
+            print "Searching for: %s" % (starts_with,)
+            for row in results:
                 data.append(row[0])
         return data
 
@@ -146,8 +137,8 @@ class DorkDB():
         if self.dbtype == 'mongodb':
             return ('mongodb', self.db.name, self.collection.name)
         else:
-            return ('sqlite',
-                    self.conf_parser.get("sqlite", "database"),
+            return ('sql',
+                    self.conf_parser.get("sql", "database"),
                     'events'
                     )
 
