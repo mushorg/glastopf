@@ -16,21 +16,23 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
+import sqlite3
 
 from sqlalchemy import Table, Column, Integer, String, MetaData
-from sqlalchemy import create_engine
 from sqlalchemy import create_engine
 import logging
 
 from ConfigParser import ConfigParser
 
-#from multiprocessing import Process, Queue
+# from multiprocessing import Process, Queue
 import multiprocessing
-import Queue # for the exception
+# for the exception
+import Queue
 
 from modules.reporting.base_logger import BaseLogger
 
 import time
+
 
 class SQL(BaseLogger):
 
@@ -63,16 +65,16 @@ class SQL(BaseLogger):
                     break
                 else:
                     entry = {
-                    'timestamp' : attack_event.event_time,
-                    'source_addr' : (attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1])),
-                    'method' : attack_event.parsed_request.method,
-                    'request' : attack_event.parsed_request.url,
-                    'request_body' : attack_event.parsed_request.body,
-                    'request_header' : json.dumps(attack_event.parsed_request.header),
-                    'module' : attack_event.matched_pattern,
-                    'filename' : attack_event.file_name,
-                    'response' : attack_event.response,
-                    'host' : attack_event.parsed_request.header.get('Host', "None")
+                    'timestamp': attack_event.event_time,
+                    'source_addr': (attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1])),
+                    'method': attack_event.parsed_request.method,
+                    'request': attack_event.parsed_request.url,
+                    'request_body': attack_event.parsed_request.body,
+                    'request_header': json.dumps(attack_event.parsed_request.header),
+                    'module': attack_event.matched_pattern,
+                    'filename': attack_event.file_name,
+                    'response': attack_event.response,
+                    'host': attack_event.parsed_request.header.get('Host', "None")
                     }
 
                     insert_dicts.append(entry)
@@ -80,12 +82,12 @@ class SQL(BaseLogger):
                 try:
                     conn = self.engine.connect()
                     conn.execute(self.events_table.insert(), insert_dicts)
-                except sqlite.OperationalError as err: #TODO: Be more specific here!
+                #TODO: Be more specific here!
+                except sqlite3.OperationalError as err:
                     logging.warning("Error caught while inserting %i events into SQL, will retry in %s seconds.i (%s)" %
                                      (len(insert_dicts), self.wait_seconds), err)
                     for item in event_backup:
                         SQL.event_queue.put(item)
-            
             time.sleep(self.wait_seconds)
 
     #called by multiple producers
@@ -109,7 +111,7 @@ class SQL(BaseLogger):
         Column('host', String),
         )
 
-        self.engine = create_engine(self.options['connection_string'], echo=False)
+        self.engine = create_engine(self.options['connection_string'],
+                                    echo=False)
         #only creates if it cant find the schema
         meta.create_all(self.engine)
-
