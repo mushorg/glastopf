@@ -19,6 +19,8 @@ import json
 
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
+from sqlalchemy import exc
+
 import logging
 
 from ConfigParser import ConfigParser
@@ -63,27 +65,25 @@ class SQL(BaseLogger):
                 except Queue.Empty:
                     break
                 else:
-                    entry = {
-                    'timestamp': attack_event.event_time,
-                    'source_addr': (attack_event.source_addr[0] + ":" + str(attack_event.source_addr[1])),
-                    'method': attack_event.parsed_request.method,
-                    'request': attack_event.parsed_request.url,
-                    'request_body': attack_event.parsed_request.body,
-                    'request_header': json.dumps(attack_event.parsed_request.header),
-                    'module': attack_event.matched_pattern,
-                    'filename': attack_event.file_name,
-                    'response': attack_event.response,
-                    'host': attack_event.parsed_request.header.get('Host', "None")
-                    }
+                    entry = attack_event.event_dict()
+
+                    for key, value in entry['request'].items():
+                        entry['request_' + key] = value
+
+                    entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
+                    entry['request_header'] = json.dumps(entry['request_header'])
+
+                    del entry['request']
 
                     insert_dicts.append(entry)
+
             if len(insert_dicts) > 0:
                 try:
                     conn = self.engine.connect()
                     conn.execute(self.events_table.insert(), insert_dicts)
-                except sqlalchemy.exc.DBAPIError as err:
-                    logging.warning("Error caught while inserting %i events into SQL, will retry in %s seconds.i (%s)" %
-                                     (len(insert_dicts), self.wait_seconds), err)
+                except exc.DBAPIError as err:
+                    logging.warning("Error caught while inserting %i events into SQL, will retry in %s seconds. (%s)" %
+                                     (len(insert_dicts), self.wait_seconds, err))
                     for item in event_backup:
                         SQL.event_queue.put(item)
             time.sleep(self.wait_seconds)
@@ -97,19 +97,20 @@ class SQL(BaseLogger):
 
         self.events_table = Table('events', meta,
         Column('id', Integer, primary_key=True, ),
-        Column('timestamp', String),
-        Column('source_addr', String),
-        Column('method', String),
-        Column('request', String),
-        Column('request_body', String),
+        Column('time', String),
+        Column('source', String),
+        Column('request_method', String),
+        Column('request_url', String),
+        Column('request_parameters', String),
+        Column('request_version', String),
         Column('request_header', String),
-        Column('module', String),
+        Column('request_body', String),
+        Column('pattern', String),
         Column('filename', String),
         Column('response', String),
-        Column('host', String),
         )
 
-        self.engine = create_engine(self.options['connection_string'],
-                                    echo=False)
+        self.engine = create_engine(self.options['connection_string'])
+
         #only creates if it cant find the schema
         meta.create_all(self.engine)

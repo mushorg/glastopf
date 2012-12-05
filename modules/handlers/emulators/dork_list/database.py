@@ -101,7 +101,7 @@ class DorkDB():
 
     def get_pattern_requests_sql(self):
         return_list = []
-        sql = "SELECT request FROM events WHERE module = :x"
+        sql = "SELECT request_url FROM events WHERE pattern = :x"
         results = self.engine.connect().execute(sql, x=self.pattern).fetchall()
         for row in results:
             return_list.append(row[0])
@@ -121,7 +121,7 @@ class DorkDB():
             data = list(self.collection.find({'request.url': regx}))
         else:
             data = []
-            sql = "SELECT request FROM events WHERE request LIKE :x"
+            sql = "SELECT request_url FROM events WHERE request_url LIKE :x"
             results = self.engine.connect().execute(sql, x=starts_with + "%").fetchall()
             print "Searching for: %s" % (starts_with,)
             for row in results:
