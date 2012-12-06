@@ -33,6 +33,7 @@ from modules import logging_handler
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
 
+import multiprocessing
 
 class GlastopfHoneypot(object):
 
@@ -64,6 +65,11 @@ class GlastopfHoneypot(object):
             self.profiler = profiler.Profiler()
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
+
+        self.post_queue = multiprocessing.Queue()
+        post_processing = multiprocessing.Process(target=self.post_processer)
+        post_processing.start()
+        
         privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
 
@@ -115,17 +121,25 @@ class GlastopfHoneypot(object):
         # Logging the event
         if not self.test:
             self.profiler.handle_event(attack_event)
+            self.post_queue.put(attack_event)
+        response_util = util.HTTPServerResponse()
+        attack_event.response = response_util.get_header(attack_event) + attack_event.response
+        return attack_event.response
+
+    def post_processer(self):
+        while True:
+            attack_event = self.post_queue.get()
+
             gen_dork_list.collect_dork(attack_event)
+
             for logger in self.loggers:
                 logger.insert(attack_event)
+
             if self.options["hpfeeds"] == "True":
                 self.hpfeeds_logger.handle_send("glastopf.events",
                                     json.dumps(attack_event.event_dict()))
                 if attack_event.file_name != None:
                     with file("files/" + attack_event.file_name, 'r') as file_handler:
                         file_content = file_handler.read()
-                    self.hpfeeds_logger.handle_send("glastopf.files",
+                        self.hpfeeds_logger.handle_send("glastopf.files",
                                     attack_event.file_name + " " + base64.b64encode(file_content))
-        response_util = util.HTTPServerResponse()
-        attack_event.response = response_util.get_header(attack_event) + attack_event.response
-        return attack_event.response
