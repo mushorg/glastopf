@@ -55,7 +55,8 @@ class GlastopfHoneypot(object):
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
             self.log.info('HPFeeds started')
         if not self.test:
-            gen_dork_list.regular_generate_dork(0)
+            if len(os.listdir('modules/handlers/emulators/dork_list/pages/')) == 0:
+                gen_dork_list.regular_generate_dork(0)
             self.regular_gen_dork = threading.Thread(
                         target=gen_dork_list.regular_generate_dork, args=(30,))
             self.regular_gen_dork.daemon = True
