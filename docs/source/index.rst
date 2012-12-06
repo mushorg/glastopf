@@ -13,6 +13,7 @@ Contents:
    
    development/index
    installation/index
+   background
 
 
 
