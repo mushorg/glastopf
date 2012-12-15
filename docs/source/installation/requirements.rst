@@ -80,7 +80,7 @@ Get Glastopf
 
 Get the source from the Subversion repository::
 
-	sudo svn co svn://glastopf.org:9090/glaspot glaspot
+	sudo git clone git://github.com/glastopf/glastopf.git
 
 Install and configure the PHP sandbox
 --------------------------------------
