@@ -17,6 +17,7 @@
 
 import unittest
 import sys
+import os
 
 from testing import test_honeypot
 from testing import test_emulators
@@ -40,6 +41,9 @@ test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_dorks))
 
 if __name__ == '__main__':
     report_name = "report.html"
+    reports_dir = "testing/reports"
+    if not os.path.isdir(reports_dir):
+        os.mkdir(reports_dir)
     outfile = open("testing/reports/" + report_name, "w")
     html_test = HTMLTestRunner
     runner = html_test.HTMLTestRunner(
