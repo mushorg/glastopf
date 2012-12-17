@@ -40,15 +40,14 @@ class TestDorks(unittest.TestCase):
         """Objective: Tests database connectivity.
         Input: Connection details to the mongodb database.
         Expected Results: Successful connected to the database.
-        Notes: We check if we are connected to the right database and collection.""" 
+        Notes: We check if we are connected to the right database and collection."""
         print "Starting database test..."
         dbtype, database, table = self.db.conn_info()
         if (dbtype == 'mongodb'):
             self.assertEqual(database, 'glastopf')
             self.assertEqual(table, 'events')
-        elif dbtype == 'sqlite':
-            self.assertEqual(database, 'glastopf.db')
-            self.assertEqual(table, 'events')
+        elif dbtype == 'sql':
+            self.assertEqual(database, 'sqlite:///db/glastopf.db')
         else:
             raise Exception('Database type not supported in unittest')
         print "Database type, Database name and Collection(or table) name:",
@@ -60,7 +59,7 @@ class TestDorks(unittest.TestCase):
         """Objective: Tests if the database is holding the expected amount of data.
         Input: Connection to the mongodb database filled with 12442 sample events.
         Expected Results: 12442 data entries.
-        Notes: Data dump available in honeypot/db/events.bson""" 
+        Notes: Data dump available in honeypot/db/events.bson"""
         print "Starting database data test..."
         self.db.count_data()
         print "Done counting database entries."
@@ -72,7 +71,7 @@ class TestDorks(unittest.TestCase):
         """Objective: Select unique request paths from database.
         Input: Connection to the mongodb database with 12442 entries and the pattern 'rfi' from the configuration.
         Expected Results: 459 data entries in total and 360 distinct paths matching the pattern.
-        Notes: We can use a pattern to select a subset. Data dump available in honeypot/db/events.bson""" 
+        Notes: We can use a pattern to select a subset. Data dump available in honeypot/db/events.bson"""
         print "Starting database SELECT test..."
         self.db.select_data()
         print "Used pattern:", self.db.pattern
@@ -87,7 +86,7 @@ class TestDorks(unittest.TestCase):
     def test_automated_extension(self):
         """Objective: Test if the database extends on new requests to the honeypot.
         Input: A test request with URL: http://localhost:8080/test.php?c=test
-        Expected Results: An entry in the 'inurl' db table containing '/test.php'. 
+        Expected Results: An entry in the 'inurl' db table containing '/test.php'.
         Notes: The test adds the '/test.php' entry to the database."""
         attack_event = attack.AttackEvent()
         attack_event.matched_pattern = "internal_test"
@@ -104,7 +103,7 @@ class TestDorks(unittest.TestCase):
         self.cursor.close()
         print "Done fetching the entries matching the request URL"
         self.assertTrue(len(cnt) > 0)
-        print "Number of entries in the database matching our URL:", 
+        print "Number of entries in the database matching our URL:",
         print len(cnt),
         print "which equates our expectation."
 
@@ -130,7 +129,7 @@ class TestDorks(unittest.TestCase):
         """Objective: Tests if the attack surface generation works.
         Input: Data from the dork database.
         Expected Results: HTML pages ready to be served to the adversary.
-        Notes: This test covers the generation of the HTML pages from the dork database. The page number is proportional to database entries.""" 
+        Notes: This test covers the generation of the HTML pages from the dork database. The page number is proportional to database entries."""
         print "Starting dork page test."
         gen_dork_list.regular_generate_dork(0)
         print "Done creating dork pages."

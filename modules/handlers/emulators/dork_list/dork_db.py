@@ -20,20 +20,20 @@ class DorkDB(object):
             self.cursor.close()
 
     def insert(self, table, content):
-        with self.sqlite_lock:
-            if (content == '') or (content is None):
-                return
-            self.cursor = self.conn.cursor()
-            try:
+        if (content == '') or (content is None):
+            return
+        try:
+            with self.sqlite_lock:
+                self.cursor = self.conn.cursor()
                 sql = "SELECT * FROM %s WHERE content = ?" % table
                 cnt = self.cursor.execute(sql, (content,)).fetchall()
                 self.cursor.close()
-                if len(cnt) == 0:
-                    self.trueInsert(table, content)
-                else:
-                    self.update_entry(table, cnt)
-            except sqlite3.ProgrammingError, e:
-                print "In finding error:", e
+            if len(cnt) == 0:
+                self.trueInsert(table, content)
+            else:
+                self.update_entry(table, cnt)
+        except sqlite3.ProgrammingError, e:
+            print "In finding error:", e
 
     def trueInsert(self, table, content):
         with self.sqlite_lock:

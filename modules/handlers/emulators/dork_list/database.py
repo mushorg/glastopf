@@ -37,7 +37,7 @@ class DorkDB():
         conf_parser.read(config)
         if conf_parser.get("mongodb", "enabled") != "True":
             if conf_parser.get("sql", "enabled") == "True":
- 
+
                 connectionstring = conf_parser.get("sql", "connection_string")
                 self.engine = create_engine(connectionstring, echo=False)
                 self.dbtype = 'sql'
@@ -90,7 +90,7 @@ class DorkDB():
             data = self.get_pattern_requests_sql()
             self.num_results = len(data)
             data = list(set(data))
-        self.num_distinct_results = len(data) 
+        self.num_distinct_results = len(data)
         #seed with static data if we got too few hits in events db
         if len(data) < 100:
             data = data + self.get_dorks_from_dorkdb()
@@ -138,7 +138,7 @@ class DorkDB():
             return ('mongodb', self.db.name, self.collection.name)
         else:
             return ('sql',
-                    self.conf_parser.get("sql", "database"),
+                    self.conf_parser.get("sql", "connection_string"),
                     'events'
                     )
 
