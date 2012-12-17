@@ -25,9 +25,7 @@ import logging
 
 from ConfigParser import ConfigParser
 
-# from multiprocessing import Process, Queue
-import multiprocessing
-# for the exception
+import threading
 import Queue
 
 from modules.reporting.base_logger import BaseLogger
@@ -49,9 +47,10 @@ class SQL(BaseLogger):
         try:
             SQL.event_queue
         except AttributeError:
-            SQL.event_queue = multiprocessing.Queue()
-            consumer_process = multiprocessing.Process(target=self.consumer)
-            consumer_process.start()
+            SQL.event_queue = Queue.Queue()
+            consumer_thread = threading.Thread(target=self.consumer)
+            consumer_thread.daemon = True
+            consumer_thread.start()
 
     def consumer(self):
         while True:

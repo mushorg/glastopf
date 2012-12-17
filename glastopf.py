@@ -20,6 +20,8 @@ import base64
 import threading
 from ConfigParser import ConfigParser
 
+import Queue
+
 import modules.HTTP.util as util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
@@ -33,7 +35,6 @@ from modules import logging_handler
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
 
-import multiprocessing
 
 class GlastopfHoneypot(object):
 
@@ -66,9 +67,10 @@ class GlastopfHoneypot(object):
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
 
-        self.post_queue = multiprocessing.Queue()
-        post_processing = multiprocessing.Process(target=self.post_processer)
-        post_processing.start()
+        self.post_queue = Queue.Queue()
+        self.post_processing = threading.Thread(target=self.post_processer)
+        self.post_processing.daemon = True
+        self.post_processing.start()
         
         privileges.drop(self.options['uid'], self.options['gid'])
         self.log.info('Glastopf instantiated and privileges dropped')
