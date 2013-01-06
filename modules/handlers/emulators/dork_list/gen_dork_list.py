@@ -66,7 +66,7 @@ def generate_dork_pages(first):
             body += " <a href='%s'>%s</a> " % (href, choice(intext_list)[0])
         dork_page = gen_html.html_template(choice(intitle_list)[0],
                                            "http://localhost:8080",
-                                           body, 
+                                           body,
                                            "Footer Powered By")
         page_md5 = hashlib.md5(dork_page).hexdigest()
         with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
@@ -111,8 +111,6 @@ def collect_dork(attack_event):
         dork_reader = dork_db.DorkDB()
         try:
             dork = attack_event.parsed_request.url.split('?')[0]
-            dork_reader.insert("inurl", dork)
+            dork_reader.insert([{'table': "inurl", 'content': dork}])
         except Exception as e:
             print "parsed_request split error for '?':", e
-        finally:
-            dork_reader.closeHandle()
