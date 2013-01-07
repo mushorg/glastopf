@@ -1,4 +1,3 @@
-
 Glastopf Installation
 ----------------------
 | 
@@ -127,7 +126,7 @@ Prerequisites OpenBSD
 
 Install the dependencies::
 
-	pkg_add -r python2.7 py-openssl autoconf automake py-chardet py-sqlalchemy py-lxml py-beautifulsoup mongodb py-numpy py-setuptools python-numpy-dev py-scipy atlas git php subversion 
+	pkg_add -r python2.7 py-openssl autoconf automake py-chardet py-sqlalchemy py-lxml py-beautifulsoup mongodb py-numpy py-setuptools python-numpy-dev py-scipy atlas git php 
 
 | 
 
