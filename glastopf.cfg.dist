@@ -1,0 +1,65 @@
+[webserver]
+host = 0.0.0.0
+port = 8080
+uid = nobody
+gid = nogroup
+proxy_enabled = False
+
+#Generic logging for general monitoring
+[logging]
+consolelog_enabled = True
+filelog_enabled = True
+logfile = log/glastopf.log
+
+[dork-db]
+enabled = True 
+pattern = rfi
+token_pattern = /\w+
+
+[hpfeed]
+enabled = True 
+host = hpfeeds.honeycloud.net
+port = 10000
+secret = 3wis3l2u5l7r3cew
+# channels comma separated
+chan = glastopf.events,glastopf.files
+ident = x8yer@hp1
+
+[sql]
+enabled = True
+#This is a sqlalchemy connection string
+connection_string = sqlite:///db/glastopf.db
+
+[mongodb]
+# MongDB logging settings
+enabled = False
+host = localhost
+port = 27017
+user = 
+password =
+database = glastopf
+collection = events
+
+[surfcertids]
+enabled = False
+host = localhost
+port = 5432
+user = 
+password = 
+database = idsserver
+
+[syslog]
+enabled = False
+socket = /dev/log
+
+[mail]
+enabled = False
+# an email notification will be sent only if a specified matched pattern is identified.
+# Use the wildcard char *, to be notified every time
+patterns = rfi,lfi
+user =
+pwd =
+mail_from =
+mail_to = 
+smtp_host = smtp.gmail.com
+smtp_port = 587
