@@ -28,13 +28,13 @@ class DorkDB(object):
                     self.cursor = self.conn.cursor()
                     sql = "SELECT * FROM %s WHERE content = ?" % item['table']
                     cnt = self.cursor.execute(sql, (item['content'],)).fetchall()
-                if len(cnt) == 0:
-                    self.trueInsert(item['table'], item['content'])
-                else:
-                    self.update_entry(item['table'], cnt)
-                    self.conn.commit()
-        except sqlite3.ProgrammingError, e:
-            print "In finding error:", e
+                    if len(cnt) == 0:
+                        self.trueInsert(item['table'], item['content'])
+                    else:
+                        self.update_entry(item['table'], cnt)
+                self.conn.commit()
+        except sqlite3.ProgrammingError as e:
+            logger.exception("Error while selecting in dork_db: {0}".format(e))
 
     def trueInsert(self, table, content):
         try:
