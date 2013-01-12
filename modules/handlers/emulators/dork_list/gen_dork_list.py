@@ -27,6 +27,9 @@ import time
 import os
 import database
 import cluster
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def prepare_text():
@@ -86,7 +89,7 @@ def remove_old_dork_pages(old_dork_list):
     for file_path in old_dork_list:
         try:
             os.unlink(file_path)
-        except Exception, e:
+        except Exception as e:
             pass
 
 
@@ -113,4 +116,5 @@ def collect_dork(attack_event):
             dork = attack_event.parsed_request.url.split('?')[0]
             dork_reader.insert([{'table': "inurl", 'content': dork}])
         except Exception as e:
-            print "parsed_request split error for '?':", e
+            logger.exception("Parsed_request split error for '?': e".format(e))
+

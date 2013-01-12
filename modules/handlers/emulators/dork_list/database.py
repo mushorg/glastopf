@@ -26,6 +26,9 @@ from ConfigParser import ConfigParser
 import cluster
 import dork_db
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class DorkDB():
@@ -59,7 +62,7 @@ class DorkDB():
                 self.connection = Connection(self.options['host'],
                                      self.options['port'])
             except Exception as e:
-                print "Unable to connect to MongoDB service:", e
+                logger.exception("Unable to connect to MongoDB service: {0}".format(e))
                 self.connection = None
             else:
                 self.db = self.connection[self.options['database']]
@@ -123,7 +126,7 @@ class DorkDB():
             data = []
             sql = "SELECT request_url FROM events WHERE request_url LIKE :x"
             results = self.engine.connect().execute(sql, x=starts_with + "%").fetchall()
-            print "Searching for: %s" % (starts_with,)
+            logger.debug("Searching for: {0}".format(starts_with))
             for row in results:
                 data.append(row[0])
         return data

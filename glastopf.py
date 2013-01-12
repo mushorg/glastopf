@@ -33,6 +33,10 @@ import os
 from modules import logging_handler
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
+import logging
+import logging.handlers
+
+logger = logging.getLogger(__name__)
 
 
 class GlastopfHoneypot(object):
@@ -42,6 +46,8 @@ class GlastopfHoneypot(object):
         self.test = test
         if not self.test:
             self.loggers = logging_handler.get_loggers()
+        logger.info('Starting Glastopf')
+        logger.info("Starting Glastopf")
         conf_parser = ConfigParser()
         conf_parser.read("glastopf.cfg")
         self.options = {
@@ -52,9 +58,10 @@ class GlastopfHoneypot(object):
         }
         if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
-            self.log.info('HPFeeds started')
+            logger.info("HPFeeds started")
         if not self.test:
             if len(os.listdir('modules/handlers/emulators/dork_list/pages/')) == 0:
+                logger.info("Generating initial dork pages - this can take a while.")
                 gen_dork_list.regular_generate_dork(0)
             self.regular_gen_dork = threading.Thread(
                         target=gen_dork_list.regular_generate_dork, args=(30,))
@@ -68,26 +75,16 @@ class GlastopfHoneypot(object):
         self.post_processing = threading.Thread(target=self.post_processer)
         self.post_processing.daemon = True
         self.post_processing.start()
-        
+
         privileges.drop(self.options['uid'], self.options['gid'])
-        self.log.info('Glastopf instantiated and privileges dropped')
+        logger.info('Glastopf instantiated and privileges dropped')
 
     def create_empty_dirs(self):
         dirs = ('log', 'db', 'files', 'modules/handlers/emulators/server_files/',
                 'modules/handlers/emulators/dork_list/pages')
         for entry in dirs:
             if not os.path.isdir(entry):
-                os.mkdir(entry)    
-
-    def print_info(self, attack_event):
-        print attack_event.event_time,
-        print attack_event.source_addr[0] + " requested",
-        print attack_event.parsed_request.method,
-        print attack_event.parsed_request.url, "on",
-        print attack_event.parsed_request.header.get('Host', "None")
-        self.log.info(' '.join([attack_event.source_addr[0],
-                      attack_event.parsed_request.method,
-                      attack_event.parsed_request.url]))
+                os.mkdir(entry)
 
     def _handle_proxy(self, attack_event, addr):
         client_ip = attack_event.parsed_request.header['X-Forwarded-For']
@@ -107,7 +104,11 @@ class GlastopfHoneypot(object):
             self._handle_proxy(attack_event)
         else:
             attack_event.source_addr = addr
-        self.print_info(attack_event)
+
+        logger.info("{0} requested {1} {2} on {3}".format(attack_event.source_addr[0],
+                                                      attack_event.parsed_request.method,
+                                                      attack_event.parsed_request.url,
+                                                      attack_event.parsed_request.header.get('Host', "None")))
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
                                 self.MethodHandlers,

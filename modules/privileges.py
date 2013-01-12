@@ -1,6 +1,9 @@
 import os
 import pwd
 import grp
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def recursive_chown(path, run_uid, run_gid):
@@ -31,20 +34,21 @@ def drop(new_uid='nobody', new_gid='nogroup'):
                      run_uid, run_gid)
             os.chown("modules/handlers/emulators/dork_list/comments.txt",
                      run_uid, run_gid)
-        except OSError, e:
-            print "Could not change file owner: %s" % (e)
+        except OSError as e:
+            logger.exception("Could not change file owner: {0}".format(e))
         try:
             os.setgid(run_gid)
-        except OSError, e:
-            print "Could not set new group: %s" % (e)
+        except OSError as e:
+            logger.exception("Could not set new group: {0}".format(e))
 
         try:
             os.setuid(run_uid)
         except OSError, e:
-            print "Could not set new user: %s" % (e)
+            logger.exception("Could not set net user: {0}".format(e))
 
         new_umask = 066
         try:
             os.umask(new_umask)
         except:
-            print "Failed to change umask"
+            logger.error("Failed to change umase")
+

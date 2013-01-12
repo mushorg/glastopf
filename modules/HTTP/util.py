@@ -68,7 +68,7 @@ class HTTPParser(object):
             request = unicodedata.normalize('NFKD',
                         request.decode(encoding['encoding'])).encode('ascii')
         except:
-            print "request.decode(%s) failed, fall back to decode with latin1.\n" % encoding['encoding']   
+            logging.exception("request.decode({0}) failed, fall back to decode with latin1.".format(encoding['encoding']))
             request = unicodedata.normalize('NFKD',
                         request.decode('latin1')).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()

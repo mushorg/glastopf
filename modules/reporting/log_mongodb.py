@@ -18,6 +18,9 @@
 from ConfigParser import ConfigParser
 
 from modules.reporting.base_logger import BaseLogger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class LogMongoDB(BaseLogger):
@@ -40,7 +43,7 @@ class LogMongoDB(BaseLogger):
                 self.connection = Connection(self.options['host'],
                                      self.options['port'])
             except:
-                print "Unable to connect to MongoDB service"
+                logger.exception("Unable to connect to MongoDB service.")
                 self.options['enabled'] = 'False'
             else:
                 self.db = self.connection[self.options['database']]

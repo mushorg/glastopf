@@ -2,6 +2,10 @@ import struct
 import socket
 import hashlib
 from ConfigParser import ConfigParser
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 """
 Based on Mark Schloessers HPFeed example cli client:
@@ -12,9 +16,6 @@ OP_ERROR    = 0
 OP_INFO        = 1
 OP_AUTH        = 2
 OP_PUBLISH    = 3
-
-def log(msg):
-    print '[feedcli] {0}'.format(msg)
 
 def msghdr(op, data):
     return struct.pack('!iB', 5+len(data), op) + data
@@ -75,7 +76,7 @@ class HPFeedClient(object):
                     rand = str(rest)
                     self.socket.send(msgauth(rand, self.options["ident"], self.options["secret"]))
                 elif opcode == OP_ERROR:
-                    log('errormessage from server: {0}'.format(data))
+                    logger.error("Error from server: {0}".format(data))
             try:
                 data = self.socket.recv(1024)
             except KeyboardInterrupt:
@@ -84,22 +85,22 @@ class HPFeedClient(object):
                 break
     
     def connect(self):
-        log('Connecting to feed broker...')
+        logger.info("Connecting to feed broker.")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.settimeout(3)
         try:
             self.socket.connect((self.options["host"], self.options["port"]))
         except:
-            log('Could not connect to broker.')
+            logger.exception("Could not connect to hpfeed broker.")
             self.socket.close()
         else:
-            log('Connected to hpfeed broker.')
+            logger.info("Connected to hpfeed broker.")
             self.broker_read()
     
     def handle_send(self, channel, data):
         try:
             self.socket.send(msgpublish(self.options["ident"], channel, data))
         except Exception, e:
-            log('Connection error: {0}'.format(e))
+            logger.exception("Connection error: {0}".format(e))
             self.connect()
             self.socket.send(msgpublish(self.options["ident"], channel, data))
