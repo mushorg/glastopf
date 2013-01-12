@@ -47,7 +47,6 @@ class GlastopfHoneypot(object):
         if not self.test:
             self.loggers = logging_handler.get_loggers()
         logger.info('Starting Glastopf')
-        logger.info("Starting Glastopf")
         conf_parser = ConfigParser()
         conf_parser.read("glastopf.cfg")
         self.options = {
