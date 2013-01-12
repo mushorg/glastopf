@@ -21,7 +21,6 @@ import os
 
 from testing import test_honeypot
 from testing import test_emulators
-from testing import test_logger
 from testing import test_sqli
 from testing import test_dorks
 
@@ -34,7 +33,6 @@ else:
 
 test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_honeypot))
 test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_emulators))
-#test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_logger))
 test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_sqli))
 test_list.addTests(unittest.TestLoader().loadTestsFromModule(test_dorks))
 
