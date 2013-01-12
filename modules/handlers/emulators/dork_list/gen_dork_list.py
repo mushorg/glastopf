@@ -116,5 +116,5 @@ def collect_dork(attack_event):
             dork = attack_event.parsed_request.url.split('?')[0]
             dork_reader.insert([{'table': "inurl", 'content': dork}])
         except Exception as e:
-            logger.exception("Parsed_request split error for '?': e".format(e))
+            logger.exception("Parsed_request split error: {0}".format(e))
 

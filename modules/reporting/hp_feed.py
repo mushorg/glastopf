@@ -100,7 +100,7 @@ class HPFeedClient(object):
     def handle_send(self, channel, data):
         try:
             self.socket.send(msgpublish(self.options["ident"], channel, data))
-        except Exception, e:
+        except Exception as e:
             logger.exception("Connection error: {0}".format(e))
             self.connect()
             self.socket.send(msgpublish(self.options["ident"], channel, data))

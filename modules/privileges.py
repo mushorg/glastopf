@@ -43,12 +43,12 @@ def drop(new_uid='nobody', new_gid='nogroup'):
 
         try:
             os.setuid(run_uid)
-        except OSError, e:
+        except OSError as e:
             logger.exception("Could not set net user: {0}".format(e))
 
         new_umask = 066
         try:
             os.umask(new_umask)
-        except:
-            logger.error("Failed to change umase")
+        except Exception as e:
+            logger.error("Failed to change umask: {0}".format(e))
 

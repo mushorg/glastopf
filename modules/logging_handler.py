@@ -20,7 +20,7 @@ import os
 from modules.reporting.base_logger import BaseLogger
 import logging
 
-logger_ = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def _get_logger_names(path='modules/reporting/'):
@@ -42,11 +42,11 @@ def get_loggers(create_tables=True):
             __import__(module_name, globals(), locals(), [], -1)
         logger_classes = BaseLogger.__subclasses__()
     except ImportError as e:
-        logger_.exception("Error while importing logger: {0}".format(e))
+        logger.exception("Error while importing logger: {0}".format(e))
         return None
     else:
         for logger_class in logger_classes:
-            logger = logger_class(create_tables=create_tables)
-            if logger.options['enabled'] == 'True':
-                loggers.append(logger)
+            logger_instance = logger_class(create_tables=create_tables)
+            if logger_instance.options['enabled'] == 'True':
+                loggers.append(logger_instance)
         return loggers

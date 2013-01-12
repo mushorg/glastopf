@@ -82,8 +82,7 @@ class SQL(BaseLogger):
                     conn = self.engine.connect()
                     conn.execute(self.events_table.insert(), insert_dicts)
                 except exc.DBAPIError as err:
-                    logger.warning("Error caught while inserting %i events into SQL, will retry in %s seconds. (%s)" %
-                                     (len(insert_dicts), self.wait_seconds, err))
+                    logger.warning("Error caught while inserting {0} events into SQL, will retry in {1} seconds. ({2})".format(len(insert_dicts), self.wait_seconds, err))
                     for item in event_backup:
                         SQL.event_queue.put(item)
             time.sleep(self.wait_seconds)

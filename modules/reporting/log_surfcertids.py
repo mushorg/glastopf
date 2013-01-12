@@ -83,9 +83,9 @@ class LogSURFcertIDS(BaseLogger):
                         self.options['database'],
                     )
                 )
-                logger.info("Connected to the SURFcert IDS logserver")
-            except:
-                logger.exception("Unable to connect to the SURFcert IDS logserver")
+                logger.info("Connected to the SURFcert IDS logserver.")
+            except Exception as e:
+                logger.exception("Unable to connect to the SURFcert IDS logserver: {0}".format(e))
                 self.options['enabled'] = 'False'
             else:
                 return None
