@@ -30,7 +30,6 @@ import modules.reporting.hp_feed as hpfeeds
 from modules.handlers.emulators.dork_list import gen_dork_list
 
 import os
-import modules.reporting.file_logger as file_logger
 from modules import logging_handler
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
@@ -43,8 +42,6 @@ class GlastopfHoneypot(object):
         self.test = test
         if not self.test:
             self.loggers = logging_handler.get_loggers()
-        self.log = file_logger.FileLogger(name="honeypot").log()
-        self.log.info('Starting Glastopf')
         conf_parser = ConfigParser()
         conf_parser.read("glastopf.cfg")
         self.options = {
