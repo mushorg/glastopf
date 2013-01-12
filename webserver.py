@@ -96,11 +96,11 @@ def setup_logging(logconsole, logfile):
 if __name__ == '__main__':
     conf_parser = ConfigParser()
     conf_parser.read("glastopf.cfg")
-    if conf_parser.has_option("logging", "logfile"):
+    if conf_parser.getboolean("logging", "filelog_enabled"):
         logfile = conf_parser.get("logging", "logfile")
     else:
         logfile = None
-    logconsole = conf_parser.getboolean("logging", "logconsole")
+    logconsole = conf_parser.getboolean("logging", "consolelog_enabled")
     setup_logging(logconsole, logfile)
 
     host = conf_parser.get("webserver", "host")
