@@ -16,6 +16,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from modules.handlers.base_emulator import BaseEmulator
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_handler(name):
@@ -25,7 +28,7 @@ def get_handler(name):
         __import__(module_name, globals(), locals(), [], -1)
         emulators = BaseEmulator.__subclasses__()
     except ImportError as e:
-        print e
+        logging.exception("Error while importing emulator: {0}", e)
         return get_handler("unknown")
     else:
         for emulator in emulators:

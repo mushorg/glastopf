@@ -22,7 +22,9 @@ import re
 
 import sandbox.apd_sandbox as sandbox
 from modules.handlers import base_emulator
+import logging
 
+logger = logging.getLogger(__name__)
 
 class RFIEmulator(base_emulator.BaseEmulator):
     def __init__(self):
@@ -52,8 +54,8 @@ class RFIEmulator(base_emulator.BaseEmulator):
             req = urllib2.Request(injectd_url)
             # FIXME: We need a timeout on read here
             injected_file = urllib2.urlopen(req, timeout=4).read()
-        except IOError, error:
-            print "Failed to fetch injected file, I/O error:", error
+        except IOError as e:
+            logger.exception("Failed to fetch injected file, I/O error: {0}".format(e))
             # TODO: We want to handle the case where we can't download
             # the injected file but pretend to be vulnerable.
             file_name = None

@@ -17,6 +17,9 @@
 
 from ConfigParser import ConfigParser
 from modules.reporting.base_logger import BaseLogger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class LogSURFcertIDS(BaseLogger):
@@ -80,9 +83,9 @@ class LogSURFcertIDS(BaseLogger):
                         self.options['database'],
                     )
                 )
-                print "Connected to the SURFcert IDS logserver"
-            except:
-                print "Unable to connect to the SURFcert IDS logserver"
+                logger.info("Connected to the SURFcert IDS logserver.")
+            except Exception as e:
+                logger.exception("Unable to connect to the SURFcert IDS logserver: {0}".format(e))
                 self.options['enabled'] = 'False'
             else:
                 return None
