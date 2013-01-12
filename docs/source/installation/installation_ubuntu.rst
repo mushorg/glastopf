@@ -59,6 +59,18 @@ Download evnet using git::
 
 |  
 
+Mongo DB
+========
+|
+
+Download event.bson from http://glastopf.org/events.bson and sample database from http://glastopf.org/glastopf.db.bz2.
+
+Install the database::
+
+	sudo mongorestore -d glastopf -c events events.bson
+
+|
+
 Get Glastopf
 ============
 | 
