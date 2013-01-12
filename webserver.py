@@ -1,6 +1,7 @@
 import sys
 import logging
-logging.basicConfig(level=logging.DEBUG)
+import os
+
 from ConfigParser import ConfigParser
 
 from evnet import loop, unloop, listenplain
@@ -8,31 +9,30 @@ from evnet.util import EventGen
 from evnet.promise import Promise
 
 import glastopf
+import logging
+
+logger = logging.getLogger()
 
 # WebSocketListener based on Mark Schloessers evnet 
 # example https://github.com/rep/evnet
 
 
 class WebSockListener(EventGen):
-    def __init__(self):
+    def __init__(self, host, port):
         EventGen.__init__(self)
-        conf_parser = ConfigParser()
-        conf_parser.read("glastopf.cfg")
-        host = conf_parser.get("webserver", "host")
-        port = conf_parser.getint("webserver", "port")
         try:
             self.l = listenplain(host=host, port=port)
         except Exception, e:
-            print "\nUnable to bind socket:",
             if e.errno == 13:
-                print "Permission denied. Run as root!\n"
+                info = "Permission denied. Run as root!"
             if e.errno == 98:
-                print "Port " + str(port) + " already bound. Stop running service on port " + str(port) + " first.\n"
+                info = "Port " + str(port) + " already bound. Stop running service on port " + str(port) + " first."
             else:
-                print "[ Errno " + str(e.errno) + "]", e.strerror + "\n"
+                info = "[ Errno " + str(e.errno) + "]", e.strerror
+            logger.exception("Unable to bind socket: {0}".format(info))
             sys.exit(1)
         else:
-            print "Webserver running on:", host + ":" + str(port), "waiting for connections...\n"
+            logger.info("Webserver running on: {0}:{1} waiting for connections.".format(host, str(port)))
             self.l._on('connection', self.connection)
             self.glastopf_honeypot = glastopf.GlastopfHoneypot()
 
@@ -68,8 +68,44 @@ class WebSock(EventGen):
     def close(self):
         self.c.close()
 
+
+def setup_logging(logconsole, logfile):
+    logger.setLevel(logging.DEBUG)
+    if not os.path.isdir('log'):
+        os.mkdir('log')
+
+    formatter = logging.Formatter('%(asctime)-15s (%(name)s) %(message)s')
+    root_logger = logging.getLogger()
+
+    if logconsole:
+        console_log = logging.StreamHandler()
+        console_log.setLevel(logging.DEBUG)
+        console_log.setFormatter(formatter)
+        root_logger.addHandler(console_log)
+
+    if logfile != None:
+        file_log = logging.handlers.TimedRotatingFileHandler(
+                                                    logfile,
+                                                    when="midnight",
+                                                    backupCount=31)
+        file_log.setLevel(logging.DEBUG)
+        file_log.setFormatter(formatter)
+        root_logger.addHandler(file_log)
+
+
 if __name__ == '__main__':
-    a = WebSockListener()
+    conf_parser = ConfigParser()
+    conf_parser.read("glastopf.cfg")
+    if conf_parser.getboolean("logging", "filelog_enabled"):
+        logfile = conf_parser.get("logging", "logfile")
+    else:
+        logfile = None
+    logconsole = conf_parser.getboolean("logging", "consolelog_enabled")
+    setup_logging(logconsole, logfile)
+
+    host = conf_parser.get("webserver", "host")
+    port = conf_parser.getint("webserver", "port")
+    a = WebSockListener(host, port)
 
     def new_conn(c):
         def onready():

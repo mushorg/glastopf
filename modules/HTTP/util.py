@@ -19,6 +19,9 @@ import unicodedata
 import chardet
 from urlparse import urlparse
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class HTTPRequest(object):
@@ -68,7 +71,7 @@ class HTTPParser(object):
             request = unicodedata.normalize('NFKD',
                         request.decode(encoding['encoding'])).encode('ascii')
         except:
-            print "request.decode(%s) failed, fall back to decode with latin1.\n" % encoding['encoding']   
+            logger.exception("request.decode({0}) failed, fall back to decode with latin1.".format(encoding['encoding']))
             request = unicodedata.normalize('NFKD',
                         request.decode('latin1')).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()

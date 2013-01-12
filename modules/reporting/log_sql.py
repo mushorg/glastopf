@@ -21,8 +21,6 @@ from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 from sqlalchemy import exc
 
-import logging
-
 from ConfigParser import ConfigParser
 
 import threading
@@ -31,6 +29,9 @@ import Queue
 from modules.reporting.base_logger import BaseLogger
 
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SQL(BaseLogger):
@@ -81,8 +82,7 @@ class SQL(BaseLogger):
                     conn = self.engine.connect()
                     conn.execute(self.events_table.insert(), insert_dicts)
                 except exc.DBAPIError as err:
-                    logging.warning("Error caught while inserting %i events into SQL, will retry in %s seconds. (%s)" %
-                                     (len(insert_dicts), self.wait_seconds, err))
+                    logger.warning("Error caught while inserting {0} events into SQL, will retry in {1} seconds. ({2})".format(len(insert_dicts), self.wait_seconds, err))
                     for item in event_backup:
                         SQL.event_queue.put(item)
             time.sleep(self.wait_seconds)
