@@ -114,10 +114,3 @@ class Database(object):
         url_list = self.select_data()
         self.clusterer = cluster.Cluster()
         self.clusterer.cluster(url_list, self.config)
-
-
-if __name__ == "__main__":
-    d = Database(config="../../../../glastopf.cfg")
-    url_list = d.select_data()
-    c = cluster.Cluster()
-    c.cluster(url_list, d.config)
