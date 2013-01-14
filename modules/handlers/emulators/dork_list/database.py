@@ -15,29 +15,29 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
-from sqlalchemy.sql import text
 
 import re
 
 from ConfigParser import ConfigParser
 
 import cluster
-import dork_db
-import random
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class DorkDB():
+class Database(object):
+    """
+    Responsible for all dork related communication with the main glastopf database.
+    """
 
     def __init__(self, config="glastopf.cfg"):
         self.config = config
         conf_parser = ConfigParser()
         self.conf_parser = conf_parser
         conf_parser.read(config)
+        self.pattern = self.conf_parser.get('dork-db', 'pattern')
         if conf_parser.get("mongodb", "enabled") != "True":
             if conf_parser.get("sql", "enabled") == "True":
 
@@ -55,12 +55,12 @@ class DorkDB():
                 "password": conf_parser.get("mongodb", "password"),
                 "database": conf_parser.get("mongodb", "database"),
                 "collection": conf_parser.get("mongodb", "collection"),
-                }
+            }
             self.dbtype = 'mongodb'
             try:
                 from pymongo import Connection
                 self.connection = Connection(self.options['host'],
-                                     self.options['port'])
+                                             self.options['port'])
             except Exception as e:
                 logger.exception("Unable to connect to MongoDB service: {0}".format(e))
                 self.connection = None
@@ -70,21 +70,9 @@ class DorkDB():
                 #                self.options['password'])
                 self.collection = self.db[self.options['collection']]
 
-    def insert_data(self, data):
-        self.collection.insert(data)
-
-    def count_data(self):
-        if self.dbtype == 'mongodb':
-            self.num_entries = self.collection.count()
-        else:
-            sql = text("SELECT COUNT(*) FROM events")
-            result = self.engine.connect().execute(sql).fetchone()
-            self.num_entries = result[0]
-
     def select_data(self,):
         url_list = []
         self.full_url_list = []
-        self.pattern = self.conf_parser.get('dork-db', 'pattern')
         if self.dbtype == 'mongodb':
             data = self.collection.find({'pattern': self.pattern})
             self.num_results = data.count()
@@ -95,11 +83,13 @@ class DorkDB():
             data = list(set(data))
         self.num_distinct_results = len(data)
         #seed with static data if we got too few hits in events db
-        if len(data) < 100:
-            data = data + self.get_dorks_from_dorkdb()
+        #if len(data) < 100:
+        #    dork_seeds = random.sample(self.dorkdb.get_dork_list('inurl'), 100)
+        #    data = dork_seeds
         for request in data:
-            url = request.split('=', 1)[0]
-            url_list.append(url)
+            if request != None:
+                url = request.split('=', 1)[0]
+                url_list.append(url)
         return url_list
 
     def get_pattern_requests_sql(self):
@@ -108,14 +98,6 @@ class DorkDB():
         results = self.engine.connect().execute(sql, x=self.pattern).fetchall()
         for row in results:
             return_list.append(row[0])
-        return return_list
-
-    def get_dorks_from_dorkdb(self):
-        return_list = []
-        dorkdb = dork_db.DorkDB()
-        entries = random.sample(dorkdb.get_dork_list('inurl'), 100)
-        for entry in entries:
-            return_list.append(entry[0])
         return return_list
 
     def select_entry(self, starts_with):
@@ -136,18 +118,9 @@ class DorkDB():
         self.clusterer = cluster.Cluster()
         self.clusterer.cluster(url_list, self.config)
 
-    def conn_info(self):
-        if self.dbtype == 'mongodb':
-            return ('mongodb', self.db.name, self.collection.name)
-        else:
-            return ('sql',
-                    self.conf_parser.get("sql", "connection_string"),
-                    'events'
-                    )
-
 
 if __name__ == "__main__":
-    d = DorkDB(config="../../../../glastopf.cfg")
+    d = Database(config="../../../../glastopf.cfg")
     url_list = d.select_data()
     c = cluster.Cluster()
     c.cluster(url_list, d.config)
