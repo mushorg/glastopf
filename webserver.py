@@ -10,6 +10,7 @@ from evnet.promise import Promise
 
 import glastopf
 import logging
+import os
 
 logger = logging.getLogger()
 
@@ -95,6 +96,8 @@ def setup_logging(logconsole, logfile):
 
 if __name__ == '__main__':
     conf_parser = ConfigParser()
+    if not os.path.isfile("glastopf.cfg"):
+        sys.exit("Could not find configuration file: glastopf.cfg")
     conf_parser.read("glastopf.cfg")
     if conf_parser.getboolean("logging", "filelog_enabled"):
         logfile = conf_parser.get("logging", "logfile")
