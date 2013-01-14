@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 class DorkPageGenerator(object):
     """
-    Responsible for maintance of dork pages and collection of dorks from requests.
+    Responsible for maintenance of dork pages and collection of dorks from requests.
     """
 
     def __init__(self, dork_db_instance, database_instance, pages_path):
