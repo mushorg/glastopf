@@ -39,16 +39,18 @@ class DorkList(base_emulator.BaseEmulator):
         # them with utf-8 encoding
         pages_path = "modules/handlers/emulators/dork_list/pages"
         dork_page_list = os.listdir(pages_path)
-        if '.git' in dork_page_list:
-            dork_page_list.remove('.git')
+        for item in ['.git', '.placeholder']:
+            if item in dork_page_list:
+                dork_page_list.remove(item)
         self.dork_page = "modules/handlers/emulators/dork_list/pages/" + choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
         with codecs.open(self.dork_page, "rb", "utf-8") as dork_page:
             with codecs.open("modules/handlers/emulators/dork_list/"
                              "comments.txt", "r", "utf-8") as comments_txt:
                 general_comments = comments_txt.read()
-                ip_comments = profiler.Profiler.get_comments(ip_address)
-                display_comments = str(ip_comments) + str(general_comments)
+                #ip_comments = profiler.Profiler.get_comments(ip_address)
+                #display_comments = str(ip_comments) + str(general_comments)
+                display_comments = '' + str(general_comments)
                 template = Template(dork_page.read())
         return template, display_comments
 

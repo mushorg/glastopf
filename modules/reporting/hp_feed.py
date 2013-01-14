@@ -52,9 +52,9 @@ class FeedUnpack(object):
 
 class HPFeedClient(object):
     
-    def __init__(self):
+    def __init__(self, config="glastopf.cfg"):
         conf_parser = ConfigParser()
-        conf_parser.read("glastopf.cfg")
+        conf_parser.read(config)
         self.options = {
             "host" : conf_parser.get("hpfeed", "host"),
             "port" : int(conf_parser.getint("hpfeed", "port")),

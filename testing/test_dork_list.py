@@ -59,7 +59,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         cls.fake_config_mongo = tempfile.mkstemp()[1]
         with open(cls.fake_config_mongo, 'w') as f:
             f.writelines(cls.gen_config(mongodb=cls.db_name))
-
+    
+    #TODO: Move this functionality to helper class
     @classmethod
     def gen_config(cls, mongodb=None, sql_connectionstring=None):
         """
@@ -82,7 +83,26 @@ class TestEmulatorDorkList(unittest.TestCase):
                 "user = a\n",
                 "password = b\n",
                 "database = {0}\n".format(mongodb),
-                "collection = events\n"]
+                "collection = events\n",
+                "[surfcertids]\n",
+                "enabled = False\n",
+                "host = localhost\n",
+                "port = 5432\n",
+                "user =\n",
+                "password =\n",
+                "database = idsserver\n",
+                "[syslog]\n",
+                "enabled = False\n",
+                "socket = /dev/log\n",
+                "[mail]\n",
+                "enabled = False\n",
+                "patterns = rfi,lfi\n",
+                "user =\n",
+                "pwd =\n",
+                "mail_from =\n",
+                "mail_to =\n",
+                "smtp_host = smtp.gmail.com\n",
+                "smtp_port = 587\n"]
 
     @classmethod
     def tearDownClass(cls):

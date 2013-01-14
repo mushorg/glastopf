@@ -21,6 +21,8 @@ import hashlib
 from modules.handlers import request_handler
 import modules.events.attack as attack
 import modules.HTTP.util as util
+import uuid
+import os
 
 
 class TestEmulatorIntegration(unittest.TestCase):
@@ -173,21 +175,29 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/
         Expected Result: One of the generated attack surfaces.
         Notes:"""
-        print "Starting 'unknown' request emulation module"
-        self.event.parsed_request = util.HTTPRequest()
-        self.event.parsed_request.url = "/"
-        self.event.matched_pattern = "unknown"
-        self.event.response = ""
-        self.event.source_addr = ("127.0.0.1", "8080")
-        emulator = request_handler.get_handler(self.event.matched_pattern)
-        print "Sending request:", "http://localhost:8080/"
-        emulator.handle(self.event)
-        remote_hash = hashlib.md5(self.event.response).hexdigest()
-        local_hash = hashlib.md5(emulator.template).hexdigest()
-        print "Hash of the local 'response' file:", local_hash
-        self.assertEqual(remote_hash, local_hash)
-        print "Return value:", remote_hash
-        print "matched a generated attack surface item."
+        #Write dummy file
+        tmp_file = 'modules/handlers/emulators/dork_list/pages/{0}'.format(str(uuid.uuid4()))
+        try:
+            with open(tmp_file, 'w+') as f:
+                f.write("tmpfile")
+            print "Starting 'unknown' request emulation module"
+            self.event.parsed_request = util.HTTPRequest()
+            self.event.parsed_request.url = "/"
+            self.event.matched_pattern = "unknown"
+            self.event.response = ""
+            self.event.source_addr = ("127.0.0.1", "8080")
+            emulator = request_handler.get_handler(self.event.matched_pattern)
+            print "Sending request:", "http://localhost:8080/"
+            emulator.handle(self.event)
+            remote_hash = hashlib.md5(self.event.response).hexdigest()
+            local_hash = hashlib.md5(emulator.template).hexdigest()
+            print "Hash of the local 'response' file:", local_hash
+            self.assertEqual(remote_hash, local_hash)
+            print "Return value:", remote_hash
+            print "matched a generated attack surface item."
+        finally:
+            if os.path.isfile(tmp_file):
+                os.remove(tmp_file)
 
     def test_phpcgi_source_code_disclosure_emulator(self):
         """Objective: Emulator testing for PHP CGI source code disclosure CVE-2012-1823

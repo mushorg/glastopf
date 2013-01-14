@@ -22,30 +22,32 @@ class Profiler(object):
         self.cymru_timeout = 3
         #self.profile_update_time = datetime.now() + timedelta(hours=24)
         self.profile_update_time = datetime.now() + timedelta(minutes=30)
-        self.loggers = logging_handler.get_loggers()
+        #self.loggers = logging_handler.get_loggers()
         thread.start_new_thread(self.run, ())
 
     @staticmethod
     def add_comment(ip_address, comment):
-        loggers = logging_handler.get_loggers(create_tables=False)
-        supported_loggers = []
-        for logger in loggers:
-            if logger.__class__.__name__ in ('LogPostgreSQL',):
-                supported_loggers.append(logger)
-        for logger in supported_loggers:
-            logger.add_comment(ip_address, comment)
+        #loggers = logging_handler.get_loggers(create_tables=False)
+        #supported_loggers = []
+        #for logger in loggers:
+        #    if logger.__class__.__name__ in ('LogPostgreSQL',):
+        #        supported_loggers.append(logger)
+        #for logger in supported_loggers:
+        #    logger.add_comment(ip_address, comment)
+        pass
 
     @staticmethod
     def get_comments(ip_address):
-        loggers = logging_handler.get_loggers(create_tables=False)
-        supported_loggers = []
-        for logger in loggers:
-            if logger.__class__.__name__ in ('LogPostgreSQL',):
-                supported_loggers.append(logger)
-        if len(supported_loggers) > 0:
-            return supported_loggers[0].get_comments(ip_address)
-        else:
-            return ''
+        #loggers = logging_handler.get_loggers(create_tables=False)
+        #supported_loggers = []
+        #for logger in loggers:
+        #    if logger.__class__.__name__ in ('LogPostgreSQL',):
+        #        supported_loggers.append(logger)
+        #if len(supported_loggers) > 0:
+        #    return supported_loggers[0].get_comments(ip_address)
+        #else:
+        #    return ''
+        return ''
 
     # Reverse the IP address for querying origin.asn.cymru.com
     def reverse_ip(self, ip):

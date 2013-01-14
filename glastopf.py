@@ -41,14 +41,14 @@ logger = logging.getLogger(__name__)
 
 class GlastopfHoneypot(object):
 
-    def __init__(self, test=False):
+    def __init__(self, test=False, config="glastopf.cfg"):
         self.create_empty_dirs()
         self.test = test
         if not self.test:
             self.loggers = logging_handler.get_loggers()
         logger.info('Starting Glastopf')
         conf_parser = ConfigParser()
-        conf_parser.read("glastopf.cfg")
+        conf_parser.read(config)
         self.options = {
             "hpfeeds": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
@@ -56,23 +56,24 @@ class GlastopfHoneypot(object):
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1')
         }
         if self.options["hpfeeds"] == "True":
-            self.hpfeeds_logger = hpfeeds.HPFeedClient()
+            self.hpfeeds_logger = hpfeeds.HPFeedClient(config=config)
             logger.info("HPFeeds started")
         self.dorkdb = dork_db.DorkDB()
-        self.db = database.Database()
+        self.db = database.Database(config=config)
         pages_dir = 'modules/handlers/emulators/dork_list/pages/'
         self.dork_generator = dork_page_generator.DorkPageGenerator(self.dorkdb, self.db,
                                                                     pages_dir)
+        if len(os.listdir(pages_dir)) == 1:
+            logger.info("Generating initial dork pages - this can take a while.")
+            self.dork_generator.regular_generate_dork(0)
 
-        if not self.test:
-            if len(os.listdir(pages_dir)) == 0:
-                logger.info("Generating initial dork pages - this can take a while.")
-                self.dork_generator.regular_generate_dork(0)
+        if not test:
             regular_gen_dork = threading.Thread(
-                        target=self.dork_generator.regular_generate_dork, args=(30,))
+                target=self.dork_generator.regular_generate_dork, args=(30,))
             regular_gen_dork.daemon = True
             regular_gen_dork.start()
-            self.profiler = profiler.Profiler()
+        self.profiler = profiler.Profiler()
+
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
 
@@ -111,21 +112,21 @@ class GlastopfHoneypot(object):
             attack_event.source_addr = addr
 
         logger.info("{0} requested {1} {2} on {3}".format(attack_event.source_addr[0],
-                                                      attack_event.parsed_request.method,
-                                                      attack_event.parsed_request.url,
-                                                      attack_event.parsed_request.header.get('Host', "None")))
+                                                          attack_event.parsed_request.method,
+                                                          attack_event.parsed_request.url,
+                                                          attack_event.parsed_request.header.get('Host', "None")))
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
-                                self.MethodHandlers,
-                                attack_event.parsed_request.method,
-                                self.MethodHandlers.GET
-                                )(attack_event.parsed_request)
+            self.MethodHandlers,
+            attack_event.parsed_request.method,
+            self.MethodHandlers.GET
+        )(attack_event.parsed_request)
         # Handle the request with the specific vulnerability module
         emulator = request_handler.get_handler(attack_event.matched_pattern)
         emulator.handle(attack_event)
         # Logging the event
         if not self.test:
-            self.profiler.handle_event(attack_event)
+            #self.profiler.handle_event(attack_event)
             self.post_queue.put(attack_event)
         response_util = util.HTTPServerResponse()
         attack_event.response = response_util.get_header(attack_event) + attack_event.response
@@ -143,9 +144,9 @@ class GlastopfHoneypot(object):
 
             if self.options["hpfeeds"] == "True":
                 self.hpfeeds_logger.handle_send("glastopf.events",
-                                    json.dumps(attack_event.event_dict()))
+                                                json.dumps(attack_event.event_dict()))
                 if attack_event.file_name != None:
                     with file("files/" + attack_event.file_name, 'r') as file_handler:
                         file_content = file_handler.read()
                         self.hpfeeds_logger.handle_send("glastopf.files",
-                                    attack_event.file_name + " " + base64.b64encode(file_content))
+                                                        attack_event.file_name + " " + base64.b64encode(file_content))
