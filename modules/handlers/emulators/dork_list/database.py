@@ -82,10 +82,7 @@ class Database(object):
             self.num_results = len(data)
             data = list(set(data))
         self.num_distinct_results = len(data)
-        #seed with static data if we got too few hits in events db
-        #if len(data) < 100:
-        #    dork_seeds = random.sample(self.dorkdb.get_dork_list('inurl'), 100)
-        #    data = dork_seeds
+
         for request in data:
             if request != None:
                 url = request.split('=', 1)[0]

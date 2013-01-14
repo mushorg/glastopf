@@ -2,7 +2,7 @@ import sqlite3
 import datetime
 import threading
 import logging
-from process_dork_file import DorkFileProcessor
+from dork_file_processor import DorkFileProcessor
 
 logger = logging.getLogger(__name__)
 
