@@ -27,7 +27,7 @@ import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
 import modules.reporting.hp_feed as hpfeeds
-from modules.handlers.emulators.dork_list import gen_dork_list
+from modules.handlers.emulators.dork_list import dork_db, database, dork_page_generator
 
 import os
 from modules import logging_handler
@@ -58,14 +58,20 @@ class GlastopfHoneypot(object):
         if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
             logger.info("HPFeeds started")
+        self.dorkdb = dork_db.DorkDB()
+        self.db = database.Database()
+        pages_dir = 'modules/handlers/emulators/dork_list/pages/'
+        self.dork_generator = dork_page_generator.DorkPageGenerator(self.dorkdb, self.db,
+                                                                    pages_dir)
+
         if not self.test:
-            if len(os.listdir('modules/handlers/emulators/dork_list/pages/')) == 0:
+            if len(os.listdir(pages_dir)) == 0:
                 logger.info("Generating initial dork pages - this can take a while.")
-                gen_dork_list.regular_generate_dork(0)
-            self.regular_gen_dork = threading.Thread(
-                        target=gen_dork_list.regular_generate_dork, args=(30,))
-            self.regular_gen_dork.daemon = True
-            self.regular_gen_dork.start()
+                self.dork_generator.regular_generate_dork(0)
+            regular_gen_dork = threading.Thread(
+                        target=self.dork_generator.regular_generate_dork, args=(30,))
+            regular_gen_dork.daemon = True
+            regular_gen_dork.start()
             self.profiler = profiler.Profiler()
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
@@ -129,7 +135,8 @@ class GlastopfHoneypot(object):
         while True:
             attack_event = self.post_queue.get()
 
-            gen_dork_list.collect_dork(attack_event)
+            #gen_dork_list.collect_dork(attack_event)
+            self.dork_generator.collect_dork(attack_event)
 
             for logger in self.loggers:
                 logger.insert(attack_event)
