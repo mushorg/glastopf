@@ -2,22 +2,34 @@ import sqlite3
 import datetime
 import threading
 import logging
+from dork_file_processor import DorkFileProcessor
 
 logger = logging.getLogger(__name__)
 
 
 class DorkDB(object):
+    """
+    Responsible for communication with the sqlite dork database.
+    """
+
     sqlite_lock = threading.Lock()
 
-    def __init__(self):
-        self.conn = sqlite3.connect("db/dork.db")
+    def __init__(self, dork_db_path="db/dork.db"):
+        self.conn = sqlite3.connect(dork_db_path, check_same_thread = False)
+        cursor = self.conn.cursor()
+        #Indicates if database has the correct schema
+        cursor.execute("SELECT name FROM sqlite_master WHERE name ='intitle'")
+        if len(cursor.fetchall()) == 0:
+            self.create()
+            dorkFileProessor = DorkFileProcessor(self)
+            dorkFileProessor.process_dorks()
 
     def create(self):
         with DorkDB.sqlite_lock:
             self.cursor = self.conn.cursor()
             tablename = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
             for table in tablename:
-                sql = "CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY, content TEXT, count INTEGER, firsttime TEXT, lasttime TEXT)" % table
+                sql = "CREATE TABLE IF NOT EXISTS %s (content TEXT PRIMARY KEY, count INTEGER, firsttime TEXT, lasttime TEXT)" % table
                 self.cursor.execute(sql)
             self.cursor.close()
             self.conn.commit()
@@ -27,43 +39,45 @@ class DorkDB(object):
             return
         try:
             with DorkDB.sqlite_lock:
+                self.cursor = self.conn.cursor()
                 for item in insert_list:
-                    self.cursor = self.conn.cursor()
                     sql = "SELECT * FROM %s WHERE content = ?" % item['table']
-                    cnt = self.cursor.execute(sql, (item['content'],)).fetchall()
-                    if len(cnt) == 0:
+                    cnt = self.cursor.execute(sql, (item['content'],)).fetchone()
+                    if cnt == None:
                         self.trueInsert(item['table'], item['content'])
                     else:
-                        self.update_entry(item['table'], cnt)
+                        self.update_entry(item['table'], cnt, self.cursor)
                 self.conn.commit()
-        except sqlite3.ProgrammingError as e:
-            logger.exception("Error while selecting in dork_db: {0}".format(e))
+        except sqlite3.OperationalError as e:
+            logger.exception("Error while inserting into dork_db: {0}".format(e))
 
     def trueInsert(self, table, content):
         try:
-            self.cursor = self.conn.cursor()
-            sql = "INSERT INTO %s VALUES( ?, ?, ?, ?, ?)" % table
-            self.cursor.execute(sql, (None, content, 1, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-            self.cursor.close()
+            sql = "INSERT INTO %s VALUES(?, ?, ?, ?)" % table
+            self.cursor.execute(sql, (content, 1, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         except sqlite3.OperationalError as e:
             logger.exception("Error while inserting into dork_db: {0}".format(e))
-        except sqlite3.ProgrammingError as e:
-            #NOTE: Might be better to fail hard here!
-            logger.exception("Programming error while inserting into dork_db: {0}".format(e))
 
-    def update_entry(self, table, cnt):
-        self.cursor = self.conn.cursor()
+    def update_entry(self, table, cnt, cursor):
         try:
             sql = "UPDATE %s SET lasttime = ? , count = count + 1 WHERE content = ?" % table
-            self.cursor.execute(sql, (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), cnt[0][1]))
-            self.cursor.close()
+            cursor.execute(sql, (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), cnt[1]))
         except sqlite3.OperationalError as e:
             logger.exception("Error while updaing column in dork_db: {0}".format(e))
 
-    def get_dork_list(self, table):
+    def get_dork_list(self, table, starts_with=None):
         with DorkDB.sqlite_lock:
             self.cursor = self.conn.cursor()
-            sql = "SELECT content FROM %s" % table
-            self.cursor.execute(sql)
+            if starts_with == None:
+                sql = "SELECT content FROM {0}".format(table)
+                self.cursor.execute(sql)
+            else:
+                sql = "SELECT content FROM {0} WHERE content LIKE ?".format(table)
+                self.cursor.execute(sql, (starts_with + '%',))
             res = self.cursor.fetchall()
-        return res
+
+        return_list = []
+        for entry in res:
+            return_list.append(entry[0])
+
+        return return_list

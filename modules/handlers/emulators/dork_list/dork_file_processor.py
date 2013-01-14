@@ -1,17 +1,16 @@
 import codecs
 import re
-import dork_db
 import unicodedata
 
 
 class DorkFileProcessor(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, dorkdb=None):
+        self.dorkdb = dorkdb
 
     def get_lines(self):
         dork_lines = []
-        with codecs.open("modules/handlers/emulators/dork_list/dorks.txt", "r", "utf-8") as dork_list:
+        with codecs.open("modules/handlers/emulators/dork_list/data/dorks.txt", "r", "utf-8") as dork_list:
             for dork_line in dork_list.readlines():
                 dork_line = dork_line.strip()
                 if dork_line != "":
@@ -41,12 +40,8 @@ class DorkFileProcessor(object):
             if operator != None:
                 dork_line_split = dork_line.partition(operator)[2]
                 inserts.append({'table': operator[:-1], 'content': self.extract_term(dork_line_split)})
-
-        if len(inserts) > 0:
-            dorkdb = dork_db.DorkDB()
-            dorkdb.create()
-            dorkdb.insert(inserts)
+        return inserts
 
     def process_dorks(self):
         dork_lines = self.get_lines()
-        self.parse_lines(dork_lines)
+        return self.parse_lines(dork_lines)
