@@ -62,7 +62,7 @@ class GlastopfHoneypot(object):
         self.db = database.Database()
         pages_dir = 'modules/handlers/emulators/dork_list/pages/'
         self.dork_generator = dork_page_generator.DorkPageGenerator(self.dorkdb, self.db,
-            pages_dir)
+                                                                    pages_dir)
 
         if not self.test:
             if len(os.listdir(pages_dir)) == 0:
