@@ -58,7 +58,7 @@ class GlastopfHoneypot(object):
         if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient()
             logger.info("HPFeeds started")
-        self.dorkdb = dork_db.DorkDB(":memory:")
+        self.dorkdb = dork_db.DorkDB()
         self.db = database.Database()
         pages_dir = 'modules/handlers/emulators/dork_list/pages/'
         self.dork_generator = dork_page_generator.DorkPageGenerator(self.dorkdb, self.db,
