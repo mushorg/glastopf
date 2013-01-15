@@ -15,16 +15,13 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from random import choice, randint
+from random import choice
 import unittest
 from lxml.html.soupparser import fromstring
-
-from pymongo import MongoClient
-import bson
-import uuid
 import os
 import shutil
 import tempfile
+import helpers
 
 from modules.handlers.emulators.dork_list import database
 from modules.handlers.emulators.dork_list.dork_page_generator import DorkPageGenerator
@@ -45,72 +42,16 @@ class TestEmulatorDorkList(unittest.TestCase):
         if not os.path.isdir('db'):
             os.mkdir('db')
 
-        #name for temporary mongo db
-        cls.db_name = 'glastopf-test-{0}'.format(str(uuid.uuid4())[0:10])
-        c = MongoClient('localhost', 27017)
+        cls.db_name = helpers.populate_mongo_testdata()
 
-        #read and insert test data into mongodb instance
-        data = open('testing/data/events_500.bson', 'r').read()
-        for item in bson.decode_all(data):
-            del item['_id']
-            c[cls.db_name].events.insert(item)
-
-        #Write a isolated glastopf configuration file
         cls.fake_config_mongo = tempfile.mkstemp()[1]
         with open(cls.fake_config_mongo, 'w') as f:
-            f.writelines(cls.gen_config(mongodb=cls.db_name))
-    
-    #TODO: Move this functionality to helper class
-    @classmethod
-    def gen_config(cls, mongodb=None, sql_connectionstring=None):
-        """
-        Generates config string.
-        """
-        return ["[sql]\n",
-                "enabled = {0}\n".format(True if sql_connectionstring else False),
-                "connection_string = {0}\n".format(sql_connectionstring),
-                "[dork-db]\n",
-                "enabled = True\n",
-                "pattern = rfi\n",
-                "token_pattern = /\w+\n",
-                "n_clusters = 10\n",
-                "max_iter = 10\n",
-                "n_init = 2\n",
-                "[mongodb]\n",
-                "enabled = {0}\n".format(True if mongodb else False),
-                "host = localhost\n",
-                "port = 27017\n",
-                "user = a\n",
-                "password = b\n",
-                "database = {0}\n".format(mongodb),
-                "collection = events\n",
-                "[surfcertids]\n",
-                "enabled = False\n",
-                "host = localhost\n",
-                "port = 5432\n",
-                "user =\n",
-                "password =\n",
-                "database = idsserver\n",
-                "[syslog]\n",
-                "enabled = False\n",
-                "socket = /dev/log\n",
-                "[mail]\n",
-                "enabled = False\n",
-                "patterns = rfi,lfi\n",
-                "user =\n",
-                "pwd =\n",
-                "mail_from =\n",
-                "mail_to =\n",
-                "smtp_host = smtp.gmail.com\n",
-                "smtp_port = 587\n"]
+            f.writelines(helpers.gen_config(mongodb=cls.db_name))
 
     @classmethod
     def tearDownClass(cls):
-        connection = MongoClient('localhost', 27017)
-        #delete the tmp mongo database
-        connection.drop_database(cls.db_name)
-
-        #remove config files
+        helpers.delete_mongo_testdata(cls.db_name)
+        
         if os.path.isfile(cls.fake_config_mongo):
             os.remove(cls.fake_config_mongo)
 
