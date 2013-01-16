@@ -122,9 +122,15 @@ Testing the Honeypot
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
-	Webserver running on: 0.0.0.0:80 waiting for connections...
-	2011-11-20 23:23:34 yyy.yyy.yyy.yyy requested GET / on  xxx.xxx.xxx.xxx
-	2011-11-20 23:23:34 yyy.yyy.yyy.yyy requested GET /style.css on xxx.xxx.xxx.xxx
-	2011-11-20 23:23:34 yyy.yyy.yyy.yyy requested GET /favicon.ico on  xxx.xxx.xxx.xxx
-	2011-11-20 23:23:34 yyy.yyy.yyy.yyy requested GET /style.css on xxx.xxx.xxx.xxx
-	2011-11-20 23:23:34 yyy.yyy.yyy.yyy requested GET /favicon.ico on  xxx.xxx.xxx.xxx
+	2013-01-12 14:06:48,215 (root) Webserver running on: 0.0.0.0:8080 waiting for connections.
+	2013-01-12 14:06:48,651 (glastopf) Starting Glastopf
+	2013-01-12 14:06:48,653 (glastopf) Starting Glastopf
+	2013-01-12 14:06:48,667 (modules.reporting.hp_feed) Connecting to feed broker.
+	2013-01-12 14:06:48,731 (modules.reporting.hp_feed) Connected to hpfeed broker.
+	2013-01-12 14:06:51,758 (glastopf) HPFeeds started
+	2013-01-12 14:06:51,760 (glastopf) Generating initial dork pages - this can take a while.
+	2013-01-12 14:07:30,781 (glastopf) Glastopf instantiated and privileges dropped
+	2013-01-12 14:12:03,447 (glastopf) 192.168.1.142 requested GET / on 192.168.1.112:8080
+	2013-01-12 14:12:03,652 (glastopf) 192.168.1.142 requested GET /style.css on 192.168.1.112:8080
+	2013-01-12 14:12:03,853 (glastopf) 192.168.1.142 requested GET /favicon.ico on 192.168.1.112:8080
+
