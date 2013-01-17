@@ -53,12 +53,13 @@ class GlastopfHoneypot(object):
             "hpfeeds": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
-            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1')
+            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
+            "dork_db": conf_parser.get("dork-db", "dork_db").encode('latin1')
         }
         if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient(config=config)
             logger.info("HPFeeds started")
-        self.dorkdb = dork_db.DorkDB()
+        self.dorkdb = dork_db.DorkDB(self.options['dork_db'])
         self.db = database.Database(config=config)
         pages_dir = 'modules/handlers/emulators/dork_list/pages/'
         self.dork_generator = dork_page_generator.DorkPageGenerator(self.dorkdb, self.db,

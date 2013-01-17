@@ -12,7 +12,8 @@ filelog_enabled = True
 logfile = log/glastopf.log
 
 [dork-db]
-enabled = True 
+enabled = True
+dork_db = db/dorks.json
 pattern = rfi
 token_pattern = /\w+
 #parameters for clustering of dorks (KMeans)

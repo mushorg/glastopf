@@ -28,6 +28,7 @@ def gen_config(mongodb=None, sql_connectionstring=None):
             "enabled = {0}\n".format(True if sql_connectionstring else False),
             "connection_string = {0}\n".format(sql_connectionstring),
             "[dork-db]\n",
+            "dork_db = db/dorks.json\n",
             "enabled = True\n",
             "pattern = rfi\n",
             "token_pattern = /\w+\n",
