@@ -51,7 +51,7 @@ class TestEmulatorDorkList(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         helpers.delete_mongo_testdata(cls.db_name)
-        
+
         if os.path.isfile(cls.fake_config_mongo):
             os.remove(cls.fake_config_mongo)
 
@@ -60,42 +60,76 @@ class TestEmulatorDorkList(unittest.TestCase):
         Input: Connection to the mongodb database with 500 entries and the pattern 'rfi' from the configuration.
         Expected Results: 10 data entries in total and 10 distinct paths matching the pattern.
         Notes: We can use a pattern to select a subset. Data dump available in testing/data/events.bson"""
-        dorkdb = dork_db.DorkDB(":memory:")
-        db = database.Database(TestEmulatorDorkList.fake_config_mongo)
-        pages_dir = tempfile.mkdtemp()
-        dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
-        dork_generator.regular_generate_dork(0)
-        print "Starting database SELECT test..."
-        db.select_data()
-        print "Used pattern:", db.pattern
-        self.assertTrue(db.num_results == 10)
-        self.assertTrue(db.num_distinct_results == 10)
+        dork_db_file = tempfile.NamedTemporaryFile().name
+        try:
+            dorkdb = dork_db.DorkDB(dork_db_file)
+            db = database.Database(TestEmulatorDorkList.fake_config_mongo)
+            pages_dir = tempfile.mkdtemp()
+            dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
+            dork_generator.regular_generate_dork(0)
+            print "Starting database SELECT test..."
+            db.select_data()
+            print "Used pattern:", db.pattern
+            self.assertTrue(db.num_results == 10)
+            self.assertTrue(db.num_distinct_results == 10)
+        finally:
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     def test_automated_extension(self):
         """Objective: Test if the dork database extends on new requests to the honeypot.
         Input: A test request with URL: http://localhost:8080/test.php?c=test
-        Expected Results: An entry in the 'inurl' db table containing '/test.php'.
-        Notes: The test adds the '/test.php' entry to the database."""
+        Expected Results: An entry in the 'inurl' db table containing '/test.php'."""
         attack_event = attack.AttackEvent()
         attack_event.matched_pattern = "internal_test"
         attack_event.parsed_request = util.HTTPRequest()
         attack_event.parsed_request.url = "/test.php?c=test"
         print "Attack event prepared."
-        dorkdb = dork_db.DorkDB(":memory:")
-        db = database.Database(TestEmulatorDorkList.fake_config_mongo)
-        dork_generator = DorkPageGenerator(dorkdb, db, None)
-        dork_generator.collect_dork(attack_event)
-        print "Done collecting the path from the event and writing to the database."
-        self.cursor = dorkdb.conn.cursor()
-        sql = "SELECT * FROM inurl WHERE content = ?"
-        cnt = self.cursor.execute(sql,
-                                 (attack_event.parsed_request.url.split('?')[0],)).fetchall()
-        self.cursor.close()
-        print "Done fetching the entries matching the request URL"
-        self.assertTrue(len(cnt) > 0)
-        print "Number of entries in the database matching our URL:",
-        print len(cnt),
-        print "which equates our expectation."
+        dork_db_file = tempfile.NamedTemporaryFile().name
+        try:
+            dorkdb = dork_db.DorkDB(dork_db_file)
+            db = database.Database(TestEmulatorDorkList.fake_config_mongo)
+            dork_generator = DorkPageGenerator(dorkdb, db, None)
+            dork_generator.collect_dork(attack_event)
+            print "Done collecting the path from the event and writing to the database."
+            results = dorkdb.get_dork_list('inurl', '/test.php')
+            print "Done fetching the entries matching the request URL"
+            self.assertTrue(len(results) > 0)
+            print "Number of entries in the database matching our URL:",
+            print len(results),
+            print "which equates our expectation."
+        finally:
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
+
+    def test_dork_persistence(self):
+        """Objective: Test if the dork database survives a application restart.
+        Input: A test request with URL: http://localhost:8080/jamesbrown.php?c=test
+        Expected Results: An entry in the 'inurl' db table containing '/jamesbrown.php'."""
+        attack_event = attack.AttackEvent()
+        attack_event.matched_pattern = "internal_test"
+        attack_event.parsed_request = util.HTTPRequest()
+        attack_event.parsed_request.url = "/jamesbrown.php?c=test"
+        print "Attack event prepared."
+        dork_db_file = tempfile.NamedTemporaryFile().name
+        try:
+            original_dorkdb = dork_db.DorkDB(dork_db_file)
+            db = database.Database(TestEmulatorDorkList.fake_config_mongo)
+            dork_generator = DorkPageGenerator(original_dorkdb, db, None)
+            dork_generator.collect_dork(attack_event)
+            original_dorkdb.save()
+            del original_dorkdb
+            print "Done collecting the path from the event and writing to the database."
+            new_dorkdb = dork_db.DorkDB(dork_db_file)
+            results = new_dorkdb.get_dork_list('inurl', '/jamesbrown.php')
+            print "Done simulating restart and fetching the entries matching the request URL"
+            self.assertTrue(len(results) == 1)
+            print "Number of entries in the database matching our URL:",
+            print len(results),
+            print "which equates our expectation."
+        finally:
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     def test_result_cluster(self):
         """Objective: Tests if the cluster is generated from the result.
@@ -104,8 +138,9 @@ class TestEmulatorDorkList(unittest.TestCase):
         Notes: String feature extraction is based on '/\w+' or /[a-zA-Z0-9_]"""
         print "Starting database cluster test..."
         pages_dir = tempfile.mkdtemp()
+        dork_db_file = tempfile.NamedTemporaryFile().name
         try:
-            dorkdb = dork_db.DorkDB(":memory:")
+            dorkdb = dork_db.DorkDB(dork_db_file)
             db = database.Database(TestEmulatorDorkList.fake_config_mongo)
             dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
             dork_generator.regular_generate_dork(0)
@@ -117,6 +152,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         finally:
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     def test_dork_page(self):
         """Objective: Tests if the attack surface generation works.
@@ -126,9 +163,9 @@ class TestEmulatorDorkList(unittest.TestCase):
 
         print "Starting dork page test."
         pages_dir = tempfile.mkdtemp()
-        #dirname = 'modules/handlers/emulators/dork_list/pages/'
+        dork_db_file = tempfile.NamedTemporaryFile().name
         try:
-            dorkdb = dork_db.DorkDB(":memory:")
+            dorkdb = dork_db.DorkDB(dork_db_file)
             db = database.Database(TestEmulatorDorkList.fake_config_mongo)
             dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
 
@@ -143,6 +180,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         finally:
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     def test_dork_page_content(self):
         """Objective: Testing the attack surfaces content.
@@ -151,8 +190,9 @@ class TestEmulatorDorkList(unittest.TestCase):
         Notes: We extract and count the elements in the HTML document."""
 
         pages_dir = tempfile.mkdtemp()
+        dork_db_file = tempfile.NamedTemporaryFile().name
         try:
-            dorkdb = dork_db.DorkDB(":memory:")
+            dorkdb = dork_db.DorkDB(dork_db_file)
             db = database.Database(TestEmulatorDorkList.fake_config_mongo)
             dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
 
@@ -172,6 +212,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         finally:
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     def test_dork_links(self):
         """Objective: Test if a random link from the dork page exists in the database.
@@ -180,8 +222,9 @@ class TestEmulatorDorkList(unittest.TestCase):
         Notes: Links have the parameters truncated, so multiple entries are likely."""
 
         pages_dir = tempfile.mkdtemp()
+        dork_db_file = tempfile.NamedTemporaryFile().name
         try:
-            dorkdb = dork_db.DorkDB(":memory:")
+            dorkdb = dork_db.DorkDB(dork_db_file)
             db = database.Database(TestEmulatorDorkList.fake_config_mongo)
             dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
             dork_generator.regular_generate_dork(0)
@@ -205,6 +248,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         finally:
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     def test_dork_page_regeneration(self):
         """Objective: Test if the dork pages get regenerated.
@@ -212,8 +257,9 @@ class TestEmulatorDorkList(unittest.TestCase):
         Expected Results: A new list of dork pages.
         Notes: A productive system generates new pages in a configurable interval."""
         pages_dir = tempfile.mkdtemp()
+        dork_db_file = tempfile.NamedTemporaryFile().name
         try:
-            dorkdb = dork_db.DorkDB(":memory:")
+            dorkdb = dork_db.DorkDB(dork_db_file)
             db = database.Database(TestEmulatorDorkList.fake_config_mongo)
             dork_generator = DorkPageGenerator(dorkdb, db, pages_dir)
             dork_generator.regular_generate_dork(0)
@@ -232,6 +278,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         finally:
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
+            if os.path.isfile(dork_db_file):
+                os.remove(dork_db_file)
 
     # def test_fetch_dorks(self):
     #     """Objective: Fetch vulnerability information from an external source.

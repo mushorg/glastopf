@@ -1,83 +1,97 @@
-import sqlite3
-import datetime
+# Copyright (C) 2013 Johnny Vestergaard <jkv@unixcluster.dk>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+from datetime import datetime
 import threading
 import logging
-from dork_file_processor import DorkFileProcessor
+import os
+import json
 
 logger = logging.getLogger(__name__)
 
 
 class DorkDB(object):
     """
-    Responsible for communication with the sqlite dork database.
+    Responsible for management and persistence of dorks.
     """
 
-    sqlite_lock = threading.Lock()
+    def __init__(self, dorks_file="db/dorks.json", auto_save=True):
+        self.lock = threading.Lock()
+        self.dorks_file = dorks_file
+        self.auto_save = auto_save
 
-    def __init__(self, dork_db_path="db/dork.db"):
-        self.conn = sqlite3.connect(dork_db_path, check_same_thread = False)
-        cursor = self.conn.cursor()
-        #Indicates if database has the correct schema
-        cursor.execute("SELECT name FROM sqlite_master WHERE name ='intitle'")
-        if len(cursor.fetchall()) == 0:
-            self.create()
-            dorkFileProessor = DorkFileProcessor(self)
-            dorkFileProessor.process_dorks()
+        self.activity_count = 0
 
-    def create(self):
-        with DorkDB.sqlite_lock:
-            self.cursor = self.conn.cursor()
-            tablename = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
-            for table in tablename:
-                sql = "CREATE TABLE IF NOT EXISTS %s (content TEXT PRIMARY KEY, count INTEGER, firsttime TEXT, lasttime TEXT)" % table
-                self.cursor.execute(sql)
-            self.cursor.close()
-            self.conn.commit()
+        with self.lock:
+            if os.path.isfile(dorks_file):
+                #Note: stored datedatime does not get converted back to datetime
+                #as they are not used by glastopf.
+                with open(dorks_file) as f:
+                    self.dorks = json.load(f)
+            else:
+                self.dorks = {}
+
+    def save(self):
+        with self.lock:
+            with open(self.dorks_file, 'w') as f:
+                f.write(json.dumps(self.dorks, default=self.json_default, sort_keys=True))
 
     def insert(self, insert_list):
         if len(insert_list) == 0:
             return
-        try:
-            with DorkDB.sqlite_lock:
-                self.cursor = self.conn.cursor()
-                for item in insert_list:
-                    sql = "SELECT * FROM %s WHERE content = ?" % item['table']
-                    cnt = self.cursor.execute(sql, (item['content'],)).fetchone()
-                    if cnt == None:
-                        self.trueInsert(item['table'], item['content'])
-                    else:
-                        self.update_entry(item['table'], cnt, self.cursor)
-                self.conn.commit()
-        except sqlite3.OperationalError as e:
-            logger.exception("Error while inserting into dork_db: {0}".format(e))
+        with self.lock:
+            for item in insert_list:
+                operator = item['table']
+                content = item['content']
 
-    def trueInsert(self, table, content):
-        try:
-            sql = "INSERT INTO %s VALUES(?, ?, ?, ?)" % table
-            self.cursor.execute(sql, (content, 1, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-        except sqlite3.OperationalError as e:
-            logger.exception("Error while inserting into dork_db: {0}".format(e))
+                #skip empty
+                if not content:
+                    continue
 
-    def update_entry(self, table, cnt, cursor):
-        try:
-            sql = "UPDATE %s SET lasttime = ? , count = count + 1 WHERE content = ?" % table
-            cursor.execute(sql, (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), cnt[1]))
-        except sqlite3.OperationalError as e:
-            logger.exception("Error while updaing column in dork_db: {0}".format(e))
+                if not operator in self.dorks:
+                    self.dorks[operator] = {}
 
-    def get_dork_list(self, table, starts_with=None):
-        with DorkDB.sqlite_lock:
-            self.cursor = self.conn.cursor()
-            if starts_with == None:
-                sql = "SELECT content FROM {0}".format(table)
-                self.cursor.execute(sql)
-            else:
-                sql = "SELECT content FROM {0} WHERE content LIKE ?".format(table)
-                self.cursor.execute(sql, (starts_with + '%',))
-            res = self.cursor.fetchall()
+                if not content in self.dorks[operator]:
+                    self.dorks[operator][content] = {'count': 0,
+                                                     'firsttime': datetime.now(),
+                                                     'lasttime': datetime.now()}
 
+                self.dorks[operator][content]['count'] += 1
+                self.dorks[operator][content]['lasttime'] = datetime.now()
+                self.activity_count += 1
+
+        #dump to file
+        if self.activity_count > 10 and self.auto_save:
+            self.save()
+            self.activity_count = 0
+
+    def get_dork_list(self, tablename, starts_with=None):
         return_list = []
-        for entry in res:
-            return_list.append(entry[0])
+        with self.lock:
+            if tablename in self.dorks:
+                for content in self.dorks[tablename].keys():
+                    if starts_with == None:
+                            return_list.append(content)
+                    else:
+                        if content.startswith(starts_with):
+                            return_list.append(content)
 
         return return_list
+
+    def json_default(slef, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
