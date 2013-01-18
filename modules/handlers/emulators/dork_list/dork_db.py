@@ -95,8 +95,3 @@ class DorkDB(object):
     def json_default(slef, obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
-
-    def o_hook(self, what):
-        print type(what)
-        print what
-
