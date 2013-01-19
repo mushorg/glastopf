@@ -59,6 +59,9 @@ class RFIEmulator(base_emulator.BaseEmulator):
             # TODO: We want to handle the case where we can't download
             # the injected file but pretend to be vulnerable.
             file_name = None
+        except urllib2.URLError as e:
+            logger.exception("Failed to fetch injected file, URLError error: {0}".format(e))
+            file_name = None
         else:
             file_name = self.store_file(injected_file)
         return file_name
