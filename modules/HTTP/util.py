@@ -15,7 +15,6 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import urllib
 import unicodedata
 import chardet
 from urlparse import urlparse
@@ -23,6 +22,12 @@ import re
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+class ParsingError(Exception):
+
+    def __init__(self, response_code):
+        self.response_code = response_code
 
 
 class HTTPRequest(object):
@@ -86,25 +91,23 @@ class HTTPParser(object):
             HTTP_REQ_METHOD_RE = re.compile("^([A-Z]{3,7})")
             parsed_request.method = HTTP_REQ_METHOD_RE.match(request[0]).group(1)
         except:
-            # Should return a 501 Not implemented error
             # We might want to use a default method (finger printable?)
-            raise
+            raise ParsingError("501 Not implemented")
         else:
             try:
                 HTTP_REQ_PATH_RE = re.compile("^([A-Z]{3,7})\s+(.*)\s+")
                 parsed_request.url = urlparse(HTTP_REQ_PATH_RE.match(request[0]).group(2)).path
                 parsed_request.parameters = urlparse(HTTP_REQ_PATH_RE.match(request[0]).group(2)).query
-            except:
+            except AttributeError:
                 # Should no path be redirected to the root dir?
-                raise
+                raise ParsingError("400 Bad Request")
             else:
                 try:
                     HTTP_REQ_VERSION_RE = re.compile("^([A-Z]{3,7})\s+(.*)\s+(HTTP/\d\.\d)")
                     parsed_request.version = HTTP_REQ_VERSION_RE.match(request[0]).group(3)
-                except:
+                except AttributeError:
                     # Default to HTTP/1.1?
-                    # Should return a 505  HTTP Version Not Supported
-                    raise
+                    raise ParsingError("505  HTTP Version Not Supported")
         parsed_request.header = self.parse_header(request[1:])
         # If the request contains parameters append to url.
         # Some detection rules need to parse the whole url,
@@ -116,9 +119,9 @@ class HTTPParser(object):
 
 class HTTPServerResponse():
     # TODO: Make header customizable
-    def __init__(self):
+    def __init__(self, response_code):
         self.response_header = {
-                                "status_line": "HTTP/1.1 200 OK\r\n",
+                                "status_line": "HTTP/1.1 {0}\r\n".format(response_code),
                                 "connection": "Connection: close\r\n",
                                 "content_length": "Content-Length: ",
                                 "content_type": "Content-Type: text/html; charset=UTF-8\r\n\r\n",

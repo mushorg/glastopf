@@ -22,7 +22,7 @@ from ConfigParser import ConfigParser
 
 import Queue
 
-import modules.HTTP.util as util
+from modules.HTTP import util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
@@ -33,7 +33,6 @@ import os
 from modules import logging_handler
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
-import logging
 import logging.handlers
 
 logger = logging.getLogger(__name__)
@@ -61,8 +60,9 @@ class GlastopfHoneypot(object):
         self.dorkdb = dork_db.DorkDB()
         self.db = database.Database(config=config)
         pages_dir = 'modules/handlers/emulators/dork_list/pages/'
-        self.dork_generator = dork_page_generator.DorkPageGenerator(self.dorkdb, self.db,
-                                                                    pages_dir)
+        self.dork_generator = dork_page_generator.DorkPageGenerator(
+                                                        self.dorkdb, self.db,
+                                                        pages_dir)
         if len(os.listdir(pages_dir)) == 1:
             logger.info("Generating initial dork pages - this can take a while.")
             self.dork_generator.regular_generate_dork(0)
@@ -86,7 +86,8 @@ class GlastopfHoneypot(object):
         logger.info('Glastopf instantiated and privileges dropped')
 
     def create_empty_dirs(self):
-        dirs = ('log', 'db', 'files', 'modules/handlers/emulators/server_files/',
+        dirs = ('log', 'db', 'files',
+                'modules/handlers/emulators/server_files/',
                 'modules/handlers/emulators/dork_list/pages')
         for entry in dirs:
             if not os.path.isdir(entry):
@@ -101,34 +102,43 @@ class GlastopfHoneypot(object):
         attack_event.source_addr = (client_ip, addr[1])
 
     def handle_request(self, raw_request, addr, connection):
+        response_code = "200 OK"
         attack_event = attack.AttackEvent()
         attack_event.sensor_addr = connection.sock.getsockname()
         attack_event.raw_request = raw_request
         # Parse the request
-        attack_event.parsed_request = self.HTTP_parser.parse_request(raw_request)
-        if self.options["proxy_enabled"] == "True":
-            self._handle_proxy(attack_event)
+        try:
+            attack_event.parsed_request = self.HTTP_parser.parse_request(
+                                                                raw_request)
+        except util.ParsingError as e:
+            response_code = e.response_code
         else:
-            attack_event.source_addr = addr
-
-        logger.info("{0} requested {1} {2} on {3}".format(attack_event.source_addr[0],
-                                                          attack_event.parsed_request.method,
-                                                          attack_event.parsed_request.url,
-                                                          attack_event.parsed_request.header.get('Host', "None")))
-        # Handle the HTTP request method
-        attack_event.matched_pattern = getattr(
-            self.MethodHandlers,
-            attack_event.parsed_request.method,
-            self.MethodHandlers.GET
-        )(attack_event.parsed_request)
-        # Handle the request with the specific vulnerability module
-        emulator = request_handler.get_handler(attack_event.matched_pattern)
-        emulator.handle(attack_event)
-        # Logging the event
-        if not self.test:
-            #self.profiler.handle_event(attack_event)
-            self.post_queue.put(attack_event)
-        response_util = util.HTTPServerResponse()
+            if self.options["proxy_enabled"] == "True":
+                self._handle_proxy(attack_event)
+            else:
+                attack_event.source_addr = addr
+            logger.info("{0} requested {1} {2} on {3}".format(
+                      attack_event.source_addr[0],
+                      attack_event.parsed_request.method,
+                      attack_event.parsed_request.url,
+                      attack_event.parsed_request.header.get('Host', "None")
+                      )
+                    )
+            # Handle the HTTP request method
+            attack_event.matched_pattern = getattr(
+                self.MethodHandlers,
+                attack_event.parsed_request.method,
+                self.MethodHandlers.GET
+            )(attack_event.parsed_request)
+            # Handle the request with the specific vulnerability module
+            emulator = request_handler.get_handler(attack_event.matched_pattern)
+            emulator.handle(attack_event)
+            # Logging the event
+            if not self.test:
+                #self.profiler.handle_event(attack_event)
+                self.post_queue.put(attack_event)
+            response_code = "200 OK"
+        response_util = util.HTTPServerResponse(response_code)
         attack_event.response = response_util.get_header(attack_event) + attack_event.response
         return attack_event.response
 
