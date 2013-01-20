@@ -1,18 +1,19 @@
-# Copyright (C) 2011  Lukas Rist
-# 
+# Copyright (C) 2012  Lukas Rist
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import urllib
 import unicodedata
@@ -63,17 +64,15 @@ class HTTPParser(object):
         return header_dict
     # TODO: add body parser function
 
-    def parse_request(self, request):        
-        # FIXME: Error handling for mal formed HTTP requests
-        request = urllib.unquote(request)
+    def parse_request(self, request):
+        # FIXME: Error handling for malformed HTTP requests
+        #request = urllib.unquote(request)
         encoding = chardet.detect(request)
         try:
-            request = unicodedata.normalize('NFKD',
-                        request.decode(encoding['encoding'])).encode('ascii')
+            request = unicodedata.normalize('NFKD', request.decode(encoding['encoding'])).encode('ascii')
         except:
             logger.exception("request.decode({0}) failed, fall back to decode with latin1.".format(encoding['encoding']))
-            request = unicodedata.normalize('NFKD',
-                        request.decode('latin1')).encode('ascii', 'ignore')
+            request = unicodedata.normalize('NFKD', request.decode('latin1')).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()
         try:
             request, parsed_request.body = request.split("\r\n\r\n", 1)
@@ -83,18 +82,33 @@ class HTTPParser(object):
         request = request.split("\r\n")
 
         # Parse the first line
-        HTTP_REQ_RE = re.compile("([A-Z0-9$-_.]{3,10})\s+(.*)\s+(HTTP/\d+.\d+)")
-        re_grp = HTTP_REQ_RE.match(request[0])
-
-        # TODO Handle invalid requests. 
-        # Improve a better error handling
-        parsed_request.method = re_grp.group(1)
-        parsed_request.url = urlparse(re_grp.group(2)).path
-        parsed_request.parameters = urlparse(re_grp.group(2)).query
-        parsed_request.version = re_grp.group(3)
+        try:
+            HTTP_REQ_METHOD_RE = re.compile("^([A-Z]{3,7})")
+            parsed_request.method = HTTP_REQ_METHOD_RE.match(request[0]).group(1)
+        except:
+            # Should return a 501 Not implemented error
+            # We might want to use a default method (finger printable?)
+            raise
+        else:
+            try:
+                HTTP_REQ_PATH_RE = re.compile("^([A-Z]{3,7})\s+(.*)\s+")
+                parsed_request.url = urlparse(HTTP_REQ_PATH_RE.match(request[0]).group(2)).path
+                parsed_request.parameters = urlparse(HTTP_REQ_PATH_RE.match(request[0]).group(2)).query
+            except:
+                # Should no path be redirected to the root dir?
+                raise
+            else:
+                try:
+                    HTTP_REQ_VERSION_RE = re.compile("^([A-Z]{3,7})\s+(.*)\s+(HTTP/\d\.\d)")
+                    parsed_request.version = HTTP_REQ_VERSION_RE.match(request[0]).group(3)
+                except:
+                    # Default to HTTP/1.1?
+                    # Should return a 505  HTTP Version Not Supported
+                    raise
         parsed_request.header = self.parse_header(request[1:])
         # If the request contains parameters append to url.
-        # Some detection rules need to parse the whole url, not only the request path
+        # Some detection rules need to parse the whole url,
+        # not only the request path
         if parsed_request.parameters:
             parsed_request.url += '?%s' % parsed_request.parameters
         return parsed_request
