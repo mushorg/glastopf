@@ -1,13 +1,11 @@
-
 import unittest
 
-from modules.HTTP.util import HTTPRequest, HTTPParser
+from modules.HTTP.util import HTTPParser
 
 
 class TestHTTPParsing(unittest.TestCase):
     """Tests the honeypots vulnerable string selection.
     We first start with the integration test and continue with unit tests"""
-
 
     def test_simple_get_request(self):
         """Test simple GET request"""
@@ -40,4 +38,3 @@ class TestHTTPParsing(unittest.TestCase):
         self.assertTrue(http_obj.url == "/path with spaces?param1=value1")
         self.assertTrue(http_obj.parameters == "param1=value1")
         self.assertTrue(http_obj.version == "HTTP/1.0")
-
