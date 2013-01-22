@@ -15,25 +15,31 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import os
+import sys
 import json
 import base64
+import Queue
 import threading
 from ConfigParser import ConfigParser
-
-import Queue
 
 from modules.HTTP import util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
-import modules.reporting.hp_feed as hpfeeds
-from modules.handlers.emulators.dork_list import dork_db, database, dork_page_generator
-
-import os
 from modules import logging_handler
+import modules.reporting.aux.hp_feed as hpfeeds
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
 import logging.handlers
+
+from modules.handlers.emulators.dork_list import dork_file_processor
+from modules.handlers.emulators.dork_list import database_sqla
+from modules.handlers.emulators.dork_list import database_mongo
+from modules.handlers.emulators.dork_list import dork_page_generator
+from modules.handlers.emulators.dork_list import cluster
+from modules.reporting.main import log_mongodb, log_sql
+from sqlalchemy import create_engine
 
 logger = logging.getLogger(__name__)
 
@@ -43,27 +49,29 @@ class GlastopfHoneypot(object):
     def __init__(self, test=False, config="glastopf.cfg"):
         self.create_empty_dirs()
         self.test = test
-        if not self.test:
-            self.loggers = logging_handler.get_loggers()
         logger.info('Starting Glastopf')
+
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
             "hpfeeds": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
-            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1')
+            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
         }
+
         if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient(config=config)
             logger.info("HPFeeds started")
-        self.dorkdb = dork_db.DorkDB()
-        self.db = database.Database(config=config)
-        pages_dir = 'modules/handlers/emulators/dork_list/pages/'
-        self.dork_generator = dork_page_generator.DorkPageGenerator(
-                                                        self.dorkdb, self.db,
-                                                        pages_dir)
-        if len(os.listdir(pages_dir)) == 1:
+
+        (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
+
+        self.dork_generator = self.setup_dork_generator(conf_parser)
+
+        if not self.test:
+            self.loggers = logging_handler.get_aux_loggers()
+
+        if len(self.dork_generator.get_current_pages()) == 0:
             logger.info("Generating initial dork pages - this can take a while.")
             self.dork_generator.regular_generate_dork(0)
 
@@ -84,6 +92,47 @@ class GlastopfHoneypot(object):
 
         privileges.drop(self.options['uid'], self.options['gid'])
         logger.info('Glastopf instantiated and privileges dropped')
+
+    def setup_dork_generator(self, conf_parser):
+        token_pattern = conf_parser.get('dork-db', 'token_pattern')
+        n_clusters = conf_parser.getint('dork-db', 'n_clusters')
+        max_iter = conf_parser.getint('dork-db', 'max_iter')
+        n_init = conf_parser.getint('dork-db', 'n_init')
+
+        file_processor = dork_file_processor.DorkFileProcessor(self.dorkdb)
+
+        clusterer = cluster.Cluster(token_pattern, n_clusters, max_iter, n_init, min_df=0.0)
+        return dork_page_generator.DorkPageGenerator(self.dorkdb,
+                                                     file_processor,
+                                                     clusterer)
+
+    def setup_main_database(self, conf_parser):
+
+        if conf_parser.getboolean("main-database", "enabled"):
+            connection_string = conf_parser.get("main-database", "connection_string")
+            logger.info("Connecting to main database with: {0}".format(connection_string))
+            if connection_string.startswith("mongodb://"):
+                maindb = log_mongodb.Database(connection_string)
+                dorkdb = database_mongo.Database(connection_string)
+                return (maindb, dorkdb)
+            elif connection_string.startswith(("sqlite", "mysql",
+                                               "oracle", "postgresql")):
+                sqla_engine = create_engine(connection_string)
+                maindb = log_sql.Database(sqla_engine)
+                dorkdb = database_sqla.Database(sqla_engine)
+                return (maindb, dorkdb)
+            else:
+                logger.error("Invalid connection string.")
+                sys.exit(1)
+        else:
+            default_db = "sqlite://db/glastopf.db"
+            logger.info("Main datbase has been disabled, dorks will be stored in: {0}".format(default_db))
+            #db will only be used for dorks
+            sqla_engine = create_engine("sqlite://db/glastopf.db")
+            maindb = log_sql.Database(sqla_engine)
+            dorkdb = database_sqla.Database(sqla_engine)
+            #disable usage of main logging datbase
+            return (None, dorkdb)
 
     def create_empty_dirs(self):
         dirs = ('log', 'db', 'files',
@@ -109,7 +158,7 @@ class GlastopfHoneypot(object):
         # Parse the request
         try:
             attack_event.parsed_request = self.HTTP_parser.parse_request(
-                                                                raw_request)
+                raw_request)
         except util.ParsingError as e:
             response_code = e.response_code
         else:
@@ -118,12 +167,12 @@ class GlastopfHoneypot(object):
             else:
                 attack_event.source_addr = addr
             logger.info("{0} requested {1} {2} on {3}".format(
-                      attack_event.source_addr[0],
-                      attack_event.parsed_request.method,
-                      attack_event.parsed_request.url,
-                      attack_event.parsed_request.header.get('Host', "None")
-                      )
-                    )
+                        attack_event.source_addr[0],
+                        attack_event.parsed_request.method,
+                        attack_event.parsed_request.url,
+                        attack_event.parsed_request.header.get('Host', "None")
+                        )
+                        )
             # Handle the HTTP request method
             attack_event.matched_pattern = getattr(
                 self.MethodHandlers,
@@ -148,6 +197,9 @@ class GlastopfHoneypot(object):
 
             #gen_dork_list.collect_dork(attack_event)
             self.dork_generator.collect_dork(attack_event)
+
+            if self.maindb:
+                self.maindb.insert(attack_event)
 
             for logger in self.loggers:
                 logger.insert(attack_event)
