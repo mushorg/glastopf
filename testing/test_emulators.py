@@ -17,6 +17,7 @@
 
 import unittest
 import hashlib
+import tempfile
 
 from modules.handlers import request_handler
 import modules.events.attack as attack

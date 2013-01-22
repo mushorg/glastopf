@@ -5,12 +5,13 @@ import unicodedata
 
 class DorkFileProcessor(object):
 
-    def __init__(self, dorkdb=None):
+    def __init__(self, dorkdb=None, dorks_file="modules/handlers/emulators/dork_list/data/dorks.txt"):
         self.dorkdb = dorkdb
+        self.dorks_file = dorks_file
 
     def get_lines(self):
         dork_lines = []
-        with codecs.open("modules/handlers/emulators/dork_list/data/dorks.txt", "r", "utf-8") as dork_list:
+        with codecs.open(self.dorks_file, "r", "utf-8") as dork_list:
             for dork_line in dork_list.readlines():
                 dork_line = dork_line.strip()
                 if dork_line != "":

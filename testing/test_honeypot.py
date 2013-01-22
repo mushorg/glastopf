@@ -22,7 +22,7 @@ import glastopf
 import tempfile
 import os
 import helpers
-
+from sqlalchemy import create_engine
 
 class FakeCon(object):
 
@@ -35,44 +35,67 @@ class TestHoneypotFunctionality(unittest.TestCase):
     Test set-up instantiates the honeypot.
     The main Test sends a request and checks the response."""
 
-    @classmethod
-    def setUpClass(cls):
-        if not os.path.isdir('db'):
-            os.mkdir('db')
-
-        cls.db_name = helpers.populate_mongo_testdata()
-
-        cls.fake_config_mongo = tempfile.mkstemp()[1]
-        with open(cls.fake_config_mongo, 'w') as f:
-            f.writelines(helpers.gen_config(mongodb=cls.db_name))
-
-        #Write a isolated glastopf configuration file
-        cls.fake_config_mongo = tempfile.mkstemp()[1]
-        with open(cls.fake_config_mongo, 'w') as f:
-            f.writelines(helpers.gen_config(mongodb=cls.db_name))
-
-    @classmethod
-    def tearDownClass(cls):
-        helpers.delete_mongo_testdata(cls.db_name)
-
-        if os.path.isfile(cls.fake_config_mongo):
-            os.remove(cls.fake_config_mongo)
-
-    def test_honeypot(self):
+    def test_honeypot_mongo(self):
         """Objective: Testing overall Honeypot integration.
-        Input: Loads the honeypot module.
+        Input: Loads the honeypot module with mongodb as main database.
         Expected Response: Honeypot responses with a non-empty HTTP response.
         Note: This test verifies the overall functionality."""
-        raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
-        source_address = ["127.0.0.1", "12345"]
-        self.glastopf = glastopf.GlastopfHoneypot(test=True, config=TestHoneypotFunctionality.fake_config_mongo)
-        self.glastopf.options["enabled"] = "False"
-        print "Sending request: http://localhost:8080/"
-        connection = FakeCon()
-        connection.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        response = self.glastopf.handle_request(raw_request,
-                                                source_address,
-                                                connection)
-        connection.sock.close()
-        self.assertIsNot(response, None)
-        #print "Non-empty return value equates our expectation."
+
+        conn_string = helpers.create_mongo_database(fill=True)
+        config_file = tempfile.mkstemp()[1]
+
+        with open(config_file, 'w') as f:
+            f.writelines(helpers.gen_config(conn_string))
+
+        try:
+            raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
+            source_address = ["127.0.0.1", "12345"]
+            self.glastopf = glastopf.GlastopfHoneypot(test=True, config=config_file)
+            self.glastopf.options["enabled"] = "False"
+            print "Sending request: http://localhost:8080/"
+            connection = FakeCon()
+            connection.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            response = self.glastopf.handle_request(raw_request,
+                                                    source_address,
+                                                    connection)
+            connection.sock.close()
+            self.assertIsNot(response, None)
+        finally:
+            helpers.delete_mongo_testdata(conn_string)
+            if os.path.isfile(config_file):
+                os.remove(config_file)
+
+    def test_honeypot_sql(self):
+        """Objective: Testing overall Honeypot integration.
+        Input: Loads the honeypot module with mongodb as main database.
+        Expected Response: Honeypot responses with a non-empty HTTP response.
+        Note: This test verifies the overall functionality."""
+
+        db_file = tempfile.mkstemp()[1]
+        conn_string = "sqlite:///{0}".format(db_file)
+        sql_engine = create_engine(conn_string)
+        helpers.populate_main_sql_testdatabase(sql_engine)
+
+        config_file = tempfile.mkstemp()[1]
+
+        with open(config_file, 'w') as f:
+            f.writelines(helpers.gen_config(conn_string))
+
+        try:
+            raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
+            source_address = ["127.0.0.1", "12345"]
+            self.glastopf = glastopf.GlastopfHoneypot(test=True, config=config_file)
+            self.glastopf.options["enabled"] = "False"
+            print "Sending request: http://localhost:8080/"
+            connection = FakeCon()
+            connection.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            response = self.glastopf.handle_request(raw_request,
+                                                    source_address,
+                                                    connection)
+            connection.sock.close()
+            self.assertIsNot(response, None)
+        finally:
+            if os.path.isfile(config_file):
+                os.remove(config_file)
+            if os.path.isfile(db_file):
+                os.remove(db_file)
