@@ -17,7 +17,6 @@ Create symbolic links::
 
 	ln -sf /usr/local/bin/php-config-5.3 /usr/local/bin/php-config
 	ln -sf /usr/local/bin/phpize-5.3 /usr/local/bin/phpize
-	ln -sf /var/www/conf/modules.sample/php-5.3.conf /var/www/conf/modules/php.conf
 	ln -sf /usr/local/bin/python2.7 /usr/local/bin/python 
 	ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
 	ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
@@ -27,8 +26,8 @@ Create symbolic links::
 
 Set autoconf and automake versions::
 
-	"export AUTOCONF_VERSION=2.59"
-	"export AUTOMAKE_VERSION=1.9" 
+	export AUTOCONF_VERSION=2.59
+	export AUTOMAKE_VERSION=1.9 
 
 | 
 
