@@ -1,0 +1,629 @@
+  ext:dat   bpk.dat
+!Host=*.* intext:enc_UserPassword=* ext:pcf
+!Host=*.* intext:enc_UserPassword=* ext:pcf
+!Host=*.* intext:enc_UserPassword=* ext:pcf
+"Microsoft (R) Windows * (TM) Version * DrWtsn32 C
+"Microsoft (R) Windows * (TM) Version * DrWtsn32 C
+"xampp/phpinfo
+( filetype:mail |   filetype:eml | filetype:mbox | filetype:mbx ) intextassword|subject
+
+((inurl:ifgraph "Page generated at") OR ("This page was built using ifgraph"))
+((inurl:ifgraph "Page generated at") OR ("This page was built using ifgraph"))
+((inurl:ifgraph “Page generated at”) OR (“This page was built using ifgraph”))
+* Il codice 94FBR &#232; incluso in molti seriali 
+allinurl:admin mdb
+ext:yml database inurl:config
+intitle:”ZyXEL Prestige Router” “Enter password”
+intitlehpinfo "PHP Version"
+intitlehpinfo "PHP Version"
+inurl:/index.php?_REQUEST=&_REQUEST[option]=com_content&_REQUEST[Itemid]=1&GLOBALS=&mosConfig_absolute_path=
+inurl:print.php?strona=
+inurl:print.php?thispage=
+inurl:print.php?tipo=
+inurl:print.php?type=
+inurl:print.php?u=
+inurl:print.php?where=
+inurl:profiles filetype:mdb
+inurl:profiles filetype:mdb
+inurl:profiles filetype:mdb
+inurl:profiles filetype:mdb
+inurl:proxy | inurl:wpad ext:pac | ext:dat findproxyforurl
+inurl:proxy | inurl:wpad ext:pac | ext:dat findproxyforurl
+inurl:proxy | inurl:wpad ext:pac | ext:dat findproxyforurl
+inurl:Proxy.txt
+inurl:Proxy.txt
+inurl:Proxy.txt
+inurl:public
+inurl:public
+inurl:public
+inurl:publisher
+inurl:pwd.dat
+inurl:query
+inurl:query
+inurl:redirect.cgi
+inurl:register.cgi
+inurl:report "EVEREST Home   Edition "
+inurl:report "EVEREST Home Edition "
+inurl:report "EVEREST Home Edition "
+inurl:report "EVEREST Home Edition "
+inurl:report "EVEREST Home Edition "
+inurl:report \"EVEREST Home Edition \" 
+inurl:report “EVEREST Home Edition ”
+inurl:responder.cgi
+inurl:robpoll.cgi filetype:cgi 
+inurl:root.asp?acs=anon Outlook Mail Web Access directory can be
+inurl:rpSys.html
+inurl:rpSys.html
+inurl:rpSys.html
+inurl:search
+inurl:search
+inurl:search
+inurl:search.php vbulletin
+inurl:search.php vbulletin
+inurl:search.php vbulletin
+inurl:search.php?cutepath=
+inurl:search.php?cutepath=
+inurl:Search.pl
+inurl:search.pl
+inurl:search/admin.php
+inurl:search/admin.php
+inurl:search/admin.php
+inurl:secring ext:skr | ext:pgp | ext:bak
+inurl:secring ext:skr | ext:pgp | ext:bak
+inurl:secring ext:skr | ext:pgp | ext:bak
+inurl:secring ext:skr | ext:pgp | ext:bak
+inurl:secring ext:skr | ext:pgp | ext:bak
+inurl:secring ext:skr | ext:pgp | ext:bak
+inurl:secring ext:skr | extgp | ext:bak 
+inurl:send_reminders.php?includedir=
+inurl:sendmail.cfm
+inurl:sendmail.inc
+inurl:server-info "Apache Server Information"
+inurl:server-info "Apache Server Information"
+inurl:server-info "Apache Server Information"
+inurl:server-info "Apache Server Information"
+inurl:server-info "Apache Server Information"
+inurl:server-info \"Apache Server Information\" 
+inurl:server-info “Apache Server Information”
+inurl:server-status   "apache"
+inurl:server-status "apache"
+inurl:server-status "apache"
+inurl:server-status "apache"
+inurl:server-status "apache"
+inurl:server-status \"apache\" 
+inurl:server-status “apache”
+inurl:server.cfg rcon password
+inurl:server.cfg rcon password
+inurl:server.cfg rcon password
+inurl:service.pwd
+inurl:service.pwd 
+inurl:services.php?page=
+inurl:services.php?page=
+inurl:servlet/webacc
+inurl:servlet/webacc
+inurl:servlet/webacc
+inurl:SessionServlet
+inurl:shop
+inurl:shop
+inurl:shop
+inurl:shop.cgi
+inurl:shopdbtest.asp
+inurl:shopdbtest.asp
+inurl:shopdbtest.asp
+inurl:shopdbtest.asp 
+inurl:show
+inurl:show.php?*root*=
+inurl:show.php?abre=
+inurl:show.php?adresa=
+inurl:show.php?b=
+inurl:show.php?base_dir=
+inurl:show.php?channel=
+inurl:show.php?chapter=
+inurl:show.php?cmd=
+inurl:show.php?corpo=
+inurl:show.php?d=
+inurl:show.php?disp=
+inurl:show.php?filepath=
+inurl:show.php?get=
+inurl:show.php?go=
+inurl:show.php?header=
+inurl:show.php?home=
+inurl:show.php?inc=
+inurl:show.php?incl=
+inurl:show.php?include=
+inurl:show.php?index=
+inurl:show.php?ir=
+inurl:show.php?j=
+inurl:show.php?ki=
+inurl:show.php?l=
+inurl:show.php?left=
+inurl:show.php?loader=
+inurl:show.php?m=
+inurl:show.php?mid=
+inurl:show.php?middlePart=
+inurl:show.php?modo=
+inurl:show.php?module=
+inurl:show.php?my=
+inurl:show.php?n=
+inurl:show.php?nivel=
+inurl:show.php?oldal=
+inurl:show.php?page=
+inurl:show.php?page=
+inurl:show.php?pageweb=
+inurl:show.php?pagina=
+inurl:show.php?param=
+inurl:show.php?path=
+inurl:show.php?path=
+inurl:show.php?path=
+inurl:show.php?path=
+inurl:show.php?path=
+inurl:show.php?play=
+inurl:show.php?pname=
+inurl:show.php?pre=
+inurl:show.php?qry=
+inurl:show.php?r=
+inurl:show.php?read=
+inurl:show.php?recipe=
+inurl:show.php?redirect=
+inurl:show.php?seccion=
+inurl:show.php?second=
+inurl:show.php?sp=
+inurl:show.php?thispage=
+inurl:show.php?to=
+inurl:show.php?type=
+inurl:show.php?x=
+inurl:show.php?xlink=
+inurl:show.php?z=
+inurl:show_news.php?cutepath=
+inurl:show_news.php?cutepath=
+inurl:showcode.asp
+inurl:shtml.dll
+inurl:shtml.dll
+inurl:shtml.exe
+inurl:shtml.exe
+inurl:sitio.php?*root*=
+inurl:sitio.php?abre=
+inurl:sitio.php?addr=
+inurl:sitio.php?body=
+inurl:sitio.php?category=
+inurl:sitio.php?chapter=
+inurl:sitio.php?content=
+inurl:sitio.php?destino=
+inurl:sitio.php?disp=
+inurl:sitio.php?doshow=
+inurl:sitio.php?e=
+inurl:sitio.php?ev=
+inurl:sitio.php?get=
+inurl:sitio.php?go=
+inurl:sitio.php?goFile=
+inurl:sitio.php?inc=
+inurl:sitio.php?incl=
+inurl:sitio.php?index=
+inurl:sitio.php?ir=
+inurl:sitio.php?left=
+inurl:sitio.php?menu=
+inurl:sitio.php?menue=
+inurl:sitio.php?mid=
+inurl:sitio.php?middlePart=
+inurl:sitio.php?modo=
+inurl:sitio.php?name=
+inurl:sitio.php?nivel=
+inurl:sitio.php?oldal=
+inurl:sitio.php?opcion=
+inurl:sitio.php?option=
+inurl:sitio.php?pageweb=
+inurl:sitio.php?param=
+inurl:sitio.php?pg=
+inurl:sitio.php?pr=
+inurl:sitio.php?qry=
+inurl:sitio.php?r=
+inurl:sitio.php?read=
+inurl:sitio.php?recipe=
+inurl:sitio.php?redirect=
+inurl:sitio.php?rub=
+inurl:sitio.php?sec=
+inurl:sitio.php?secao=
+inurl:sitio.php?secc=
+inurl:sitio.php?section=
+inurl:sitio.php?sivu=
+inurl:sitio.php?sp=
+inurl:sitio.php?start=
+inurl:sitio.php?strona=
+inurl:sitio.php?t=
+inurl:sitio.php?texto=
+inurl:sitio.php?tipo=
+inurl:skins/advanced/advanced1.php?pluginpath[0]=
+inurl:skins/advanced/advanced1.php?pluginpath[0]=
+inurl:smarty_config.php?root_dir=
+inurl:snitz_forums_.mdb 
+inurl:snitz_forums_2000.mdb
+inurl:snitz_forums_2000.mdb
+inurl:snitz_forums_2000.mdb
+inurl:snitz_forums_2000.mdb
+inurl:snitz_forums_2000.mdb
+inurl:snitz_forums_2000.mdbinurl:ssl.conf filetype:conf
+inurl:software
+inurl:software
+inurl:software
+inurl:solpot.html?body=
+inurl:solpot.html?body=  
+inurl:source.asp
+inurl:sources/join.php?FORM[url]=owned&CONFIG[captcha]=1&CONFIG[path]=
+inurl:SQuery/lib/gore.php?libpath=
+inurl:SQuery/lib/gore.php?libpath=
+inurl:sQuery/lib/gore.php?libpath=
+inurl:sQuery/lib/gore.php?libpath=
+inurl:ssi
+inurl:ssl.conf filetype:conf
+inurl:ssl.conf filetype:conf
+inurl:ssl.conf filetype:conf
+inurl:ssl.conf filetype:conf
+inurl:ssl.conf filetype:conf
+inurl:ssl.conf filetype:conf 
+inurl:standard.php?*[*]*=
+inurl:standard.php?abre=
+inurl:standard.php?action=
+inurl:standard.php?base_dir=
+inurl:standard.php?body=
+inurl:standard.php?channel=
+inurl:standard.php?chapter=
+inurl:standard.php?cmd=
+inurl:standard.php?cont=
+inurl:standard.php?destino=
+inurl:standard.php?dir=
+inurl:standard.php?e=
+inurl:standard.php?ev=
+inurl:standard.php?eval=
+inurl:start.php?p=
+inurl:start.php?pageweb=
+inurl:start.php?panel=
+inurl:start.php?param=
+inurl:start.php?pg=
+inurl:start.php?play=
+inurl:start.php?pname=
+inurl:start.php?pollname=
+inurl:start.php?rub=
+inurl:start.php?secao=
+inurl:start.php?seccion=
+inurl:start.php?seite=
+inurl:start.php?showpage=
+inurl:start.php?sivu=
+inurl:start.php?sp=
+inurl:start.php?str=
+inurl:start.php?strona=
+inurl:start.php?thispage=
+inurl:start.php?tipo=
+inurl:start.php?where=
+inurl:start.php?xlink=
+inurl:stat.htm
+inurl:statrep.nsf -gov
+inurl:statrep.nsf -gov
+inurl:statrep.nsf -gov
+inurl:stats.htm
+inurl:stats.html
+inurl:stats.txt
+inurl:status.cgi?host=all
+inurl:status.cgi?host=all
+inurl:status.cgi?host=all
+inurl:sub*.php?*[*]*=
+inurl:sub*.php?*root*=
+inurl:sub*.php?abre=
+inurl:sub*.php?action=
+inurl:sub*.php?adresa=
+inurl:sub*.php?b=
+inurl:sub*.php?base_dir=
+inurl:sub*.php?basepath=
+inurl:sub*.php?body=
+inurl:sub*.php?category=
+inurl:sub*.php?channel=
+inurl:sub*.php?chapter=
+inurl:sub*.php?cont=
+inurl:sub*.php?content=
+inurl:sub*.php?corpo=
+inurl:sub*.php?destino=
+inurl:sub*.php?g=
+inurl:sub*.php?go=
+inurl:sub*.php?goFile=
+inurl:sub*.php?header=
+inurl:sub*.php?id=
+inurl:sub*.php?include=
+inurl:sub*.php?ir=
+inurl:sub*.php?itemnav=
+inurl:sub*.php?j=
+inurl:sub*.php?k=
+inurl:sub*.php?lang=
+inurl:sub*.php?left=
+inurl:sub*.php?link=
+inurl:sub*.php?load=
+inurl:sub*.php?menue=
+inurl:sub*.php?mid=
+inurl:sub*.php?middle=
+inurl:sub*.php?mod=
+inurl:sub*.php?modo=
+inurl:sub*.php?module=
+inurl:sub*.php?my=
+inurl:sub*.php?name=
+inurl:sub*.php?oldal=
+inurl:sub*.php?op=
+inurl:sub*.php?open=
+inurl:sub*.php?OpenPage=
+inurl:sub*.php?option=
+inurl:sub*.php?pa=
+inurl:sub*.php?pag=
+inurl:sub*.php?panel=
+inurl:sub*.php?path=
+inurl:sub*.php?phpbb_root_path=
+inurl:sub*.php?play=
+inurl:sub*.php?pname=
+inurl:sub*.php?pre=
+inurl:sub*.php?qry=
+inurl:sub*.php?recipe=
+inurl:sub*.php?rub=
+inurl:sub*.php?s=
+inurl:sub*.php?sec=
+inurl:sub*.php?secao=
+inurl:sub*.php?secc=
+inurl:sub*.php?seite=
+inurl:sub*.php?sp=
+inurl:sub*.php?str=
+inurl:sub*.php?thispage=
+inurl:sub*.php?u=
+inurl:sub*.php?viewpage=
+inurl:sub*.php?where=
+inurl:sub*.php?z=
+inurl:submit.cgi
+inurl:subscribe.pl
+inurl:support
+inurl:support
+inurl:support
+inurl:support/mailling/maillist/inc/initdb.php?absolute_path=
+inurl:survey.cgi
+inurl:tdbin
+inurl:tdbin
+inurl:tdbin
+inurl:tdbin
+inurl:tdbin
+inurl:tdbin
+inurl:tdbin 
+inurl:template.php?*[*]*=
+inurl:template.php?a=
+inurl:template.php?addr=
+inurl:template.php?base_dir=
+inurl:template.php?basepath=
+inurl:template.php?c=
+inurl:template.php?choix=
+inurl:template.php?cont=
+inurl:template.php?content=
+inurl:template.php?corpo=
+inurl:template.php?dir=
+inurl:template.php?doshow=
+inurl:template.php?e=
+inurl:template.php?f=
+inurl:template.php?goto=
+inurl:template.php?goto=
+inurl:template.php?h=
+inurl:template.php?header=
+inurl:template.php?ir=
+inurl:template.php?k=
+inurl:template.php?lang=
+inurl:template.php?left=
+inurl:template.php?load=
+inurl:template.php?menue=
+inurl:template.php?mid=
+inurl:template.php?mod=
+inurl:template.php?name=
+inurl:template.php?name=
+inurl:template.php?nivel=
+inurl:template.php?op=
+inurl:template.php?opcion=
+inurl:template.php?pag=
+inurl:template.php?page=
+inurl:template.php?pagina=
+inurl:template.php?pagina=
+inurl:template.php?panel=
+inurl:template.php?param=
+inurl:template.php?path=
+inurl:template.php?play=
+inurl:template.php?pre=
+inurl:template.php?qry=
+inurl:template.php?ref=
+inurl:template.php?s=
+inurl:template.php?secao=
+inurl:template.php?second=
+inurl:template.php?section=
+inurl:template.php?seite=
+inurl:template.php?sekce=
+inurl:template.php?showpage=
+inurl:template.php?sp=
+inurl:template.php?str=
+inurl:template.php?t=
+inurl:template.php?texto=
+inurl:template.php?thispage=
+inurl:template.php?tipo=
+inurl:template.php?viewpage=
+inurl:template.php?where=
+inurl:template.php?y=
+inurl:test-cgi
+inurl:test.bat
+inurl:test.cgi
+inurl:test.php?page=
+inurl:test.php?page=
+inurl:testcgi xitami
+inurl:testcgi xitami
+inurl:testcgi xitami
+inurl:textpattern/index.php
+inurl:textpattern/index.php
+inurl:textpattern/index.php
+inurl:tools/send_reminders.php?includedir=
+inurl:tools/send_reminders.php?includedir=
+inurl:tools/send_reminders.php?includedir=
+inurl:ultraboard.cgi
+inurl:upload.asp
+inurl:user
+inurl:user
+inurl:user
+inurl:userlist
+inurl:users.pwd
+inurl:vbstats.php   "page generated"
+inurl:vbstats.php "page generated"
+inurl:vbstats.php "page generated"
+inurl:vbstats.php "page generated"
+inurl:vbstats.php "page generated"
+inurl:vbstats.php \"page generated\" 
+inurl:vbstats.php “page generated”
+inurl:ventrilo_srv.ini adminpassword
+inurl:ventrilo_srv.ini adminpassword
+inurl:ventrilo_srv.ini adminpassword
+inurl:video.php?content=
+inurl:video.php?content=
+inurl:view-source
+inurl:view.php?*[*]*=
+inurl:view.php?adresa=
+inurl:view.php?b=
+inurl:view.php?body=
+inurl:view.php?channel=
+inurl:view.php?chapter=
+inurl:view.php?choix=
+inurl:view.php?cmd=
+inurl:view.php?content=
+inurl:view.php?disp=
+inurl:view.php?get=
+inurl:view.php?go=
+inurl:view.php?goFile=
+inurl:view.php?goto=
+inurl:view.php?header=
+inurl:view.php?incl=
+inurl:view.php?ir=
+inurl:view.php?ki=
+inurl:view.php?lang=
+inurl:view.php?load=
+inurl:view.php?loader=
+inurl:view.php?mid=
+inurl:view.php?middle=
+inurl:view.php?mod=
+inurl:view.php?oldal=
+inurl:view.php?option=
+inurl:view.php?pag=
+inurl:view.php?page=
+inurl:view.php?page=
+inurl:view.php?page=
+inurl:view.php?panel=
+inurl:view.php?pg=
+inurl:view.php?phpbb_root_path=
+inurl:view.php?pollname=
+inurl:view.php?pr=
+inurl:view.php?qry=
+inurl:view.php?recipe=
+inurl:view.php?redirect=
+inurl:view.php?sec=
+inurl:view.php?secao=
+inurl:view.php?seccion=
+inurl:view.php?second=
+inurl:view.php?seite=
+inurl:view.php?showpage=
+inurl:view.php?sp=
+inurl:view.php?str=
+inurl:view.php?to=
+inurl:view.php?type=
+inurl:view.php?u=
+inurl:view.php?var=
+inurl:view.php?where=
+inurl:view/index.shtml
+inurl:view/index.shtml
+inurl:view/index.shtml
+inurl:view/indexFrame.shtml
+inurl:view/indexFrame.shtml
+inurl:view/indexFrame.shtml
+inurl:view/view.shtml
+inurl:view/view.shtml
+inurl:view/view.shtml
+inurl:ViewerFrame?Mode=Refresh
+inurl:ViewerFrame?Mode=Refresh
+inurl:ViewerFrame?Mode=Refresh
+inurl:vtund.conf intext:pass -cvs
+inurl:vtund.conf intext:pass -cvs
+inurl:vtund.conf intext:pass -cvs
+inurl:vtund.conf intext:pass -cvs s
+inurl:vtund.conf intext:pass -cvs s
+inurl:vtund.conf intext:pass -cvs s
+inurl:vtund.conf intextass -cvs 
+inurl:w3-msql
+inurl:w3-msql
+inurl:wais.pl
+inurl:wamp_dir/setup/yesno.phtml?no_url=
+inurl:way-board.cgi
+inurl:WCP_USER
+inurl:WCP_USER
+inurl:WCP_USER
+inurl:web
+inurl:web
+inurl:web
+inurl:web_store.cgi
+inurl:webaccess.htm
+inurl:webalizer filetype:png -.gov -.edu -.mil -opendarwin
+inurl:webalizer filetype:png -.gov -.edu -.mil -opendarwin
+inurl:webalizer filetype:png -.gov -.edu -.mil -opendarwin
+inurl:webdist.cgi
+inurl:webdriver
+inurl:webgais
+inurl:webgais
+inurl:webmail./index.pl "Interface"
+inurl:webmail./index.pl "Interface"
+inurl:webmail./index.pl “Interface”
+inurl:webpage.cgi
+inurl:websendmail
+inurl:webutil.pl
+inurl:webutil.pl
+inurl:webutil.pl
+inurl:webvpn.html "login" "Please enter your"
+inurl:webvpn.html "login" "Please enter your"
+inurl:webvpn.html “login” “Please enter your”
+inurl:wp-mail.php + "There doesn't seem to be any new mail."
+inurl:wp-mail.php + "There doesn't seem to be any new mail."
+inurl:wp-mail.php + “There doesn’t seem to be any new mail.”
+inurl:wrap
+inurl:WSFTP.LOG
+inurl:www-sql
+inurl:wwwboard.pl
+inurl:wwwstats.html
+inurl:XcCDONTS.asp
+inurl:XcCDONTS.asp
+inurl:XcCDONTS.asp
+inurl:YaBB.pl
+inurl:yapboz_detay.asp + View Webcam User Accessing
+inurl:yapboz_detay.asp + View Webcam User Accessing
+inurl:yapboz_detay.asp + View Webcam User Accessing
+inurl:zebra.conf intext:password -sample -test -tutorial -download
+inurl:zebra.conf intext:password -sample -test -tutorial -download
+inurl:zebra.conf intext:password -sample -test -tutorial -download
+inurl:zebra.conf intext:password -sample -test -tutorial -download
+inurl:zebra.conf intext:password -sample -test -tutorial -download
+inurl:zebra.conf intext:password -sample -test -tutorial -download
+inurl:zebra.conf intextassword -sample -test -tutorial -download 
+inurl:zentrack/index.php?configFile=
+inurl:zentrack/index.php?configFile=
+inurl:”/admin/configuration. php?” Mystore
+inurl:”/axs/ax-admin.pl” -s?ri?t
+inurl:”/catalog.nsf” intitle:catalog
+inurl:”/cricket/grapher.cgi”
+inurl:”/NSearch/AdminServlet”
+inurl:”/slxweb.dll/external?name=(custportal|webticketcust)”
+inurl:”1220/parse_xml.cgi?”
+inurl:”631/admin” (inurl:”op=*”) | (intitle:CUPS)
+inurl:”:10000″ intext:webmin
+inurl:”Activex/default.htm” “Demo”
+inurl:”bookmark.htm”
+inurl:”cacti” +inurl:”graph_view.php” +”Settings Tree View” -cvs -RPM
+inurl:”calendar.asp?action=login”
+inurl:”calendars?ri?t/users.txt”
+inurl:”default/login.php” intitle:”kerio”
+inurl:”editor/list.asp” | inurl:”database_editor.asp” | inurl:”login.asa” “are set”
+inurl:”GRC.DAT” intext:”password”
+inurl:”gs/adminlogin.aspx”
+inurl:”index.php? module=ew_filemanager”
+inurl:”install/install.php”
+inurl:”map.asp?” intitle:”WhatsUp Gold”
+inurl:”newsletter/admin/”
+site:www.mailinator.com inurl:ShowMail.do
+site:www.mailinator.com inurl:ShowMail.do
+“your password is” filetype:log

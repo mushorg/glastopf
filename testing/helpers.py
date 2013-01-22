@@ -1,6 +1,9 @@
 from pymongo import MongoClient
+from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy import create_engine
 import bson
 import uuid
+import json
 
 
 def populate_mongo_testdata():
@@ -15,18 +18,76 @@ def populate_mongo_testdata():
         return db_name
 
 
+def populate_main_sql_testdatabase(engine):
+
+    meta = MetaData()
+
+    table = Table('events', meta,
+          Column('id', Integer, primary_key=True, ),
+          Column('time', String),
+          Column('source', String),
+          Column('request_method', String),
+          Column('request_url', String),
+          Column('request_parameters', String),
+          Column('request_version', String),
+          Column('request_header', String),
+          Column('request_body', String),
+          Column('pattern', String),
+          Column('filename', String),
+          Column('response', String),
+          )
+
+    meta.create_all(engine)
+
+    insert_dicts = []
+    data = open('testing/data/events_500.bson', 'r').read()
+    for entry in bson.decode_all(data):
+
+        for key, value in entry['request'].items():
+            entry['request_' + key] = value
+
+        entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
+        entry['request_header'] = json.dumps(entry['request_header'])
+        entry['request_parameters'] = entry['request_parameters'][0]
+        del entry['request']
+        del entry['_id']
+        insert_dicts.append(entry)
+
+    conn = engine.connect()
+    print "Inserted: {0}".format(len(insert_dicts))
+    conn.execute(table.insert(), insert_dicts)
+
 def delete_mongo_testdata(dbname):
         connection = MongoClient('localhost', 27017)
         connection.drop_database(dbname)
+
+
+def create_empty_main_db_sqla(engine):
+        meta = MetaData()
+
+        Table('events', meta,
+              Column('id', Integer, primary_key=True, ),
+              Column('time', String),
+              Column('source', String),
+              Column('request_method', String),
+              Column('request_url', String),
+              Column('request_parameters', String),
+              Column('request_version', String),
+              Column('request_header', String),
+              Column('request_body', String),
+              Column('pattern', String),
+              Column('filename', String),
+              Column('response', String),
+              )
+
+        meta.create_all(engine)
 
 
 def gen_config(mongodb=None, sql_connectionstring=None):
     """
     Generates configuration for testing purposes.
     """
-    return ["[sql]\n",
-            "enabled = {0}\n".format(True if sql_connectionstring else False),
-            "connection_string = {0}\n".format(sql_connectionstring),
+    return [
             "[dork-db]\n",
             "enabled = True\n",
             "pattern = rfi\n",
@@ -34,14 +95,6 @@ def gen_config(mongodb=None, sql_connectionstring=None):
             "n_clusters = 10\n",
             "max_iter = 10\n",
             "n_init = 2\n",
-            "[mongodb]\n",
-            "enabled = {0}\n".format(True if mongodb else False),
-            "host = localhost\n",
-            "port = 27017\n",
-            "user = a\n",
-            "password = b\n",
-            "database = {0}\n".format(mongodb),
-            "collection = events\n",
             "[surfcertids]\n",
             "enabled = False\n",
             "host = localhost\n",
@@ -74,4 +127,11 @@ def gen_config(mongodb=None, sql_connectionstring=None):
             "uid = nobody\n",
             "gid = nogroup\n",
             "proxy_enabled = False\n",
+            "[main-database]\n",
+            "enabled = True\n",
+            "connection_string = sqlite:///\n",
             ]
+
+if __name__ == '__main__':
+    engine = create_engine('sqlite:///')
+    populate_main_sql_testdatabase(engine)

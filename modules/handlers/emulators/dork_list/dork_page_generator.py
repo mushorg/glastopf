@@ -20,11 +20,9 @@ import hashlib
 import codecs
 import unicodedata
 import random
-import dork_file_processor
 import gen_html
 import time
 import os
-import cluster
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,10 +33,14 @@ class DorkPageGenerator(object):
     Responsible for maintenance of dork pages and collection of dorks from requests.
     """
 
-    def __init__(self, dork_db_instance, database_instance, pages_path):
-        self.dorkdb = dork_db_instance
+    def __init__(self, database_instance, 
+                 dorks_file_processor_instance, 
+                 cluster_instance,
+                 pages_path="modules/handlers/emulators/dork_list/pages/"):
         self.database = database_instance
         self.pages_path = pages_path
+        self.dork_file_processor = dorks_file_processor_instance
+        self.clustere = cluster_instance
 
     def prepare_text(self):
         line_list = []
@@ -51,9 +53,8 @@ class DorkPageGenerator(object):
 
     def generate_dork_pages(self, first):
         if first:
-            processor = dork_file_processor.DorkFileProcessor(self.dorkdb)
-            dorks = processor.process_dorks()
-            self.dorkdb.insert(dorks)
+            dorks = self.dork_file_processor.process_dorks()
+            self.database.insert_dorks(dorks)
         line_list = self.prepare_text()
         shuffle(line_list)
         #inurl_list = dork_reader.get_dork_list('inurl')
@@ -61,13 +62,12 @@ class DorkPageGenerator(object):
         inurl_list = self.database.select_data()
         #get data from dorkdb is the live database does not have enough
         if len(inurl_list) < 100:
-            dork_seeds = random.sample(self.dorkdb.get_dork_list('inurl'), 100)
+            dork_seeds = random.sample(self.database.get_dork_list('inurl'), 100)
             inurl_list += dork_seeds
-        c = cluster.Cluster()
-        c.cluster(inurl_list, self.database.config)
-        inurl_cluster = choice(c.clusters)
-        intext_list = self.dorkdb.get_dork_list('intext')
-        intitle_list = self.dorkdb.get_dork_list('intitle')
+        clusters = self.clustere.cluster(inurl_list)
+        inurl_cluster = choice(clusters)
+        intext_list = self.database.get_dork_list('intext')
+        intitle_list = self.database.get_dork_list('intitle')
         while len(inurl_list) > 50 and len(line_list) > 56:
             body = ''
             for i in range(0, 49):
@@ -89,6 +89,8 @@ class DorkPageGenerator(object):
     def get_current_pages(self):
         dork_page_list = []
         for f in os.listdir(self.pages_path):
+            if f.startswith("."):
+                continue
             file_path = os.path.join(self.pages_path, f)
             if os.path.isfile(file_path):
                 dork_page_list.append(file_path)
@@ -118,9 +120,8 @@ class DorkPageGenerator(object):
 
     def collect_dork(self, attack_event):
         if attack_event.matched_pattern != "unknown":
-            #dork_reader = dork_db.DorkDB(dork_db_path)
             try:
                 dork = attack_event.parsed_request.url.split('?')[0]
-                self.dorkdb.insert([{'table': "inurl", 'content': dork}])
+                self.database.insert_dorks([{'table': "inurl", 'content': dork}])
             except Exception as e:
                 logger.exception("Parsed_request split error: {0}".format(e))

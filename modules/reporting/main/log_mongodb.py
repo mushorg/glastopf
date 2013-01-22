@@ -15,24 +15,28 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from modules.handlers.base_emulator import BaseEmulator
+from pymongo import MongoClient, uri_parser
+
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def get_handler(name):
-    try:
-        BaseEmulator()
-        module_name = "modules.handlers.emulators." + name
-        __import__(module_name, globals(), locals(), [], -1)
-        emulators = BaseEmulator.__subclasses__()
-    except ImportError as e:
-        print e
-        logging.exception("Error while importing emulator: {0}", e)
-        return get_handler("unknown")
-    else:
-        for emulator in emulators:
-            if emulator.__module__.rsplit(".", 1)[1].strip() == name:
-                return emulator()
-        return get_handler("unknown")
+class Database(object):
+
+    def __init__(self, connection_string):
+
+    	uri_dict = uri_parser.parse_uri(connection_string)
+    	if not uri_dict['database']:
+    		raise Exception("Invalid Mongo URI. Database name must be specified.")
+
+        try:
+            client = MongoClient(connection_string)
+            self.db = client[uri_dict['database']]
+        except:
+            logger.exception("Unable to connect to MongoDB service.")
+            raise
+
+    def insert(self, attack_event):
+        self.db["events"].insert(attack_event.event_dict())
+

@@ -12,7 +12,7 @@ filelog_enabled = True
 logfile = log/glastopf.log
 
 [dork-db]
-enabled = True 
+enabled = True
 pattern = rfi
 token_pattern = /\w+
 #parameters for clustering of dorks (KMeans)
@@ -21,7 +21,7 @@ max_iter = 50
 n_init = 20
 
 [hpfeed]
-enabled = True 
+enabled = True
 host = hpfeeds.honeycloud.net
 port = 10000
 secret = 3wis3l2u5l7r3cew
@@ -29,20 +29,15 @@ secret = 3wis3l2u5l7r3cew
 chan = glastopf.events,glastopf.files
 ident = x8yer@hp1
 
-[sql]
+[main-database]
+#If disabled a sqlite database will be created (db/glastopf.db)
+#to be used as dork storage.
 enabled = True
-#This is a sqlalchemy connection string
+#mongodb or sqlalchemy connection string, ex:
+#mongodb://localhost:27017/glastopf
+#mongodb://james:bond@localhost:27017/glastopf
+#mysql://james:bond@somehost.com/glastopf
 connection_string = sqlite:///db/glastopf.db
-
-[mongodb]
-# MongDB logging settings
-enabled = False
-host = localhost
-port = 27017
-user = 
-password =
-database = glastopf
-collection = events
 
 [surfcertids]
 enabled = False
