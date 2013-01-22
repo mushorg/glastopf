@@ -15,7 +15,6 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
 import logging
 from datetime import datetime
 from sqlalchemy import Table, Column, Integer, String, MetaData
@@ -26,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class Database(object):
     """
-    Responsible for all dork related communication with the glastopf database.
+    Responsible for all dork related communication with the glastopf sql database.
     """
 
     def __init__(self, engine):
@@ -38,7 +37,6 @@ class Database(object):
 
     def select_data(self, pattern="rfi"):
         url_list = []
-        self.full_url_list = []
 
         data = self.get_pattern_requests_sql(pattern=pattern)
         data = list(set(data))

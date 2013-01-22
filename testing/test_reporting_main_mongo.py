@@ -20,22 +20,23 @@ import datetime
 
 from modules.reporting.main import log_mongodb
 from sqlalchemy import create_engine
-
+from pymongo import MongoClient, uri_parser
 from modules.handlers import request_handler
 from datetime import datetime
 import modules.events.attack as attack
 import modules.HTTP.util as util
 from pymongo import MongoClient
 import uuid
+import helpers
 
 
 
-class TestSQLAlchemy(unittest.TestCase):
+class TestMongoMainDatbase(unittest.TestCase):
 
     def test_mongodb_insert(self):
 
-        db_name = 'glastopf-test-{0}'.format(str(uuid.uuid4())[0:10])
-        conn_string = "mongodb://localhost:27017/{0}".format(db_name)
+        conn_string = helpers.create_mongo_database(fill=False)
+        db_name = uri_parser.parse_uri(conn_string)['database']
 
         try:
             maindb = log_mongodb.Database(conn_string)
@@ -72,5 +73,4 @@ class TestSQLAlchemy(unittest.TestCase):
             self.assertEqual(entry["source"][1], 12345)
 
         finally:
-            client = MongoClient(conn_string)
-            client.drop_database(db_name)
+            helpers.delete_mongo_testdata(conn_string)

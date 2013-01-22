@@ -39,4 +39,3 @@ class Database(object):
 
     def insert(self, attack_event):
         self.db["events"].insert(attack_event.event_dict())
-

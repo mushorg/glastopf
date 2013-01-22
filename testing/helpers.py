@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, uri_parser
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 import bson
@@ -6,17 +6,23 @@ import uuid
 import json
 
 
-def populate_mongo_testdata():
+def create_mongo_database(fill=True):
         db_name = 'glastopf-test-{0}'.format(str(uuid.uuid4())[0:10])
-        c = MongoClient('localhost', 27017)
+        conn_string = "mongodb://localhost/{0}".format(db_name)
+        c = MongoClient(conn_string)
 
         #read and insert test data into mongodb instance
-        data = open('testing/data/events_500.bson', 'r').read()
-        for item in bson.decode_all(data):
-            del item['_id']
-            c[db_name].events.insert(item)
-        return db_name
+        if fill:
+            data = open('testing/data/events_500.bson', 'r').read()
+            for item in bson.decode_all(data):
+                del item['_id']
+                c[db_name].events.insert(item)
+        return conn_string
 
+def delete_mongo_testdata(conn_string):
+        db_name = uri_parser.parse_uri(conn_string)['database']
+        client = MongoClient(conn_string)
+        client.drop_database(db_name)
 
 def populate_main_sql_testdatabase(engine):
 
@@ -57,10 +63,6 @@ def populate_main_sql_testdatabase(engine):
     print "Inserted: {0}".format(len(insert_dicts))
     conn.execute(table.insert(), insert_dicts)
 
-def delete_mongo_testdata(dbname):
-        connection = MongoClient('localhost', 27017)
-        connection.drop_database(dbname)
-
 
 def create_empty_main_db_sqla(engine):
         meta = MetaData()
@@ -83,7 +85,7 @@ def create_empty_main_db_sqla(engine):
         meta.create_all(engine)
 
 
-def gen_config(mongodb=None, sql_connectionstring=None):
+def gen_config(conn_string):
     """
     Generates configuration for testing purposes.
     """
@@ -129,7 +131,7 @@ def gen_config(mongodb=None, sql_connectionstring=None):
             "proxy_enabled = False\n",
             "[main-database]\n",
             "enabled = True\n",
-            "connection_string = sqlite:///\n",
+            "connection_string = {0}\n".format(conn_string),
             ]
 
 if __name__ == '__main__':

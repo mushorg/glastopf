@@ -40,25 +40,7 @@ class TestEmulatorDorkList(unittest.TestCase):
     The test script will connect to an mongodb instance on localhost, and populate
     with data a needed."""
 
-    @classmethod
-    def setUpClass(cls):
-        if not os.path.isdir('db'):
-            os.mkdir('db')
-
-        cls.db_name = helpers.populate_mongo_testdata()
-
-        cls.fake_config_mongo = tempfile.mkstemp()[1]
-        with open(cls.fake_config_mongo, 'w') as f:
-            f.writelines(helpers.gen_config(mongodb=cls.db_name))
-
-    @classmethod
-    def tearDownClass(cls):
-        helpers.delete_mongo_testdata(cls.db_name)
-
-        if os.path.isfile(cls.fake_config_mongo):
-            os.remove(cls.fake_config_mongo)
-
-    def test_db_select(self):
+    def test_db_select_sqlalchemy(self):
         """Objective: Select unique request paths from database.
         Input: Connection to main glastopf database with 500 entries and the pattern 'rfi'.
         Expected Results: 10 data entries in total.
@@ -66,7 +48,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         pages_dir = tempfile.mkdtemp()
 
         try:
-            (db, engine, dork_generator) = self.dork_generator_chain(pages_dir)
+            (db, engine, dork_generator) = self.dork_generator_chain('sql', pages_dir)
             dork_generator.regular_generate_dork(0)
             print "Starting database SELECT test..."
             result = db.select_data("rfi")
@@ -87,7 +69,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         print "Attack event prepared."
         pages_dir = tempfile.mkdtemp()
         try:
-            (db, engine, dork_generator) = self.dork_generator_chain(pages_dir)
+            (db, engine, dork_generator) = self.dork_generator_chain('sql', pages_dir)
             dork_generator.regular_generate_dork(0)
             dork_generator.collect_dork(attack_event)
             print "Done collecting the path from the event and writing to the database."
@@ -110,7 +92,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         print "Starting database cluster test..."
         pages_dir = tempfile.mkdtemp()
         try:
-            (db, engine, dork_generator) = self.dork_generator_chain(pages_dir)
+            (db, engine, dork_generator) = self.dork_generator_chain('sql', pages_dir)
             dork_generator.regular_generate_dork(0)
             print "Done clustering database entries."
             url_list = db.select_data()
@@ -132,7 +114,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         print "Starting dork page test."
         pages_dir = tempfile.mkdtemp()
         try:
-            (db, engine, dork_generator) = self.dork_generator_chain(pages_dir)
+            (db, engine, dork_generator) = self.dork_generator_chain('sql', pages_dir)
             dork_generator.regular_generate_dork(0)
             print "Done creating dork pages."
             current_pages = dork_generator.get_current_pages()
@@ -154,7 +136,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         pages_dir = tempfile.mkdtemp()
 
         try:
-            dork_generator = self.dork_generator_chain(pages_dir)[2]
+            dork_generator = self.dork_generator_chain('sql', pages_dir)[2]
             dork_generator.regular_generate_dork(0)
 
             sample_file = choice(dork_generator.get_current_pages())
@@ -180,7 +162,7 @@ class TestEmulatorDorkList(unittest.TestCase):
 
         pages_dir = tempfile.mkdtemp()
         try:
-            (db, engine, dork_generator) = self.dork_generator_chain(pages_dir)
+            (db, engine, dork_generator) = self.dork_generator_chain('sql', pages_dir)
             dork_generator.regular_generate_dork(0)
             sample_file = choice(dork_generator.get_current_pages())
             print "Randomly selected dork page:", sample_file.rsplit('/', 1)[1]
@@ -209,7 +191,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         Notes: A productive system generates new pages in a configurable interval."""
         pages_dir = tempfile.mkdtemp()
         try:
-            (db, engine, dork_generator) = self.dork_generator_chain(pages_dir)
+            (db, engine, dork_generator) = self.dork_generator_chain('sql', pages_dir)
             dork_generator.regular_generate_dork(0)
             old_list = dork_generator.get_current_pages()
             print "There are %s previously generated dork pages" % len(old_list),
@@ -227,15 +209,22 @@ class TestEmulatorDorkList(unittest.TestCase):
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
 
-    def dork_generator_chain(self, pages_dir):
+    def dork_generator_chain(self, dbtype, pages_dir):
         """
         Helper method to constructs chain of objects to satify dependencies for the dork_generator.
         Returns an instance of dork_page_generator.
         """
-        engine = create_engine('sqlite:///')
-        #Create mock of empty main db
-        helpers.populate_main_sql_testdatabase(engine)
-        db = database_sqla.Database(engine)
+
+        if dbtype == "sql":
+            engine = create_engine('sqlite:///')
+            #Create mock of empty main db
+            helpers.populate_main_sql_testdatabase(engine)
+            db = database_sqla.Database(engine)
+        elif dbtype == "mongodb":
+            conn_string = helpers.create_mongo_database(fill=True)
+            db = database_mongo.Database(create_mongo_database)
+        else:
+            raise Exception("Unsupported database type: {0}".format(dbtype))
         file_processor = DorkFileProcessor(db, dorks_file="testing/data/dorks_reduced.txt")
 
         #setting the bar low for testing

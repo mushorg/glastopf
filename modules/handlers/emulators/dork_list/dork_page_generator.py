@@ -33,8 +33,8 @@ class DorkPageGenerator(object):
     Responsible for maintenance of dork pages and collection of dorks from requests.
     """
 
-    def __init__(self, database_instance, 
-                 dorks_file_processor_instance, 
+    def __init__(self, database_instance,
+                 dorks_file_processor_instance,
                  cluster_instance,
                  pages_path="modules/handlers/emulators/dork_list/pages/"):
         self.database = database_instance
@@ -60,7 +60,7 @@ class DorkPageGenerator(object):
         #inurl_list = dork_reader.get_dork_list('inurl')
         #db = database.DorkDB(self.dorkdb)
         inurl_list = self.database.select_data()
-        #get data from dorkdb is the live database does not have enough
+        #get data from dorkdb if the live database does not have enough
         if len(inurl_list) < 100:
             dork_seeds = random.sample(self.database.get_dork_list('inurl'), 100)
             inurl_list += dork_seeds

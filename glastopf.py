@@ -15,18 +15,24 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import os
+import sys
 import json
 import base64
+import Queue
 import threading
 from ConfigParser import ConfigParser
-
-import Queue
 
 from modules.HTTP import util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
+from modules import logging_handler
 import modules.reporting.aux.hp_feed as hpfeeds
+import modules.privileges as privileges
+import modules.processing.profiler as profiler
+import logging.handlers
+
 from modules.handlers.emulators.dork_list import dork_file_processor
 from modules.handlers.emulators.dork_list import database_sqla
 from modules.handlers.emulators.dork_list import database_mongo
@@ -34,13 +40,6 @@ from modules.handlers.emulators.dork_list import dork_page_generator
 from modules.handlers.emulators.dork_list import cluster
 from modules.reporting.main import log_mongodb, log_sql
 from sqlalchemy import create_engine
-
-import os
-import sys
-from modules import logging_handler
-import modules.privileges as privileges
-import modules.processing.profiler as profiler
-import logging.handlers
 
 logger = logging.getLogger(__name__)
 
@@ -104,8 +103,8 @@ class GlastopfHoneypot(object):
 
         clusterer = cluster.Cluster(token_pattern, n_clusters, max_iter, n_init, min_df=0.0)
         return dork_page_generator.DorkPageGenerator(self.dorkdb,
-                                                                 file_processor,
-                                                                 clusterer)
+                                                     file_processor,
+                                                     clusterer)
 
     def setup_main_database(self, conf_parser):
 

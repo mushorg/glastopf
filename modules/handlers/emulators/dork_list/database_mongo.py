@@ -17,8 +17,8 @@
 
 import re
 from pymongo import MongoClient, uri_parser
+from datetime import datetime
 
-import cluster
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 class Database(object):
     """
-    Responsible for all dork related communication with the main glastopf mongo database.
+    Responsible for all dork related communication with the glastopf mongo database.
     """
 
     def __init__(self, connection_string):
@@ -37,16 +37,18 @@ class Database(object):
 
         try:
             self.client = MongoClient(connection_string)
-            self.events_coll = client[uri_dict['database']]
+            self.db = self.client[uri_dict['database']]
         except:
             logger.exception("Unable to connect to MongoDB service.")
             raise
 
-    def select_data(self,):
+    def select_data(self, pattern="rfi"):
+        """
+        Selects URLs from the events database filtered by attack module.
+        """
         url_list = []
-        self.full_url_list = []
-        data = self.events_coll.find({'pattern': self.pattern})
-        self.num_results = data.count()
+
+        data = self.db.events.find({'pattern': pattern})
         data = list(data.distinct('request.url'))
 
         self.num_distinct_results = len(data)
@@ -58,37 +60,36 @@ class Database(object):
         return url_list
 
     def select_entry(self, starts_with):
+        """
+        Selects URL from main database filterned by name.
+        """
         regx = re.compile(starts_with + ".*", re.IGNORECASE)
-        data = list(self.events_coll.find({'request.url': regx}))
-        return data
+        urls = list(self.db.events.find({'request.url': regx}))
+        return urls
 
     def insert_dorks(self, insert_list):
         if len(insert_list) == 0:
             return
 
-        conn = self.engine.connect()
-        trans = conn.begin()
-        try:
-            for item in insert_list:
-                collection = item['table']
-                #'firsttime' can be extracted from the _id (ObjectId)
-                self.db[collection].update({'content': item['content']},
-                                           {'$set': {'lastime': datetime.now()},
-                                            '$inc': {'count': 1}})
+        for item in insert_list:
+            collection = item['table']
+            self.db[collection].update({'content': item['content']},
+                                       {'$set': {'lastime': datetime.now()},
+                                        '$inc': {'count': 1}}, upsert=True)
 
-    def get_dork_list(self, tablename, starts_with=None):
-        conn = self.engine.connect()
-        table = self.tables[tablename]
-
-        if starts_with == None:
-            result = conn.execute(select([table]))
+    def get_dork_list(self, collection, starts_with=None):
+        """
+        Selects dork from dork collection.
+        """
+        if starts_with != None:
+            regx = re.compile(starts_with + "^{0}".format(starts_with), re.IGNORECASE)
+            dorks = list(self.db[collection].find({'content': regx},
+                                                  {'content': 1, '_id': 0}))
         else:
-            result = conn.execute(
-                table.select().
-                where(table.c.content.like('%{0}'.format(starts_with))))
+            dorks = list(self.db[collection].find({}, {'content': 1, '_id': 0}))
 
         return_list = []
-        for entry in result:
-            return_list.append(entry[0])
+        for item in dorks:
+            return_list.append(item['content'])
 
         return return_list
