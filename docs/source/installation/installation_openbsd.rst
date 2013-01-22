@@ -9,14 +9,26 @@ Prerequisites OpenBSD
 
 Install the dependencies::
 
-	pkg_add -r python2.7 py-openssl autoconf automake py-chardet py-sqlalchemy py-lxml py-beautifulsoup mongodb py-numpy py-setuptools python-numpy-dev py-scipy atlas git php 
+	pkg_add -r python-2.7 py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-numpy py-setuptools py-scipy atlas blas php autoconf automake g77 gfortran plplot-f77 libgfortran mpfr libgfortran gmp gd pango glib2 plplot cairo png jpeg libelf ghostscript mongodb
 
 | 
 
 Create symbolic links::
 
-	ln -s /usr/local/bin/php-config-5.3 /usr/local/bin/php-config
-	ln -s /usr/local/bin/phpize-5.3 /usr/local/bin/phpize
+	ln -sf /usr/local/bin/php-config-5.3 /usr/local/bin/php-config
+	ln -sf /usr/local/bin/phpize-5.3 /usr/local/bin/phpize
+	ln -sf /var/www/conf/modules.sample/php-5.3.conf /var/www/conf/modules/php.conf
+	ln -sf /usr/local/bin/python2.7 /usr/local/bin/python 
+	ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
+	ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
+	ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
+
+| 
+
+Set autoconf and automake versions::
+
+	"export AUTOCONF_VERSION=2.59"
+	"export AUTOMAKE_VERSION=1.9" 
 
 | 
 
