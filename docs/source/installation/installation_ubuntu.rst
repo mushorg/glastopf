@@ -20,11 +20,9 @@ Installing ANTLR Python runtime
 The ANTLR runtime is needed to analyze SQL injections::
 
 	cd /opt
-	sudo wget http://www.antlr.org/download/antlr-3.1.3.tar.gz
+	sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
 	sudo tar xzf antlr-3.1.3.tar.gz
 	cd antlr-3.1.3/runtime/Python
-	sudo wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
-	sudo mv setuptools-0.6c11-py2.7.egg setuptools-0.6c5-py2.7.egg
 	sudo python2.7 setup.py install
 
 | 
