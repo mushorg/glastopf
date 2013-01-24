@@ -47,9 +47,13 @@ class Database(object):
 
             del entry['request']
 
-            conn = self.engine.connect()
-            conn.execute(self.events_table.insert(entry))
-              
+            try:
+                conn = self.engine.connect()
+                conn.execute(self.events_table.insert(entry))
+            except exc.OperationalError as e:
+                message = str(e)[:35]
+                logger.error("Error inserting attack event into main database: {0}".format(message))
+
     def setup_mapping(self):
         meta = MetaData()
 
