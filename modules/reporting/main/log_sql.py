@@ -18,6 +18,7 @@
 import json
 
 from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 
 import threading
@@ -25,6 +26,8 @@ import Queue
 
 import time
 import logging
+
+import modules.processing.ip_profile as ipp
 
 logger = logging.getLogger(__name__)
 
@@ -34,22 +37,35 @@ class Database(object):
     def __init__(self, engine):
         self.engine = engine
         self.setup_mapping()
+        self.session = sessionmaker(bind=self.engine)()
 
     def insert(self, attack_event):
 
-            entry = attack_event.event_dict()
+        entry = attack_event.event_dict()
 
-            for key, value in entry['request'].items():
-                entry['request_' + key] = value
+        for key, value in entry['request'].items():
+            entry['request_' + key] = value
 
-            entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
-            entry['request_header'] = json.dumps(entry['request_header'])
+        entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
+        entry['request_header'] = json.dumps(entry['request_header'])
 
-            del entry['request']
+        del entry['request']
 
-            conn = self.engine.connect()
-            conn.execute(self.events_table.insert(entry))
-              
+        conn = self.engine.connect()
+        conn.execute(self.events_table.insert(entry))
+            
+    def insert_profile(self, ip_profile):
+        self.session.add(ip_profile)
+        self.session.commit()
+        
+    def update_profile(self, ip_profile):
+        self.session.commit()
+    
+    def get_profile(self, source_ip):
+        ip_profile = self.session.query(ipp.IPProfile).filter(
+                                 ipp.IPProfile.ip==source_ip).first()
+        return ip_profile
+        
     def setup_mapping(self):
         meta = MetaData()
 
@@ -69,5 +85,6 @@ class Database(object):
         )
 
         #only creates if it cant find the schema
-
         meta.create_all(self.engine)
+        
+    
