@@ -93,6 +93,10 @@ Download using git::
 	sudo ./configure --enable-bfr
 	sudo make && sudo make install
 
+Open the php.ini file and add the following::
+
+	zend_extension = /usr/lib/php5/20100525+lfs/bfr.so
+
 | 
 
 Go to sandbox directory */opt/glastopf/sandbox/* and create the apd_sandbox.php using command::
