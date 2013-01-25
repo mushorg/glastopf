@@ -40,7 +40,6 @@ class Database(object):
         self.session = sessionmaker(bind=self.engine)()
 
     def insert(self, attack_event):
-
         entry = attack_event.event_dict()
 
         for key, value in entry['request'].items():
@@ -51,8 +50,12 @@ class Database(object):
 
         del entry['request']
 
-        conn = self.engine.connect()
-        conn.execute(self.events_table.insert(entry))
+        try:
+            conn = self.engine.connect()
+            conn.execute(self.events_table.insert(entry))
+        except exc.OperationalError as e:
+            message = str(e)[:35]
+            logger.error("Error inserting attack event into main database: {0}".format(message))
             
     def insert_profile(self, ip_profile):
         self.session.add(ip_profile)
@@ -65,7 +68,7 @@ class Database(object):
         ip_profile = self.session.query(ipp.IPProfile).filter(
                                  ipp.IPProfile.ip==source_ip).first()
         return ip_profile
-        
+
     def setup_mapping(self):
         meta = MetaData()
 
