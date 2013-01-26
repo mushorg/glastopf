@@ -1,4 +1,4 @@
-# Glastopf
+# Glastopf [![Build Status](https://travis-ci.org/glastopf/glastopf.png?branch=master)](https://travis-ci.org/glastopf/glastopf)
 
 ## ABOUT
 

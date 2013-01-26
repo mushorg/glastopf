@@ -1,0 +1,11 @@
+lxml
+beautifulsoup
+numpy
+setuptools
+pymongo
+chardet
+sqlalchemy
+git+http://github.com/scipy/scipy/
+#git+git://github.com/kynan/antlr.git#egg=antlr
+cssselect
+scikit_learn
