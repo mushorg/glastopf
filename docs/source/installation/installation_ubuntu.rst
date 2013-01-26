@@ -9,8 +9,8 @@ Prerequisites Ubuntu
 
 Install the dependencies::	
 
-    sudo apt-get install python2.7 python-openssl python2.7-dev build-essential make python-chardet python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pymongo python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
-
+    sudo apt-get install python2.7 python-openssl python2.7-dev build-essential make python-chardet python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
+    pip install --upgrade pymongo
 | 
 
 Installing ANTLR Python runtime
