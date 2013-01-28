@@ -1,6 +1,6 @@
 lxml
 beautifulsoup
-numpy
+#numpy
 setuptools
 pymongo
 chardet
