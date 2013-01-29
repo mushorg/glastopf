@@ -17,13 +17,13 @@
 
 import os
 
-from modules.reporting.aux.base_logger import BaseLogger
+from modules.reporting.auxiliary.base_logger import BaseLogger
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def _get_logger_names(path='modules/reporting/aux'):
+def _get_logger_names(path='modules/reporting/auxiliary'):
     names = os.listdir(path)
     for name in reversed(names):
         if (name == 'base_logger.py' or name == 'file_logger.py'
@@ -38,7 +38,7 @@ def get_aux_loggers(create_tables=True):
     try:
         BaseLogger()
         for name in _get_logger_names():
-            module_name = "modules.reporting.aux." + name.split('.', 1)[0]
+            module_name = "modules.reporting.auxiliary." + name.split('.', 1)[0]
             __import__(module_name, globals(), locals(), [], -1)
         logger_classes = BaseLogger.__subclasses__()
     except ImportError as e:

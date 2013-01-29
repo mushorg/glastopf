@@ -28,7 +28,7 @@ import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers import request_handler
 from modules import logging_handler
-import modules.reporting.aux.hp_feed as hpfeeds
+import modules.reporting.auxiliary.hp_feed as hpfeeds
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
 import logging.handlers

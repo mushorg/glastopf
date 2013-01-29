@@ -19,7 +19,7 @@ import logging
 
 from ConfigParser import ConfigParser
 
-from modules.reporting.aux.base_logger import BaseLogger
+from modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogSyslog(BaseLogger):
