@@ -34,7 +34,7 @@
     <id>5</id>
     <patternDescription>SQL injection</patternDescription>
     <patternString><![CDATA[.*(select|drop|update|union|insert|alter|declare|cast)( |\().*]]></patternString>
-    <module>sql</module>
+    <module>sqli</module>
   </request>
   <request>
     <id>6</id>
@@ -99,7 +99,7 @@
   <request>
     <id>16</id>
     <patternDescription>PHPMyAdmin</patternDescription>
-    <patternString><![CDATA[^/phpmyadmin]]></patternString>
+    <patternString><![CDATA[(^/phpmyadmin|^/pma|^/phpmyadmin\-[\w\.]+)]]></patternString>
     <module>phpmyadmin</module>
   </request>
   <request>
