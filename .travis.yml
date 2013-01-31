@@ -45,3 +45,6 @@ install:
 script: 
  - echo $REPO
  - nosetests
+notifications:
+ irc:
+  - "irc.freenode.org#glastopf"
