@@ -18,6 +18,7 @@
 import json
 
 from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 
 import threading
@@ -26,6 +27,8 @@ import Queue
 import time
 import logging
 
+import modules.processing.ip_profile as ipp
+
 logger = logging.getLogger(__name__)
 
 
@@ -33,26 +36,52 @@ class Database(object):
 
     def __init__(self, engine):
         self.engine = engine
+        ipp.Base.metadata.create_all(self.engine)
         self.setup_mapping()
+        self.session = sessionmaker(bind=self.engine)()
 
     def insert(self, attack_event):
+        entry = attack_event.event_dict()
 
-            entry = attack_event.event_dict()
+        for key, value in entry['request'].items():
+            entry['request_' + key] = value
 
-            for key, value in entry['request'].items():
-                entry['request_' + key] = value
+        entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
+        entry['request_header'] = json.dumps(entry['request_header'])
 
-            entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
-            entry['request_header'] = json.dumps(entry['request_header'])
+        del entry['request']
 
-            del entry['request']
-
-            try:
-                conn = self.engine.connect()
-                conn.execute(self.events_table.insert(entry))
-            except exc.OperationalError as e:
-                message = str(e)[:35]
-                logger.error("Error inserting attack event into main database: {0}".format(message))
+        try:
+            conn = self.engine.connect()
+            conn.execute(self.events_table.insert(entry))
+        except exc.OperationalError as e:
+            message = str(e)[:35]
+            logger.error("Error inserting attack event into main database: {0}".format(message))
+            
+    def insert_profile(self, ip_profile):
+        #print "last_event_time for ip %s:%s"%(
+        #             ip_profile.ip, ip_profile.last_event_time)
+        # .split()[0] is added to deal with multiple ASNs
+        self.session.add(ip_profile)
+        try:
+            self.session.commit()
+        except exc.OperationalError as e:
+            self.session.rollback()
+            message = str(e)[:35]
+            logger.error("Error inserting profile into main database: {0}".format(message))
+        
+    def update_db(self):
+        try:
+            self.session.commit()
+        except exc.OperationalError as e:
+            self.session.rollback()
+            message = str(e)[:35]
+            logger.error("Error updating profile in main database: {0}".format(message))
+    
+    def get_profile(self, source_ip):
+        ip_profile = self.session.query(ipp.IPProfile).filter(
+                                 ipp.IPProfile.ip==source_ip).first()
+        return ip_profile
 
     def setup_mapping(self):
         meta = MetaData()
@@ -73,5 +102,6 @@ class Database(object):
         )
 
         #only creates if it cant find the schema
-
         meta.create_all(self.engine)
+        
+    
