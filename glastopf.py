@@ -63,6 +63,8 @@ class GlastopfHoneypot(object):
         if self.options["hpfeeds"] == "True":
             self.hpfeeds_logger = hpfeeds.HPFeedClient(config=config)
             logger.info("HPFeeds started")
+        
+        self.profiler_available = False
 
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
 
@@ -80,7 +82,9 @@ class GlastopfHoneypot(object):
                 target=self.dork_generator.regular_generate_dork, args=(30,))
             regular_gen_dork.daemon = True
             regular_gen_dork.start()
-        self.profiler = profiler.Profiler()
+        
+        if self.profiler_available:
+            self.profiler = profiler.Profiler(self.maindb)
 
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
@@ -120,6 +124,7 @@ class GlastopfHoneypot(object):
                 sqla_engine = create_engine(connection_string)
                 maindb = log_sql.Database(sqla_engine)
                 dorkdb = database_sqla.Database(sqla_engine)
+                self.profiler_available = True
                 return (maindb, dorkdb)
             else:
                 logger.error("Invalid connection string.")
@@ -131,6 +136,7 @@ class GlastopfHoneypot(object):
             sqla_engine = create_engine("sqlite://db/glastopf.db")
             maindb = log_sql.Database(sqla_engine)
             dorkdb = database_sqla.Database(sqla_engine)
+            self.profiler_available = True
             #disable usage of main logging datbase
             return (None, dorkdb)
 
@@ -184,7 +190,8 @@ class GlastopfHoneypot(object):
             emulator.handle(attack_event)
             # Logging the event
             if not self.test:
-                #self.profiler.handle_event(attack_event)
+                if self.profiler_available:
+                    self.profiler.handle_event(attack_event)
                 self.post_queue.put(attack_event)
             response_code = "200 OK"
         response_util = util.HTTPServerResponse(response_code)
