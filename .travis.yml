@@ -1,0 +1,50 @@
+language: python
+services:
+ - mongodb
+python:
+  - "2.7"
+virtualenv:
+  system_site_packages: true
+before_install:
+ - REPO=`pwd`
+ - echo $REPO
+ - pwd
+ - "sudo apt-get -qq update"
+ - "sudo apt-get -qq install python-dev libevent-dev"
+ - "sudo apt-get -qq install libatlas-dev libatlas-base-dev gfortran"
+ - "sudo apt-get -qq install python-numpy python-numpy-dev python-scipy"
+#dependencies for the php sandbox
+ - "sudo apt-get -qq install php5 php5-dev"
+#Install antlr python module
+ - cd /opt
+ - sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
+ - sudo tar xzf antlr-3.1.3.tar.gz
+ - cd antlr-3.1.3/runtime/Python
+ - sudo python2.7 setup.py install
+#Install Better Function Replacer (BFR)
+ - cd /tmp
+ - git clone git://github.com/glastopf/BFR.git
+ - cd BFR
+ - phpize
+ - ./configure --enable-bfr
+ - make
+ - sudo make install
+#TODO: Extract path from output
+ - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626+lfs/bfr.so" >> /etc/php5/cli/php.ini'
+ - cd $REPO
+ - cd sandbox
+ - sudo make
+ - pwd
+install: 
+#Receipe provided by travis for some über wierdness when using virtualenv and travis-ci
+ - export PYTHONIOENCODING=UTF8 # just in case
+ - pwd
+ - cd $REPO
+ - pip install -r requirements.txt --use-mirrors
+# command to run tests
+script: 
+ - echo $REPO
+ - nosetests
+notifications:
+ irc:
+  - "irc.freenode.org#glastopf"

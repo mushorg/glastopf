@@ -130,7 +130,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.event.response = ""
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)
-        self.assertIsNot(self.event.response, "test successful")
+        self.assertEqual(self.event.response, "test successful")
         print "Return value 'test successful', matching our expectation."
 
     def test_robots_emulator(self):

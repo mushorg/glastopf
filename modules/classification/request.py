@@ -84,7 +84,7 @@ class Classifier(object):
         for pattern in patterns:
             match = None
             parsed_pattern = self.parse_pattern(pattern)
-            re_pattern = re.compile(parsed_pattern.string)
+            re_pattern = re.compile(parsed_pattern.string, re.I)
             #TODO: Rules for specific method. We should add a tag in the
             # rule to identify which rule it applies.
             # And some forms would send data in GET and POST methods.

@@ -1,4 +1,4 @@
-# Glastopf
+# Glastopf [![Build Status](https://travis-ci.org/glastopf/glastopf.png?branch=master)](https://travis-ci.org/glastopf/glastopf)
 
 ## ABOUT
 
@@ -18,3 +18,7 @@ By sending your data via hpfeeds you agree that your data might be shared
 with 3rd parties.
 If you are interested in the data collected by Glastopf instances, please
 contact Lukas at <glaslos@gmail.com>
+
+## SUPPORT
+
+Thanks to JetBrains for free PyCharm licenses!

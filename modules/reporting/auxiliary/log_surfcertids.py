@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from ConfigParser import ConfigParser
-from modules.reporting.aux.base_logger import BaseLogger
+from modules.reporting.auxiliary.base_logger import BaseLogger
 import logging
 
 logger = logging.getLogger(__name__)
