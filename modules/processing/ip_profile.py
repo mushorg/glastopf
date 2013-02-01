@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Integer, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,19 +9,20 @@ class IPProfile(Base):
     as_number = Column(String)
     as_name = Column(String)
     country_code = Column(String)
-    total_requests = Column(String)
-    total_scans = Column(String)
+    total_requests = Column(Integer)
+    total_scans = Column(Integer)
     bgp_prefix = Column(String)
-    requests_per_scan = Column(String)
-    avg_scan_duration = Column(String)
-    scan_time_period = Column(String)
+    requests_per_scan = Column(Float)
+    avg_scan_duration = Column(Float)
+    scan_time_period = Column(Float)
     last_event_time = Column(String) 
        
     def __init__(
-            self, ip, as_number, as_name, country_code,
-            total_requests, total_scans, bgp_prefix, 
-            requests_per_scan, avg_scan_duration, 
-            scan_time_period, last_event_time ):
+            self, ip=None, as_number=None, as_name=None,
+            country_code=None, total_requests=0,
+            total_scans=0, bgp_prefix=None,
+            requests_per_scan=None, avg_scan_duration=1, 
+            scan_time_period=1, last_event_time=None):
         self.ip = ip
         self.as_number = as_number
         self.as_name = as_name

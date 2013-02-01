@@ -16,12 +16,12 @@ class Profiler(object):
         self.scans_table = ScansTable()
         self.events_deque = collections.deque()
         self.deque_read_interval = 15
-        self.scan_threshold = 300
+        self.scan_threshold = 30
         #self.scan_threshold = 60
         self.cymru_min_timeout = 2
         self.cymru_timeout = 3
         #self.profile_update_time = datetime.now() + timedelta(hours=24)
-        self.profile_update_time = datetime.now() + timedelta(minutes=30)
+        self.profile_update_time = datetime.now() + timedelta(seconds=30)
         #self.loggers = logging_handler.get_loggers()
         thread.start_new_thread(self.run, ())
 
@@ -101,9 +101,9 @@ class Profiler(object):
                     return False
         as_info = cmd.stdout.readline()
         as_info = as_info.strip().strip('"').split('|')
-        # .split()[0] is added to deal with multiple ASNs
-        as_info = [word.strip().split()[0] for word in as_info]
         try:
+            # .split()[0] is added to deal with multiple ASNs
+            as_info = [word.strip().split()[0] for word in as_info]
             ip_profile.as_number = as_info[0]
             ip_profile.bgp_prefix = as_info[1]
             ip_profile.country_code = as_info[2]
@@ -135,8 +135,7 @@ class Profiler(object):
             pass
 
     def create_new_profile(self, source_ip):
-        ip_profile = ipp.IPProfile()
-        ip_profile.ip = source_ip
+        ip_profile = ipp.IPProfile(ip=source_ip)
         if self.fetch_as_number(ip_profile):
             self.fetch_as_name(ip_profile)
         return ip_profile
@@ -144,36 +143,38 @@ class Profiler(object):
     def update_profile_with_scan(self, profile, scan):
         profile.total_requests += scan.requests
         profile.total_scans += 1
-        profile.requests_per_scan = (profile.total_requests /
+        profile.requests_per_scan = (profile.total_requests * 1.0 /
                                      profile.total_scans)
         profile.avg_scan_duration = (
                 ((profile.avg_scan_duration * (profile.total_scans - 1)) +
-                 (scan.last_event_time - scan.start_time)) /
+                 (scan.last_event_time - scan.start_time).total_seconds()) /
                 (profile.total_scans))
         if profile.total_scans > 1:
+            prof_last_ev_time = datetime.strptime(profile.last_event_time,
+                                              "%Y-%m-%d %H:%M:%S")
             profile.scan_time_period = (
                 ((profile.scan_time_period * (profile.total_scans - 2)) +
-                (scan.start_time - profile.last_event_time)) /
+                (scan.start_time - prof_last_ev_time).total_seconds()) /
                 (profile.total_scans - 1))
-        profile.last_event_time = scan.last_event_time
+        profile.last_event_time = scan.last_event_time.strftime("%Y-%m-%d %H:%M:%S")
 
     def update_profile_with_current_scan(self, profile, scan):
-        profile.total_requests += scan.requests - scan.requests_posted
+        profile.total_requests += (scan.requests - scan.requests_posted)
         scan.requests_posted = scan.requests
 
-    def update_profiles(self, loggers):
+    def update_profiles(self):
         self.scans_table.close_old_scans(self.scan_threshold)
         for source_ip in self.scans_table.scans:
             ip_profile = self.maindb.get_profile(source_ip)
             if ip_profile is None:
-                self.maindb.insert_profile(source_ip)
                 ip_profile = self.create_new_profile(source_ip)
+                self.maindb.insert_profile(ip_profile)
             for scan in self.scans_table.scans[source_ip]['closed']:
                 self.update_profile_with_scan(ip_profile, scan)
             if 'current' in self.scans_table.scans[source_ip]:
                 scan = self.scans_table.scans[source_ip]['current']
                 self.update_profile_with_current_scan(ip_profile, scan)
-                self.maindb.update_profile(ip_profile)
+            self.maindb.update_db()
         self.scans_table.delete_closed_scans()
 
     def run(self):
@@ -182,7 +183,7 @@ class Profiler(object):
                 if datetime.now() > self.profile_update_time:
                     self.update_profiles()
                     #self.profile_update_time += timedelta(hours=24)
-                    self.profile_update_time += timedelta(minutes=1)
+                    self.profile_update_time += timedelta(seconds=30)
                 time.sleep(self.deque_read_interval)
                 continue
             self.update_scan(self.events_deque.pop())
