@@ -15,15 +15,29 @@ class Profiler(object):
         self.maindb = maindb
         self.scans_table = ScansTable()
         self.events_deque = collections.deque()
-        self.deque_read_interval = 15
+        # Max interval(sec) between two requests that are part of the same scan
         self.scan_threshold = 30
-        #self.scan_threshold = 60
+        # The database will be updated this frequently
+        self.profile_update_time = datetime.now() + timedelta(minutes=2)
+        self.deque_read_interval = 15
         self.cymru_min_timeout = 2
         self.cymru_timeout = 3
-        #self.profile_update_time = datetime.now() + timedelta(hours=24)
-        self.profile_update_time = datetime.now() + timedelta(seconds=30)
         #self.loggers = logging_handler.get_loggers()
         thread.start_new_thread(self.run, ())
+
+    # Reverse the IP address for querying origin.asn.cymru.com
+    def reverse_ip(self, ip):
+        ipreg = re.compile("([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})"
+                                    "\.([0-9]{1,3})$")
+        m = ipreg.match(ip)
+        if m is not None:
+            return (m.group(4) + "." + m.group(3) + "." + m.group(2) +
+                    "." + m.group(1))
+        else:
+            return ""
+
+    def handle_event(self, event):
+        self.events_deque.appendleft(event)
 
     @staticmethod
     def add_comment(ip_address, comment):
@@ -50,20 +64,6 @@ class Profiler(object):
         #else:
         #    return ''
         return ''
-
-    # Reverse the IP address for querying origin.asn.cymru.com
-    def reverse_ip(self, ip):
-        ipreg = re.compile("([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})"
-                                    "\.([0-9]{1,3})$")
-        m = ipreg.match(ip)
-        if m is not None:
-            return (m.group(4) + "." + m.group(3) + "." + m.group(2) +
-                    "." + m.group(1))
-        else:
-            return ""
-
-    def handle_event(self, event):
-        self.events_deque.appendleft(event)
 
     def update_scan(self, event):
         source_ip = event.source_addr[0].split(',')[0]
