@@ -138,4 +138,10 @@
     <patternString><![CDATA[\-d\sauto_prepend_file=php://input]]></patternString>
     <module>php_cgi_rce</module>
   </request>
+  <request>
+    <id>23</id>
+    <patternDescription>Common PHPInfo test/debug resources</patternDescription>
+    <patternString><![CDATA[^/info.php|^/phpinfo.php|^/phpinfo.html]]></patternString>
+    <module>phpinfo</module>
+  </request>
 </requests>

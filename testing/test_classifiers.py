@@ -188,3 +188,44 @@ class TestClassifier(unittest.TestCase):
         parsed_request.version = 'HTTP/1.0'
         matched_pattern = self.requestClassifier.classify_request(parsed_request)
         self.assertTrue(matched_pattern == 'login')
+
+    def test_phpinfo_classifier(self):
+        """Objective: Test classifier for phpinfo debug/test requests
+        Input: HTTPRequest with an attempt to discover a generic phpinfo test page
+        Expected Response: matched pattern to phpinfo
+        Note: """
+
+        parsed_request = HTTPRequest()
+        parsed_request.method = 'POST'
+        parsed_request.url = '/phpinfo.php?ss'
+        parsed_request.version = 'HTTP/1.0'
+        matched_pattern = self.requestClassifier.classify_request(parsed_request)
+        self.assertTrue(matched_pattern == 'phpinfo')
+
+        parsed_request = HTTPRequest()
+        parsed_request.method = 'POST'
+        parsed_request.url = '/phpinfo.php'
+        parsed_request.version = 'HTTP/1.0'
+        matched_pattern = self.requestClassifier.classify_request(parsed_request)
+        self.assertTrue(matched_pattern == 'phpinfo')
+
+        parsed_request = HTTPRequest()
+        parsed_request.method = 'POST'
+        parsed_request.url = '/info.php'
+        parsed_request.version = 'HTTP/1.0'
+        matched_pattern = self.requestClassifier.classify_request(parsed_request)
+        self.assertTrue(matched_pattern == 'phpinfo')
+
+        parsed_request = HTTPRequest()
+        parsed_request.method = 'POST'
+        parsed_request.url = '/info.php?page'
+        parsed_request.version = 'HTTP/1.0'
+        matched_pattern = self.requestClassifier.classify_request(parsed_request)
+        self.assertTrue(matched_pattern == 'phpinfo')
+
+        parsed_request = HTTPRequest()
+        parsed_request.method = 'POST'
+        parsed_request.url = '/phpinfo.html'
+        parsed_request.version = 'HTTP/1.0'
+        matched_pattern = self.requestClassifier.classify_request(parsed_request)
+        self.assertTrue(matched_pattern == 'phpinfo')

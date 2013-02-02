@@ -231,3 +231,18 @@ class TestEmulatorIntegration(unittest.TestCase):
         emulator.handle(self.event)
         print "Return value:", self.event.response
         self.assertTrue("""testing""" == self.event.response)
+
+
+    def test_phpinfo_emulator(self):
+        """Objective: Emulator testing for phpinfo.php requests
+        Input: http://localhost/phpinfo.php
+        Expected Result: Result of the phpinfo() function
+        Notes:"""
+        self.event.parsed_request = util.HTTPRequest()
+        self.event.parsed_request.method = 'GET'
+        self.event.parsed_request.url = "/info.php?param1"
+        self.event.matched_pattern = "phpinfo"
+        emulator = request_handler.get_handler(self.event.matched_pattern)
+        emulator.handle(self.event)
+        self.assertTrue("PHP Version " in self.event.response)
+        self.assertTrue("Zend Extension" in self.event.response)
