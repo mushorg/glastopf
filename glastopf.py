@@ -108,7 +108,7 @@ class GlastopfHoneypot(object):
 
         mnemosyne_service = None
         clusterer = cluster.Cluster(token_pattern, n_clusters, max_iter, n_init, min_df=0.0)
-        if conf_parser.has_options('dork-db', 'mnem_service'):
+        if conf_parser.has_option('dork-db', 'mnem_service'):
             if conf_parser.getboolean('dork-db', 'mnem_service') == True:
                 mnemosyne_service = mnem_service.Mnem_Service()
 
