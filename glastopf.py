@@ -38,6 +38,7 @@ from modules.handlers.emulators.dork_list import database_sqla
 from modules.handlers.emulators.dork_list import database_mongo
 from modules.handlers.emulators.dork_list import dork_page_generator
 from modules.handlers.emulators.dork_list import cluster
+from modules.handlers.emulators.dork_list import mnem_service
 from modules.reporting.main import log_mongodb, log_sql
 from sqlalchemy import create_engine
 
@@ -105,10 +106,16 @@ class GlastopfHoneypot(object):
 
         file_processor = dork_file_processor.DorkFileProcessor(self.dorkdb)
 
+        mnemosyne_service = None
         clusterer = cluster.Cluster(token_pattern, n_clusters, max_iter, n_init, min_df=0.0)
+        if conf_parser.has_options('dork-db', 'mnem_service'):
+            if conf_parser.getboolean('dork-db', 'mnem_service') == True:
+                mnemosyne_service = mnem_service.Mnem_Service()
+
         return dork_page_generator.DorkPageGenerator(self.dorkdb,
                                                      file_processor,
-                                                     clusterer)
+                                                     clusterer,
+                                                     mnem_service_instance=mnemosyne_service)
 
     def setup_main_database(self, conf_parser):
 
