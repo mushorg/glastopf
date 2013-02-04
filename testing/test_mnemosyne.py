@@ -28,9 +28,9 @@ class TestMnemosyneService(unittest.TestCase):
         Basic test to check if we can extract dorks from the mnemosyne dorks service.
         """
 
-        sut = mnem_service.Mnem_Service(limit=10)
+        sut = mnem_service.Mnem_Service()
 
-        dorks = sut.get_dorks()
+        dorks = sut.get_dorks(limit=10)
 
         self.assertTrue(len(dorks) > 0)
 
@@ -41,9 +41,9 @@ class TestMnemosyneService(unittest.TestCase):
         """
 
         #using wrong username/pass to simulate an error
-        sut = mnem_service.Mnem_Service(username='glastopf_test', password='glastopf_test')
+        sut = mnem_service.Mnem_Service()
 
-        dorks = sut.get_dorks()
+        dorks = sut.get_dorks(username='glastopf_test', password='glastopf_test')
 
         self.assertTrue(len(dorks) == 0)
 
