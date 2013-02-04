@@ -33,16 +33,18 @@ class DorkFileProcessor(object):
             term = term.strip()
         return term
 
-    def parse_lines(self, dork_lines):
+    def parse_lines(self, dork_lines, ignores):
         search_opers = ('intitle:', 'inurl:', 'intext:', 'filetype:', 'ext:', 'allinurl:')
         inserts = []
         for dork_line in dork_lines:
             operator = next((oper for oper in search_opers if oper in dork_line), None)
             if operator != None:
                 dork_line_split = dork_line.partition(operator)[2]
-                inserts.append({'table': operator[:-1], 'content': self.extract_term(dork_line_split)})
+                table = operator[:-1]
+                if table not in ignores:
+                    inserts.append({'table': table, 'content': self.extract_term(dork_line_split)})
         return inserts
 
-    def process_dorks(self):
+    def process_dorks(self, ignore=()):
         dork_lines = self.get_lines()
-        return self.parse_lines(dork_lines)
+        return self.parse_lines(dork_lines, ignore)

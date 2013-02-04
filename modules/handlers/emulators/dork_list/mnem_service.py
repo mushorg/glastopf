@@ -51,7 +51,12 @@ class Mnem_Service():
             logging.warning("Timeout while communication with mnemosyne, current timeout value is: {0}".format(timeout))
             return []
 
-        return dorks
+        #align with glastopf db setup
+        return_list = []
+        for item in dorks:
+            return_list.append( {'content': item['content'],
+                                 'table': item['type']})
+        return return_list
 
 if __name__ == '__main__':
     print get_dorks()

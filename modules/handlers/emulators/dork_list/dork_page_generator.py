@@ -59,7 +59,11 @@ class DorkPageGenerator(object):
     def generate_dork_pages(self, first):
         if first:
             if self.mnem_service:
+                #mnemosyne only contains 'inurl' atm
                 dorks = self.mnem_service.get_dorks()
+                #therefore we need to extract all other dorks from the file
+                file_dorks = self.dork_file_processor.process_dorks(ignore=('inurl'))
+                dorks += file_dorks
             else:
                 dorks = self.dork_file_processor.process_dorks()
         self.database.insert_dorks(dorks)
