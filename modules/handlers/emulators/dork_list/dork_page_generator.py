@@ -24,6 +24,7 @@ import gen_html
 import time
 import os
 import logging
+import mnem_service
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +37,15 @@ class DorkPageGenerator(object):
     def __init__(self, database_instance,
                  dorks_file_processor_instance,
                  cluster_instance,
-                 pages_path="modules/handlers/emulators/dork_list/pages/"):
+                 dork_service=False,
+                 pages_path="modules/handlers/emulators/dork_list/pages/",
+                 mnem_service_instance=None):
+        self.dork_service = dork_service
         self.database = database_instance
         self.pages_path = pages_path
         self.dork_file_processor = dorks_file_processor_instance
         self.clustere = cluster_instance
+        self.mnem_service = mnem_service_instance
 
     def prepare_text(self):
         line_list = []
@@ -53,8 +58,11 @@ class DorkPageGenerator(object):
 
     def generate_dork_pages(self, first):
         if first:
-            dorks = self.dork_file_processor.process_dorks()
-            self.database.insert_dorks(dorks)
+            if self.mnem_service:
+                dorks = self.mnem_service.get_dorks()
+            else:
+                dorks = self.dork_file_processor.process_dorks()
+        self.database.insert_dorks(dorks)
         line_list = self.prepare_text()
         shuffle(line_list)
         #inurl_list = dork_reader.get_dork_list('inurl')
