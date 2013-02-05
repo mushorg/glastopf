@@ -35,7 +35,7 @@ class Mnem_Service():
             payload = {'username': username, 'password': password}
             response = sess.post(base_url + '/login', payload, timeout=timeout, verify=False)
             if response.status_code != 200:
-                logging.warning("Error while requesting session cookie from mnemosyne: {0}".format(response.status_code))
+                logger.warning("Error while requesting session cookie from mnemosyne: {0}".format(response.status_code))
                 return []
 
             #get the dorks
@@ -45,10 +45,10 @@ class Mnem_Service():
                 dorks = json.loads(response.text)['dorks']
                 logger.debug("Successfully retrieved {0} dorks from the mnemosyne service.".format(len(dorks)))
             else:
-                logging.warning("Error while requesting dorks from mnemosyne: {0}".format(response.status_code))
+                logger.warning("Error while requesting dorks from mnemosyne: {0}".format(response.status_code))
                 return []
         except Timeout as e:
-            logging.warning("Timeout while communication with mnemosyne, current timeout value is: {0}".format(timeout))
+            logger.warning("Timeout while communication with mnemosyne, current timeout value is: {0}".format(timeout))
             return []
 
         #align with glastopf db setup
