@@ -47,6 +47,11 @@ class DorkPageGenerator(object):
         self.clustere = cluster_instance
         self.mnem_service = mnem_service_instance
 
+        #check if we need bootstrapping
+        if len(self.database.get_dork_list('inurl')) == 0:
+            logger.info("Bootstrapping dork database.")
+            self.bootstrap_dorkdb()
+
     def prepare_text(self):
         line_list = []
         with codecs.open("modules/handlers/emulators/dork_list/data/pride.txt", "r", "utf-8") as text_file:
@@ -56,21 +61,11 @@ class DorkPageGenerator(object):
                     line_list.append(unicodedata.normalize('NFKD', text_line).encode('ascii', 'ignore'))
         return line_list
 
-    def generate_dork_pages(self, first):
-        if first:
-            if self.mnem_service:
-                #mnemosyne only contains 'inurl' atm
-                dorks = self.mnem_service.get_dorks()
-                #therefore we need to extract all other dorks from the file
-                file_dorks = self.dork_file_processor.process_dorks(ignore=('inurl'))
-                dorks += file_dorks
-            else:
-                dorks = self.dork_file_processor.process_dorks()
-        self.database.insert_dorks(dorks)
+    def generate_dork_pages(self):
+
         line_list = self.prepare_text()
         shuffle(line_list)
-        #inurl_list = dork_reader.get_dork_list('inurl')
-        #db = database.DorkDB(self.dorkdb)
+
         inurl_list = self.database.select_data()
         #get data from dorkdb if the live database does not have enough
         if len(inurl_list) < 100:
@@ -118,7 +113,7 @@ class DorkPageGenerator(object):
     def regular_generate_dork(self, sleeper):
         sleep_time = sleeper * 60
         old_pages = self.get_current_pages()
-        self.generate_dork_pages(True)
+        self.generate_dork_pages()
         self.remove_pages(old_pages)
         if sleeper == 0:
             return
@@ -127,7 +122,7 @@ class DorkPageGenerator(object):
         while True:
             time.sleep(sleep_time)
             old_pages = self.get_current_pages()
-            self.generate_dork_pages(False)
+            self.generate_dork_pages()
             self.remove_pages(old_pages)
 
     def collect_dork(self, attack_event):
@@ -137,3 +132,21 @@ class DorkPageGenerator(object):
                 self.database.insert_dorks([{'table': "inurl", 'content': dork}])
             except Exception as e:
                 logger.exception("Parsed_request split error: {0}".format(e))
+
+    def bootstrap_dorkdb(self):
+        ignore = ()
+        dorks = []
+        print "bootstrapping"
+        if self.mnem_service:
+            #get dorks from mnemosyne - note: only 'inurl' at the moment
+            dorks = self.mnem_service.get_dorks()
+            if len(dorks) > 0:
+                #all went well, do not extract inurl from file
+                ignore=('inurl')
+            else:
+                #something went wrong (nothing extracted from mnemosyne), extract all types from file
+                ignore = ()
+
+        #combine mnemosyne dorks with file dorks - accordingly to the ignore filter.
+        dorks += self.dork_file_processor.process_dorks(ignore)
+        self.database.insert_dorks(dorks)

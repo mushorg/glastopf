@@ -132,5 +132,4 @@ class Database(object):
         return_list = []
         for entry in result:
             return_list.append(entry[0])
-
         return return_list
