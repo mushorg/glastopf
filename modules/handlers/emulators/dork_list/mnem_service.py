@@ -57,6 +57,3 @@ class Mnem_Service():
             return_list.append( {'content': item['content'],
                                  'table': item['type']})
         return return_list
-
-if __name__ == '__main__':
-    print get_dorks()
