@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import requests
-from requests.exceptions import Timeout
+from requests.exceptions import Timeout, ConnectionError
 import json
 import logging
 
@@ -47,8 +47,8 @@ class Mnem_Service():
             else:
                 logger.warning("Error while requesting dorks from mnemosyne: {0}".format(response.status_code))
                 return []
-        except Timeout as e:
-            logger.warning("Timeout while communication with mnemosyne, current timeout value is: {0}".format(timeout))
+        except (Timeout, ConnectionError) as e:
+            logger.warning("Error while communication with mnemosyne: {0}".format(e))
             return []
 
         #align with glastopf db setup
