@@ -136,7 +136,6 @@ class DorkPageGenerator(object):
     def bootstrap_dorkdb(self):
         ignore = ()
         dorks = []
-        print "bootstrapping"
         if self.mnem_service:
             #get dorks from mnemosyne - note: only 'inurl' at the moment
             dorks = self.mnem_service.get_dorks()
