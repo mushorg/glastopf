@@ -50,7 +50,13 @@ class GlastopfHoneypot(object):
     def __init__(self, test=False, config="glastopf.cfg"):
         self.create_empty_dirs()
         self.test = test
-        logger.info('Starting Glastopf')
+        git_ref = "Unknown"
+        if os.path.isfile('.git/refs/heads/master'):
+            with open('.git/refs/heads/master', 'r') as f:
+                git_ref = f.readline().rstrip()
+
+        logger.info('Starting Glastopf (Git: {0})'.format(git_ref))
+
 
         conf_parser = ConfigParser()
         conf_parser.read(config)
