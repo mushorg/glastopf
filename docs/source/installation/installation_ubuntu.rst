@@ -10,7 +10,7 @@ Prerequisites Ubuntu
 Install the dependencies::	
 
     sudo apt-get install python2.7 python-openssl python2.7-dev build-essential make python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
-    pip install --upgrade pymongo
+    sudo pip install --upgrade pymongo
 | 
 
 Installing ANTLR Python runtime
@@ -54,18 +54,6 @@ Download evnet using git::
 	git clone git://github.com/rep/evnet.git
 	cd evnet
 	sudo python2.7 setup.py install 
-
-|  
-
-Mongo DB
-========
-|
-
-Download event.bson from http://glastopf.org/events.bson and sample database from http://glastopf.org/glastopf.db.bz2.
-
-Install the database::
-
-	sudo mongorestore -d glastopf -c events events.bson
 
 |
 
