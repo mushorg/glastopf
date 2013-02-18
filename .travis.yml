@@ -10,7 +10,7 @@ before_install:
  - echo $REPO
  - pwd
  - "sudo apt-get -qq update"
- - "sudo apt-get -qq install python-dev libevent-dev"
+ - "sudo apt-get -qq install python-dev libevent-dev cython"
  - "sudo apt-get -qq install libatlas-dev libatlas-base-dev gfortran"
  - "sudo apt-get -qq install python-numpy python-numpy-dev python-scipy"
 #dependencies for the php sandbox
