@@ -36,6 +36,7 @@ class LogSyslog(BaseLogger):
             LogSyslog.logger
         except AttributeError:
             LogSyslog.logger = logging.getLogger('glaspot_attack')
+            LogSyslog.logger.propagate = False
             LogSyslog.log_handler = logging.handlers.SysLogHandler(address=self.options['socket'])
             LogSyslog.logger.addHandler(self.log_handler)
             LogSyslog.logger.setLevel(logging.INFO)
