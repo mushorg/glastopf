@@ -36,7 +36,11 @@ before_install:
  - cd sandbox
  - sudo make
  - pwd
+<<<<<<< HEAD
 install: 
+=======
+install:
+>>>>>>> use correct (new) path for bfr.so
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
  - cd $REPO
