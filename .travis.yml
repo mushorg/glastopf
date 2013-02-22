@@ -29,6 +29,7 @@ before_install:
  - ./configure --enable-bfr
  - make
  - sudo make install
+ - php --version
 #TODO: Extract path from output
  - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626+lfs/bfr.so" >> /etc/php5/cli/php.ini'
  - cd $REPO
@@ -36,7 +37,6 @@ before_install:
  - sudo make
  - pwd
 install: 
-#Receipe provided by travis for some über wierdness when using virtualenv and travis-ci
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
  - cd $REPO
@@ -45,6 +45,7 @@ install:
 # command to run tests
 script: 
  - echo $REPO
+ - php --version
  - nosetests
 notifications:
  irc:
