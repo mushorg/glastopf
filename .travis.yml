@@ -30,13 +30,12 @@ before_install:
  - make
  - sudo make install
 #TODO: Extract path from output
- - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626+lfs/bfr.so" >> /etc/php5/cli/php.ini'
+ - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
  - cd $REPO
  - cd sandbox
  - sudo make
  - pwd
-install: 
-#Receipe provided by travis for some über wierdness when using virtualenv and travis-ci
+install:
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
  - cd $REPO
