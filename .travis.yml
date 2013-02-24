@@ -29,18 +29,13 @@ before_install:
  - ./configure --enable-bfr
  - make
  - sudo make install
- - php --version
 #TODO: Extract path from output
  - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
  - cd $REPO
  - cd sandbox
  - sudo make
  - pwd
-<<<<<<< HEAD
-install: 
-=======
 install:
->>>>>>> use correct (new) path for bfr.so
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
  - cd $REPO
@@ -49,8 +44,7 @@ install:
 # command to run tests
 script: 
  - echo $REPO
- - php --version
  - nosetests
-#notifications:
-# irc:
-#  - "irc.freenode.org#glastopf"
+notifications:
+ irc:
+  - "irc.freenode.org#glastopf"
