@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from glastopf.modules.handlers import base_emulator
+import os
 
 
 class FaviconHandler(base_emulator.BaseEmulator):
@@ -26,7 +27,7 @@ class FaviconHandler(base_emulator.BaseEmulator):
     def handle(self, attack_event):
         response_header = "HTTP/1.1 200 OK\r\n"
         response_header += "Connection: close\r\nContent-Type: image/x-icon;"
-        with open('modules/handlers/emulators/favicon/favicon.ico', 'r') as favicon:
+        with open(os.path.join(self.data_dir, 'favicon/favicon.ico'), 'r') as favicon:
             data = favicon.read()
         response_header += "Content-Length: %s\r\n\r\n" % len(data)
         attack_event.response = response_header + data

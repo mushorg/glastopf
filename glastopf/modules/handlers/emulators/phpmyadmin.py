@@ -20,6 +20,7 @@ import hashlib
 import time
 
 from glastopf.modules.handlers import base_emulator
+import os
 
 
 class PMAEmulator(base_emulator.BaseEmulator):
@@ -28,7 +29,7 @@ class PMAEmulator(base_emulator.BaseEmulator):
         pass
 
     def handle(self, attack_event, time_stamp=time.time()):
-        path = 'modules/handlers/emulators/phpmyadmin/script_setup.php'
+        path = os.path.join(self.data_dir, 'phpmyadmin/script_setup.php')
         with open(path, 'r') as setup_php:
             self.page = setup_php.read()
         m = hashlib.md5()

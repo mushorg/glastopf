@@ -23,6 +23,7 @@ class BaseEmulator(object):
 
     def __init__(self, data_dir=os.path.join(os.getcwd(), 'data')):
         self.data_dir = data_dir
+        self.emulator_dir = os.path.join(package_directory, 'emulators')
 
     def handle(self):
         pass

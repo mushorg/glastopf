@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from glastopf.modules.handlers import base_emulator
+import os
 
 
 class RobotsHandler(base_emulator.BaseEmulator):
@@ -24,7 +25,7 @@ class RobotsHandler(base_emulator.BaseEmulator):
         pass
 
     def handle(self, attack_event):
-        robots_path = 'modules/handlers/emulators/robots/robots.txt'
+        robots_path = os.path.join(self.data_dir, 'robots/robots.txt')
         with open(robots_path, 'r') as robot_file:
             attack_event.response = robot_file.read()
         return attack_event

@@ -45,6 +45,7 @@ from sqlalchemy import create_engine
 
 
 logger = logging.getLogger(__name__)
+package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class GlastopfHoneypot(object):
@@ -164,6 +165,10 @@ class GlastopfHoneypot(object):
         if not os.path.isfile(os.path.join(self.work_dir, 'glastopf.cfg')):
             shutil.copyfile(os.path.join(m_path, 'glastopf/glastopf.cfg.dist'),
                         os.path.join(self.work_dir, 'glastopf.cfg'))
+
+        #copy emulator level data
+        emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
+        shutil.copytree(emulator_data_dir, 'data/')
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:

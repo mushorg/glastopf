@@ -2,9 +2,11 @@ from pymongo import MongoClient, uri_parser
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 import bson
+import os
 import uuid
 import json
 
+file_dir = os.path.dirname(os.path.abspath(__file__))
 
 def create_mongo_database(fill=True):
         db_name = 'glastopf-test-{0}'.format(str(uuid.uuid4())[0:10])
@@ -13,7 +15,7 @@ def create_mongo_database(fill=True):
 
         #read and insert test data into mongodb instance
         if fill:
-            data = open('testing/data/events_500.bson', 'r').read()
+            data = open(os.path.join(file_dir, 'data/events_500.bson'), 'r').read()
             for item in bson.decode_all(data):
                 del item['_id']
                 c[db_name].events.insert(item)
@@ -46,7 +48,7 @@ def populate_main_sql_testdatabase(engine):
     meta.create_all(engine)
 
     insert_dicts = []
-    data = open('testing/data/events_500.bson', 'r').read()
+    data = open(os.path.join(file_dir, 'data/events_500.bson'), 'r').read()
     for entry in bson.decode_all(data):
 
         for key, value in entry['request'].items():

@@ -19,6 +19,7 @@ import difflib
 import urllib
 import re
 import binascii
+import os
 
 from xml.dom.minidom import parse
 from xml.etree import ElementTree
@@ -45,9 +46,12 @@ class Query(object):
 
 class PreSQLiClassifier(object):
     # FIXME: Error handling for errors in the xml file
-    def __init__(self, path="modules/classification/sql_utils/patterns.xml"):
+    def __init__(self):
         # TODO: check if file exists
-        self.tree = parse(path)
+        #directory of sql.py
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        patterns_file = os.path.join(file_dir, 'sql_utils', 'patterns.xml')
+        self.tree = parse(patterns_file)
 
     def _get_patterns(self):
         patterns = self.tree.getElementsByTagName("pattern")
@@ -201,8 +205,10 @@ class SQLParser(object):
 
 class QueryComparer(object):
 
-    def __init__(self, path='modules/classification/sql_utils/queries.xml'):
-        tree = ElementTree.parse(path)
+    def __init__(self):
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        queries_file = os.path.join(file_dir, 'sql_utils', 'queries.xml')
+        tree = ElementTree.parse(queries_file)
         doc = tree.getroot()
         self.queries = doc.findall("query")
 

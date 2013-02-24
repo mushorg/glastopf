@@ -25,7 +25,7 @@ class FileServer(base_emulator.BaseEmulator):
         pass
 
     def handle(self, attack_event):
-        server_path = 'modules/handlers/emulators/server_files'
+        server_path = os.path.join(self.data_dir, 'server_files')
         request_file = attack_event.parsed_request.url.lstrip('/')
         if request_file == "":
             request_file = "index.html"

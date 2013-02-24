@@ -15,12 +15,13 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from glastopf.modules.handlers import base_emulator
+import os
 
 
 class TomcatManagerStatusHandler(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
-        tomcat_manager_path = 'modules/handlers/emulators/tomcat/manager_status.html'
+        tomcat_manager_path = os.path.join(self.data_dir, '/tomcat/manager_status.html')
         with open(tomcat_manager_path, 'r') as tomcat_manager_file:
             attack_event.response = tomcat_manager_file.read()
         return attack_event

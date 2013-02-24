@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from xml.etree import ElementTree
+import os
 
 
 class Response(object):
@@ -27,8 +28,10 @@ class Response(object):
 
 class SQLResponses(object):
     # FIXME: Error handling for errors in the xml file
-    def __init__(self, path="modules/classification/sql_utils/responses.xml"):
-        tree = ElementTree.parse(path)
+    def __init__(self):
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        responses_file = os.path.join(file_dir, 'responses.xml')
+        tree = ElementTree.parse(responses_file)
         doc = tree.getroot()
         self.xml_responses = doc.findall("response")
 

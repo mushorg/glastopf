@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from glastopf.modules.handlers import base_emulator
-
+import os
 
 class PHPInfoHandler(base_emulator.BaseEmulator):
 
@@ -28,7 +28,7 @@ class PHPInfoHandler(base_emulator.BaseEmulator):
         # vulnerable software version (ex: PHP v 4.4.4)
         # TODO some information inside the static file can be made dynamic, different for every honeypot installation
         # Ex: Server version, server ip, modules versions, and so on
-        robots_path = 'modules/handlers/emulators/phpinfo/phpinfo.html'
+        robots_path = os.path.join(self.data_dir, 'phpinfo/phpinfo.html')
         with open(robots_path, 'r') as robot_file:
             attack_event.response = robot_file.read()
         return attack_event
