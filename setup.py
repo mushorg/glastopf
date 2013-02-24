@@ -17,6 +17,7 @@ setup(
     include_package_data = True,
     author_email='',
     description='Web application honeypot',
+    test_suite = 'nose.collector',
     #TODO: Include all dependencies
     #TODO: Investigate the ANTLR, numpy and scipy issues in regards to virtualenv
     install_requires=['evnet', 'pyopenssl'],
