@@ -19,13 +19,9 @@ import unittest
 import sys
 import os
 
-from testing import test_honeypot
-from testing import test_emulators
-from testing import test_sqli
-from testing import test_dork_list
-from testing import test_classifiers
+from glastopf.testing import test_honeypot, test_dork_list, HTMLTestRunner
 
-from testing import HTMLTestRunner
+from glastopf.testing import test_sqli, test_emulators, test_classifiers
 
 if sys.version_info[1] == 6:
     test_list = unittest.TestSuite()
