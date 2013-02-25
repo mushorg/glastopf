@@ -20,8 +20,8 @@ import os
 
 class PHPInfoHandler(base_emulator.BaseEmulator):
 
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(PHPInfoHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
         # The phpinfo simulator returns a static fake phpinfo() page, with

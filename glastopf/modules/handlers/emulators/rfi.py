@@ -28,8 +28,11 @@ from glastopf.modules.handlers import base_emulator
 logger = logging.getLogger(__name__)
 
 class RFIEmulator(base_emulator.BaseEmulator):
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(RFIEmulator, self).__init__(data_dir)
+        self.files_dir = os.path.join(self.data_dir, 'files/')
+        if not os.path.exists(self.files_dir):
+            os.mkdir(self.files_dir)
 
     def extract_url(self, url):
         protocol_pattern = re.compile("=(ht|f)tps?", re.IGNORECASE)
@@ -44,8 +47,8 @@ class RFIEmulator(base_emulator.BaseEmulator):
 
     def store_file(self, injected_file):
         file_name = self.get_filename(injected_file)
-        if not os.path.exists("files/" + file_name):
-            with open("files/" + file_name, 'w+') as local_file:
+        if not os.path.exists(os.path.join(self.files_dir, file_name)):
+            with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(injected_file)
         return file_name
 

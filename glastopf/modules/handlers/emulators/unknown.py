@@ -30,6 +30,8 @@ if sys.getdefaultencoding() != 'utf-8':
 
 
 class DorkList(base_emulator.BaseEmulator):
+    def __init__(self, data_dir):
+        super(DorkList, self).__init__(data_dir)
 
     def _get_template(self, attack_event):
         # TODO: decode the file using chardet or even better create

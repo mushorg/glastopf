@@ -21,8 +21,8 @@ from glastopf.modules.handlers import base_emulator
 
 
 class FileServer(base_emulator.BaseEmulator):
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(FileServer, self).__init__(data_dir)
 
     def handle(self, attack_event):
         server_path = os.path.join(self.data_dir, 'server_files')

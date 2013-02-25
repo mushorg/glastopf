@@ -27,12 +27,13 @@ from glastopf.modules.handlers import base_emulator
 
 class SQLiEmulator(base_emulator.BaseEmulator):
     """Emulates a SQL injection vulnerability and a successful attack."""
-    def __init__(self):
+    def __init__(self, data_dir):
         self.query_cleaner = sql.QueryCleaner()
         self.pre_classifier = sql.PreSQLiClassifier()
         self.query_parser = sql.SQLParser()
         self.query_compare = sql.QueryComparer()
         self.sql_response = sql_responses.SQLResponses()
+        super(SQLiEmulator, self).__init__(data_dir)
 
     def handle(self, attack_event, rule="sql_stmt_list"):
         matched_patterns = []

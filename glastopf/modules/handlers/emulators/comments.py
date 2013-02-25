@@ -10,9 +10,8 @@ import glastopf.modules.processing.profiler as profiler
 
 
 class CommentPoster(base_emulator.BaseEmulator):
-    def __init__(self, data_dir=os.getcwd()):
-        self.data_dir = data_dir
-        pass
+    def __init__(self, data_dir):
+        super(CommentPoster, self).__init__(data_dir)
 
     def html_escape(self, comment):
         return cgi.escape(comment)

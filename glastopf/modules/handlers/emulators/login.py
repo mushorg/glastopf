@@ -25,9 +25,8 @@ from glastopf.modules.handlers import base_emulator
 
 
 class LoginEmulator(base_emulator.BaseEmulator):
-    def __init__(self, data_dir = os.getcwd()):
-        self.data_dir = data_dir
-        pass
+    def __init__(self, data_dir):
+        super(LoginEmulator, self).__init__(data_dir)
 
     def handle(self, attack_event):
         pages_dir = os.path.join(self.data_dir, 'dork_pages')
@@ -44,5 +43,5 @@ class LoginEmulator(base_emulator.BaseEmulator):
             with codecs.open(os.path.join(self.data_dir, 'comments.txt'), "r", "utf-8") as comments_txt:
                 template = Template(dork_page.read())
                 attack_event.response = template.safe_substitute(
-                                                login_msg=login_msg,
-                                                comments=comments_txt.read())
+                    login_msg=login_msg,
+                    comments=comments_txt.read())

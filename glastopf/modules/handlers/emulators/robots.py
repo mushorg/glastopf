@@ -21,8 +21,8 @@ import os
 
 class RobotsHandler(base_emulator.BaseEmulator):
 
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(RobotsHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
         robots_path = os.path.join(self.data_dir, 'robots/robots.txt')

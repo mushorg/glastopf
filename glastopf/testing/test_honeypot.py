@@ -18,6 +18,7 @@
 import unittest
 import socket
 import tempfile
+import shutil
 import os
 
 from glastopf.glastopf import GlastopfHoneypot
@@ -35,6 +36,13 @@ class TestHoneypotFunctionality(unittest.TestCase):
     Test set-up instantiates the honeypot.
     The main Test sends a request and checks the response."""
 
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        if os.path.isdir(self.tmpdir):
+            shutil.rmtree(self.tmpdir)
+
     def test_honeypot_mongo(self):
         """Objective: Testing overall Honeypot integration.
         Input: Loads the honeypot module with mongodb as main database.
@@ -50,7 +58,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         try:
             raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
             source_address = ["127.0.0.1", "12345"]
-            self.glastopf = GlastopfHoneypot(test=True, config=config_file)
+            self.glastopf = GlastopfHoneypot(workdir=self.tmpdir, test=True, config=config_file)
             self.glastopf.options["enabled"] = "False"
             print "Sending request: http://localhost:8080/"
             connection = FakeCon()
@@ -84,7 +92,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         try:
             raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
             source_address = ["127.0.0.1", "12345"]
-            self.glastopf = GlastopfHoneypot(test=True, config=config_file)
+            self.glastopf = GlastopfHoneypot(workdir=self.tmpdir, test=True, config=config_file)
             self.glastopf.options["enabled"] = "False"
             print "Sending request: http://localhost:8080/"
             connection = FakeCon()

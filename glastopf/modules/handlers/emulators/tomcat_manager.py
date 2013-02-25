@@ -19,6 +19,8 @@ import os
 
 
 class TomcatManagerHandler(base_emulator.BaseEmulator):
+    def __init__(self, data_dir):
+        super(TomcatManagerHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
         tomcat_manager_path = os.path.join(self.data_dir, 'tomcat/manager.html')

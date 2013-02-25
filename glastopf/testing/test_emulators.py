@@ -18,14 +18,16 @@
 import unittest
 import hashlib
 import uuid
+import shutil
 import os
 import tempfile
+import inspect
+import uuid
 import shutil
 
 from glastopf.modules.handlers.request_handler import RequestHandler
 import glastopf.modules.events.attack as attack
 import glastopf.modules.HTTP.util as util
-
 
 class TestEmulatorIntegration(unittest.TestCase):
     """Tests the honeypots request emulation modules.
@@ -34,9 +36,19 @@ class TestEmulatorIntegration(unittest.TestCase):
     def setUp(self):
         self.event = attack.AttackEvent()
         self.event.parsed_request = util.HTTPRequest()
+        self.tmp_dir = tempfile.mkdtemp()
+        self.data_dir = os.path.join(self.tmp_dir, 'data/')
+        package_directory = os.path.dirname(os.path.abspath(inspect.getfile(RequestHandler)))
+        #original data as stored with new glatopf installations
+        self.original_data_dir = os.path.join(package_directory, 'emulators/data/')
+        #copy the data to a isolated data directory
+        shutil.copytree(self.original_data_dir, self.data_dir)
 
     def tearDown(self):
         del self.event
+        if os.path.isdir(self.tmp_dir):
+            shutil.rmtree(self.tmp_dir)
+
 
     def test_dummy_emulator(self):
         """Objective: Tests the dummy emulator added to prove extensibility.
@@ -46,6 +58,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         print "Starting Dummy emulator module test"
         self.event.matched_pattern = "dummy"
         print "Loading module"
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         print "Trying to handle an event with the dummy module"
         emulator.handle(self.event)
@@ -61,12 +74,12 @@ class TestEmulatorIntegration(unittest.TestCase):
         Notes: Providing a unique favicon could improve the deception."""
         print "Starting favicon module test"
         self.event.matched_pattern = "favicon_ico"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         print "Sending request to the module: http://localhost:8080/favicon.ico"
         self.event.parsed_request.url = "/favicon.ico"
         emulator.handle(self.event)
-        with open('modules/handlers/emulators/favicon/favicon.ico', 'r') as favicon:
+        with open(os.path.join(self.original_data_dir, 'favicon/favicon.ico'), 'r') as favicon:
             data = favicon.read()
             local_hash = hashlib.md5(data).hexdigest()
             print "Calculate md5 hash from local favicon file:", local_hash
@@ -82,7 +95,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Expected Result: The passwd file from the virtual file system.
         Notes:"""
         print "Starting local file inclusion test"
-        with open("virtualdocs/linux/etc/passwd", 'r') as passwd_file:
+        with open(os.path.join(self.data_dir, "virtualdocs/linux/etc/passwd"), 'r') as passwd_file:
             passwd = passwd_file.read()
             local_hash = hashlib.md5(passwd).hexdigest()
             print "Hash of the local 'passwd' file:", local_hash
@@ -92,7 +105,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.event.matched_pattern = "lfi"
         self.event.response = ""
         print "Loading the emulator and handling the request."
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)
         remote_hash = hashlib.md5(self.event.response).hexdigest()
@@ -105,13 +118,13 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/phpmyadmin
         Expected Result: The PHPMyAdmin set-up page.
         Notes: This module is for a specific attack against PHPMyAdmin"""
-        with open('modules/handlers/emulators/phpmyadmin/script_setup.php', 'r') as setup_php:
+        with open(os.path.join(self.data_dir, 'phpmyadmin/script_setup.php'), 'r') as setup_php:
             page = setup_php.read()
             local_hash = hashlib.md5(page).hexdigest()
             print "Hash of the local 'script' file:", local_hash
         self.event.matched_pattern = "phpmyadmin"
         self.event.response = ""
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         print "Sending request:", "http://localhost:8080/phpmyadmin/setup.php"
         emulator.handle(self.event)
@@ -132,7 +145,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         print "Sending request:", "http://localhost:8080" + self.event.parsed_request.url
         self.event.matched_pattern = "rfi"
         self.event.response = ""
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)
         self.assertEqual(self.event.response, "test successful")
@@ -144,12 +157,12 @@ class TestEmulatorIntegration(unittest.TestCase):
         Expected Response: The robots.txt page.
         Notes: The robots.txt is provided by the honeypot"""
         print "Starting robot.txt request handling module"
-        with open('modules/handlers/emulators/robots/robots.txt', 'r') as robots_file:
+        with open(os.path.join(self.data_dir, 'robots/robots.txt'), 'r') as robots_file:
             robots = robots_file.read()
             local_hash = hashlib.md5(robots).hexdigest()
             print "Hash of the local 'robots' file:", local_hash
         self.event.matched_pattern = "robots"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         print "Sending request:", "http://localhost:8080/robots.txt"
         emulator.handle(self.event)
@@ -164,12 +177,12 @@ class TestEmulatorIntegration(unittest.TestCase):
         Expected Result: The styles.css file.
         Notes: Definitions used for the attacks surface style parameters."""
         print "Starting style.css emulator test"
-        with open('modules/handlers/emulators/style/style.css', 'r') as style_file:
+        with open(os.path.join(self.data_dir, 'style/style.css'), 'r') as style_file:
             style = style_file.read()
             local_hash = hashlib.md5(style).hexdigest()
             print "Hash of the local 'style' file:", local_hash
         self.event.matched_pattern = "style_css"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         print "Sending request:", "http://localhost:8080/style.css"
         emulator.handle(self.event)
@@ -183,31 +196,28 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/
         Expected Result: One of the generated attack surfaces.
         Notes:"""
-        tmp_data_dir = tempfile.mkdtemp()
-        os.makedirs(os.path.join(tmp_data_dir, 'dork_pages'))
-        tmp_file = os.path.join(tmp_data_dir, 'dork_pages', format(str(uuid.uuid4())))
-        try:
-            with open(tmp_file, 'w+') as f:
-                f.write("tmpfile")
-            print "Starting 'unknown' request emulation module"
-            self.event.parsed_request = util.HTTPRequest()
-            self.event.parsed_request.url = "/"
-            self.event.matched_pattern = "unknown"
-            self.event.response = ""
-            self.event.source_addr = ("127.0.0.1", "8080")
-            request_handler = RequestHandler(data_dir=tmp_data_dir)
-            emulator = request_handler.get_handler(self.event.matched_pattern)
-            print "Sending request:", "http://localhost:8080/"
-            emulator.handle(self.event)
-            remote_hash = hashlib.md5(self.event.response).hexdigest()
-            local_hash = hashlib.md5(emulator.template).hexdigest()
-            print "Hash of the local 'response' file:", local_hash
-            self.assertEqual(remote_hash, local_hash)
-            print "Return value:", remote_hash
-            print "matched a generated attack surface item."
-        finally:
-            if os.path.isdir(tmp_data_dir):
-                shutil.rmtree(tmp_data_dir)
+        os.mkdir(os.path.join(self.data_dir, 'dork_pages'))
+        tmp_file = os.path.join(self.data_dir, 'dork_pages', format(str(uuid.uuid4())))
+
+        with open(tmp_file, 'w+') as f:
+            f.write("tmpfile")
+        print "Starting 'unknown' request emulation module"
+        self.event.parsed_request = util.HTTPRequest()
+        self.event.parsed_request.url = "/"
+        self.event.matched_pattern = "unknown"
+        self.event.response = ""
+        self.event.source_addr = ("127.0.0.1", "8080")
+        request_handler = RequestHandler(self.data_dir)
+        emulator = request_handler.get_handler(self.event.matched_pattern)
+        print "Sending request:", "http://localhost:8080/"
+        emulator.handle(self.event)
+        remote_hash = hashlib.md5(self.event.response).hexdigest()
+        local_hash = hashlib.md5(emulator.template).hexdigest()
+        print "Hash of the local 'response' file:", local_hash
+        self.assertEqual(remote_hash, local_hash)
+        print "Return value:", remote_hash
+        print "matched a generated attack surface item."
+
 
     def test_phpcgi_source_code_disclosure_emulator(self):
         """Objective: Emulator testing for PHP CGI source code disclosure CVE-2012-1823
@@ -219,7 +229,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.event.parsed_request.parameters = "-s"
         self.event.matched_pattern = "php_cgi_rce"
         self.event.response = ""
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)
         self.assertEquals(self.event.response, """<code><span style="color: #000000">
@@ -231,13 +241,14 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost/-d+allow_url_include=on+-d+safe_mode=off+-d+open_basedir=off-d+auto_prepend_file=php://input POST: <?php echo("rce attempt"); ?>
         Expected Result: Remote command execution of a echo command
         Notes:"""
+        os.mkdir(os.path.join(self.data_dir, 'files/'))
         self.event.parsed_request = util.HTTPRequest()
         self.event.parsed_request.method = 'POST'
         self.event.parsed_request.url = "/index.php"
         self.event.parsed_request.parameters = "-d+allow_url_include=on+-d+safe_mode=off+-d+open_basedir=off-d+auto_prepend_file=php://input"
         self.event.matched_pattern = "php_cgi_rce"
         self.event.parsed_request.body = '<?php echo "testing"; ?>'
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)
         print "Return value:", self.event.response
@@ -253,7 +264,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.event.parsed_request.method = 'GET'
         self.event.parsed_request.url = "/info.php?param1"
         self.event.matched_pattern = "phpinfo"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)
         self.assertTrue("PHP Version " in self.event.response)

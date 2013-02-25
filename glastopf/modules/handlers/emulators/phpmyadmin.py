@@ -25,8 +25,8 @@ import os
 
 class PMAEmulator(base_emulator.BaseEmulator):
 
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(PMAEmulator, self).__init__(data_dir)
 
     def handle(self, attack_event, time_stamp=time.time()):
         path = os.path.join(self.data_dir, 'phpmyadmin/script_setup.php')

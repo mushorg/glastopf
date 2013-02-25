@@ -24,7 +24,7 @@ import os
 logger = logging.getLogger(__name__)
 
 class RequestHandler:
-    def __init__(self, data_dir=os.getcwd()):
+    def __init__(self, data_dir):
         self.data_dir = data_dir
 
     def get_handler(self, name):
@@ -39,5 +39,5 @@ class RequestHandler:
         else:
             for emulator in emulators:
                 if emulator.__module__.rsplit(".", 1)[1].strip() == name:
-                    return emulator()
+                    return emulator(data_dir=self.data_dir)
             return self.get_handler("unknown")

@@ -19,6 +19,8 @@ from glastopf.modules.handlers import base_emulator
 
 
 class TraceHandler(base_emulator.BaseEmulator):
+    def __init__(self, data_dir):
+        super(TraceHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
         attack_event.response += attack_event.raw_request

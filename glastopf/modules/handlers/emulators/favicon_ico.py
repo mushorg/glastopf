@@ -21,8 +21,8 @@ import os
 
 class FaviconHandler(base_emulator.BaseEmulator):
 
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(FaviconHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
         response_header = "HTTP/1.1 200 OK\r\n"

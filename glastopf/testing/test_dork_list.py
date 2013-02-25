@@ -224,8 +224,8 @@ class TestEmulatorDorkList(unittest.TestCase):
             db = database_mongo.Database(create_mongo_database)
         else:
             raise Exception("Unsupported database type: {0}".format(dbtype))
-        file_processor = DorkFileProcessor(db, dorks_file="testing/data/dorks_reduced.txt")
-
+        reduced_dorks_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'data/dorks_reduced.txt')
+        file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
         #setting the bar low for testing
         clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
         dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir)

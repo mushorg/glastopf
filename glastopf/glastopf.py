@@ -169,11 +169,14 @@ class GlastopfHoneypot(object):
         if not os.path.isfile(os.path.join(self.work_dir, 'glastopf.cfg')):
             logger.info('Copying glastopf.cfg to work directory.')
             shutil.copyfile(os.path.join(m_path, 'glastopf/glastopf.cfg.dist'),
-                        os.path.join(self.work_dir, 'glastopf.cfg'))
+                            os.path.join(self.work_dir, 'glastopf.cfg'))
+
+        #copy entire sandbox
+        shutil.copy(os.path.join(''))
 
         #copy emulator level data
         emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
-        shutil.copytree(emulator_data_dir, 'data/')
+        shutil.copytree(emulator_data_dir, os.path.join(self.work_dir, 'data/'))
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:
@@ -218,7 +221,7 @@ class GlastopfHoneypot(object):
                 self.MethodHandlers.GET
             )(attack_event.parsed_request)
             # Handle the request with the specific vulnerability module
-            request_handler = RequestHandler()
+            request_handler = RequestHandler(os.path.join(self.work_dir, 'data/'))
             emulator = request_handler.get_handler(attack_event.matched_pattern)
             emulator.handle(attack_event)
             # Logging the event

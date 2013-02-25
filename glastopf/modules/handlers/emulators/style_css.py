@@ -21,9 +21,11 @@ from glastopf.modules.handlers.base_emulator import package_directory
 
 
 class StyleHandler(base_emulator.BaseEmulator):
+    def __init__(self, data_dir):
+        super(StyleHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        css_file = os.path.join(self.data_dir, '/style/style.css')
+        css_file = os.path.join(self.data_dir, 'style/style.css')
         with open(css_file, 'r') as style_file:
             attack_event.response = style_file.read()
         return attack_event

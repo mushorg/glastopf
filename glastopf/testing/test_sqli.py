@@ -17,6 +17,9 @@
 
 import unittest
 import datetime
+import os
+import shutil
+import tempfile
 
 from glastopf.modules.handlers.request_handler import RequestHandler
 import glastopf.modules.events.attack as attack
@@ -33,9 +36,12 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.parsed_request.parameters_dict = {
                                                      "q": "SELECT A FROM B",
                                                      }
+        self.data_dir = tempfile.mkdtemp()
 
     def tearDown(self):
         del self.event
+        if os.path.isdir(self.data_dir):
+            shutil.rmtree(self.data_dir)
 
     def _get_test_request(self, attack_event):
         params = '&'.join(
@@ -52,7 +58,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: 121 matches the SELECT, 237 the three white spaces, 80 the column and table alias and 122 the FROM"""
         print "Starting SQL injection Lexer test..."
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
@@ -71,7 +77,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: The Parser turns the tokens into a query"""
         print "Starting SQL injection Parser test..."
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
@@ -89,7 +95,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: As there is no table b, the honeypot returns an error message."""
         print "Starting SQL injection module integration test..."
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
@@ -107,7 +113,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: The query is included in the error message."""
         print "Starting error based SQL injection test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      "q": "'",
@@ -128,7 +134,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: This query is MySQL specific."""
         print "Starting SQL user disclosure test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      "q": "SELECT user()",
@@ -149,7 +155,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: The query is MySQL specific."""
         print "Starting mysqld version disclosure test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      "q": "SELECT @@version",
@@ -170,7 +176,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: The query and identifying string is included in the error message."""
         print "Starting error based SQLMap injection test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      "q": ") AND (SELECT 8957 FROM(SELECT COUNT(*),CONCAT(0x3a6e676a3a,(SELECT (CASE WHEN (8957=8957) THEN 1 ELSE 0 END)),0x3a6f74633a,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.CHARACTER_SETS GROUP BY x)a) AND (4673=4673",
@@ -190,7 +196,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: """
         print "Starting time based injection test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      "q": ") AND SLEEP(1) AND (4673=4673",
@@ -213,7 +219,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: """
         print "Starting obfuscated time based injection test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      "q": ")%20aND%20SLeeP(1)%20And%20(4673%3D4673",
@@ -236,7 +242,7 @@ class TestSQLiEmulation(unittest.TestCase):
         Notes: The query and identifying string is included in the error message."""
         print "Starting error based JavaScript injection test"
         self.event.matched_pattern = "sqli"
-        request_handler = RequestHandler()
+        request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.parsed_request.parameters_dict = {
                                                      'q': '<script>alert("XSS");</script>',

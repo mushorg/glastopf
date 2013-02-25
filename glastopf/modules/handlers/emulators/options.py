@@ -20,8 +20,8 @@ from glastopf.modules.handlers import base_emulator
 
 class OPTIONSRequest(base_emulator.BaseEmulator):
 
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(OPTIONSRequest, self).__init__(data_dir)
 
     def handle(self, attack_event):
         attack_event.response = "HTTP/1.1 200 OK\r\nAllow: OPTIONS, GET, HEAD, POST\r\n\r\n"

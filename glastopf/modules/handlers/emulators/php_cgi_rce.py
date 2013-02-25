@@ -41,8 +41,11 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
 
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, data_dir):
+        super(PHPCGIRCE, self).__init__(data_dir)
+        self.files_dir = os.path.join(self.data_dir, 'files/')
+        if not os.path.exists(self.files_dir):
+            os.mkdir(self.files_dir)
 
     # TODO duplicate code from rfi.py, refactor it
     def get_filename(self, php_code):
@@ -51,10 +54,8 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
 
     def store_file(self, php_code):
         file_name = self.get_filename(php_code)
-        if not os.path.exists("files/"):
-            raise Exception("Relative directory files does not exists")
-        if not os.path.exists("files/" + file_name):
-            with open("files/" + file_name, 'w+') as local_file:
+        if not os.path.exists(os.path.join(self.files_dir, file_name)):
+            with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(php_code)
         return file_name
     

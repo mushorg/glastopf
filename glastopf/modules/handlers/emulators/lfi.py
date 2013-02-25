@@ -22,6 +22,9 @@ from glastopf.modules.handlers import base_emulator
 
 
 class LFIEmulator(base_emulator.BaseEmulator):
+    def __init__(self, data_dir):
+        super(LFIEmulator, self).__init__(data_dir)
+
     def virtualdocs_whitelist(self):
         whitelist = []
         for root, subFolders, files in os.walk(os.path.join(self.data_dir, 'virtualdocs/')):
