@@ -50,10 +50,10 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 class GlastopfHoneypot(object):
 
-    def __init__(self, test=False, config="glastopf.cfg"):
-        self.work_dir = os.getcwd()
+    def __init__(self, test=False, config="glastopf.cfg", workdir=os.getcwd()):
+        self.work_dir = workdir
         logger.info('Initializing Glastopf using "{0}" as work directory.'.format(self.work_dir))
-        self.create_empty_dirs()
+        self.prepare_workdir()
         self.test = test
         git_ref = "Unknown"
         if os.path.isfile('.git/refs/heads/master'):
@@ -159,10 +159,15 @@ class GlastopfHoneypot(object):
             #disable usage of main logging datbase
             return (None, dorkdb)
 
-    def create_empty_dirs(self):
+    def prepare_workdir(self):
+        #TODO: Check if files and directories exists before copying
+        #TODO: Add options to force (overwrite) existing files and directories
+
+        #pack to glastopf package
         m_path = os.path.dirname(pkgutil.get_loader('glastopf').filename)
 
         if not os.path.isfile(os.path.join(self.work_dir, 'glastopf.cfg')):
+            logger.info('Copying glastopf.cfg to work directory.')
             shutil.copyfile(os.path.join(m_path, 'glastopf/glastopf.cfg.dist'),
                         os.path.join(self.work_dir, 'glastopf.cfg'))
 
