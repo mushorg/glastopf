@@ -22,13 +22,9 @@ from glastopf.modules.handlers import base_emulator
 
 
 class LFIEmulator(base_emulator.BaseEmulator):
-
-    def __init__(self):
-        pass
-
     def virtualdocs_whitelist(self):
         whitelist = []
-        for root, subFolders, files in os.walk('virtualdocs/'):
+        for root, subFolders, files in os.walk(os.path.join(self.data_dir, 'virtualdocs/')):
             if ".git" in root:
                 continue
             for dir_file in files:
@@ -42,7 +38,7 @@ class LFIEmulator(base_emulator.BaseEmulator):
         try:
             pattern = re.compile(r'(\.\./)*')
             result = pattern.split(cleaned_path, maxsplit=1)
-            path = "virtualdocs/linux/%s" % result[2]
+            path = os.path.join(self.data_dir, 'virtualdocs/linux', result[2])
         except:
             path = None
         return path
