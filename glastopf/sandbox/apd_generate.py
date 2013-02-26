@@ -22,6 +22,7 @@ import apd_functions
 def output(s):
     print s
 
+
 FUNCTIONS = apd_functions.FUNCTIONS
 WHITELIST = apd_functions.WHITELIST
 
@@ -43,14 +44,15 @@ output("foreach ($functions as $function){")
 output("\t$rand_int = rand(100,999);")
 output("\trename_function($function, $function.'_'.$rand_int);")
 output("}\n")
-    
+
 int = 0
 for function, return_val in FUNCTIONS.items():
     parts = function.split(";")
     function_name = parts[0]
     function_args = ", ".join(parts[1:-1])
     rand_int = random.randint(100, 999)
-    output("override_function('%s', '%s', 'return %s_rep(%s);');" % (function_name, function_args, function_name, function_args))
+    output("override_function('%s', '%s', 'return %s_rep(%s);');" % (
+    function_name, function_args, function_name, function_args))
     output("function %s_rep(%s) {" % (function_name, function_args))
     if return_val == "None":
         return_val = "\treturn;"

@@ -27,6 +27,7 @@ from glastopf.modules.handlers import base_emulator
 
 logger = logging.getLogger(__name__)
 
+
 class RFIEmulator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(RFIEmulator, self).__init__(data_dir)
@@ -73,7 +74,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
     def handle(self, attack_event):
         if attack_event.parsed_request.method == 'GET':
             attack_event.file_name = self.download_file(
-                                        attack_event.parsed_request.url)
+                attack_event.parsed_request.url)
         elif attack_event.parsed_request.method == 'POST':
             # FIXME: I don't think this is going to work...
             """attack_event.file_name = self.download_file(

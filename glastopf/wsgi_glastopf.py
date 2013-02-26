@@ -17,6 +17,7 @@
 import glastopf
 from urllib import quote
 
+
 def reconstruct_request(environ):
     url = environ["REQUEST_METHOD"] + " "
     url += quote(environ.get('SCRIPT_NAME', ''))
@@ -28,6 +29,7 @@ def reconstruct_request(environ):
     request = url + header + "\r\n\r\n"
     return request
 
+
 def application(environ, start_response):
     request = reconstruct_request(environ)
     status = '200 OK' # HTTP Status
@@ -35,11 +37,13 @@ def application(environ, start_response):
     start_response(status, headers)
     glastopf_honeypot = glastopf.GlastopfHoneypot()
     # FIXME: Provide the real requesting IP address
-    response = glastopf_honeypot.handle_request(request, addr = "127.0.0.1").split("\r\n\r\n")[1]
+    response = glastopf_honeypot.handle_request(request, addr="127.0.0.1").split("\r\n\r\n")[1]
     return [response]
+
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
+
     httpd = make_server('', 8080, application)
     print "Listening on port 8080...."
     httpd.serve_forever()

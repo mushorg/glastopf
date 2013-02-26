@@ -27,6 +27,7 @@ from glastopf.modules.handlers import base_emulator
 
 class SQLiEmulator(base_emulator.BaseEmulator):
     """Emulates a SQL injection vulnerability and a successful attack."""
+
     def __init__(self, data_dir):
         self.query_cleaner = sql.QueryCleaner()
         self.pre_classifier = sql.PreSQLiClassifier()
@@ -43,7 +44,7 @@ class SQLiEmulator(base_emulator.BaseEmulator):
                 parameter = self.query_cleaner.solve_concat(parameter)
             clean_param = self.query_cleaner._hex_replace(parameter)
             matched_patterns.extend(
-                        self.pre_classifier.classify_request(clean_param))
+                self.pre_classifier.classify_request(clean_param))
             self.query_parser.parser_query(clean_param, rule)
             payload.append(clean_param)
         payload = ' '.join(payload)
@@ -57,9 +58,9 @@ class SQLiEmulator(base_emulator.BaseEmulator):
             pass
         if len(self.query_parser.tokens) > 0:
             best_query, best_ratio = self.query_compare.query_similarity(
-                                                    self.query_parser.tokens,
-                                                    payload)
-        #attack_event.response = self.query_parser.tokens, best_query, best_ratio
+                self.query_parser.tokens,
+                payload)
+            #attack_event.response = self.query_parser.tokens, best_query, best_ratio
         if len(matched_patterns) > 0:
             response = self.sql_response.get_response(matched_patterns[0].response)
             payload_response = re.sub('PAYLOAD',

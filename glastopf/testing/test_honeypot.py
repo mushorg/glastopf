@@ -25,8 +25,8 @@ from glastopf.glastopf import GlastopfHoneypot
 from glastopf.testing import helpers
 from sqlalchemy import create_engine
 
-class FakeCon(object):
 
+class FakeCon(object):
     def __init__(self):
         self.sock = None
 

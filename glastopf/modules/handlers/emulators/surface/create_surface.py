@@ -31,7 +31,6 @@ from glastopf.modules.handlers.emulators.surface import surface_html, dork_datab
 
 
 class SurfaceCreator(object):
-
     def __init__(self, config="glastopf.cfg"):
         self.config = ConfigObj(config)
         self.dork_db = dork_database.DorkDB()
@@ -92,7 +91,8 @@ class SurfaceCreator(object):
         loader = jinja2.FileSystemLoader("modules/handlers/emulators/surface/templates/default.html", encoding="utf-8")
         env = jinja2.Environment(loader)
         template = env.get_template()
-        dork_page = template.render(titel=choice(self.intitle_list)[0], form_URL="http://localhost:8080", body=body, footer="Footer Powered By")
+        dork_page = template.render(titel=choice(self.intitle_list)[0], form_URL="http://localhost:8080", body=body,
+                                    footer="Footer Powered By")
         page_md5 = hashlib.md5(dork_page).hexdigest()
         with codecs.open("modules/handlers/emulators/dork_list/pages/%s" % page_md5, "w", "utf-8") as dork_file:
             dork_file.write(dork_page)
@@ -126,7 +126,7 @@ class SurfaceCreator(object):
             return
         if sleep_time < 60:
             sleep_time = 60
-        # TODO: Improve this loop
+            # TODO: Improve this loop
         while True:
             time.sleep(sleep_time)
             old_dork_list = self.get_old_dork_pages_list(dirname)

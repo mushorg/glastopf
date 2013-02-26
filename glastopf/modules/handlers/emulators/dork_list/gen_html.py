@@ -52,7 +52,7 @@ def html_template(titlename, formURLname, bodycontent, footstr):
         </fieldset>
 </div></body>
 </html>"""
-)
+    )
     return template.safe_substitute(
-            dict(title=titlename, form_URL=formURLname, bodystr=bodycontent),
-            footer=footstr)
+        dict(title=titlename, form_URL=formURLname, bodystr=bodycontent),
+        footer=footstr)

@@ -19,6 +19,7 @@ import os
 import urlparse
 
 from xml.dom.minidom import parse
+
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -56,7 +57,7 @@ class Classifier(object):
 
     def parse_pattern(self, pattern):
         pattern_id = self.getText(pattern.getElementsByTagName("id")[0].childNodes)
-        pattern_string = self.getText(pattern.getElementsByTagName("patternString")[0].childNodes) 
+        pattern_string = self.getText(pattern.getElementsByTagName("patternString")[0].childNodes)
         pattern_description = pattern.getElementsByTagName("patternDescription")[0].childNodes[0].data
         pattern_module = pattern.getElementsByTagName("module")[0].childNodes[0].data
         parsed_pattern = RequestPattern(pattern_id, pattern_string,
@@ -103,7 +104,7 @@ class Classifier(object):
                 match = True
             elif parsed_request.method == "TRACE":
                 parsed_pattern.module = 'trace'
-                match = True 
+                match = True
             else:
                 parsed_pattern.module = 'unknown'
                 match = True

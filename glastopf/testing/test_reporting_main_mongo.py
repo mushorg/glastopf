@@ -28,7 +28,6 @@ from glastopf.testing import helpers
 
 
 class TestMongoMainDatbase(unittest.TestCase):
-
     def test_mongodb_insert(self):
 
         conn_string = helpers.create_mongo_database(fill=False)
@@ -39,21 +38,21 @@ class TestMongoMainDatbase(unittest.TestCase):
 
             #prepare attack event
             attack_event = attack.AttackEvent()
-            attack_event.event_time =  self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            attack_event.event_time = self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             attack_event.matched_pattern = "test_test"
             attack_event.source_addr = ("192.168.1.201", 12345)
             attack_event.parsed_request = util.HTTPRequest()
             attack_event.parsed_request.url = "/breadandbytter.php?a=b"
-            attack_event.parsed_request.method= "GET"
-            attack_event.parsed_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3', 'Connection': 'keep-alive'}
+            attack_event.parsed_request.method = "GET"
+            attack_event.parsed_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+                                                  'Connection': 'keep-alive'}
             attack_event.parsed_request.body = "some stuff"
 
             maindb.insert(attack_event)
 
-
             collection = MongoClient(conn_string)[db_name]['events']
             results = list(collection.find())
-            
+
             #Check if database returned the correct amount
             self.assertEqual(len(list(results)), 1)
 

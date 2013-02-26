@@ -23,17 +23,17 @@ import os
 import tempfile
 import inspect
 import helpers
-import uuid
-import shutil
 
 from glastopf.modules.handlers.request_handler import RequestHandler
 import glastopf.modules.events.attack as attack
 import glastopf.modules.HTTP.util as util
 
+
 class TestEmulatorIntegration(unittest.TestCase):
     """Tests the honeypots request emulation modules.
     General approach is to load the module, pass a request if needed and
     compare the modules return value with an expectation"""
+
     def setUp(self):
         self.event = attack.AttackEvent()
         self.event.parsed_request = util.HTTPRequest()
@@ -85,7 +85,7 @@ class TestEmulatorIntegration(unittest.TestCase):
             local_hash = hashlib.md5(data).hexdigest()
             print "Calculate md5 hash from local favicon file:", local_hash
             remote_hash = hashlib.md5(
-                        self.event.response.split('\r\n\r\n')[1]).hexdigest()
+                self.event.response.split('\r\n\r\n')[1]).hexdigest()
         self.assertEqual(remote_hash, local_hash)
         print "Return value", remote_hash,
         print "matched expectation."

@@ -58,7 +58,7 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
             with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(php_code)
         return file_name
-    
+
     def handle(self, attack_event):
 
         php_source_code_s = """<code><span style="color: #000000">
@@ -67,7 +67,7 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
 
         php_source_code_w = """<?php
 page = $_GET['page']; include(page); ?>"""
-        
+
         # php -h
         #   -s   Output HTML syntax highlighted source.
         #   -w   Output source with stripped comments and whitespace.
@@ -81,9 +81,8 @@ page = $_GET['page']; include(page); ?>"""
 
         # Handle remote code execution
         if attack_event.parsed_request.method == 'POST' and \
-        'auto_prepend_file=php://input' in attack_event.parsed_request.parameters and \
-        '-d' in attack_event.parsed_request.parameters:
-
+                        'auto_prepend_file=php://input' in attack_event.parsed_request.parameters and \
+                        '-d' in attack_event.parsed_request.parameters:
             # Read the PHP POST payload calculate the md5 checksum and save the file
             # Then call the PHP sandbox and return the expected results
             # TODO verify if it's a valid PHP code?

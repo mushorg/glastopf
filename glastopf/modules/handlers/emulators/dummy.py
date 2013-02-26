@@ -19,7 +19,6 @@ from glastopf.modules.handlers import base_emulator
 
 
 class DummyHandler(base_emulator.BaseEmulator):
-
     def __init__(self, data_dir):
         super(DummyHandler, self).__init__(data_dir)
 

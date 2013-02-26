@@ -27,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 
 class Database(object):
-
     def __init__(self, engine):
         self.engine = engine
         ipp.Base.metadata.create_all(self.engine)
@@ -51,7 +50,7 @@ class Database(object):
         except exc.OperationalError as e:
             message = str(e)[:35]
             logger.error("Error inserting attack event into main database: {0}".format(message))
-            
+
     def insert_profile(self, ip_profile):
         #print "last_event_time for ip %s:%s"%(
         #             ip_profile.ip, ip_profile.last_event_time)
@@ -63,7 +62,7 @@ class Database(object):
             self.session.rollback()
             message = str(e)[:35]
             logger.error("Error inserting profile into main database: {0}".format(message))
-        
+
     def update_db(self):
         try:
             self.session.commit()
@@ -71,28 +70,28 @@ class Database(object):
             self.session.rollback()
             message = str(e)[:35]
             logger.error("Error updating profile in main database: {0}".format(message))
-    
+
     def get_profile(self, source_ip):
         ip_profile = self.session.query(ipp.IPProfile).filter(
-                                 ipp.IPProfile.ip==source_ip).first()
+            ipp.IPProfile.ip == source_ip).first()
         return ip_profile
 
     def setup_mapping(self):
         meta = MetaData()
 
         self.events_table = Table('events', meta,
-        Column('id', Integer, primary_key=True, ),
-        Column('time', String),
-        Column('source', String),
-        Column('request_method', String),
-        Column('request_url', String),
-        Column('request_parameters', String),
-        Column('request_version', String),
-        Column('request_header', String),
-        Column('request_body', String),
-        Column('pattern', String),
-        Column('filename', String),
-        Column('response', String),
+                                  Column('id', Integer, primary_key=True, ),
+                                  Column('time', String),
+                                  Column('source', String),
+                                  Column('request_method', String),
+                                  Column('request_url', String),
+                                  Column('request_parameters', String),
+                                  Column('request_version', String),
+                                  Column('request_header', String),
+                                  Column('request_body', String),
+                                  Column('pattern', String),
+                                  Column('filename', String),
+                                  Column('response', String),
         )
 
         #only creates if it cant find the schema

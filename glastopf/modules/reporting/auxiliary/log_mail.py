@@ -23,7 +23,6 @@ from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogMail(BaseLogger):
-
     def __init__(self, config="glastopf.cfg", create_tables=True):
         conf_parser = ConfigParser()
         conf_parser.read(config)
@@ -44,7 +43,7 @@ class LogMail(BaseLogger):
         mail_msg += '%s %s' % (attack_event.parsed_request.method, attack_event.parsed_request.url)
         for header in attack_event.parsed_request.header.keys():
             mail_msg += '\n%s: %s' % (header, attack_event.parsed_request.header[header])
-        
+
         if attack_event.parsed_request.body:
             mail_msg += '\n\n%s' % attack_event.parsed_request.body
 
@@ -57,7 +56,7 @@ class LogMail(BaseLogger):
         msg['From'] = self.options["mail_from"]
         msg['To'] = self.options["mail_to"]
 
-        server = smtplib.SMTP('%s:%s' % (self.options["smtp_host"], self.options["smtp_port"]) )
+        server = smtplib.SMTP('%s:%s' % (self.options["smtp_host"], self.options["smtp_port"]))
         server.ehlo_or_helo_if_needed()
         server.starttls()
         server.ehlo_or_helo_if_needed()

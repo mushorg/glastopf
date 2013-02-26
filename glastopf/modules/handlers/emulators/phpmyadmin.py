@@ -24,7 +24,6 @@ import os
 
 
 class PMAEmulator(base_emulator.BaseEmulator):
-
     def __init__(self, data_dir):
         super(PMAEmulator, self).__init__(data_dir)
 
@@ -36,6 +35,6 @@ class PMAEmulator(base_emulator.BaseEmulator):
         m.update("%d" % time_stamp)
         page_template = Template(self.page)
         attack_event.response += page_template.substitute(
-                                                token_value=m.hexdigest()
-                                                )
+            token_value=m.hexdigest()
+        )
         return attack_event

@@ -25,13 +25,11 @@ logger = logging.getLogger(__name__)
 
 
 class ParsingError(Exception):
-
     def __init__(self, response_code):
         self.response_code = response_code
 
 
 class HTTPRequest(object):
-
     def __init__(self):
         self.method = "GET"
         self.url = "/"
@@ -42,18 +40,17 @@ class HTTPRequest(object):
 
     def request_dict(self):
         request_dict = {
-                        "method": self.method,
-                        "url": self.url,
-                        "parameters": self.parameters,
-                        "version": self.version,
-                        "header": self.header,
-                        "body": self.body
-                        }
+            "method": self.method,
+            "url": self.url,
+            "parameters": self.parameters,
+            "version": self.version,
+            "header": self.header,
+            "body": self.body
+        }
         return request_dict
 
 
 class HTTPParser(object):
-
     def __init__(self, ):
         pass
 
@@ -67,7 +64,8 @@ class HTTPParser(object):
             else:
                 continue
         return header_dict
-    # TODO: add body parser function
+
+        # TODO: add body parser function
 
     def parse_request(self, request):
         # FIXME: Error handling for malformed HTTP requests
@@ -76,7 +74,8 @@ class HTTPParser(object):
         try:
             request = unicodedata.normalize('NFKD', request.decode(encoding['encoding'])).encode('ascii')
         except:
-            logger.exception("request.decode({0}) failed, fall back to decode with latin1.".format(encoding['encoding']))
+            logger.exception(
+                "request.decode({0}) failed, fall back to decode with latin1.".format(encoding['encoding']))
             request = unicodedata.normalize('NFKD', request.decode('latin1')).encode('ascii', 'ignore')
         parsed_request = HTTPRequest()
         try:
@@ -121,15 +120,15 @@ class HTTPServerResponse():
     # TODO: Make header customizable
     def __init__(self, response_code):
         self.response_header = {
-                                "status_line": "HTTP/1.1 {0}\r\n".format(response_code),
-                                "connection": "Connection: close\r\n",
-                                "content_length": "Content-Length: ",
-                                "content_type": "Content-Type: text/html; charset=UTF-8\r\n\r\n",
-                            }
+            "status_line": "HTTP/1.1 {0}\r\n".format(response_code),
+            "connection": "Connection: close\r\n",
+            "content_length": "Content-Length: ",
+            "content_type": "Content-Type: text/html; charset=UTF-8\r\n\r\n",
+        }
         self.trace_header = (
-                         "HTTP/1.1 200 OK \r\n"
-                         "Connection: close\r\n"
-                         "Content-Type: message/http\r\n\r\n")
+            "HTTP/1.1 200 OK \r\n"
+            "Connection: close\r\n"
+            "Content-Type: message/http\r\n\r\n")
 
     def get_header(self, attack_event):
         if attack_event.parsed_request.method.lower() == 'trace':

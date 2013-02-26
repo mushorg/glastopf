@@ -20,7 +20,6 @@ import os
 
 
 class FaviconHandler(base_emulator.BaseEmulator):
-
     def __init__(self, data_dir):
         super(FaviconHandler, self).__init__(data_dir)
 

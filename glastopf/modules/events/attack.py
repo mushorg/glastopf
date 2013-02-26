@@ -19,7 +19,6 @@ from datetime import datetime
 
 
 class AttackEvent(object):
-
     def __init__(self):
         self.sensor_add = ("127.0.0.1", "8080")
         self.parsed_request = None
@@ -32,11 +31,11 @@ class AttackEvent(object):
 
     def event_dict(self):
         event_dict = {
-                    "time": self.event_time,
-                    "source": self.source_addr,
-                    "request": self.parsed_request.request_dict(),
-                    "pattern": self.matched_pattern,
-                    "filename": self.file_name,
-                    "response": self.response
-                    }
+            "time": self.event_time,
+            "source": self.source_addr,
+            "request": self.parsed_request.request_dict(),
+            "pattern": self.matched_pattern,
+            "filename": self.file_name,
+            "response": self.response
+        }
         return event_dict

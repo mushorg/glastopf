@@ -26,7 +26,6 @@ import glastopf.modules.HTTP.util as util
 
 
 class TestSQLAlchemy(unittest.TestCase):
-
     def test_sqla_insert(self):
         #in-memory sqlite database
         sqla_engine = create_engine("sqlite:///")
@@ -34,13 +33,14 @@ class TestSQLAlchemy(unittest.TestCase):
 
         #prepare attack event
         attack_event = attack.AttackEvent()
-        attack_event.event_time =  self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        attack_event.event_time = self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         attack_event.matched_pattern = "test_test"
         attack_event.source_addr = ("192.168.1.201", 12345)
         attack_event.parsed_request = util.HTTPRequest()
         attack_event.parsed_request.url = "/breadandbytter.php?a=b"
-        attack_event.parsed_request.method= "GET"
-        attack_event.parsed_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3', 'Connection': 'keep-alive'}
+        attack_event.parsed_request.method = "GET"
+        attack_event.parsed_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+                                              'Connection': 'keep-alive'}
         attack_event.parsed_request.body = "some stuff"
 
         #insert attack event

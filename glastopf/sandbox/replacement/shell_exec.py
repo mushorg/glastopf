@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-def call():    
+def call():
     function = """\tif ($cmd == 'id') {
 \t\t$ret = array('uid=0(root) gid=0(root) groups=0(root)',);
 \t}

@@ -74,7 +74,7 @@ class Database(object):
                                   Column('count', Integer),
                                   Column('firsttime', String),
                                   Column('lasttime', String),
-                                  )
+            )
         meta.create_all(engine)
         return tables
 

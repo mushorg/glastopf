@@ -21,7 +21,6 @@ from glastopf.modules.handlers.emulators.dork_list import mnem_service
 
 
 class TestMnemosyneService(unittest.TestCase):
-
     def test_extractions(self):
         """
         Basic test to check if we can extract dorks from the mnemosyne dorks service.

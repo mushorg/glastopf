@@ -18,8 +18,8 @@
 from glastopf.modules.handlers import base_emulator
 import os
 
-class PHPInfoHandler(base_emulator.BaseEmulator):
 
+class PHPInfoHandler(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(PHPInfoHandler, self).__init__(data_dir)
 

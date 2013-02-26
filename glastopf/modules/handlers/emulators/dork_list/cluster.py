@@ -1,10 +1,8 @@
-
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.cluster import KMeans
 
 
 class Cluster(object):
-
     def __init__(self, pattern, n_clusters, max_iter, n_init, min_df=2):
         self.pattern = pattern
         self.n_clusters = n_clusters
@@ -30,6 +28,7 @@ class Cluster(object):
     def cluster(self, url_list):
         vectorizer = CountVectorizer(preprocessor=self.preprocessor, token_pattern=self.pattern, min_df=self.min_df)
         X = vectorizer.fit_transform(url_list)
-        km = KMeans(n_clusters=self.n_clusters, max_iter=self.max_iter, verbose=0, n_init=self.n_init, precompute_distances=True)
+        km = KMeans(n_clusters=self.n_clusters, max_iter=self.max_iter, verbose=0, n_init=self.n_init,
+                    precompute_distances=True)
         km.fit(X)
         return self.write_clusters(url_list, km.labels_)

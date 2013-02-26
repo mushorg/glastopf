@@ -22,7 +22,6 @@ import Queue
 import threading
 from ConfigParser import ConfigParser
 import logging.handlers
-import pkgutil
 
 from modules.HTTP import util
 import modules.HTTP.method_handler as method_handler
@@ -48,19 +47,13 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class GlastopfHoneypot(object):
-
-    def __init__(self, test=False, config="glastopf.cfg", workdir=os.getcwd()):
-        self.work_dir = workdir
+    def __init__(self, test=False, config="glastopf.cfg", work_dir=os.getcwd()):
+        logger.info('Initializing Glastopf using "{0}" as work directory.'.format(work_dir))
+        self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
-        logger.info('Initializing Glastopf using "{0}" as work directory.'.format(self.work_dir))
+
         self.prepare_environment()
         self.test = test
-        git_ref = "Unknown"
-        if os.path.isfile('.git/refs/heads/master'):
-            with open('.git/refs/heads/master', 'r') as f:
-                git_ref = f.readline().rstrip()
-
-        logger.info('Starting Glastopf (Git: {0})'.format(git_ref))
 
         conf_parser = ConfigParser()
         conf_parser.read(config)
@@ -203,7 +196,7 @@ class GlastopfHoneypot(object):
         client_ip = client_ip.split(',')[-1]
         if client_ip == 'unknown':
             client_ip = '0.0.0.0'
-        # Note: the port number is not relevant in this case
+            # Note: the port number is not relevant in this case
         attack_event.source_addr = (client_ip, addr[1])
 
     def handle_request(self, raw_request, addr, connection):
@@ -223,12 +216,12 @@ class GlastopfHoneypot(object):
             else:
                 attack_event.source_addr = addr
             logger.info("{0} requested {1} {2} on {3}".format(
-                        attack_event.source_addr[0],
-                        attack_event.parsed_request.method,
-                        attack_event.parsed_request.url,
-                        attack_event.parsed_request.header.get('Host', "None")
-                        )
-                        )
+                attack_event.source_addr[0],
+                attack_event.parsed_request.method,
+                attack_event.parsed_request.url,
+                attack_event.parsed_request.header.get('Host', "None")
+            )
+            )
             # Handle the HTTP request method
             attack_event.matched_pattern = getattr(
                 self.MethodHandlers,

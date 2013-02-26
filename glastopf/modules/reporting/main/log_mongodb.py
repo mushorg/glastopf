@@ -23,12 +23,11 @@ logger = logging.getLogger(__name__)
 
 
 class Database(object):
-
     def __init__(self, connection_string):
 
-    	uri_dict = uri_parser.parse_uri(connection_string)
-    	if not uri_dict['database']:
-    		raise Exception("Invalid Mongo URI. Database name must be specified.")
+        uri_dict = uri_parser.parse_uri(connection_string)
+        if not uri_dict['database']:
+            raise Exception("Invalid Mongo URI. Database name must be specified.")
 
         try:
             client = MongoClient(connection_string)

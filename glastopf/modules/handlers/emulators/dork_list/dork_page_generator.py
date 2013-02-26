@@ -145,7 +145,7 @@ class DorkPageGenerator(object):
             dorks = self.mnem_service.get_dorks()
             if len(dorks) > 0:
                 #all went well, do not extract inurl from file
-                ignore=('inurl')
+                ignore = ('inurl')
             else:
                 #something went wrong (nothing extracted from mnemosyne), extract all types from file
                 ignore = ()

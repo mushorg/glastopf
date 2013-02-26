@@ -37,7 +37,7 @@ class HTTPMethods(object):
     def HEAD(self, parsed_request):
         # TODO: Return the proper HEAD respone
         return "head"
-    
+
     def TRACE(self, parsed_request):
         return "trace"
 

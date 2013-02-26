@@ -19,7 +19,6 @@ from glastopf.modules.handlers import base_emulator
 
 
 class OPTIONSRequest(base_emulator.BaseEmulator):
-
     def __init__(self, data_dir):
         super(OPTIONSRequest, self).__init__(data_dir)
 

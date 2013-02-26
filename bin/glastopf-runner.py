@@ -5,12 +5,12 @@ from ConfigParser import ConfigParser
 import logging.handlers
 import shutil
 import pkgutil
+import argparse
 
 from evnet import loop, unloop, listenplain
 from evnet.util import EventGen
 from evnet.promise import Promise
 from glastopf.glastopf import GlastopfHoneypot
-import argparse
 
 
 logger = logging.getLogger()
@@ -97,6 +97,7 @@ def setup_logging(logconsole, logfile):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Glastopf runner')
+    #defaults to current directory (aka. working directory)
     parser.add_argument('--workdir', dest='workdir', default=os.getcwd())
 
     args = parser.parse_args()
@@ -119,7 +120,7 @@ if __name__ == '__main__':
 
     host = conf_parser.get("webserver", "host")
     port = conf_parser.getint("webserver", "port")
-    a = WebSockListener(host, port, parser.workdir)
+    a = WebSockListener(host, port, args.workdir)
 
     def new_conn(c):
         def onready():

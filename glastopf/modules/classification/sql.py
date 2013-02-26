@@ -61,21 +61,21 @@ class PreSQLiClassifier(object):
         rc = []
         for node in nodelist:
             if (node.nodeType == node.TEXT_NODE or
-                    node.nodeType == node.CDATA_SECTION_NODE):
+                        node.nodeType == node.CDATA_SECTION_NODE):
                 rc.append(node.data)
                 break
         return ''.join(rc)
 
     def _parse_pattern(self, pattern):
         pattern_id = self._getText(
-                        pattern.getElementsByTagName("id")[0].childNodes)
+            pattern.getElementsByTagName("id")[0].childNodes)
         pattern_string = self._getText(
-                        pattern.getElementsByTagName("string")[0].childNodes)
+            pattern.getElementsByTagName("string")[0].childNodes)
         db = self._getText(pattern.getElementsByTagName("db")[0].childNodes)
         response = self._getText(
-                        pattern.getElementsByTagName("response")[0].childNodes)
+            pattern.getElementsByTagName("response")[0].childNodes)
         parsed_pattern = Pattern(
-                        pattern_id, pattern_string, db, response)
+            pattern_id, pattern_string, db, response)
         return parsed_pattern
 
     def _chr_rep(self, match):
@@ -106,7 +106,6 @@ class PreSQLiClassifier(object):
 
 
 class QueryCleaner(object):
-
     def __init__(self):
         pass
 
@@ -147,13 +146,12 @@ class QueryCleaner(object):
     def solve_concat(self, query):
         concat = self._find_concat(query)
         clean_params = self._process_concat_params(
-                                self._parenthetic_contents(concat)[1])
+            self._parenthetic_contents(concat)[1])
         solved_query = query.replace(concat, ''.join(clean_params))
         return solved_query
 
 
 class SQLParser(object):
-
     def __init__(self):
         self.parser = None
 
@@ -204,7 +202,6 @@ class SQLParser(object):
 
 
 class QueryComparer(object):
-
     def __init__(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))
         queries_file = os.path.join(file_dir, 'sql_utils', 'queries.xml')

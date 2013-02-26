@@ -72,10 +72,11 @@ class LogSURFcertIDS(BaseLogger):
             "ptype_useragent": 62,
             "ptype_host": 63,
             "ptype_pattern": 64,
-            }
+        }
         if self.options['enabled'] == 'True':
             try:
                 import psycopg2
+
                 self.connection = psycopg2.connect(
                     "host=%s port=%s user=%s password=%s dbname=%s" % (
                         self.options['host'],
@@ -111,66 +112,66 @@ class LogSURFcertIDS(BaseLogger):
         cursor.execute("""
             SELECT surfids3_attack_add(%s, %s, %s, %s, %s, NULL, %s);
             """,
-            (
-            severity,
-            str(attack_event.source_addr[0]),
-            str(attack_event.source_addr[1]),
-            str(attack_event.sensor_addr[0]),
-            str(attack_event.sensor_addr[1]),
-            self.options["atype"]
-            )
+                       (
+                           severity,
+                           str(attack_event.source_addr[0]),
+                           str(attack_event.source_addr[1]),
+                           str(attack_event.sensor_addr[0]),
+                           str(attack_event.sensor_addr[1]),
+                           self.options["atype"]
+                       )
         )
         attackid = cursor.fetchall()[0]
         if attackid > 0:
             cursor.execute("""
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                (
-                attackid,
-                str(attack_event.sensor_addr[0]),
-                self.options["ptype_request"],
-                attack_event.parsed_request.url
-                )
+                           (
+                               attackid,
+                               str(attack_event.sensor_addr[0]),
+                               self.options["ptype_request"],
+                               attack_event.parsed_request.url
+                           )
             )
             cursor.execute("""
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                (
-                attackid,
-                str(attack_event.sensor_addr[0]),
-                self.options["ptype_referer"],
-                attack_event.parsed_request.header.get('Referer', 'None')
-                )
+                           (
+                               attackid,
+                               str(attack_event.sensor_addr[0]),
+                               self.options["ptype_referer"],
+                               attack_event.parsed_request.header.get('Referer', 'None')
+                           )
             )
             cursor.execute("""
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                (
-                attackid,
-                str(attack_event.sensor_addr[0]),
-                self.options["ptype_useragent"],
-                attack_event.parsed_request.header.get('User-Agent', 'None')
-                )
+                           (
+                               attackid,
+                               str(attack_event.sensor_addr[0]),
+                               self.options["ptype_useragent"],
+                               attack_event.parsed_request.header.get('User-Agent', 'None')
+                           )
             )
             cursor.execute("""
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                (
-                attackid,
-                str(attack_event.sensor_addr[0]),
-                self.options["ptype_host"],
-                attack_event.parsed_request.header.get('Host', 'None')
-                )
+                           (
+                               attackid,
+                               str(attack_event.sensor_addr[0]),
+                               self.options["ptype_host"],
+                               attack_event.parsed_request.header.get('Host', 'None')
+                           )
             )
             cursor.execute("""
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                (
-                attackid,
-                str(attack_event.sensor_addr[0]),
-                self.options["ptype_pattern"],
-                attack_event.matched_pattern
-                )
+                           (
+                               attackid,
+                               str(attack_event.sensor_addr[0]),
+                               self.options["ptype_pattern"],
+                               attack_event.matched_pattern
+                           )
             )
         self.connection.commit()
         cursor.close()

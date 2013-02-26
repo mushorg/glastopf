@@ -39,7 +39,7 @@ class TestClassifier(unittest.TestCase):
         parsed_request.method = 'GET'
         parsed_request.url = '/robots.txt'
         parsed_request.version = 'HTTP/1.0'
-        
+
         matched_pattern = self.requestClassifier.classify_request(parsed_request)
         self.assertTrue(matched_pattern == 'robots')
 

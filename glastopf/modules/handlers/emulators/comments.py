@@ -27,7 +27,7 @@ class CommentPoster(base_emulator.BaseEmulator):
         with codecs.open(os.path.join(pages_path, dork_page)) as dork_page:
             try:
                 comment = (parse_qs(attack_event.parsed_request.body)
-                            ['comment'][0])
+                           ['comment'][0])
                 clean_comment = self.html_escape(comment)
                 clean_comment = "<br/><br/>" + clean_comment
                 comment = "<br/><br/>" + comment
@@ -44,5 +44,5 @@ class CommentPoster(base_emulator.BaseEmulator):
                 display_comments = str(ip_comments) + str(general_comments)
                 template = Template(dork_page.read())
                 attack_event.response = template.safe_substitute(
-                                                login_msg="",
-                                                comments=display_comments)
+                    login_msg="",
+                    comments=display_comments)

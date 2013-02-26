@@ -22,8 +22,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class Mnem_Service():
 
+class Mnem_Service():
     #yes google hackers, these credentials are left here by purpose!
     def get_dorks(self, username='glastopf', password='glastopf', limit=1000):
         base_url = 'https://mnemosyne.honeycloud.net:8282'
@@ -54,6 +54,6 @@ class Mnem_Service():
         #align with glastopf db setup
         return_list = []
         for item in dorks:
-            return_list.append( {'content': item['content'],
-                                 'table': item['type']})
+            return_list.append({'content': item['content'],
+                                'table': item['type']})
         return return_list

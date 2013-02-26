@@ -73,7 +73,7 @@ class TestEmulatorDorkList(unittest.TestCase):
             dork_generator.collect_dork(attack_event)
             print "Done collecting the path from the event and writing to the database."
             sql = "SELECT * FROM inurl WHERE content = :x"
-            result = engine.connect().execute(sql,  x='/thiswillNeVeRHaPPend.php').fetchall()
+            result = engine.connect().execute(sql, x='/thiswillNeVeRHaPPend.php').fetchall()
             print "Done fetching the entries matching the request URL"
             self.assertTrue(len(result) > 0)
             print "Number of entries in the database matching our URL:",
@@ -231,18 +231,18 @@ class TestEmulatorDorkList(unittest.TestCase):
         dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir)
         return (db, engine, dork_generator)
 
-    # def test_fetch_dorks(self):
-    #     """Objective: Fetch vulnerability information from an external source.
-    #     Input: Exploit database dump from http://exploit-db.com. The report contains the vulnerable path.
-    #     Expected Results: New vulnerable paths are extracted from the input.
-    #     Notes: The data is extracted using a regular expression from 8665 vulnerability reports.
-    #     Reports are located in 'modules/handlers/emulators/dork_list/archive/platforms/php/webapps'"""
-    #     print "Starting external dork source test."
-    #     rexp = remote_exploits.ExploitDB()
-    #     rexp.get_dorks()
-    #     print "Done fetching and processing dorks."
-    #     self.assertTrue(len(rexp.vuln_list) > 0)
-    #     self.assertTrue(len(rexp.rfi_list) > 0)
-    #     print 'We found:', len(rexp.vuln_list), 'vulnerable paths and',
-    #     print len(rexp.rfi_list), 'RFI specific ones',
-    #     print "which equates our expectation."
+        # def test_fetch_dorks(self):
+        #     """Objective: Fetch vulnerability information from an external source.
+        #     Input: Exploit database dump from http://exploit-db.com. The report contains the vulnerable path.
+        #     Expected Results: New vulnerable paths are extracted from the input.
+        #     Notes: The data is extracted using a regular expression from 8665 vulnerability reports.
+        #     Reports are located in 'modules/handlers/emulators/dork_list/archive/platforms/php/webapps'"""
+        #     print "Starting external dork source test."
+        #     rexp = remote_exploits.ExploitDB()
+        #     rexp.get_dorks()
+        #     print "Done fetching and processing dorks."
+        #     self.assertTrue(len(rexp.vuln_list) > 0)
+        #     self.assertTrue(len(rexp.rfi_list) > 0)
+        #     print 'We found:', len(rexp.vuln_list), 'vulnerable paths and',
+        #     print len(rexp.rfi_list), 'RFI specific ones',
+        #     print "which equates our expectation."

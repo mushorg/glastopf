@@ -7,7 +7,6 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class DorkFileProcessor(object):
-
     def __init__(self, dorkdb=None, dorks_file=os.path.join(package_directory, 'data/dorks.txt')):
         self.dorkdb = dorkdb
         self.dorks_file = dorks_file

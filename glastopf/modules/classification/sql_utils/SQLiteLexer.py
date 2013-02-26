@@ -3,7 +3,7 @@
 import sys
 from antlr3 import *
 from antlr3.compat import set, frozenset
-                         
+
 #package org.tmatesoft.sqljet.core.internal.lang;
 
 
@@ -12,245 +12,244 @@ from antlr3.compat import set, frozenset
 HIDDEN = BaseRecognizer.HIDDEN
 
 # token types
-ROW=183
-BLOB_LITERAL=7
-TYPE_PARAMS=35
-NOT=43
-EXCEPT=120
-FOREIGN=163
-EOF=-1
-STATEMENT=32
-TYPE=34
-RPAREN=50
-CREATE=151
-STRING_LITERAL=31
-IS_NULL=25
-USING=133
-BIND=5
-CREATE_TRIGGER=15
-BEGIN=141
-REGEXP=62
-ANALYZE=108
-FUNCTION_LITERAL=19
-CONFLICT=150
-APOSTROPHE=188
-LESS_OR_EQ=65
-ATTACH=105
-VIRTUAL=152
-D=195
-E=196
-F=197
-ID_QUOTED=233
-G=198
-BLOB=92
-A=192
-B=193
-C=194
-ASC=112
-L=203
-M=204
-N=205
-O=206
-TRANSACTION=145
-KEY=159
-H=199
-BIND_NAME=6
-I=200
-ELSE=85
-J=201
-K=202
-U=212
-T=211
-IN_VALUES=22
-W=214
-UNDERSCORE=191
-V=213
-Q=208
-P=207
-S=210
-R=209
-ROLLBACK=101
-FAIL=103
-RESTRICT=166
-Y=216
-X=215
-Z=217
-GROUP=124
-INTERSECT=119
-DROP_INDEX=16
-WS=237
-PLAN=39
-ALIAS=4
-END=86
-RPAREN_SQUARE=190
-CONSTRAINT=157
-RENAME=171
-ALTER=170
-ID_PLAIN=227
-STRING_CORE_DOUBLE=222
-ISNULL=52
-TABLE=153
-FLOAT=90
-STRING_CORE_SINGLE=221
-ID_QUOTED_CORE_SQUARE=229
-NOTNULL=53
-NOT_EQUALS=58
-NOT_NULL=27
-LPAREN=48
-ASTERISK=74
-GREATER_OR_EQ=67
-AT=98
-DOUBLE_PIPE=77
-AS=83
-SLASH=75
-IS_NOT=26
-THEN=88
-ID_QUOTED_CORE=228
-OFFSET=116
-REPLACE=111
-LEFT=127
-COLUMN=173
-PLUS=72
-PIPE=71
-EXISTS=156
-LIKE=60
-COLLATE=79
-ADD=172
-INTEGER=89
-OUTER=128
-BY=42
-DEFERRABLE=167
-TO=147
-ID_CORE=226
-AMPERSAND=70
-SET=139
-HAVING=125
-MINUS=73
-IGNORE=100
-SEMI=36
-UNION=117
-COLUMN_CONSTRAINT=8
-COLON=97
-FLOAT_EXP=234
-COLUMNS=10
-COMMIT=146
-IN_TABLE=23
-DATABASE=106
-VACUUM=110
-DROP=169
-DETACH=107
-WHEN=87
-ID_QUOTED_APOSTROPHE=232
-STRING_DOUBLE=224
-STRING_SINGLE=223
-NATURAL=126
-BETWEEN=56
-OPTIONS=28
-STRING=91
-CAST=82
-STRING_CORE=220
-TABLE_CONSTRAINT=33
-ID_LITERAL=21
-CURRENT_TIME=93
-TRIGGER=176
-CASE=84
-EQUALS=51
-CASCADE=165
-RELEASE=149
-EXPLAIN=37
-GREATER=66
-ESCAPE=46
-INSERT=134
-SAVEPOINT=148
-LESS=64
-RAISE=99
-LPAREN_SQUARE=189
-EACH=182
-COMMENT=235
-ABORT=102
-SELECT=121
-INTO=135
-UNIQUE=161
-GLOB=61
-VIEW=174
-LINE_COMMENT=236
-NULL=55
-QUOTE_DOUBLE=186
-ON=132
-MATCH=63
-PRIMARY=158
-DELETE=140
-OF=180
-SHIFT_LEFT=68
-SHIFT_RIGHT=69
-INTEGER_LITERAL=24
-FUNCTION_EXPRESSION=20
-OR=44
-QUERY=38
-CHECK=162
-QUOTE_SINGLE=187
-STRING_ESCAPE_DOUBLE=219
-FROM=122
-DISTINCT=81
-TEMPORARY=154
-CURRENT_DATE=94
-BACKSLASH=184
-DOLLAR=185
-WHERE=123
-CONSTRAINTS=11
-COLUMN_EXPRESSION=9
-INNER=129
-STRING_ESCAPE_SINGLE=218
-ORDER=114
-LIMIT=115
-PRAGMA=104
-UPDATE=138
-FOR=181
-DEFERRED=142
-SELECT_CORE=30
-EXCLUSIVE=144
-AND=45
-ID=80
-CROSS=130
-IF=155
-INDEX=175
-TILDA=78
-IN=47
-REFERENCES=164
-CREATE_TABLE=13
-COMMA=49
-IS=54
-ALL=118
-DOT=40
-CURRENT_TIMESTAMP=95
-CREATE_VIEW=14
-INITIALLY=168
-REINDEX=109
-EQUALS2=57
-PERCENT=76
-AUTOINCREMENT=160
-NOT_EQUALS2=59
-DEFAULT=137
-VALUES=136
-BEFORE=177
-AFTER=178
-INSTEAD=179
-JOIN=131
-ID_QUOTED_CORE_APOSTROPHE=230
-ID_QUOTED_SQUARE=231
-INDEXED=41
-FLOAT_LITERAL=18
-CREATE_INDEX=12
-QUESTION=96
-ORDERING=29
-IMMEDIATE=143
-DESC=113
-DROP_TABLE=17
-ID_START=225
+ROW = 183
+BLOB_LITERAL = 7
+TYPE_PARAMS = 35
+NOT = 43
+EXCEPT = 120
+FOREIGN = 163
+EOF = -1
+STATEMENT = 32
+TYPE = 34
+RPAREN = 50
+CREATE = 151
+STRING_LITERAL = 31
+IS_NULL = 25
+USING = 133
+BIND = 5
+CREATE_TRIGGER = 15
+BEGIN = 141
+REGEXP = 62
+ANALYZE = 108
+FUNCTION_LITERAL = 19
+CONFLICT = 150
+APOSTROPHE = 188
+LESS_OR_EQ = 65
+ATTACH = 105
+VIRTUAL = 152
+D = 195
+E = 196
+F = 197
+ID_QUOTED = 233
+G = 198
+BLOB = 92
+A = 192
+B = 193
+C = 194
+ASC = 112
+L = 203
+M = 204
+N = 205
+O = 206
+TRANSACTION = 145
+KEY = 159
+H = 199
+BIND_NAME = 6
+I = 200
+ELSE = 85
+J = 201
+K = 202
+U = 212
+T = 211
+IN_VALUES = 22
+W = 214
+UNDERSCORE = 191
+V = 213
+Q = 208
+P = 207
+S = 210
+R = 209
+ROLLBACK = 101
+FAIL = 103
+RESTRICT = 166
+Y = 216
+X = 215
+Z = 217
+GROUP = 124
+INTERSECT = 119
+DROP_INDEX = 16
+WS = 237
+PLAN = 39
+ALIAS = 4
+END = 86
+RPAREN_SQUARE = 190
+CONSTRAINT = 157
+RENAME = 171
+ALTER = 170
+ID_PLAIN = 227
+STRING_CORE_DOUBLE = 222
+ISNULL = 52
+TABLE = 153
+FLOAT = 90
+STRING_CORE_SINGLE = 221
+ID_QUOTED_CORE_SQUARE = 229
+NOTNULL = 53
+NOT_EQUALS = 58
+NOT_NULL = 27
+LPAREN = 48
+ASTERISK = 74
+GREATER_OR_EQ = 67
+AT = 98
+DOUBLE_PIPE = 77
+AS = 83
+SLASH = 75
+IS_NOT = 26
+THEN = 88
+ID_QUOTED_CORE = 228
+OFFSET = 116
+REPLACE = 111
+LEFT = 127
+COLUMN = 173
+PLUS = 72
+PIPE = 71
+EXISTS = 156
+LIKE = 60
+COLLATE = 79
+ADD = 172
+INTEGER = 89
+OUTER = 128
+BY = 42
+DEFERRABLE = 167
+TO = 147
+ID_CORE = 226
+AMPERSAND = 70
+SET = 139
+HAVING = 125
+MINUS = 73
+IGNORE = 100
+SEMI = 36
+UNION = 117
+COLUMN_CONSTRAINT = 8
+COLON = 97
+FLOAT_EXP = 234
+COLUMNS = 10
+COMMIT = 146
+IN_TABLE = 23
+DATABASE = 106
+VACUUM = 110
+DROP = 169
+DETACH = 107
+WHEN = 87
+ID_QUOTED_APOSTROPHE = 232
+STRING_DOUBLE = 224
+STRING_SINGLE = 223
+NATURAL = 126
+BETWEEN = 56
+OPTIONS = 28
+STRING = 91
+CAST = 82
+STRING_CORE = 220
+TABLE_CONSTRAINT = 33
+ID_LITERAL = 21
+CURRENT_TIME = 93
+TRIGGER = 176
+CASE = 84
+EQUALS = 51
+CASCADE = 165
+RELEASE = 149
+EXPLAIN = 37
+GREATER = 66
+ESCAPE = 46
+INSERT = 134
+SAVEPOINT = 148
+LESS = 64
+RAISE = 99
+LPAREN_SQUARE = 189
+EACH = 182
+COMMENT = 235
+ABORT = 102
+SELECT = 121
+INTO = 135
+UNIQUE = 161
+GLOB = 61
+VIEW = 174
+LINE_COMMENT = 236
+NULL = 55
+QUOTE_DOUBLE = 186
+ON = 132
+MATCH = 63
+PRIMARY = 158
+DELETE = 140
+OF = 180
+SHIFT_LEFT = 68
+SHIFT_RIGHT = 69
+INTEGER_LITERAL = 24
+FUNCTION_EXPRESSION = 20
+OR = 44
+QUERY = 38
+CHECK = 162
+QUOTE_SINGLE = 187
+STRING_ESCAPE_DOUBLE = 219
+FROM = 122
+DISTINCT = 81
+TEMPORARY = 154
+CURRENT_DATE = 94
+BACKSLASH = 184
+DOLLAR = 185
+WHERE = 123
+CONSTRAINTS = 11
+COLUMN_EXPRESSION = 9
+INNER = 129
+STRING_ESCAPE_SINGLE = 218
+ORDER = 114
+LIMIT = 115
+PRAGMA = 104
+UPDATE = 138
+FOR = 181
+DEFERRED = 142
+SELECT_CORE = 30
+EXCLUSIVE = 144
+AND = 45
+ID = 80
+CROSS = 130
+IF = 155
+INDEX = 175
+TILDA = 78
+IN = 47
+REFERENCES = 164
+CREATE_TABLE = 13
+COMMA = 49
+IS = 54
+ALL = 118
+DOT = 40
+CURRENT_TIMESTAMP = 95
+CREATE_VIEW = 14
+INITIALLY = 168
+REINDEX = 109
+EQUALS2 = 57
+PERCENT = 76
+AUTOINCREMENT = 160
+NOT_EQUALS2 = 59
+DEFAULT = 137
+VALUES = 136
+BEFORE = 177
+AFTER = 178
+INSTEAD = 179
+JOIN = 131
+ID_QUOTED_CORE_APOSTROPHE = 230
+ID_QUOTED_SQUARE = 231
+INDEXED = 41
+FLOAT_LITERAL = 18
+CREATE_INDEX = 12
+QUESTION = 96
+ORDERING = 29
+IMMEDIATE = 143
+DESC = 113
+DROP_TABLE = 17
+ID_START = 225
 
 
 class SQLiteLexer(Lexer):
-
     grammarFileName = "SQLite.g"
     antlr_version = version_str_to_tuple("3.1.3 Mar 18, 2009 10:09:25")
     antlr_version_str = "3.1.3 Mar 18, 2009 10:09:25"
@@ -260,33 +259,28 @@ class SQLiteLexer(Lexer):
             state = RecognizerSharedState()
         super(SQLiteLexer, self).__init__(input, state)
 
-
         self.dfa19 = self.DFA19(
             self, 19,
-            eot = self.DFA19_eot,
-            eof = self.DFA19_eof,
-            min = self.DFA19_min,
-            max = self.DFA19_max,
-            accept = self.DFA19_accept,
-            special = self.DFA19_special,
-            transition = self.DFA19_transition
-            )
+            eot=self.DFA19_eot,
+            eof=self.DFA19_eof,
+            min=self.DFA19_min,
+            max=self.DFA19_max,
+            accept=self.DFA19_accept,
+            special=self.DFA19_special,
+            transition=self.DFA19_transition
+        )
 
         self.dfa26 = self.DFA26(
             self, 26,
-            eot = self.DFA26_eot,
-            eof = self.DFA26_eof,
-            min = self.DFA26_min,
-            max = self.DFA26_max,
-            accept = self.DFA26_accept,
-            special = self.DFA26_special,
-            transition = self.DFA26_transition
-            )
+            eot=self.DFA26_eot,
+            eof=self.DFA26_eof,
+            min=self.DFA26_min,
+            max=self.DFA26_max,
+            accept=self.DFA26_accept,
+            special=self.DFA26_special,
+            transition=self.DFA26_transition
+        )
 
-
-
-
-                               
 
     """public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
          final StringBuilder buffer = new StringBuilder();
@@ -314,10 +308,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:759:7: ( '=' )
             # SQLite.g:759:16: '='
-            pass 
+            pass
             self.match(61)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -339,10 +331,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:760:8: ( '==' )
             # SQLite.g:760:16: '=='
-            pass 
+            pass
             self.match("==")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -364,10 +354,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:761:11: ( '!=' )
             # SQLite.g:761:16: '!='
-            pass 
+            pass
             self.match("!=")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -389,10 +377,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:762:12: ( '<>' )
             # SQLite.g:762:16: '<>'
-            pass 
+            pass
             self.match("<>")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -414,10 +400,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:763:5: ( '<' )
             # SQLite.g:763:16: '<'
-            pass 
+            pass
             self.match(60)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -439,10 +423,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:764:11: ( '<=' )
             # SQLite.g:764:16: '<='
-            pass 
+            pass
             self.match("<=")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -464,10 +446,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:765:8: ( '>' )
             # SQLite.g:765:16: '>'
-            pass 
+            pass
             self.match(62)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -489,10 +469,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:766:14: ( '>=' )
             # SQLite.g:766:16: '>='
-            pass 
+            pass
             self.match(">=")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -514,10 +492,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:767:11: ( '<<' )
             # SQLite.g:767:16: '<<'
-            pass 
+            pass
             self.match("<<")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -539,10 +515,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:768:12: ( '>>' )
             # SQLite.g:768:16: '>>'
-            pass 
+            pass
             self.match(">>")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -564,10 +538,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:769:10: ( '&' )
             # SQLite.g:769:16: '&'
-            pass 
+            pass
             self.match(38)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -589,10 +561,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:770:5: ( '|' )
             # SQLite.g:770:16: '|'
-            pass 
+            pass
             self.match(124)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -614,10 +584,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:771:12: ( '||' )
             # SQLite.g:771:16: '||'
-            pass 
+            pass
             self.match("||")
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -639,10 +607,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:772:5: ( '+' )
             # SQLite.g:772:16: '+'
-            pass 
+            pass
             self.match(43)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -664,10 +630,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:773:6: ( '-' )
             # SQLite.g:773:16: '-'
-            pass 
+            pass
             self.match(45)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -689,10 +653,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:774:6: ( '~' )
             # SQLite.g:774:16: '~'
-            pass 
+            pass
             self.match(126)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -714,10 +676,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:775:9: ( '*' )
             # SQLite.g:775:16: '*'
-            pass 
+            pass
             self.match(42)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -739,10 +699,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:776:6: ( '/' )
             # SQLite.g:776:16: '/'
-            pass 
+            pass
             self.match(47)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -764,10 +722,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:777:10: ( '\\\\' )
             # SQLite.g:777:16: '\\\\'
-            pass 
+            pass
             self.match(92)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -789,10 +745,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:778:8: ( '%' )
             # SQLite.g:778:16: '%'
-            pass 
+            pass
             self.match(37)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -814,10 +768,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:779:5: ( ';' )
             # SQLite.g:779:16: ';'
-            pass 
+            pass
             self.match(59)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -839,10 +791,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:780:4: ( '.' )
             # SQLite.g:780:16: '.'
-            pass 
+            pass
             self.match(46)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -864,10 +814,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:781:6: ( ',' )
             # SQLite.g:781:16: ','
-            pass 
+            pass
             self.match(44)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -889,10 +837,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:782:7: ( '(' )
             # SQLite.g:782:16: '('
-            pass 
+            pass
             self.match(40)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -914,10 +860,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:783:7: ( ')' )
             # SQLite.g:783:16: ')'
-            pass 
+            pass
             self.match(41)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -939,10 +883,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:784:9: ( '?' )
             # SQLite.g:784:16: '?'
-            pass 
+            pass
             self.match(63)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -964,10 +906,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:785:6: ( ':' )
             # SQLite.g:785:16: ':'
-            pass 
+            pass
             self.match(58)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -989,10 +929,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:786:3: ( '@' )
             # SQLite.g:786:16: '@'
-            pass 
+            pass
             self.match(64)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1014,10 +952,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:787:7: ( '$' )
             # SQLite.g:787:16: '$'
-            pass 
+            pass
             self.match(36)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1039,10 +975,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:788:13: ( '\"' )
             # SQLite.g:788:16: '\"'
-            pass 
+            pass
             self.match(34)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1064,10 +998,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:789:13: ( '\\'' )
             # SQLite.g:789:16: '\\''
-            pass 
+            pass
             self.match(39)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1089,10 +1021,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:790:11: ( '`' )
             # SQLite.g:790:16: '`'
-            pass 
+            pass
             self.match(96)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1114,10 +1044,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:791:14: ( '[' )
             # SQLite.g:791:16: '['
-            pass 
+            pass
             self.match(91)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1139,10 +1067,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:792:14: ( ']' )
             # SQLite.g:792:16: ']'
-            pass 
+            pass
             self.match(93)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1164,10 +1090,8 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:793:11: ( '_' )
             # SQLite.g:793:16: '_'
-            pass 
+            pass
             self.match(95)
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1186,7 +1110,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:796:11: ( ( 'a' | 'A' ) )
             # SQLite.g:796:12: ( 'a' | 'A' )
-            pass 
+            pass
             if self.input.LA(1) == 65 or self.input.LA(1) == 97:
                 self.input.consume()
             else:
@@ -1212,7 +1136,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:797:11: ( ( 'b' | 'B' ) )
             # SQLite.g:797:12: ( 'b' | 'B' )
-            pass 
+            pass
             if self.input.LA(1) == 66 or self.input.LA(1) == 98:
                 self.input.consume()
             else:
@@ -1238,7 +1162,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:798:11: ( ( 'c' | 'C' ) )
             # SQLite.g:798:12: ( 'c' | 'C' )
-            pass 
+            pass
             if self.input.LA(1) == 67 or self.input.LA(1) == 99:
                 self.input.consume()
             else:
@@ -1264,7 +1188,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:799:11: ( ( 'd' | 'D' ) )
             # SQLite.g:799:12: ( 'd' | 'D' )
-            pass 
+            pass
             if self.input.LA(1) == 68 or self.input.LA(1) == 100:
                 self.input.consume()
             else:
@@ -1290,7 +1214,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:800:11: ( ( 'e' | 'E' ) )
             # SQLite.g:800:12: ( 'e' | 'E' )
-            pass 
+            pass
             if self.input.LA(1) == 69 or self.input.LA(1) == 101:
                 self.input.consume()
             else:
@@ -1316,7 +1240,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:801:11: ( ( 'f' | 'F' ) )
             # SQLite.g:801:12: ( 'f' | 'F' )
-            pass 
+            pass
             if self.input.LA(1) == 70 or self.input.LA(1) == 102:
                 self.input.consume()
             else:
@@ -1342,7 +1266,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:802:11: ( ( 'g' | 'G' ) )
             # SQLite.g:802:12: ( 'g' | 'G' )
-            pass 
+            pass
             if self.input.LA(1) == 71 or self.input.LA(1) == 103:
                 self.input.consume()
             else:
@@ -1368,7 +1292,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:803:11: ( ( 'h' | 'H' ) )
             # SQLite.g:803:12: ( 'h' | 'H' )
-            pass 
+            pass
             if self.input.LA(1) == 72 or self.input.LA(1) == 104:
                 self.input.consume()
             else:
@@ -1394,7 +1318,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:804:11: ( ( 'i' | 'I' ) )
             # SQLite.g:804:12: ( 'i' | 'I' )
-            pass 
+            pass
             if self.input.LA(1) == 73 or self.input.LA(1) == 105:
                 self.input.consume()
             else:
@@ -1420,7 +1344,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:805:11: ( ( 'j' | 'J' ) )
             # SQLite.g:805:12: ( 'j' | 'J' )
-            pass 
+            pass
             if self.input.LA(1) == 74 or self.input.LA(1) == 106:
                 self.input.consume()
             else:
@@ -1446,7 +1370,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:806:11: ( ( 'k' | 'K' ) )
             # SQLite.g:806:12: ( 'k' | 'K' )
-            pass 
+            pass
             if self.input.LA(1) == 75 or self.input.LA(1) == 107:
                 self.input.consume()
             else:
@@ -1472,7 +1396,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:807:11: ( ( 'l' | 'L' ) )
             # SQLite.g:807:12: ( 'l' | 'L' )
-            pass 
+            pass
             if self.input.LA(1) == 76 or self.input.LA(1) == 108:
                 self.input.consume()
             else:
@@ -1498,7 +1422,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:808:11: ( ( 'm' | 'M' ) )
             # SQLite.g:808:12: ( 'm' | 'M' )
-            pass 
+            pass
             if self.input.LA(1) == 77 or self.input.LA(1) == 109:
                 self.input.consume()
             else:
@@ -1524,7 +1448,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:809:11: ( ( 'n' | 'N' ) )
             # SQLite.g:809:12: ( 'n' | 'N' )
-            pass 
+            pass
             if self.input.LA(1) == 78 or self.input.LA(1) == 110:
                 self.input.consume()
             else:
@@ -1550,7 +1474,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:810:11: ( ( 'o' | 'O' ) )
             # SQLite.g:810:12: ( 'o' | 'O' )
-            pass 
+            pass
             if self.input.LA(1) == 79 or self.input.LA(1) == 111:
                 self.input.consume()
             else:
@@ -1576,7 +1500,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:811:11: ( ( 'p' | 'P' ) )
             # SQLite.g:811:12: ( 'p' | 'P' )
-            pass 
+            pass
             if self.input.LA(1) == 80 or self.input.LA(1) == 112:
                 self.input.consume()
             else:
@@ -1602,7 +1526,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:812:11: ( ( 'q' | 'Q' ) )
             # SQLite.g:812:12: ( 'q' | 'Q' )
-            pass 
+            pass
             if self.input.LA(1) == 81 or self.input.LA(1) == 113:
                 self.input.consume()
             else:
@@ -1628,7 +1552,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:813:11: ( ( 'r' | 'R' ) )
             # SQLite.g:813:12: ( 'r' | 'R' )
-            pass 
+            pass
             if self.input.LA(1) == 82 or self.input.LA(1) == 114:
                 self.input.consume()
             else:
@@ -1654,7 +1578,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:814:11: ( ( 's' | 'S' ) )
             # SQLite.g:814:12: ( 's' | 'S' )
-            pass 
+            pass
             if self.input.LA(1) == 83 or self.input.LA(1) == 115:
                 self.input.consume()
             else:
@@ -1680,7 +1604,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:815:11: ( ( 't' | 'T' ) )
             # SQLite.g:815:12: ( 't' | 'T' )
-            pass 
+            pass
             if self.input.LA(1) == 84 or self.input.LA(1) == 116:
                 self.input.consume()
             else:
@@ -1706,7 +1630,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:816:11: ( ( 'u' | 'U' ) )
             # SQLite.g:816:12: ( 'u' | 'U' )
-            pass 
+            pass
             if self.input.LA(1) == 85 or self.input.LA(1) == 117:
                 self.input.consume()
             else:
@@ -1732,7 +1656,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:817:11: ( ( 'v' | 'V' ) )
             # SQLite.g:817:12: ( 'v' | 'V' )
-            pass 
+            pass
             if self.input.LA(1) == 86 or self.input.LA(1) == 118:
                 self.input.consume()
             else:
@@ -1758,7 +1682,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:818:11: ( ( 'w' | 'W' ) )
             # SQLite.g:818:12: ( 'w' | 'W' )
-            pass 
+            pass
             if self.input.LA(1) == 87 or self.input.LA(1) == 119:
                 self.input.consume()
             else:
@@ -1784,7 +1708,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:819:11: ( ( 'x' | 'X' ) )
             # SQLite.g:819:12: ( 'x' | 'X' )
-            pass 
+            pass
             if self.input.LA(1) == 88 or self.input.LA(1) == 120:
                 self.input.consume()
             else:
@@ -1810,7 +1734,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:820:11: ( ( 'y' | 'Y' ) )
             # SQLite.g:820:12: ( 'y' | 'Y' )
-            pass 
+            pass
             if self.input.LA(1) == 89 or self.input.LA(1) == 121:
                 self.input.consume()
             else:
@@ -1836,7 +1760,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:821:11: ( ( 'z' | 'Z' ) )
             # SQLite.g:821:12: ( 'z' | 'Z' )
-            pass 
+            pass
             if self.input.LA(1) == 90 or self.input.LA(1) == 122:
                 self.input.consume()
             else:
@@ -1865,14 +1789,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:823:6: ( A B O R T )
             # SQLite.g:823:8: A B O R T
-            pass 
+            pass
             self.mA()
             self.mB()
             self.mO()
             self.mR()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1894,12 +1816,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:824:4: ( A D D )
             # SQLite.g:824:6: A D D
-            pass 
+            pass
             self.mA()
             self.mD()
             self.mD()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1921,14 +1841,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:825:6: ( A F T E R )
             # SQLite.g:825:8: A F T E R
-            pass 
+            pass
             self.mA()
             self.mF()
             self.mT()
             self.mE()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1950,12 +1868,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:826:4: ( A L L )
             # SQLite.g:826:6: A L L
-            pass 
+            pass
             self.mA()
             self.mL()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -1977,14 +1893,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:827:6: ( A L T E R )
             # SQLite.g:827:8: A L T E R
-            pass 
+            pass
             self.mA()
             self.mL()
             self.mT()
             self.mE()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2006,7 +1920,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:828:8: ( A N A L Y Z E )
             # SQLite.g:828:10: A N A L Y Z E
-            pass 
+            pass
             self.mA()
             self.mN()
             self.mA()
@@ -2014,8 +1928,6 @@ class SQLiteLexer(Lexer):
             self.mY()
             self.mZ()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2037,12 +1949,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:829:4: ( A N D )
             # SQLite.g:829:6: A N D
-            pass 
+            pass
             self.mA()
             self.mN()
             self.mD()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2064,11 +1974,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:830:3: ( A S )
             # SQLite.g:830:5: A S
-            pass 
+            pass
             self.mA()
             self.mS()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2090,12 +1998,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:831:4: ( A S C )
             # SQLite.g:831:6: A S C
-            pass 
+            pass
             self.mA()
             self.mS()
             self.mC()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2117,15 +2023,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:832:7: ( A T T A C H )
             # SQLite.g:832:9: A T T A C H
-            pass 
+            pass
             self.mA()
             self.mT()
             self.mT()
             self.mA()
             self.mC()
             self.mH()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2147,7 +2051,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:833:14: ( A U T O I N C R E M E N T )
             # SQLite.g:833:16: A U T O I N C R E M E N T
-            pass 
+            pass
             self.mA()
             self.mU()
             self.mT()
@@ -2161,8 +2065,6 @@ class SQLiteLexer(Lexer):
             self.mE()
             self.mN()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2184,15 +2086,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:834:7: ( B E F O R E )
             # SQLite.g:834:9: B E F O R E
-            pass 
+            pass
             self.mB()
             self.mE()
             self.mF()
             self.mO()
             self.mR()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2214,14 +2114,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:835:6: ( B E G I N )
             # SQLite.g:835:8: B E G I N
-            pass 
+            pass
             self.mB()
             self.mE()
             self.mG()
             self.mI()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2243,7 +2141,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:836:8: ( B E T W E E N )
             # SQLite.g:836:10: B E T W E E N
-            pass 
+            pass
             self.mB()
             self.mE()
             self.mT()
@@ -2251,8 +2149,6 @@ class SQLiteLexer(Lexer):
             self.mE()
             self.mE()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2274,11 +2170,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:837:3: ( B Y )
             # SQLite.g:837:5: B Y
-            pass 
+            pass
             self.mB()
             self.mY()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2300,7 +2194,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:838:8: ( C A S C A D E )
             # SQLite.g:838:10: C A S C A D E
-            pass 
+            pass
             self.mC()
             self.mA()
             self.mS()
@@ -2308,8 +2202,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mD()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2331,13 +2223,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:839:5: ( C A S E )
             # SQLite.g:839:7: C A S E
-            pass 
+            pass
             self.mC()
             self.mA()
             self.mS()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2359,13 +2249,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:840:5: ( C A S T )
             # SQLite.g:840:7: C A S T
-            pass 
+            pass
             self.mC()
             self.mA()
             self.mS()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2387,14 +2275,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:841:6: ( C H E C K )
             # SQLite.g:841:8: C H E C K
-            pass 
+            pass
             self.mC()
             self.mH()
             self.mE()
             self.mC()
             self.mK()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2416,7 +2302,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:842:8: ( C O L L A T E )
             # SQLite.g:842:10: C O L L A T E
-            pass 
+            pass
             self.mC()
             self.mO()
             self.mL()
@@ -2424,8 +2310,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mT()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2447,15 +2331,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:843:7: ( C O L U M N )
             # SQLite.g:843:9: C O L U M N
-            pass 
+            pass
             self.mC()
             self.mO()
             self.mL()
             self.mU()
             self.mM()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2477,15 +2359,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:844:7: ( C O M M I T )
             # SQLite.g:844:9: C O M M I T
-            pass 
+            pass
             self.mC()
             self.mO()
             self.mM()
             self.mM()
             self.mI()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2507,7 +2387,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:845:9: ( C O N F L I C T )
             # SQLite.g:845:11: C O N F L I C T
-            pass 
+            pass
             self.mC()
             self.mO()
             self.mN()
@@ -2516,8 +2396,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mC()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2539,7 +2417,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:846:11: ( C O N S T R A I N T )
             # SQLite.g:846:13: C O N S T R A I N T
-            pass 
+            pass
             self.mC()
             self.mO()
             self.mN()
@@ -2550,8 +2428,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mN()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2573,15 +2449,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:847:7: ( C R E A T E )
             # SQLite.g:847:9: C R E A T E
-            pass 
+            pass
             self.mC()
             self.mR()
             self.mE()
             self.mA()
             self.mT()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2603,14 +2477,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:848:6: ( C R O S S )
             # SQLite.g:848:8: C R O S S
-            pass 
+            pass
             self.mC()
             self.mR()
             self.mO()
             self.mS()
             self.mS()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2632,7 +2504,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:849:13: ( C U R R E N T '_' T I M E )
             # SQLite.g:849:15: C U R R E N T '_' T I M E
-            pass 
+            pass
             self.mC()
             self.mU()
             self.mR()
@@ -2645,8 +2517,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mM()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2668,7 +2538,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:850:13: ( C U R R E N T '_' D A T E )
             # SQLite.g:850:15: C U R R E N T '_' D A T E
-            pass 
+            pass
             self.mC()
             self.mU()
             self.mR()
@@ -2681,8 +2551,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mT()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2704,7 +2572,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:851:18: ( C U R R E N T '_' T I M E S T A M P )
             # SQLite.g:851:20: C U R R E N T '_' T I M E S T A M P
-            pass 
+            pass
             self.mC()
             self.mU()
             self.mR()
@@ -2722,8 +2590,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mM()
             self.mP()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2745,7 +2611,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:852:9: ( D A T A B A S E )
             # SQLite.g:852:11: D A T A B A S E
-            pass 
+            pass
             self.mD()
             self.mA()
             self.mT()
@@ -2754,8 +2620,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mS()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2777,7 +2641,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:853:8: ( D E F A U L T )
             # SQLite.g:853:10: D E F A U L T
-            pass 
+            pass
             self.mD()
             self.mE()
             self.mF()
@@ -2785,8 +2649,6 @@ class SQLiteLexer(Lexer):
             self.mU()
             self.mL()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2808,7 +2670,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:854:11: ( D E F E R R A B L E )
             # SQLite.g:854:13: D E F E R R A B L E
-            pass 
+            pass
             self.mD()
             self.mE()
             self.mF()
@@ -2819,8 +2681,6 @@ class SQLiteLexer(Lexer):
             self.mB()
             self.mL()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2842,7 +2702,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:855:9: ( D E F E R R E D )
             # SQLite.g:855:11: D E F E R R E D
-            pass 
+            pass
             self.mD()
             self.mE()
             self.mF()
@@ -2851,8 +2711,6 @@ class SQLiteLexer(Lexer):
             self.mR()
             self.mE()
             self.mD()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2874,15 +2732,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:856:7: ( D E L E T E )
             # SQLite.g:856:9: D E L E T E
-            pass 
+            pass
             self.mD()
             self.mE()
             self.mL()
             self.mE()
             self.mT()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2904,13 +2760,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:857:5: ( D E S C )
             # SQLite.g:857:7: D E S C
-            pass 
+            pass
             self.mD()
             self.mE()
             self.mS()
             self.mC()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2932,15 +2786,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:858:7: ( D E T A C H )
             # SQLite.g:858:9: D E T A C H
-            pass 
+            pass
             self.mD()
             self.mE()
             self.mT()
             self.mA()
             self.mC()
             self.mH()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2962,7 +2814,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:859:9: ( D I S T I N C T )
             # SQLite.g:859:11: D I S T I N C T
-            pass 
+            pass
             self.mD()
             self.mI()
             self.mS()
@@ -2971,8 +2823,6 @@ class SQLiteLexer(Lexer):
             self.mN()
             self.mC()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -2994,13 +2844,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:860:5: ( D R O P )
             # SQLite.g:860:7: D R O P
-            pass 
+            pass
             self.mD()
             self.mR()
             self.mO()
             self.mP()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3022,13 +2870,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:861:5: ( E A C H )
             # SQLite.g:861:7: E A C H
-            pass 
+            pass
             self.mE()
             self.mA()
             self.mC()
             self.mH()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3050,13 +2896,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:862:5: ( E L S E )
             # SQLite.g:862:7: E L S E
-            pass 
+            pass
             self.mE()
             self.mL()
             self.mS()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3078,12 +2922,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:863:4: ( E N D )
             # SQLite.g:863:6: E N D
-            pass 
+            pass
             self.mE()
             self.mN()
             self.mD()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3105,15 +2947,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:864:7: ( E S C A P E )
             # SQLite.g:864:9: E S C A P E
-            pass 
+            pass
             self.mE()
             self.mS()
             self.mC()
             self.mA()
             self.mP()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3135,15 +2975,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:865:7: ( E X C E P T )
             # SQLite.g:865:9: E X C E P T
-            pass 
+            pass
             self.mE()
             self.mX()
             self.mC()
             self.mE()
             self.mP()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3165,7 +3003,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:866:10: ( E X C L U S I V E )
             # SQLite.g:866:12: E X C L U S I V E
-            pass 
+            pass
             self.mE()
             self.mX()
             self.mC()
@@ -3175,8 +3013,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mV()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3198,15 +3034,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:867:7: ( E X I S T S )
             # SQLite.g:867:9: E X I S T S
-            pass 
+            pass
             self.mE()
             self.mX()
             self.mI()
             self.mS()
             self.mT()
             self.mS()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3228,7 +3062,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:868:8: ( E X P L A I N )
             # SQLite.g:868:10: E X P L A I N
-            pass 
+            pass
             self.mE()
             self.mX()
             self.mP()
@@ -3236,8 +3070,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mI()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3259,13 +3091,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:869:5: ( F A I L )
             # SQLite.g:869:7: F A I L
-            pass 
+            pass
             self.mF()
             self.mA()
             self.mI()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3287,12 +3117,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:870:4: ( F O R )
             # SQLite.g:870:6: F O R
-            pass 
+            pass
             self.mF()
             self.mO()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3314,7 +3142,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:871:8: ( F O R E I G N )
             # SQLite.g:871:10: F O R E I G N
-            pass 
+            pass
             self.mF()
             self.mO()
             self.mR()
@@ -3322,8 +3150,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mG()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3345,13 +3171,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:872:5: ( F R O M )
             # SQLite.g:872:7: F R O M
-            pass 
+            pass
             self.mF()
             self.mR()
             self.mO()
             self.mM()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3373,13 +3197,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:873:5: ( G L O B )
             # SQLite.g:873:7: G L O B
-            pass 
+            pass
             self.mG()
             self.mL()
             self.mO()
             self.mB()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3401,14 +3223,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:874:6: ( G R O U P )
             # SQLite.g:874:8: G R O U P
-            pass 
+            pass
             self.mG()
             self.mR()
             self.mO()
             self.mU()
             self.mP()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3430,15 +3250,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:875:7: ( H A V I N G )
             # SQLite.g:875:9: H A V I N G
-            pass 
+            pass
             self.mH()
             self.mA()
             self.mV()
             self.mI()
             self.mN()
             self.mG()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3460,11 +3278,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:876:3: ( I F )
             # SQLite.g:876:5: I F
-            pass 
+            pass
             self.mI()
             self.mF()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3486,15 +3302,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:877:7: ( I G N O R E )
             # SQLite.g:877:9: I G N O R E
-            pass 
+            pass
             self.mI()
             self.mG()
             self.mN()
             self.mO()
             self.mR()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3516,7 +3330,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:878:10: ( I M M E D I A T E )
             # SQLite.g:878:12: I M M E D I A T E
-            pass 
+            pass
             self.mI()
             self.mM()
             self.mM()
@@ -3526,8 +3340,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mT()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3549,11 +3361,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:879:3: ( I N )
             # SQLite.g:879:5: I N
-            pass 
+            pass
             self.mI()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3575,14 +3385,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:880:6: ( I N D E X )
             # SQLite.g:880:8: I N D E X
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mD()
             self.mE()
             self.mX()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3604,7 +3412,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:881:8: ( I N D E X E D )
             # SQLite.g:881:10: I N D E X E D
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mD()
@@ -3612,8 +3420,6 @@ class SQLiteLexer(Lexer):
             self.mX()
             self.mE()
             self.mD()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3635,7 +3441,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:882:10: ( I N I T I A L L Y )
             # SQLite.g:882:12: I N I T I A L L Y
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mI()
@@ -3645,8 +3451,6 @@ class SQLiteLexer(Lexer):
             self.mL()
             self.mL()
             self.mY()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3668,14 +3472,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:883:6: ( I N N E R )
             # SQLite.g:883:8: I N N E R
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mN()
             self.mE()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3697,15 +3499,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:884:7: ( I N S E R T )
             # SQLite.g:884:9: I N S E R T
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mS()
             self.mE()
             self.mR()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3727,7 +3527,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:885:8: ( I N S T E A D )
             # SQLite.g:885:10: I N S T E A D
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mS()
@@ -3735,8 +3535,6 @@ class SQLiteLexer(Lexer):
             self.mE()
             self.mA()
             self.mD()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3758,7 +3556,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:886:10: ( I N T E R S E C T )
             # SQLite.g:886:12: I N T E R S E C T
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mT()
@@ -3768,8 +3566,6 @@ class SQLiteLexer(Lexer):
             self.mE()
             self.mC()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3791,13 +3587,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:887:5: ( I N T O )
             # SQLite.g:887:7: I N T O
-            pass 
+            pass
             self.mI()
             self.mN()
             self.mT()
             self.mO()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3819,11 +3613,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:888:3: ( I S )
             # SQLite.g:888:5: I S
-            pass 
+            pass
             self.mI()
             self.mS()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3845,15 +3637,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:889:7: ( I S N U L L )
             # SQLite.g:889:9: I S N U L L
-            pass 
+            pass
             self.mI()
             self.mS()
             self.mN()
             self.mU()
             self.mL()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3875,13 +3665,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:890:5: ( J O I N )
             # SQLite.g:890:7: J O I N
-            pass 
+            pass
             self.mJ()
             self.mO()
             self.mI()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3903,12 +3691,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:891:4: ( K E Y )
             # SQLite.g:891:6: K E Y
-            pass 
+            pass
             self.mK()
             self.mE()
             self.mY()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3930,13 +3716,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:892:5: ( L E F T )
             # SQLite.g:892:7: L E F T
-            pass 
+            pass
             self.mL()
             self.mE()
             self.mF()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3958,13 +3742,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:893:5: ( L I K E )
             # SQLite.g:893:7: L I K E
-            pass 
+            pass
             self.mL()
             self.mI()
             self.mK()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -3986,14 +3768,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:894:6: ( L I M I T )
             # SQLite.g:894:8: L I M I T
-            pass 
+            pass
             self.mL()
             self.mI()
             self.mM()
             self.mI()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4015,14 +3795,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:895:6: ( M A T C H )
             # SQLite.g:895:8: M A T C H
-            pass 
+            pass
             self.mM()
             self.mA()
             self.mT()
             self.mC()
             self.mH()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4044,7 +3822,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:896:8: ( N A T U R A L )
             # SQLite.g:896:10: N A T U R A L
-            pass 
+            pass
             self.mN()
             self.mA()
             self.mT()
@@ -4052,8 +3830,6 @@ class SQLiteLexer(Lexer):
             self.mR()
             self.mA()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4075,12 +3851,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:897:4: ( N O T )
             # SQLite.g:897:6: N O T
-            pass 
+            pass
             self.mN()
             self.mO()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4102,7 +3876,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:898:8: ( N O T N U L L )
             # SQLite.g:898:10: N O T N U L L
-            pass 
+            pass
             self.mN()
             self.mO()
             self.mT()
@@ -4110,8 +3884,6 @@ class SQLiteLexer(Lexer):
             self.mU()
             self.mL()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4133,13 +3905,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:899:5: ( N U L L )
             # SQLite.g:899:7: N U L L
-            pass 
+            pass
             self.mN()
             self.mU()
             self.mL()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4161,11 +3931,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:900:3: ( O F )
             # SQLite.g:900:5: O F
-            pass 
+            pass
             self.mO()
             self.mF()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4187,15 +3955,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:901:7: ( O F F S E T )
             # SQLite.g:901:9: O F F S E T
-            pass 
+            pass
             self.mO()
             self.mF()
             self.mF()
             self.mS()
             self.mE()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4217,11 +3983,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:902:3: ( O N )
             # SQLite.g:902:5: O N
-            pass 
+            pass
             self.mO()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4243,11 +4007,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:903:3: ( O R )
             # SQLite.g:903:5: O R
-            pass 
+            pass
             self.mO()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4269,14 +4031,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:904:6: ( O R D E R )
             # SQLite.g:904:8: O R D E R
-            pass 
+            pass
             self.mO()
             self.mR()
             self.mD()
             self.mE()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4298,14 +4058,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:905:6: ( O U T E R )
             # SQLite.g:905:8: O U T E R
-            pass 
+            pass
             self.mO()
             self.mU()
             self.mT()
             self.mE()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4327,13 +4085,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:906:5: ( P L A N )
             # SQLite.g:906:7: P L A N
-            pass 
+            pass
             self.mP()
             self.mL()
             self.mA()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4355,15 +4111,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:907:7: ( P R A G M A )
             # SQLite.g:907:9: P R A G M A
-            pass 
+            pass
             self.mP()
             self.mR()
             self.mA()
             self.mG()
             self.mM()
             self.mA()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4385,7 +4139,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:908:8: ( P R I M A R Y )
             # SQLite.g:908:10: P R I M A R Y
-            pass 
+            pass
             self.mP()
             self.mR()
             self.mI()
@@ -4393,8 +4147,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mR()
             self.mY()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4416,14 +4168,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:909:6: ( Q U E R Y )
             # SQLite.g:909:8: Q U E R Y
-            pass 
+            pass
             self.mQ()
             self.mU()
             self.mE()
             self.mR()
             self.mY()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4445,14 +4195,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:910:6: ( R A I S E )
             # SQLite.g:910:8: R A I S E
-            pass 
+            pass
             self.mR()
             self.mA()
             self.mI()
             self.mS()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4474,7 +4222,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:911:11: ( R E F E R E N C E S )
             # SQLite.g:911:13: R E F E R E N C E S
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mF()
@@ -4485,8 +4233,6 @@ class SQLiteLexer(Lexer):
             self.mC()
             self.mE()
             self.mS()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4508,15 +4254,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:912:7: ( R E G E X P )
             # SQLite.g:912:9: R E G E X P
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mG()
             self.mE()
             self.mX()
             self.mP()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4538,7 +4282,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:913:8: ( R E I N D E X )
             # SQLite.g:913:10: R E I N D E X
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mI()
@@ -4546,8 +4290,6 @@ class SQLiteLexer(Lexer):
             self.mD()
             self.mE()
             self.mX()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4569,7 +4311,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:914:8: ( R E L E A S E )
             # SQLite.g:914:10: R E L E A S E
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mL()
@@ -4577,8 +4319,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mS()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4600,15 +4340,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:915:7: ( R E N A M E )
             # SQLite.g:915:9: R E N A M E
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mN()
             self.mA()
             self.mM()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4630,7 +4368,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:916:8: ( R E P L A C E )
             # SQLite.g:916:10: R E P L A C E
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mP()
@@ -4638,8 +4376,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mC()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4661,7 +4397,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:917:9: ( R E S T R I C T )
             # SQLite.g:917:11: R E S T R I C T
-            pass 
+            pass
             self.mR()
             self.mE()
             self.mS()
@@ -4670,8 +4406,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mC()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4693,7 +4427,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:918:9: ( R O L L B A C K )
             # SQLite.g:918:11: R O L L B A C K
-            pass 
+            pass
             self.mR()
             self.mO()
             self.mL()
@@ -4702,8 +4436,6 @@ class SQLiteLexer(Lexer):
             self.mA()
             self.mC()
             self.mK()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4725,12 +4457,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:919:4: ( R O W )
             # SQLite.g:919:6: R O W
-            pass 
+            pass
             self.mR()
             self.mO()
             self.mW()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4752,7 +4482,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:920:10: ( S A V E P O I N T )
             # SQLite.g:920:12: S A V E P O I N T
-            pass 
+            pass
             self.mS()
             self.mA()
             self.mV()
@@ -4762,8 +4492,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mN()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4785,15 +4513,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:921:7: ( S E L E C T )
             # SQLite.g:921:9: S E L E C T
-            pass 
+            pass
             self.mS()
             self.mE()
             self.mL()
             self.mE()
             self.mC()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4815,12 +4541,10 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:922:4: ( S E T )
             # SQLite.g:922:6: S E T
-            pass 
+            pass
             self.mS()
             self.mE()
             self.mT()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4842,14 +4566,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:923:6: ( T A B L E )
             # SQLite.g:923:8: T A B L E
-            pass 
+            pass
             self.mT()
             self.mA()
             self.mB()
             self.mL()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4871,7 +4593,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:924:10: ( T E M P ( O R A R Y )? )
             # SQLite.g:924:12: T E M P ( O R A R Y )?
-            pass 
+            pass
             self.mT()
             self.mE()
             self.mM()
@@ -4880,21 +4602,16 @@ class SQLiteLexer(Lexer):
             alt1 = 2
             LA1_0 = self.input.LA(1)
 
-            if (LA1_0 == 79 or LA1_0 == 111) :
+            if (LA1_0 == 79 or LA1_0 == 111):
                 alt1 = 1
             if alt1 == 1:
                 # SQLite.g:924:22: O R A R Y
-                pass 
+                pass
                 self.mO()
                 self.mR()
                 self.mA()
                 self.mR()
                 self.mY()
-
-
-
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4916,13 +4633,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:925:5: ( T H E N )
             # SQLite.g:925:7: T H E N
-            pass 
+            pass
             self.mT()
             self.mH()
             self.mE()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4944,11 +4659,9 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:926:3: ( T O )
             # SQLite.g:926:5: T O
-            pass 
+            pass
             self.mT()
             self.mO()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -4970,7 +4683,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:927:12: ( T R A N S A C T I O N )
             # SQLite.g:927:14: T R A N S A C T I O N
-            pass 
+            pass
             self.mT()
             self.mR()
             self.mA()
@@ -4982,8 +4695,6 @@ class SQLiteLexer(Lexer):
             self.mI()
             self.mO()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5005,7 +4716,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:928:8: ( T R I G G E R )
             # SQLite.g:928:10: T R I G G E R
-            pass 
+            pass
             self.mT()
             self.mR()
             self.mI()
@@ -5013,8 +4724,6 @@ class SQLiteLexer(Lexer):
             self.mG()
             self.mE()
             self.mR()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5036,14 +4745,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:929:6: ( U N I O N )
             # SQLite.g:929:8: U N I O N
-            pass 
+            pass
             self.mU()
             self.mN()
             self.mI()
             self.mO()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5065,15 +4772,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:930:7: ( U N I Q U E )
             # SQLite.g:930:9: U N I Q U E
-            pass 
+            pass
             self.mU()
             self.mN()
             self.mI()
             self.mQ()
             self.mU()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5095,15 +4800,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:931:7: ( U P D A T E )
             # SQLite.g:931:9: U P D A T E
-            pass 
+            pass
             self.mU()
             self.mP()
             self.mD()
             self.mA()
             self.mT()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5125,14 +4828,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:932:6: ( U S I N G )
             # SQLite.g:932:8: U S I N G
-            pass 
+            pass
             self.mU()
             self.mS()
             self.mI()
             self.mN()
             self.mG()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5154,15 +4855,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:933:7: ( V A C U U M )
             # SQLite.g:933:9: V A C U U M
-            pass 
+            pass
             self.mV()
             self.mA()
             self.mC()
             self.mU()
             self.mU()
             self.mM()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5184,15 +4883,13 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:934:7: ( V A L U E S )
             # SQLite.g:934:9: V A L U E S
-            pass 
+            pass
             self.mV()
             self.mA()
             self.mL()
             self.mU()
             self.mE()
             self.mS()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5214,13 +4911,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:935:5: ( V I E W )
             # SQLite.g:935:7: V I E W
-            pass 
+            pass
             self.mV()
             self.mI()
             self.mE()
             self.mW()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5242,7 +4937,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:936:8: ( V I R T U A L )
             # SQLite.g:936:10: V I R T U A L
-            pass 
+            pass
             self.mV()
             self.mI()
             self.mR()
@@ -5250,8 +4945,6 @@ class SQLiteLexer(Lexer):
             self.mU()
             self.mA()
             self.mL()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5273,13 +4966,11 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:937:5: ( W H E N )
             # SQLite.g:937:7: W H E N
-            pass 
+            pass
             self.mW()
             self.mH()
             self.mE()
             self.mN()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5301,14 +4992,12 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:938:6: ( W H E R E )
             # SQLite.g:938:8: W H E R E
-            pass 
+            pass
             self.mW()
             self.mH()
             self.mE()
             self.mR()
             self.mE()
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5327,10 +5016,10 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:940:30: ( ( BACKSLASH QUOTE_SINGLE ) )
             # SQLite.g:940:32: ( BACKSLASH QUOTE_SINGLE )
-            pass 
+            pass
             # SQLite.g:940:32: ( BACKSLASH QUOTE_SINGLE )
             # SQLite.g:940:33: BACKSLASH QUOTE_SINGLE
-            pass 
+            pass
             self.mBACKSLASH()
             self.mQUOTE_SINGLE()
 
@@ -5354,10 +5043,10 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:941:30: ( ( BACKSLASH QUOTE_DOUBLE ) )
             # SQLite.g:941:32: ( BACKSLASH QUOTE_DOUBLE )
-            pass 
+            pass
             # SQLite.g:941:32: ( BACKSLASH QUOTE_DOUBLE )
             # SQLite.g:941:33: BACKSLASH QUOTE_DOUBLE
-            pass 
+            pass
             self.mBACKSLASH()
             self.mQUOTE_DOUBLE()
 
@@ -5381,7 +5070,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:942:21: (~ ( QUOTE_SINGLE | QUOTE_DOUBLE ) )
             # SQLite.g:942:23: ~ ( QUOTE_SINGLE | QUOTE_DOUBLE )
-            pass 
+            pass
             if (0 <= self.input.LA(1) <= 33) or (35 <= self.input.LA(1) <= 38) or (40 <= self.input.LA(1) <= 65535):
                 self.input.consume()
             else:
@@ -5407,43 +5096,42 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:943:28: ( ( STRING_CORE | QUOTE_DOUBLE | STRING_ESCAPE_SINGLE )* )
             # SQLite.g:943:30: ( STRING_CORE | QUOTE_DOUBLE | STRING_ESCAPE_SINGLE )*
-            pass 
+            pass
             # SQLite.g:943:30: ( STRING_CORE | QUOTE_DOUBLE | STRING_ESCAPE_SINGLE )*
             while True: #loop2
                 alt2 = 4
                 LA2_0 = self.input.LA(1)
 
-                if (LA2_0 == 92) :
+                if (LA2_0 == 92):
                     LA2_2 = self.input.LA(2)
 
-                    if (LA2_2 == 39) :
+                    if (LA2_2 == 39):
                         alt2 = 3
 
                     else:
                         alt2 = 1
 
 
-                elif (LA2_0 == 34) :
+                elif (LA2_0 == 34):
                     alt2 = 2
-                elif ((0 <= LA2_0 <= 33) or (35 <= LA2_0 <= 38) or (40 <= LA2_0 <= 91) or (93 <= LA2_0 <= 65535)) :
+                elif ((0 <= LA2_0 <= 33) or (35 <= LA2_0 <= 38) or (40 <= LA2_0 <= 91) or (93 <= LA2_0 <= 65535)):
                     alt2 = 1
-
 
                 if alt2 == 1:
                     # SQLite.g:943:32: STRING_CORE
-                    pass 
+                    pass
                     self.mSTRING_CORE()
 
 
                 elif alt2 == 2:
                     # SQLite.g:943:46: QUOTE_DOUBLE
-                    pass 
+                    pass
                     self.mQUOTE_DOUBLE()
 
 
                 elif alt2 == 3:
                     # SQLite.g:943:61: STRING_ESCAPE_SINGLE
-                    pass 
+                    pass
                     self.mSTRING_ESCAPE_SINGLE()
 
 
@@ -5467,43 +5155,42 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:944:28: ( ( STRING_CORE | QUOTE_SINGLE | STRING_ESCAPE_DOUBLE )* )
             # SQLite.g:944:30: ( STRING_CORE | QUOTE_SINGLE | STRING_ESCAPE_DOUBLE )*
-            pass 
+            pass
             # SQLite.g:944:30: ( STRING_CORE | QUOTE_SINGLE | STRING_ESCAPE_DOUBLE )*
             while True: #loop3
                 alt3 = 4
                 LA3_0 = self.input.LA(1)
 
-                if (LA3_0 == 92) :
+                if (LA3_0 == 92):
                     LA3_2 = self.input.LA(2)
 
-                    if (LA3_2 == 34) :
+                    if (LA3_2 == 34):
                         alt3 = 3
 
                     else:
                         alt3 = 1
 
 
-                elif (LA3_0 == 39) :
+                elif (LA3_0 == 39):
                     alt3 = 2
-                elif ((0 <= LA3_0 <= 33) or (35 <= LA3_0 <= 38) or (40 <= LA3_0 <= 91) or (93 <= LA3_0 <= 65535)) :
+                elif ((0 <= LA3_0 <= 33) or (35 <= LA3_0 <= 38) or (40 <= LA3_0 <= 91) or (93 <= LA3_0 <= 65535)):
                     alt3 = 1
-
 
                 if alt3 == 1:
                     # SQLite.g:944:32: STRING_CORE
-                    pass 
+                    pass
                     self.mSTRING_CORE()
 
 
                 elif alt3 == 2:
                     # SQLite.g:944:46: QUOTE_SINGLE
-                    pass 
+                    pass
                     self.mQUOTE_SINGLE()
 
 
                 elif alt3 == 3:
                     # SQLite.g:944:61: STRING_ESCAPE_DOUBLE
-                    pass 
+                    pass
                     self.mSTRING_ESCAPE_DOUBLE()
 
 
@@ -5527,10 +5214,10 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:945:23: ( ( QUOTE_SINGLE STRING_CORE_SINGLE QUOTE_SINGLE ) )
             # SQLite.g:945:25: ( QUOTE_SINGLE STRING_CORE_SINGLE QUOTE_SINGLE )
-            pass 
+            pass
             # SQLite.g:945:25: ( QUOTE_SINGLE STRING_CORE_SINGLE QUOTE_SINGLE )
             # SQLite.g:945:26: QUOTE_SINGLE STRING_CORE_SINGLE QUOTE_SINGLE
-            pass 
+            pass
             self.mQUOTE_SINGLE()
             self.mSTRING_CORE_SINGLE()
             self.mQUOTE_SINGLE()
@@ -5555,10 +5242,10 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:946:23: ( ( QUOTE_DOUBLE STRING_CORE_DOUBLE QUOTE_DOUBLE ) )
             # SQLite.g:946:25: ( QUOTE_DOUBLE STRING_CORE_DOUBLE QUOTE_DOUBLE )
-            pass 
+            pass
             # SQLite.g:946:25: ( QUOTE_DOUBLE STRING_CORE_DOUBLE QUOTE_DOUBLE )
             # SQLite.g:946:26: QUOTE_DOUBLE STRING_CORE_DOUBLE QUOTE_DOUBLE
-            pass 
+            pass
             self.mQUOTE_DOUBLE()
             self.mSTRING_CORE_DOUBLE()
             self.mQUOTE_DOUBLE()
@@ -5586,14 +5273,14 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:947:7: ( ( STRING_SINGLE | STRING_DOUBLE ) )
             # SQLite.g:947:9: ( STRING_SINGLE | STRING_DOUBLE )
-            pass 
+            pass
             # SQLite.g:947:9: ( STRING_SINGLE | STRING_DOUBLE )
             alt4 = 2
             LA4_0 = self.input.LA(1)
 
-            if (LA4_0 == 39) :
+            if (LA4_0 == 39):
                 alt4 = 1
-            elif (LA4_0 == 34) :
+            elif (LA4_0 == 34):
                 alt4 = 2
             else:
                 nvae = NoViableAltException("", 4, 0, self.input)
@@ -5602,19 +5289,14 @@ class SQLiteLexer(Lexer):
 
             if alt4 == 1:
                 # SQLite.g:947:10: STRING_SINGLE
-                pass 
+                pass
                 self.mSTRING_SINGLE()
 
 
             elif alt4 == 2:
                 # SQLite.g:947:26: STRING_DOUBLE
-                pass 
+                pass
                 self.mSTRING_DOUBLE()
-
-
-
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5633,7 +5315,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:949:18: ( ( 'a' .. 'z' | 'A' .. 'Z' | UNDERSCORE ) )
             # SQLite.g:949:20: ( 'a' .. 'z' | 'A' .. 'Z' | UNDERSCORE )
-            pass 
+            pass
             if (65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
             else:
@@ -5659,8 +5341,9 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:950:17: ( ( ID_START | '0' .. '9' | DOLLAR ) )
             # SQLite.g:950:19: ( ID_START | '0' .. '9' | DOLLAR )
-            pass 
-            if self.input.LA(1) == 36 or (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
+            pass
+            if self.input.LA(1) == 36 or (48 <= self.input.LA(1) <= 57) or (
+                    65 <= self.input.LA(1) <= 90) or self.input.LA(1) == 95 or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
             else:
                 mse = MismatchedSetException(None, self.input)
@@ -5685,20 +5368,19 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:951:18: ( ID_START ( ID_CORE )* )
             # SQLite.g:951:20: ID_START ( ID_CORE )*
-            pass 
+            pass
             self.mID_START()
             # SQLite.g:951:29: ( ID_CORE )*
             while True: #loop5
                 alt5 = 2
                 LA5_0 = self.input.LA(1)
 
-                if (LA5_0 == 36 or (48 <= LA5_0 <= 57) or (65 <= LA5_0 <= 90) or LA5_0 == 95 or (97 <= LA5_0 <= 122)) :
+                if (LA5_0 == 36 or (48 <= LA5_0 <= 57) or (65 <= LA5_0 <= 90) or LA5_0 == 95 or (97 <= LA5_0 <= 122)):
                     alt5 = 1
-
 
                 if alt5 == 1:
                     # SQLite.g:951:30: ID_CORE
-                    pass 
+                    pass
                     self.mID_CORE()
 
 
@@ -5722,8 +5404,9 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:953:24: (~ ( APOSTROPHE | LPAREN_SQUARE | RPAREN_SQUARE ) )
             # SQLite.g:953:26: ~ ( APOSTROPHE | LPAREN_SQUARE | RPAREN_SQUARE )
-            pass 
-            if (0 <= self.input.LA(1) <= 90) or self.input.LA(1) == 92 or (94 <= self.input.LA(1) <= 95) or (97 <= self.input.LA(1) <= 65535):
+            pass
+            if (0 <= self.input.LA(1) <= 90) or self.input.LA(1) == 92 or (94 <= self.input.LA(1) <= 95) or (
+                    97 <= self.input.LA(1) <= 65535):
                 self.input.consume()
             else:
                 mse = MismatchedSetException(None, self.input)
@@ -5748,19 +5431,18 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:954:31: ( ( ID_QUOTED_CORE | APOSTROPHE )* )
             # SQLite.g:954:33: ( ID_QUOTED_CORE | APOSTROPHE )*
-            pass 
+            pass
             # SQLite.g:954:33: ( ID_QUOTED_CORE | APOSTROPHE )*
             while True: #loop6
                 alt6 = 2
                 LA6_0 = self.input.LA(1)
 
-                if ((0 <= LA6_0 <= 90) or LA6_0 == 92 or (94 <= LA6_0 <= 65535)) :
+                if ((0 <= LA6_0 <= 90) or LA6_0 == 92 or (94 <= LA6_0 <= 65535)):
                     alt6 = 1
-
 
                 if alt6 == 1:
                     # SQLite.g:
-                    pass 
+                    pass
                     if (0 <= self.input.LA(1) <= 90) or self.input.LA(1) == 92 or (94 <= self.input.LA(1) <= 65535):
                         self.input.consume()
                     else:
@@ -5790,19 +5472,18 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:955:35: ( ( ID_QUOTED_CORE | LPAREN_SQUARE | RPAREN_SQUARE )* )
             # SQLite.g:955:37: ( ID_QUOTED_CORE | LPAREN_SQUARE | RPAREN_SQUARE )*
-            pass 
+            pass
             # SQLite.g:955:37: ( ID_QUOTED_CORE | LPAREN_SQUARE | RPAREN_SQUARE )*
             while True: #loop7
                 alt7 = 2
                 LA7_0 = self.input.LA(1)
 
-                if ((0 <= LA7_0 <= 95) or (97 <= LA7_0 <= 65535)) :
+                if ((0 <= LA7_0 <= 95) or (97 <= LA7_0 <= 65535)):
                     alt7 = 1
-
 
                 if alt7 == 1:
                     # SQLite.g:
-                    pass 
+                    pass
                     if (0 <= self.input.LA(1) <= 95) or (97 <= self.input.LA(1) <= 65535):
                         self.input.consume()
                     else:
@@ -5832,10 +5513,10 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:956:26: ( ( LPAREN_SQUARE ID_QUOTED_CORE_SQUARE RPAREN_SQUARE ) )
             # SQLite.g:956:28: ( LPAREN_SQUARE ID_QUOTED_CORE_SQUARE RPAREN_SQUARE )
-            pass 
+            pass
             # SQLite.g:956:28: ( LPAREN_SQUARE ID_QUOTED_CORE_SQUARE RPAREN_SQUARE )
             # SQLite.g:956:29: LPAREN_SQUARE ID_QUOTED_CORE_SQUARE RPAREN_SQUARE
-            pass 
+            pass
             self.mLPAREN_SQUARE()
             self.mID_QUOTED_CORE_SQUARE()
             self.mRPAREN_SQUARE()
@@ -5860,10 +5541,10 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:957:30: ( ( APOSTROPHE ID_QUOTED_CORE_APOSTROPHE APOSTROPHE ) )
             # SQLite.g:957:32: ( APOSTROPHE ID_QUOTED_CORE_APOSTROPHE APOSTROPHE )
-            pass 
+            pass
             # SQLite.g:957:32: ( APOSTROPHE ID_QUOTED_CORE_APOSTROPHE APOSTROPHE )
             # SQLite.g:957:33: APOSTROPHE ID_QUOTED_CORE_APOSTROPHE APOSTROPHE
-            pass 
+            pass
             self.mAPOSTROPHE()
             self.mID_QUOTED_CORE_APOSTROPHE()
             self.mAPOSTROPHE()
@@ -5890,9 +5571,9 @@ class SQLiteLexer(Lexer):
             alt8 = 2
             LA8_0 = self.input.LA(1)
 
-            if (LA8_0 == 91) :
+            if (LA8_0 == 91):
                 alt8 = 1
-            elif (LA8_0 == 96) :
+            elif (LA8_0 == 96):
                 alt8 = 2
             else:
                 nvae = NoViableAltException("", 8, 0, self.input)
@@ -5901,13 +5582,13 @@ class SQLiteLexer(Lexer):
 
             if alt8 == 1:
                 # SQLite.g:958:21: ID_QUOTED_SQUARE
-                pass 
+                pass
                 self.mID_QUOTED_SQUARE()
 
 
             elif alt8 == 2:
                 # SQLite.g:958:40: ID_QUOTED_APOSTROPHE
-                pass 
+                pass
                 self.mID_QUOTED_APOSTROPHE()
 
 
@@ -5931,9 +5612,9 @@ class SQLiteLexer(Lexer):
             alt9 = 2
             LA9_0 = self.input.LA(1)
 
-            if ((65 <= LA9_0 <= 90) or LA9_0 == 95 or (97 <= LA9_0 <= 122)) :
+            if ((65 <= LA9_0 <= 90) or LA9_0 == 95 or (97 <= LA9_0 <= 122)):
                 alt9 = 1
-            elif (LA9_0 == 91 or LA9_0 == 96) :
+            elif (LA9_0 == 91 or LA9_0 == 96):
                 alt9 = 2
             else:
                 nvae = NoViableAltException("", 9, 0, self.input)
@@ -5942,15 +5623,14 @@ class SQLiteLexer(Lexer):
 
             if alt9 == 1:
                 # SQLite.g:960:5: ID_PLAIN
-                pass 
+                pass
                 self.mID_PLAIN()
 
 
             elif alt9 == 2:
                 # SQLite.g:960:16: ID_QUOTED
-                pass 
+                pass
                 self.mID_QUOTED()
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -5972,20 +5652,19 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:964:8: ( ( '0' .. '9' )+ )
             # SQLite.g:964:10: ( '0' .. '9' )+
-            pass 
+            pass
             # SQLite.g:964:10: ( '0' .. '9' )+
             cnt10 = 0
             while True: #loop10
                 alt10 = 2
                 LA10_0 = self.input.LA(1)
 
-                if ((48 <= LA10_0 <= 57)) :
+                if ((48 <= LA10_0 <= 57)):
                     alt10 = 1
-
 
                 if alt10 == 1:
                     # SQLite.g:964:11: '0' .. '9'
-                    pass 
+                    pass
                     self.matchRange(48, 57)
 
 
@@ -5997,8 +5676,6 @@ class SQLiteLexer(Lexer):
                     raise eee
 
                 cnt10 += 1
-
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -6017,7 +5694,7 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:965:20: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
             # SQLite.g:965:22: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
-            pass 
+            pass
             if self.input.LA(1) == 69 or self.input.LA(1) == 101:
                 self.input.consume()
             else:
@@ -6029,11 +5706,11 @@ class SQLiteLexer(Lexer):
             alt11 = 2
             LA11_0 = self.input.LA(1)
 
-            if (LA11_0 == 43 or LA11_0 == 45) :
+            if (LA11_0 == 43 or LA11_0 == 45):
                 alt11 = 1
             if alt11 == 1:
                 # SQLite.g:
-                pass 
+                pass
                 if self.input.LA(1) == 43 or self.input.LA(1) == 45:
                     self.input.consume()
                 else:
@@ -6050,13 +5727,12 @@ class SQLiteLexer(Lexer):
                 alt12 = 2
                 LA12_0 = self.input.LA(1)
 
-                if ((48 <= LA12_0 <= 57)) :
+                if ((48 <= LA12_0 <= 57)):
                     alt12 = 1
-
 
                 if alt12 == 1:
                     # SQLite.g:965:44: '0' .. '9'
-                    pass 
+                    pass
                     self.matchRange(48, 57)
 
 
@@ -6092,20 +5768,19 @@ class SQLiteLexer(Lexer):
             alt19 = self.dfa19.predict(self.input)
             if alt19 == 1:
                 # SQLite.g:967:9: ( '0' .. '9' )+ DOT ( '0' .. '9' )* ( FLOAT_EXP )?
-                pass 
+                pass
                 # SQLite.g:967:9: ( '0' .. '9' )+
                 cnt13 = 0
                 while True: #loop13
                     alt13 = 2
                     LA13_0 = self.input.LA(1)
 
-                    if ((48 <= LA13_0 <= 57)) :
+                    if ((48 <= LA13_0 <= 57)):
                         alt13 = 1
-
 
                     if alt13 == 1:
                         # SQLite.g:967:10: '0' .. '9'
-                        pass 
+                        pass
                         self.matchRange(48, 57)
 
 
@@ -6123,27 +5798,26 @@ class SQLiteLexer(Lexer):
                     alt14 = 2
                     LA14_0 = self.input.LA(1)
 
-                    if ((48 <= LA14_0 <= 57)) :
+                    if ((48 <= LA14_0 <= 57)):
                         alt14 = 1
-
 
                     if alt14 == 1:
                         # SQLite.g:967:26: '0' .. '9'
-                        pass 
+                        pass
                         self.matchRange(48, 57)
 
 
                     else:
                         break #loop14
-                # SQLite.g:967:37: ( FLOAT_EXP )?
+                    # SQLite.g:967:37: ( FLOAT_EXP )?
                 alt15 = 2
                 LA15_0 = self.input.LA(1)
 
-                if (LA15_0 == 69 or LA15_0 == 101) :
+                if (LA15_0 == 69 or LA15_0 == 101):
                     alt15 = 1
                 if alt15 == 1:
                     # SQLite.g:967:37: FLOAT_EXP
-                    pass 
+                    pass
                     self.mFLOAT_EXP()
 
 
@@ -6152,7 +5826,7 @@ class SQLiteLexer(Lexer):
 
             elif alt19 == 2:
                 # SQLite.g:968:9: DOT ( '0' .. '9' )+ ( FLOAT_EXP )?
-                pass 
+                pass
                 self.mDOT()
                 # SQLite.g:968:13: ( '0' .. '9' )+
                 cnt16 = 0
@@ -6160,13 +5834,12 @@ class SQLiteLexer(Lexer):
                     alt16 = 2
                     LA16_0 = self.input.LA(1)
 
-                    if ((48 <= LA16_0 <= 57)) :
+                    if ((48 <= LA16_0 <= 57)):
                         alt16 = 1
-
 
                     if alt16 == 1:
                         # SQLite.g:968:14: '0' .. '9'
-                        pass 
+                        pass
                         self.matchRange(48, 57)
 
 
@@ -6178,15 +5851,15 @@ class SQLiteLexer(Lexer):
                         raise eee
 
                     cnt16 += 1
-                # SQLite.g:968:25: ( FLOAT_EXP )?
+                    # SQLite.g:968:25: ( FLOAT_EXP )?
                 alt17 = 2
                 LA17_0 = self.input.LA(1)
 
-                if (LA17_0 == 69 or LA17_0 == 101) :
+                if (LA17_0 == 69 or LA17_0 == 101):
                     alt17 = 1
                 if alt17 == 1:
                     # SQLite.g:968:25: FLOAT_EXP
-                    pass 
+                    pass
                     self.mFLOAT_EXP()
 
 
@@ -6195,20 +5868,19 @@ class SQLiteLexer(Lexer):
 
             elif alt19 == 3:
                 # SQLite.g:969:9: ( '0' .. '9' )+ FLOAT_EXP
-                pass 
+                pass
                 # SQLite.g:969:9: ( '0' .. '9' )+
                 cnt18 = 0
                 while True: #loop18
                     alt18 = 2
                     LA18_0 = self.input.LA(1)
 
-                    if ((48 <= LA18_0 <= 57)) :
+                    if ((48 <= LA18_0 <= 57)):
                         alt18 = 1
-
 
                     if alt18 == 1:
                         # SQLite.g:969:10: '0' .. '9'
-                        pass 
+                        pass
                         self.matchRange(48, 57)
 
 
@@ -6221,7 +5893,6 @@ class SQLiteLexer(Lexer):
 
                     cnt18 += 1
                 self.mFLOAT_EXP()
-
 
             self._state.type = _type
             self._state.channel = _channel
@@ -6243,7 +5914,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:971:5: ( ( 'x' | 'X' ) QUOTE_SINGLE ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )+ QUOTE_SINGLE )
             # SQLite.g:971:7: ( 'x' | 'X' ) QUOTE_SINGLE ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )+ QUOTE_SINGLE
-            pass 
+            pass
             if self.input.LA(1) == 88 or self.input.LA(1) == 120:
                 self.input.consume()
             else:
@@ -6258,14 +5929,14 @@ class SQLiteLexer(Lexer):
                 alt20 = 2
                 LA20_0 = self.input.LA(1)
 
-                if ((48 <= LA20_0 <= 57) or (65 <= LA20_0 <= 70) or (97 <= LA20_0 <= 102)) :
+                if ((48 <= LA20_0 <= 57) or (65 <= LA20_0 <= 70) or (97 <= LA20_0 <= 102)):
                     alt20 = 1
-
 
                 if alt20 == 1:
                     # SQLite.g:
-                    pass 
-                    if (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 70) or (97 <= self.input.LA(1) <= 102):
+                    pass
+                    if (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 70) or (
+                            97 <= self.input.LA(1) <= 102):
                         self.input.consume()
                     else:
                         mse = MismatchedSetException(None, self.input)
@@ -6284,8 +5955,6 @@ class SQLiteLexer(Lexer):
                 cnt20 += 1
             self.mQUOTE_SINGLE()
 
-
-
             self._state.type = _type
             self._state.channel = _channel
 
@@ -6303,29 +5972,28 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:973:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
             # SQLite.g:973:19: '/*' ( options {greedy=false; } : . )* '*/'
-            pass 
+            pass
             self.match("/*")
             # SQLite.g:973:24: ( options {greedy=false; } : . )*
             while True: #loop21
                 alt21 = 2
                 LA21_0 = self.input.LA(1)
 
-                if (LA21_0 == 42) :
+                if (LA21_0 == 42):
                     LA21_1 = self.input.LA(2)
 
-                    if (LA21_1 == 47) :
+                    if (LA21_1 == 47):
                         alt21 = 2
-                    elif ((0 <= LA21_1 <= 46) or (48 <= LA21_1 <= 65535)) :
+                    elif ((0 <= LA21_1 <= 46) or (48 <= LA21_1 <= 65535)):
                         alt21 = 1
 
 
-                elif ((0 <= LA21_0 <= 41) or (43 <= LA21_0 <= 65535)) :
+                elif ((0 <= LA21_0 <= 41) or (43 <= LA21_0 <= 65535)):
                     alt21 = 1
-
 
                 if alt21 == 1:
                     # SQLite.g:973:52: .
-                    pass 
+                    pass
                     self.matchAny()
 
 
@@ -6350,21 +6018,21 @@ class SQLiteLexer(Lexer):
         try:
             # SQLite.g:974:22: ( '--' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
             # SQLite.g:974:24: '--' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
-            pass 
+            pass
             self.match("--")
             # SQLite.g:974:29: (~ ( '\\n' | '\\r' ) )*
             while True: #loop22
                 alt22 = 2
                 LA22_0 = self.input.LA(1)
 
-                if ((0 <= LA22_0 <= 9) or (11 <= LA22_0 <= 12) or (14 <= LA22_0 <= 65535)) :
+                if ((0 <= LA22_0 <= 9) or (11 <= LA22_0 <= 12) or (14 <= LA22_0 <= 65535)):
                     alt22 = 1
-
 
                 if alt22 == 1:
                     # SQLite.g:974:29: ~ ( '\\n' | '\\r' )
-                    pass 
-                    if (0 <= self.input.LA(1) <= 9) or (11 <= self.input.LA(1) <= 12) or (14 <= self.input.LA(1) <= 65535):
+                    pass
+                    if (0 <= self.input.LA(1) <= 9) or (11 <= self.input.LA(1) <= 12) or (
+                            14 <= self.input.LA(1) <= 65535):
                         self.input.consume()
                     else:
                         mse = MismatchedSetException(None, self.input)
@@ -6375,36 +6043,34 @@ class SQLiteLexer(Lexer):
 
                 else:
                     break #loop22
-            # SQLite.g:974:43: ( ( '\\r' )? '\\n' | EOF )
+                # SQLite.g:974:43: ( ( '\\r' )? '\\n' | EOF )
             alt24 = 2
             LA24_0 = self.input.LA(1)
 
-            if (LA24_0 == 10 or LA24_0 == 13) :
+            if (LA24_0 == 10 or LA24_0 == 13):
                 alt24 = 1
             else:
                 alt24 = 2
             if alt24 == 1:
                 # SQLite.g:974:44: ( '\\r' )? '\\n'
-                pass 
+                pass
                 # SQLite.g:974:44: ( '\\r' )?
                 alt23 = 2
                 LA23_0 = self.input.LA(1)
 
-                if (LA23_0 == 13) :
+                if (LA23_0 == 13):
                     alt23 = 1
                 if alt23 == 1:
                     # SQLite.g:974:44: '\\r'
-                    pass 
+                    pass
                     self.match(13)
-
-
 
                 self.match(10)
 
 
             elif alt24 == 2:
                 # SQLite.g:974:55: EOF
-                pass 
+                pass
                 self.match(EOF)
 
 
@@ -6430,7 +6096,7 @@ class SQLiteLexer(Lexer):
 
             # SQLite.g:975:3: ( ( ' ' | '\\r' | '\\t' | '\\u000C' | '\\n' | COMMENT | LINE_COMMENT ) )
             # SQLite.g:975:5: ( ' ' | '\\r' | '\\t' | '\\u000C' | '\\n' | COMMENT | LINE_COMMENT )
-            pass 
+            pass
             # SQLite.g:975:5: ( ' ' | '\\r' | '\\t' | '\\u000C' | '\\n' | COMMENT | LINE_COMMENT )
             alt25 = 7
             LA25 = self.input.LA(1)
@@ -6455,49 +6121,49 @@ class SQLiteLexer(Lexer):
 
             if alt25 == 1:
                 # SQLite.g:975:6: ' '
-                pass 
+                pass
                 self.match(32)
 
 
             elif alt25 == 2:
                 # SQLite.g:975:10: '\\r'
-                pass 
+                pass
                 self.match(13)
 
 
             elif alt25 == 3:
                 # SQLite.g:975:15: '\\t'
-                pass 
+                pass
                 self.match(9)
 
 
             elif alt25 == 4:
                 # SQLite.g:975:20: '\\u000C'
-                pass 
+                pass
                 self.match(12)
 
 
             elif alt25 == 5:
                 # SQLite.g:975:29: '\\n'
-                pass 
+                pass
                 self.match(10)
 
 
             elif alt25 == 6:
                 # SQLite.g:975:34: COMMENT
-                pass 
+                pass
                 self.mCOMMENT()
 
 
             elif alt25 == 7:
                 # SQLite.g:975:42: LINE_COMMENT
-                pass 
+                pass
                 self.mLINE_COMMENT()
 
 
 
             #action start
-            _channel=HIDDEN;
+            _channel = HIDDEN;
             #action end
 
 
@@ -6519,978 +6185,972 @@ class SQLiteLexer(Lexer):
         alt26 = self.dfa26.predict(self.input)
         if alt26 == 1:
             # SQLite.g:1:10: EQUALS
-            pass 
+            pass
             self.mEQUALS()
 
 
         elif alt26 == 2:
             # SQLite.g:1:17: EQUALS2
-            pass 
+            pass
             self.mEQUALS2()
 
 
         elif alt26 == 3:
             # SQLite.g:1:25: NOT_EQUALS
-            pass 
+            pass
             self.mNOT_EQUALS()
 
 
         elif alt26 == 4:
             # SQLite.g:1:36: NOT_EQUALS2
-            pass 
+            pass
             self.mNOT_EQUALS2()
 
 
         elif alt26 == 5:
             # SQLite.g:1:48: LESS
-            pass 
+            pass
             self.mLESS()
 
 
         elif alt26 == 6:
             # SQLite.g:1:53: LESS_OR_EQ
-            pass 
+            pass
             self.mLESS_OR_EQ()
 
 
         elif alt26 == 7:
             # SQLite.g:1:64: GREATER
-            pass 
+            pass
             self.mGREATER()
 
 
         elif alt26 == 8:
             # SQLite.g:1:72: GREATER_OR_EQ
-            pass 
+            pass
             self.mGREATER_OR_EQ()
 
 
         elif alt26 == 9:
             # SQLite.g:1:86: SHIFT_LEFT
-            pass 
+            pass
             self.mSHIFT_LEFT()
 
 
         elif alt26 == 10:
             # SQLite.g:1:97: SHIFT_RIGHT
-            pass 
+            pass
             self.mSHIFT_RIGHT()
 
 
         elif alt26 == 11:
             # SQLite.g:1:109: AMPERSAND
-            pass 
+            pass
             self.mAMPERSAND()
 
 
         elif alt26 == 12:
             # SQLite.g:1:119: PIPE
-            pass 
+            pass
             self.mPIPE()
 
 
         elif alt26 == 13:
             # SQLite.g:1:124: DOUBLE_PIPE
-            pass 
+            pass
             self.mDOUBLE_PIPE()
 
 
         elif alt26 == 14:
             # SQLite.g:1:136: PLUS
-            pass 
+            pass
             self.mPLUS()
 
 
         elif alt26 == 15:
             # SQLite.g:1:141: MINUS
-            pass 
+            pass
             self.mMINUS()
 
 
         elif alt26 == 16:
             # SQLite.g:1:147: TILDA
-            pass 
+            pass
             self.mTILDA()
 
 
         elif alt26 == 17:
             # SQLite.g:1:153: ASTERISK
-            pass 
+            pass
             self.mASTERISK()
 
 
         elif alt26 == 18:
             # SQLite.g:1:162: SLASH
-            pass 
+            pass
             self.mSLASH()
 
 
         elif alt26 == 19:
             # SQLite.g:1:168: BACKSLASH
-            pass 
+            pass
             self.mBACKSLASH()
 
 
         elif alt26 == 20:
             # SQLite.g:1:178: PERCENT
-            pass 
+            pass
             self.mPERCENT()
 
 
         elif alt26 == 21:
             # SQLite.g:1:186: SEMI
-            pass 
+            pass
             self.mSEMI()
 
 
         elif alt26 == 22:
             # SQLite.g:1:191: DOT
-            pass 
+            pass
             self.mDOT()
 
 
         elif alt26 == 23:
             # SQLite.g:1:195: COMMA
-            pass 
+            pass
             self.mCOMMA()
 
 
         elif alt26 == 24:
             # SQLite.g:1:201: LPAREN
-            pass 
+            pass
             self.mLPAREN()
 
 
         elif alt26 == 25:
             # SQLite.g:1:208: RPAREN
-            pass 
+            pass
             self.mRPAREN()
 
 
         elif alt26 == 26:
             # SQLite.g:1:215: QUESTION
-            pass 
+            pass
             self.mQUESTION()
 
 
         elif alt26 == 27:
             # SQLite.g:1:224: COLON
-            pass 
+            pass
             self.mCOLON()
 
 
         elif alt26 == 28:
             # SQLite.g:1:230: AT
-            pass 
+            pass
             self.mAT()
 
 
         elif alt26 == 29:
             # SQLite.g:1:233: DOLLAR
-            pass 
+            pass
             self.mDOLLAR()
 
 
         elif alt26 == 30:
             # SQLite.g:1:240: QUOTE_DOUBLE
-            pass 
+            pass
             self.mQUOTE_DOUBLE()
 
 
         elif alt26 == 31:
             # SQLite.g:1:253: QUOTE_SINGLE
-            pass 
+            pass
             self.mQUOTE_SINGLE()
 
 
         elif alt26 == 32:
             # SQLite.g:1:266: APOSTROPHE
-            pass 
+            pass
             self.mAPOSTROPHE()
 
 
         elif alt26 == 33:
             # SQLite.g:1:277: LPAREN_SQUARE
-            pass 
+            pass
             self.mLPAREN_SQUARE()
 
 
         elif alt26 == 34:
             # SQLite.g:1:291: RPAREN_SQUARE
-            pass 
+            pass
             self.mRPAREN_SQUARE()
 
 
         elif alt26 == 35:
             # SQLite.g:1:305: UNDERSCORE
-            pass 
+            pass
             self.mUNDERSCORE()
 
 
         elif alt26 == 36:
             # SQLite.g:1:316: ABORT
-            pass 
+            pass
             self.mABORT()
 
 
         elif alt26 == 37:
             # SQLite.g:1:322: ADD
-            pass 
+            pass
             self.mADD()
 
 
         elif alt26 == 38:
             # SQLite.g:1:326: AFTER
-            pass 
+            pass
             self.mAFTER()
 
 
         elif alt26 == 39:
             # SQLite.g:1:332: ALL
-            pass 
+            pass
             self.mALL()
 
 
         elif alt26 == 40:
             # SQLite.g:1:336: ALTER
-            pass 
+            pass
             self.mALTER()
 
 
         elif alt26 == 41:
             # SQLite.g:1:342: ANALYZE
-            pass 
+            pass
             self.mANALYZE()
 
 
         elif alt26 == 42:
             # SQLite.g:1:350: AND
-            pass 
+            pass
             self.mAND()
 
 
         elif alt26 == 43:
             # SQLite.g:1:354: AS
-            pass 
+            pass
             self.mAS()
 
 
         elif alt26 == 44:
             # SQLite.g:1:357: ASC
-            pass 
+            pass
             self.mASC()
 
 
         elif alt26 == 45:
             # SQLite.g:1:361: ATTACH
-            pass 
+            pass
             self.mATTACH()
 
 
         elif alt26 == 46:
             # SQLite.g:1:368: AUTOINCREMENT
-            pass 
+            pass
             self.mAUTOINCREMENT()
 
 
         elif alt26 == 47:
             # SQLite.g:1:382: BEFORE
-            pass 
+            pass
             self.mBEFORE()
 
 
         elif alt26 == 48:
             # SQLite.g:1:389: BEGIN
-            pass 
+            pass
             self.mBEGIN()
 
 
         elif alt26 == 49:
             # SQLite.g:1:395: BETWEEN
-            pass 
+            pass
             self.mBETWEEN()
 
 
         elif alt26 == 50:
             # SQLite.g:1:403: BY
-            pass 
+            pass
             self.mBY()
 
 
         elif alt26 == 51:
             # SQLite.g:1:406: CASCADE
-            pass 
+            pass
             self.mCASCADE()
 
 
         elif alt26 == 52:
             # SQLite.g:1:414: CASE
-            pass 
+            pass
             self.mCASE()
 
 
         elif alt26 == 53:
             # SQLite.g:1:419: CAST
-            pass 
+            pass
             self.mCAST()
 
 
         elif alt26 == 54:
             # SQLite.g:1:424: CHECK
-            pass 
+            pass
             self.mCHECK()
 
 
         elif alt26 == 55:
             # SQLite.g:1:430: COLLATE
-            pass 
+            pass
             self.mCOLLATE()
 
 
         elif alt26 == 56:
             # SQLite.g:1:438: COLUMN
-            pass 
+            pass
             self.mCOLUMN()
 
 
         elif alt26 == 57:
             # SQLite.g:1:445: COMMIT
-            pass 
+            pass
             self.mCOMMIT()
 
 
         elif alt26 == 58:
             # SQLite.g:1:452: CONFLICT
-            pass 
+            pass
             self.mCONFLICT()
 
 
         elif alt26 == 59:
             # SQLite.g:1:461: CONSTRAINT
-            pass 
+            pass
             self.mCONSTRAINT()
 
 
         elif alt26 == 60:
             # SQLite.g:1:472: CREATE
-            pass 
+            pass
             self.mCREATE()
 
 
         elif alt26 == 61:
             # SQLite.g:1:479: CROSS
-            pass 
+            pass
             self.mCROSS()
 
 
         elif alt26 == 62:
             # SQLite.g:1:485: CURRENT_TIME
-            pass 
+            pass
             self.mCURRENT_TIME()
 
 
         elif alt26 == 63:
             # SQLite.g:1:498: CURRENT_DATE
-            pass 
+            pass
             self.mCURRENT_DATE()
 
 
         elif alt26 == 64:
             # SQLite.g:1:511: CURRENT_TIMESTAMP
-            pass 
+            pass
             self.mCURRENT_TIMESTAMP()
 
 
         elif alt26 == 65:
             # SQLite.g:1:529: DATABASE
-            pass 
+            pass
             self.mDATABASE()
 
 
         elif alt26 == 66:
             # SQLite.g:1:538: DEFAULT
-            pass 
+            pass
             self.mDEFAULT()
 
 
         elif alt26 == 67:
             # SQLite.g:1:546: DEFERRABLE
-            pass 
+            pass
             self.mDEFERRABLE()
 
 
         elif alt26 == 68:
             # SQLite.g:1:557: DEFERRED
-            pass 
+            pass
             self.mDEFERRED()
 
 
         elif alt26 == 69:
             # SQLite.g:1:566: DELETE
-            pass 
+            pass
             self.mDELETE()
 
 
         elif alt26 == 70:
             # SQLite.g:1:573: DESC
-            pass 
+            pass
             self.mDESC()
 
 
         elif alt26 == 71:
             # SQLite.g:1:578: DETACH
-            pass 
+            pass
             self.mDETACH()
 
 
         elif alt26 == 72:
             # SQLite.g:1:585: DISTINCT
-            pass 
+            pass
             self.mDISTINCT()
 
 
         elif alt26 == 73:
             # SQLite.g:1:594: DROP
-            pass 
+            pass
             self.mDROP()
 
 
         elif alt26 == 74:
             # SQLite.g:1:599: EACH
-            pass 
+            pass
             self.mEACH()
 
 
         elif alt26 == 75:
             # SQLite.g:1:604: ELSE
-            pass 
+            pass
             self.mELSE()
 
 
         elif alt26 == 76:
             # SQLite.g:1:609: END
-            pass 
+            pass
             self.mEND()
 
 
         elif alt26 == 77:
             # SQLite.g:1:613: ESCAPE
-            pass 
+            pass
             self.mESCAPE()
 
 
         elif alt26 == 78:
             # SQLite.g:1:620: EXCEPT
-            pass 
+            pass
             self.mEXCEPT()
 
 
         elif alt26 == 79:
             # SQLite.g:1:627: EXCLUSIVE
-            pass 
+            pass
             self.mEXCLUSIVE()
 
 
         elif alt26 == 80:
             # SQLite.g:1:637: EXISTS
-            pass 
+            pass
             self.mEXISTS()
 
 
         elif alt26 == 81:
             # SQLite.g:1:644: EXPLAIN
-            pass 
+            pass
             self.mEXPLAIN()
 
 
         elif alt26 == 82:
             # SQLite.g:1:652: FAIL
-            pass 
+            pass
             self.mFAIL()
 
 
         elif alt26 == 83:
             # SQLite.g:1:657: FOR
-            pass 
+            pass
             self.mFOR()
 
 
         elif alt26 == 84:
             # SQLite.g:1:661: FOREIGN
-            pass 
+            pass
             self.mFOREIGN()
 
 
         elif alt26 == 85:
             # SQLite.g:1:669: FROM
-            pass 
+            pass
             self.mFROM()
 
 
         elif alt26 == 86:
             # SQLite.g:1:674: GLOB
-            pass 
+            pass
             self.mGLOB()
 
 
         elif alt26 == 87:
             # SQLite.g:1:679: GROUP
-            pass 
+            pass
             self.mGROUP()
 
 
         elif alt26 == 88:
             # SQLite.g:1:685: HAVING
-            pass 
+            pass
             self.mHAVING()
 
 
         elif alt26 == 89:
             # SQLite.g:1:692: IF
-            pass 
+            pass
             self.mIF()
 
 
         elif alt26 == 90:
             # SQLite.g:1:695: IGNORE
-            pass 
+            pass
             self.mIGNORE()
 
 
         elif alt26 == 91:
             # SQLite.g:1:702: IMMEDIATE
-            pass 
+            pass
             self.mIMMEDIATE()
 
 
         elif alt26 == 92:
             # SQLite.g:1:712: IN
-            pass 
+            pass
             self.mIN()
 
 
         elif alt26 == 93:
             # SQLite.g:1:715: INDEX
-            pass 
+            pass
             self.mINDEX()
 
 
         elif alt26 == 94:
             # SQLite.g:1:721: INDEXED
-            pass 
+            pass
             self.mINDEXED()
 
 
         elif alt26 == 95:
             # SQLite.g:1:729: INITIALLY
-            pass 
+            pass
             self.mINITIALLY()
 
 
         elif alt26 == 96:
             # SQLite.g:1:739: INNER
-            pass 
+            pass
             self.mINNER()
 
 
         elif alt26 == 97:
             # SQLite.g:1:745: INSERT
-            pass 
+            pass
             self.mINSERT()
 
 
         elif alt26 == 98:
             # SQLite.g:1:752: INSTEAD
-            pass 
+            pass
             self.mINSTEAD()
 
 
         elif alt26 == 99:
             # SQLite.g:1:760: INTERSECT
-            pass 
+            pass
             self.mINTERSECT()
 
 
         elif alt26 == 100:
             # SQLite.g:1:770: INTO
-            pass 
+            pass
             self.mINTO()
 
 
         elif alt26 == 101:
             # SQLite.g:1:775: IS
-            pass 
+            pass
             self.mIS()
 
 
         elif alt26 == 102:
             # SQLite.g:1:778: ISNULL
-            pass 
+            pass
             self.mISNULL()
 
 
         elif alt26 == 103:
             # SQLite.g:1:785: JOIN
-            pass 
+            pass
             self.mJOIN()
 
 
         elif alt26 == 104:
             # SQLite.g:1:790: KEY
-            pass 
+            pass
             self.mKEY()
 
 
         elif alt26 == 105:
             # SQLite.g:1:794: LEFT
-            pass 
+            pass
             self.mLEFT()
 
 
         elif alt26 == 106:
             # SQLite.g:1:799: LIKE
-            pass 
+            pass
             self.mLIKE()
 
 
         elif alt26 == 107:
             # SQLite.g:1:804: LIMIT
-            pass 
+            pass
             self.mLIMIT()
 
 
         elif alt26 == 108:
             # SQLite.g:1:810: MATCH
-            pass 
+            pass
             self.mMATCH()
 
 
         elif alt26 == 109:
             # SQLite.g:1:816: NATURAL
-            pass 
+            pass
             self.mNATURAL()
 
 
         elif alt26 == 110:
             # SQLite.g:1:824: NOT
-            pass 
+            pass
             self.mNOT()
 
 
         elif alt26 == 111:
             # SQLite.g:1:828: NOTNULL
-            pass 
+            pass
             self.mNOTNULL()
 
 
         elif alt26 == 112:
             # SQLite.g:1:836: NULL
-            pass 
+            pass
             self.mNULL()
 
 
         elif alt26 == 113:
             # SQLite.g:1:841: OF
-            pass 
+            pass
             self.mOF()
 
 
         elif alt26 == 114:
             # SQLite.g:1:844: OFFSET
-            pass 
+            pass
             self.mOFFSET()
 
 
         elif alt26 == 115:
             # SQLite.g:1:851: ON
-            pass 
+            pass
             self.mON()
 
 
         elif alt26 == 116:
             # SQLite.g:1:854: OR
-            pass 
+            pass
             self.mOR()
 
 
         elif alt26 == 117:
             # SQLite.g:1:857: ORDER
-            pass 
+            pass
             self.mORDER()
 
 
         elif alt26 == 118:
             # SQLite.g:1:863: OUTER
-            pass 
+            pass
             self.mOUTER()
 
 
         elif alt26 == 119:
             # SQLite.g:1:869: PLAN
-            pass 
+            pass
             self.mPLAN()
 
 
         elif alt26 == 120:
             # SQLite.g:1:874: PRAGMA
-            pass 
+            pass
             self.mPRAGMA()
 
 
         elif alt26 == 121:
             # SQLite.g:1:881: PRIMARY
-            pass 
+            pass
             self.mPRIMARY()
 
 
         elif alt26 == 122:
             # SQLite.g:1:889: QUERY
-            pass 
+            pass
             self.mQUERY()
 
 
         elif alt26 == 123:
             # SQLite.g:1:895: RAISE
-            pass 
+            pass
             self.mRAISE()
 
 
         elif alt26 == 124:
             # SQLite.g:1:901: REFERENCES
-            pass 
+            pass
             self.mREFERENCES()
 
 
         elif alt26 == 125:
             # SQLite.g:1:912: REGEXP
-            pass 
+            pass
             self.mREGEXP()
 
 
         elif alt26 == 126:
             # SQLite.g:1:919: REINDEX
-            pass 
+            pass
             self.mREINDEX()
 
 
         elif alt26 == 127:
             # SQLite.g:1:927: RELEASE
-            pass 
+            pass
             self.mRELEASE()
 
 
         elif alt26 == 128:
             # SQLite.g:1:935: RENAME
-            pass 
+            pass
             self.mRENAME()
 
 
         elif alt26 == 129:
             # SQLite.g:1:942: REPLACE
-            pass 
+            pass
             self.mREPLACE()
 
 
         elif alt26 == 130:
             # SQLite.g:1:950: RESTRICT
-            pass 
+            pass
             self.mRESTRICT()
 
 
         elif alt26 == 131:
             # SQLite.g:1:959: ROLLBACK
-            pass 
+            pass
             self.mROLLBACK()
 
 
         elif alt26 == 132:
             # SQLite.g:1:968: ROW
-            pass 
+            pass
             self.mROW()
 
 
         elif alt26 == 133:
             # SQLite.g:1:972: SAVEPOINT
-            pass 
+            pass
             self.mSAVEPOINT()
 
 
         elif alt26 == 134:
             # SQLite.g:1:982: SELECT
-            pass 
+            pass
             self.mSELECT()
 
 
         elif alt26 == 135:
             # SQLite.g:1:989: SET
-            pass 
+            pass
             self.mSET()
 
 
         elif alt26 == 136:
             # SQLite.g:1:993: TABLE
-            pass 
+            pass
             self.mTABLE()
 
 
         elif alt26 == 137:
             # SQLite.g:1:999: TEMPORARY
-            pass 
+            pass
             self.mTEMPORARY()
 
 
         elif alt26 == 138:
             # SQLite.g:1:1009: THEN
-            pass 
+            pass
             self.mTHEN()
 
 
         elif alt26 == 139:
             # SQLite.g:1:1014: TO
-            pass 
+            pass
             self.mTO()
 
 
         elif alt26 == 140:
             # SQLite.g:1:1017: TRANSACTION
-            pass 
+            pass
             self.mTRANSACTION()
 
 
         elif alt26 == 141:
             # SQLite.g:1:1029: TRIGGER
-            pass 
+            pass
             self.mTRIGGER()
 
 
         elif alt26 == 142:
             # SQLite.g:1:1037: UNION
-            pass 
+            pass
             self.mUNION()
 
 
         elif alt26 == 143:
             # SQLite.g:1:1043: UNIQUE
-            pass 
+            pass
             self.mUNIQUE()
 
 
         elif alt26 == 144:
             # SQLite.g:1:1050: UPDATE
-            pass 
+            pass
             self.mUPDATE()
 
 
         elif alt26 == 145:
             # SQLite.g:1:1057: USING
-            pass 
+            pass
             self.mUSING()
 
 
         elif alt26 == 146:
             # SQLite.g:1:1063: VACUUM
-            pass 
+            pass
             self.mVACUUM()
 
 
         elif alt26 == 147:
             # SQLite.g:1:1070: VALUES
-            pass 
+            pass
             self.mVALUES()
 
 
         elif alt26 == 148:
             # SQLite.g:1:1077: VIEW
-            pass 
+            pass
             self.mVIEW()
 
 
         elif alt26 == 149:
             # SQLite.g:1:1082: VIRTUAL
-            pass 
+            pass
             self.mVIRTUAL()
 
 
         elif alt26 == 150:
             # SQLite.g:1:1090: WHEN
-            pass 
+            pass
             self.mWHEN()
 
 
         elif alt26 == 151:
             # SQLite.g:1:1095: WHERE
-            pass 
+            pass
             self.mWHERE()
 
 
         elif alt26 == 152:
             # SQLite.g:1:1101: STRING
-            pass 
+            pass
             self.mSTRING()
 
 
         elif alt26 == 153:
             # SQLite.g:1:1108: ID
-            pass 
+            pass
             self.mID()
 
 
         elif alt26 == 154:
             # SQLite.g:1:1111: INTEGER
-            pass 
+            pass
             self.mINTEGER()
 
 
         elif alt26 == 155:
             # SQLite.g:1:1119: FLOAT
-            pass 
+            pass
             self.mFLOAT()
 
 
         elif alt26 == 156:
             # SQLite.g:1:1125: BLOB
-            pass 
+            pass
             self.mBLOB()
 
 
         elif alt26 == 157:
             # SQLite.g:1:1130: WS
-            pass 
+            pass
             self.mWS()
-
-
-
-
-
 
 
     # lookup tables for DFA #19
 
     DFA19_eot = DFA.unpack(
         u"\5\uffff"
-        )
+    )
 
     DFA19_eof = DFA.unpack(
         u"\5\uffff"
-        )
+    )
 
     DFA19_min = DFA.unpack(
         u"\2\56\3\uffff"
-        )
+    )
 
     DFA19_max = DFA.unpack(
         u"\1\71\1\145\3\uffff"
-        )
+    )
 
     DFA19_accept = DFA.unpack(
         u"\2\uffff\1\2\1\3\1\1"
-        )
+    )
 
     DFA19_special = DFA.unpack(
         u"\5\uffff"
-        )
+    )
 
-            
     DFA19_transition = [
         DFA.unpack(u"\1\2\1\uffff\12\1"),
         DFA.unpack(u"\1\4\1\uffff\12\1\13\uffff\1\3\37\uffff\1\3"),
@@ -7546,11 +7206,11 @@ class SQLiteLexer(Lexer):
         u"\3\66\1\u0285\1\u0286\4\uffff\1\u0287\1\uffff\4\66\3\uffff\1\u028c"
         u"\1\66\1\u028e\1\u0290\1\uffff\1\u0291\1\uffff\1\66\2\uffff\3\66"
         u"\1\u0296\1\uffff"
-        )
+    )
 
     DFA26_eof = DFA.unpack(
         u"\u0297\uffff"
-        )
+    )
 
     DFA26_min = DFA.unpack(
         u"\1\11\1\75\1\uffff\1\74\1\75\1\uffff\1\174\1\uffff\1\55\2\uffff"
@@ -7606,7 +7266,7 @@ class SQLiteLexer(Lexer):
         u"\115\1\124\2\44\4\uffff\1\44\1\uffff\2\116\2\105\3\uffff\1\44\1"
         u"\124\2\44\1\uffff\1\44\1\uffff\1\124\2\uffff\1\101\1\115\1\120"
         u"\1\44\1\uffff"
-        )
+    )
 
     DFA26_max = DFA.unpack(
         u"\1\176\1\75\1\uffff\2\76\1\uffff\1\174\1\uffff\1\55\2\uffff\1\52"
@@ -7664,7 +7324,7 @@ class SQLiteLexer(Lexer):
         u"\145\1\155\1\164\2\172\4\uffff\1\172\1\uffff\2\156\2\145\3\uffff"
         u"\1\172\1\164\2\172\1\uffff\1\172\1\uffff\1\164\2\uffff\1\141\1"
         u"\155\1\160\1\172\1\uffff"
-        )
+    )
 
     DFA26_accept = DFA.unpack(
         u"\2\uffff\1\3\2\uffff\1\13\1\uffff\1\16\1\uffff\1\20\1\21\1\uffff"
@@ -7694,22 +7354,21 @@ class SQLiteLexer(Lexer):
         u"\4\uffff\1\u0082\1\uffff\1\u0083\10\uffff\1\117\1\143\1\137\1\133"
         u"\1\uffff\1\u0085\4\uffff\1\73\1\103\1\174\4\uffff\1\u008c\1\uffff"
         u"\1\76\1\uffff\1\77\1\56\4\uffff\1\100"
-        )
+    )
 
     DFA26_special = DFA.unpack(
         u"\27\uffff\1\1\1\2\1\0\1\3\u027c\uffff"
-        )
+    )
 
-            
     DFA26_transition = [
         DFA.unpack(u"\2\67\1\uffff\2\67\22\uffff\1\67\1\2\1\27\1\uffff\1"
-        u"\26\1\15\1\5\1\30\1\21\1\22\1\12\1\7\1\20\1\10\1\17\1\13\12\65"
-        u"\1\24\1\16\1\3\1\1\1\4\1\23\1\25\1\35\1\36\1\37\1\40\1\41\1\42"
-        u"\1\43\1\44\1\45\1\46\1\47\1\50\1\51\1\52\1\53\1\54\1\55\1\56\1"
-        u"\57\1\60\1\61\1\62\1\63\1\64\2\66\1\32\1\14\1\33\1\uffff\1\34\1"
-        u"\31\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\44\1\45\1\46\1\47\1\50"
-        u"\1\51\1\52\1\53\1\54\1\55\1\56\1\57\1\60\1\61\1\62\1\63\1\64\2"
-        u"\66\1\uffff\1\6\1\uffff\1\11"),
+                   u"\26\1\15\1\5\1\30\1\21\1\22\1\12\1\7\1\20\1\10\1\17\1\13\12\65"
+                   u"\1\24\1\16\1\3\1\1\1\4\1\23\1\25\1\35\1\36\1\37\1\40\1\41\1\42"
+                   u"\1\43\1\44\1\45\1\46\1\47\1\50\1\51\1\52\1\53\1\54\1\55\1\56\1"
+                   u"\57\1\60\1\61\1\62\1\63\1\64\2\66\1\32\1\14\1\33\1\uffff\1\34\1"
+                   u"\31\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\44\1\45\1\46\1\47\1\50"
+                   u"\1\51\1\52\1\53\1\54\1\55\1\56\1\57\1\60\1\61\1\62\1\63\1\64\2"
+                   u"\66\1\uffff\1\6\1\uffff\1\11"),
         DFA.unpack(u"\1\70"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\74\1\73\1\72"),
@@ -7738,47 +7397,47 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\133\66\1\uffff\uffa4\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\123\1\uffff\1\124\1\uffff\1\120\5\uffff\1\117\1"
-        u"\uffff\1\115\4\uffff\1\122\1\116\1\121\14\uffff\1\123\1\uffff\1"
-        u"\124\1\uffff\1\120\5\uffff\1\117\1\uffff\1\115\4\uffff\1\122\1"
-        u"\116\1\121"),
+                   u"\uffff\1\115\4\uffff\1\122\1\116\1\121\14\uffff\1\123\1\uffff\1"
+                   u"\124\1\uffff\1\120\5\uffff\1\117\1\uffff\1\115\4\uffff\1\122\1"
+                   u"\116\1\121"),
         DFA.unpack(u"\1\125\23\uffff\1\126\13\uffff\1\125\23\uffff\1\126"),
         DFA.unpack(u"\1\127\6\uffff\1\133\6\uffff\1\132\2\uffff\1\131\2"
-        u"\uffff\1\130\13\uffff\1\127\6\uffff\1\133\6\uffff\1\132\2\uffff"
-        u"\1\131\2\uffff\1\130"),
+                   u"\uffff\1\130\13\uffff\1\127\6\uffff\1\133\6\uffff\1\132\2\uffff"
+                   u"\1\131\2\uffff\1\130"),
         DFA.unpack(u"\1\135\3\uffff\1\134\3\uffff\1\137\10\uffff\1\136\16"
-        u"\uffff\1\135\3\uffff\1\134\3\uffff\1\137\10\uffff\1\136"),
+                   u"\uffff\1\135\3\uffff\1\134\3\uffff\1\137\10\uffff\1\136"),
         DFA.unpack(u"\1\142\12\uffff\1\144\1\uffff\1\143\4\uffff\1\141\4"
-        u"\uffff\1\140\10\uffff\1\142\12\uffff\1\144\1\uffff\1\143\4\uffff"
-        u"\1\141\4\uffff\1\140"),
+                   u"\uffff\1\140\10\uffff\1\142\12\uffff\1\144\1\uffff\1\143\4\uffff"
+                   u"\1\141\4\uffff\1\140"),
         DFA.unpack(u"\1\147\15\uffff\1\145\2\uffff\1\146\16\uffff\1\147"
-        u"\15\uffff\1\145\2\uffff\1\146"),
+                   u"\15\uffff\1\145\2\uffff\1\146"),
         DFA.unpack(u"\1\150\5\uffff\1\151\31\uffff\1\150\5\uffff\1\151"),
         DFA.unpack(u"\1\152\37\uffff\1\152"),
         DFA.unpack(u"\1\154\1\156\5\uffff\1\157\1\153\4\uffff\1\155\22\uffff"
-        u"\1\154\1\156\5\uffff\1\157\1\153\4\uffff\1\155"),
+                   u"\1\154\1\156\5\uffff\1\157\1\153\4\uffff\1\155"),
         DFA.unpack(u"\1\160\37\uffff\1\160"),
         DFA.unpack(u"\1\161\37\uffff\1\161"),
         DFA.unpack(u"\1\163\3\uffff\1\162\33\uffff\1\163\3\uffff\1\162"),
         DFA.unpack(u"\1\164\37\uffff\1\164"),
         DFA.unpack(u"\1\167\15\uffff\1\166\5\uffff\1\165\13\uffff\1\167"
-        u"\15\uffff\1\166\5\uffff\1\165"),
+                   u"\15\uffff\1\166\5\uffff\1\165"),
         DFA.unpack(u"\1\170\7\uffff\1\173\3\uffff\1\171\2\uffff\1\172\20"
-        u"\uffff\1\170\7\uffff\1\173\3\uffff\1\171\2\uffff\1\172"),
+                   u"\uffff\1\170\7\uffff\1\173\3\uffff\1\171\2\uffff\1\172"),
         DFA.unpack(u"\1\174\5\uffff\1\175\31\uffff\1\174\5\uffff\1\175"),
         DFA.unpack(u"\1\176\37\uffff\1\176"),
         DFA.unpack(u"\1\u0081\3\uffff\1\177\11\uffff\1\u0080\21\uffff\1"
-        u"\u0081\3\uffff\1\177\11\uffff\1\u0080"),
+                   u"\u0081\3\uffff\1\177\11\uffff\1\u0080"),
         DFA.unpack(u"\1\u0083\3\uffff\1\u0082\33\uffff\1\u0083\3\uffff\1"
-        u"\u0082"),
+                   u"\u0082"),
         DFA.unpack(u"\1\u0086\3\uffff\1\u0088\2\uffff\1\u0087\6\uffff\1"
-        u"\u0085\2\uffff\1\u0084\16\uffff\1\u0086\3\uffff\1\u0088\2\uffff"
-        u"\1\u0087\6\uffff\1\u0085\2\uffff\1\u0084"),
+                   u"\u0085\2\uffff\1\u0084\16\uffff\1\u0086\3\uffff\1\u0088\2\uffff"
+                   u"\1\u0087\6\uffff\1\u0085\2\uffff\1\u0084"),
         DFA.unpack(u"\1\u008a\1\uffff\1\u0089\2\uffff\1\u008b\32\uffff\1"
-        u"\u008a\1\uffff\1\u0089\2\uffff\1\u008b"),
+                   u"\u008a\1\uffff\1\u0089\2\uffff\1\u008b"),
         DFA.unpack(u"\1\u008c\7\uffff\1\u008d\27\uffff\1\u008c\7\uffff\1"
-        u"\u008d"),
+                   u"\u008d"),
         DFA.unpack(u"\1\u008e\37\uffff\1\u008e"),
         DFA.unpack(u"\1\u008f"),
         DFA.unpack(u"\1\106\1\uffff\12\65\13\uffff\1\106\37\uffff\1\106"),
@@ -7806,34 +7465,34 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0091\2\uffff\1\u0092\34\uffff\1\u0091\2\uffff\1"
-        u"\u0092"),
+                   u"\u0092"),
         DFA.unpack(u"\1\u0093\37\uffff\1\u0093"),
         DFA.unpack(u"\1\u0094\7\uffff\1\u0095\27\uffff\1\u0094\7\uffff\1"
-        u"\u0095"),
+                   u"\u0095"),
         DFA.unpack(u"\1\u0096\37\uffff\1\u0096"),
         DFA.unpack(u"\1\u0097\37\uffff\1\u0097"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\2\66\1\u0099\27\66\4\uffff"
-        u"\1\66\1\uffff\2\66\1\u0099\27\66"),
+                   u"\1\66\1\uffff\2\66\1\u0099\27\66"),
         DFA.unpack(u"\1\u009a\37\uffff\1\u009a"),
         DFA.unpack(u"\1\u009b\37\uffff\1\u009b"),
         DFA.unpack(u"\1\u009c\1\u009d\14\uffff\1\u009e\21\uffff\1\u009c"
-        u"\1\u009d\14\uffff\1\u009e"),
+                   u"\1\u009d\14\uffff\1\u009e"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00a0\37\uffff\1\u00a0"),
         DFA.unpack(u"\1\u00a1\37\uffff\1\u00a1"),
         DFA.unpack(u"\1\u00a2\11\uffff\1\u00a3\25\uffff\1\u00a2\11\uffff"
-        u"\1\u00a3"),
+                   u"\1\u00a3"),
         DFA.unpack(u"\1\u00a6\1\u00a5\1\u00a4\35\uffff\1\u00a6\1\u00a5\1"
-        u"\u00a4"),
+                   u"\u00a4"),
         DFA.unpack(u"\1\u00a7\37\uffff\1\u00a7"),
         DFA.unpack(u"\1\u00a8\5\uffff\1\u00a9\6\uffff\1\u00aa\1\u00ab\21"
-        u"\uffff\1\u00a8\5\uffff\1\u00a9\6\uffff\1\u00aa\1\u00ab"),
+                   u"\uffff\1\u00a8\5\uffff\1\u00a9\6\uffff\1\u00aa\1\u00ab"),
         DFA.unpack(u"\1\u00ac\37\uffff\1\u00ac"),
         DFA.unpack(u"\1\u00ad\37\uffff\1\u00ad"),
         DFA.unpack(u"\1\u00ae\37\uffff\1\u00ae"),
         DFA.unpack(u"\1\u00b0\5\uffff\1\u00af\6\uffff\1\u00b1\22\uffff\1"
-        u"\u00b0\5\uffff\1\u00af\6\uffff\1\u00b1"),
+                   u"\u00b0\5\uffff\1\u00af\6\uffff\1\u00b1"),
         DFA.unpack(u"\1\u00b2\37\uffff\1\u00b2"),
         DFA.unpack(u"\1\u00b3\37\uffff\1\u00b3"),
         DFA.unpack(u"\1\u00b4\37\uffff\1\u00b4"),
@@ -7845,48 +7504,48 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u00ba\37\uffff\1\u00ba"),
         DFA.unpack(u"\1\u00bb\37\uffff\1\u00bb"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\3\66\1\u00c0\4\66\1\u00c1"
-        u"\4\66\1\u00be\4\66\1\u00bf\1\u00bd\6\66\4\uffff\1\66\1\uffff\3"
-        u"\66\1\u00c0\4\66\1\u00c1\4\66\1\u00be\4\66\1\u00bf\1\u00bd\6\66"),
+                   u"\4\66\1\u00be\4\66\1\u00bf\1\u00bd\6\66\4\uffff\1\66\1\uffff\3"
+                   u"\66\1\u00c0\4\66\1\u00c1\4\66\1\u00be\4\66\1\u00bf\1\u00bd\6\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\15\66\1\u00c4\14\66\4"
-        u"\uffff\1\66\1\uffff\15\66\1\u00c4\14\66"),
+                   u"\uffff\1\66\1\uffff\15\66\1\u00c4\14\66"),
         DFA.unpack(u"\1\u00c5\37\uffff\1\u00c5"),
         DFA.unpack(u"\1\u00c6\37\uffff\1\u00c6"),
         DFA.unpack(u"\1\u00c7\37\uffff\1\u00c7"),
         DFA.unpack(u"\1\u00c8\37\uffff\1\u00c8"),
         DFA.unpack(u"\1\u00ca\1\uffff\1\u00c9\35\uffff\1\u00ca\1\uffff\1"
-        u"\u00c9"),
+                   u"\u00c9"),
         DFA.unpack(u"\1\u00cb\37\uffff\1\u00cb"),
         DFA.unpack(u"\1\u00cc\37\uffff\1\u00cc"),
         DFA.unpack(u"\1\u00cd\37\uffff\1\u00cd"),
         DFA.unpack(u"\1\u00ce\37\uffff\1\u00ce"),
         DFA.unpack(u"\1\u00cf\37\uffff\1\u00cf"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\5\66\1\u00d1\24\66\4\uffff"
-        u"\1\66\1\uffff\5\66\1\u00d1\24\66"),
+                   u"\1\66\1\uffff\5\66\1\u00d1\24\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\3\66\1\u00d3\26\66\4\uffff"
-        u"\1\66\1\uffff\3\66\1\u00d3\26\66"),
+                   u"\1\66\1\uffff\3\66\1\u00d3\26\66"),
         DFA.unpack(u"\1\u00d4\37\uffff\1\u00d4"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00d6\37\uffff\1\u00d6"),
         DFA.unpack(u"\1\u00d7\7\uffff\1\u00d8\27\uffff\1\u00d7\7\uffff\1"
-        u"\u00d8"),
+                   u"\u00d8"),
         DFA.unpack(u"\1\u00d9\37\uffff\1\u00d9"),
         DFA.unpack(u"\1\u00df\1\u00db\1\uffff\1\u00dd\2\uffff\1\u00dc\1"
-        u"\uffff\1\u00e0\1\uffff\1\u00de\2\uffff\1\u00da\22\uffff\1\u00df"
-        u"\1\u00db\1\uffff\1\u00dd\2\uffff\1\u00dc\1\uffff\1\u00e0\1\uffff"
-        u"\1\u00de\2\uffff\1\u00da"),
+                   u"\uffff\1\u00e0\1\uffff\1\u00de\2\uffff\1\u00da\22\uffff\1\u00df"
+                   u"\1\u00db\1\uffff\1\u00dd\2\uffff\1\u00dc\1\uffff\1\u00e0\1\uffff"
+                   u"\1\u00de\2\uffff\1\u00da"),
         DFA.unpack(u"\1\u00e1\12\uffff\1\u00e2\24\uffff\1\u00e1\12\uffff"
-        u"\1\u00e2"),
+                   u"\1\u00e2"),
         DFA.unpack(u"\1\u00e3\37\uffff\1\u00e3"),
         DFA.unpack(u"\1\u00e5\7\uffff\1\u00e4\27\uffff\1\u00e5\7\uffff\1"
-        u"\u00e4"),
+                   u"\u00e4"),
         DFA.unpack(u"\1\u00e6\37\uffff\1\u00e6"),
         DFA.unpack(u"\1\u00e7\7\uffff\1\u00e8\27\uffff\1\u00e7\7\uffff\1"
-        u"\u00e8"),
+                   u"\u00e8"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00ea\37\uffff\1\u00ea"),
         DFA.unpack(u"\1\u00eb\37\uffff\1\u00eb"),
         DFA.unpack(u"\1\u00ec\37\uffff\1\u00ec"),
@@ -7894,44 +7553,44 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u00ee\37\uffff\1\u00ee"),
         DFA.unpack(u"\1\u00ef\37\uffff\1\u00ef"),
         DFA.unpack(u"\1\u00f0\10\uffff\1\u00f1\26\uffff\1\u00f0\10\uffff"
-        u"\1\u00f1"),
+                   u"\1\u00f1"),
         DFA.unpack(u"\1\u00f2\14\uffff\1\u00f3\22\uffff\1\u00f2\14\uffff"
-        u"\1\u00f3"),
+                   u"\1\u00f3"),
         DFA.unpack(u"\1\u00f4\37\uffff\1\u00f4"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u00f5\37\uffff\1\u00f5"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00f7\37\uffff\1\u00f7"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00f9\37\uffff\1\u00f9"),
         DFA.unpack(u"\1\u00fa\37\uffff\1\u00fa"),
         DFA.unpack(u"\1\u00fb\37\uffff\1\u00fb"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00fd\37\uffff\1\u00fd"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u00ff\37\uffff\1\u00ff"),
         DFA.unpack(u"\1\u0100\37\uffff\1\u0100"),
         DFA.unpack(u"\1\u0101\37\uffff\1\u0101"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0104\1\uffff\1\u0103\16\uffff\1\u0102\16\uffff"
-        u"\1\u0104\1\uffff\1\u0103\16\uffff\1\u0102"),
+                   u"\1\u0104\1\uffff\1\u0103\16\uffff\1\u0102"),
         DFA.unpack(u"\1\u0105\37\uffff\1\u0105"),
         DFA.unpack(u"\1\u0106\37\uffff\1\u0106"),
         DFA.unpack(u"\1\u0107\37\uffff\1\u0107"),
         DFA.unpack(u"\1\u0109\14\uffff\1\u0108\22\uffff\1\u0109\14\uffff"
-        u"\1\u0108"),
+                   u"\1\u0108"),
         DFA.unpack(u"\1\u010a\37\uffff\1\u010a"),
         DFA.unpack(u"\1\u010c\10\uffff\1\u010b\26\uffff\1\u010c\10\uffff"
-        u"\1\u010b"),
+                   u"\1\u010b"),
         DFA.unpack(u"\1\u010d\37\uffff\1\u010d"),
         DFA.unpack(u"\1\u010f\3\uffff\1\u010e\33\uffff\1\u010f\3\uffff\1"
-        u"\u010e"),
+                   u"\u010e"),
         DFA.unpack(u"\1\u0110\37\uffff\1\u0110"),
         DFA.unpack(u"\1\u0111\37\uffff\1\u0111"),
         DFA.unpack(u"\1\u0112\37\uffff\1\u0112"),
@@ -7940,15 +7599,15 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0115\37\uffff\1\u0115"),
         DFA.unpack(u"\1\u0116\37\uffff\1\u0116"),
         DFA.unpack(u"\1\u0118\6\uffff\1\u0117\30\uffff\1\u0118\6\uffff\1"
-        u"\u0117"),
+                   u"\u0117"),
         DFA.unpack(u"\1\u0119\37\uffff\1\u0119"),
         DFA.unpack(u"\1\u011a\37\uffff\1\u011a"),
         DFA.unpack(u"\1\u011b\37\uffff\1\u011b"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u011d\37\uffff\1\u011d"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\4\66\1\u011f\25\66\4\uffff"
-        u"\1\66\1\uffff\4\66\1\u011f\25\66"),
+                   u"\1\66\1\uffff\4\66\1\u011f\25\66"),
         DFA.unpack(u"\1\u0120\37\uffff\1\u0120"),
         DFA.unpack(u"\1\u0121\37\uffff\1\u0121"),
         DFA.unpack(u"\1\u0122\37\uffff\1\u0122"),
@@ -7956,10 +7615,10 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0124\37\uffff\1\u0124"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0126\11\uffff\1\u0125\25\uffff\1\u0126\11\uffff"
-        u"\1\u0125"),
+                   u"\1\u0125"),
         DFA.unpack(u"\1\u0127\37\uffff\1\u0127"),
         DFA.unpack(u"\1\u0129\16\uffff\1\u0128\20\uffff\1\u0129\16\uffff"
-        u"\1\u0128"),
+                   u"\1\u0128"),
         DFA.unpack(u"\1\u012a\37\uffff\1\u012a"),
         DFA.unpack(u"\1\u012b\37\uffff\1\u012b"),
         DFA.unpack(u""),
@@ -7969,14 +7628,14 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u012e\37\uffff\1\u012e"),
         DFA.unpack(u"\1\u012f\37\uffff\1\u012f"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0131\37\uffff\1\u0131"),
         DFA.unpack(u"\1\u0132\37\uffff\1\u0132"),
         DFA.unpack(u"\1\u0133\37\uffff\1\u0133"),
         DFA.unpack(u"\1\u0134\37\uffff\1\u0134"),
         DFA.unpack(u"\1\u0135\37\uffff\1\u0135"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\15\66\1\u0137\14\66\4"
-        u"\uffff\1\66\1\uffff\15\66\1\u0137\14\66"),
+                   u"\uffff\1\66\1\uffff\15\66\1\u0137\14\66"),
         DFA.unpack(u"\1\u0138\37\uffff\1\u0138"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0139\37\uffff\1\u0139"),
@@ -7997,10 +7656,10 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0146\37\uffff\1\u0146"),
         DFA.unpack(u"\1\u0147\37\uffff\1\u0147"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0149\37\uffff\1\u0149"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u014b\37\uffff\1\u014b"),
         DFA.unpack(u"\1\u014c\37\uffff\1\u014c"),
         DFA.unpack(u"\1\u014d\37\uffff\1\u014d"),
@@ -8011,14 +7670,14 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0151\37\uffff\1\u0151"),
         DFA.unpack(u"\1\u0152\37\uffff\1\u0152"),
         DFA.unpack(u"\1\u0154\1\uffff\1\u0153\35\uffff\1\u0154\1\uffff\1"
-        u"\u0153"),
+                   u"\u0153"),
         DFA.unpack(u"\1\u0155\37\uffff\1\u0155"),
         DFA.unpack(u"\1\u0156\37\uffff\1\u0156"),
         DFA.unpack(u"\1\u0157\37\uffff\1\u0157"),
         DFA.unpack(u"\1\u0158\37\uffff\1\u0158"),
         DFA.unpack(u"\1\u0159\37\uffff\1\u0159"),
         DFA.unpack(u"\1\u015a\3\uffff\1\u015b\33\uffff\1\u015a\3\uffff\1"
-        u"\u015b"),
+                   u"\u015b"),
         DFA.unpack(u"\1\u015c\37\uffff\1\u015c"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u015d\37\uffff\1\u015d"),
@@ -8033,9 +7692,9 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0163\37\uffff\1\u0163"),
         DFA.unpack(u"\1\u0164\37\uffff\1\u0164"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0167\37\uffff\1\u0167"),
         DFA.unpack(u"\1\u0168\37\uffff\1\u0168"),
         DFA.unpack(u"\1\u0169\37\uffff\1\u0169"),
@@ -8050,11 +7709,11 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0172\37\uffff\1\u0172"),
         DFA.unpack(u"\1\u0173\37\uffff\1\u0173"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0175\37\uffff\1\u0175"),
         DFA.unpack(u"\1\u0176\37\uffff\1\u0176"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0178\37\uffff\1\u0178"),
         DFA.unpack(u"\1\u0179\37\uffff\1\u0179"),
         DFA.unpack(u"\1\u017a\37\uffff\1\u017a"),
@@ -8062,22 +7721,22 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u017c\37\uffff\1\u017c"),
         DFA.unpack(u"\1\u017d\37\uffff\1\u017d"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0180\37\uffff\1\u0180"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0184\37\uffff\1\u0184"),
         DFA.unpack(u"\1\u0185\37\uffff\1\u0185"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0187\37\uffff\1\u0187"),
         DFA.unpack(u"\1\u0188\37\uffff\1\u0188"),
         DFA.unpack(u"\1\u0189\37\uffff\1\u0189"),
@@ -8088,16 +7747,16 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u018e\37\uffff\1\u018e"),
         DFA.unpack(u"\1\u018f\37\uffff\1\u018f"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0191\37\uffff\1\u0191"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0194\37\uffff\1\u0194"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0196\37\uffff\1\u0196"),
         DFA.unpack(u"\1\u0197\37\uffff\1\u0197"),
@@ -8105,7 +7764,7 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0199\37\uffff\1\u0199"),
         DFA.unpack(u"\1\u019a\37\uffff\1\u019a"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u019c\37\uffff\1\u019c"),
         DFA.unpack(u"\1\u019d\37\uffff\1\u019d"),
         DFA.unpack(u"\1\u019e\37\uffff\1\u019e"),
@@ -8126,9 +7785,9 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u01ab\37\uffff\1\u01ab"),
         DFA.unpack(u"\1\u01ac\37\uffff\1\u01ac"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\16\66\1\u01af\13\66\4"
-        u"\uffff\1\66\1\uffff\16\66\1\u01af\13\66"),
+                   u"\uffff\1\66\1\uffff\16\66\1\u01af\13\66"),
         DFA.unpack(u"\1\u01b0\37\uffff\1\u01b0"),
         DFA.unpack(u"\1\u01b1\37\uffff\1\u01b1"),
         DFA.unpack(u"\1\u01b2\37\uffff\1\u01b2"),
@@ -8136,23 +7795,23 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u01b4\37\uffff\1\u01b4"),
         DFA.unpack(u"\1\u01b5\37\uffff\1\u01b5"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01b7\37\uffff\1\u01b7"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01b9\37\uffff\1\u01b9"),
         DFA.unpack(u"\1\u01ba\37\uffff\1\u01ba"),
         DFA.unpack(u"\1\u01bb\37\uffff\1\u01bb"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01be\37\uffff\1\u01be"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01c0\37\uffff\1\u01c0"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01c2\37\uffff\1\u01c2"),
         DFA.unpack(u""),
         DFA.unpack(u""),
@@ -8160,14 +7819,14 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u01c4\37\uffff\1\u01c4"),
         DFA.unpack(u"\1\u01c5\37\uffff\1\u01c5"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01c7\37\uffff\1\u01c7"),
         DFA.unpack(u"\1\u01c8\37\uffff\1\u01c8"),
         DFA.unpack(u"\1\u01c9\37\uffff\1\u01c9"),
         DFA.unpack(u"\1\u01ca\37\uffff\1\u01ca"),
         DFA.unpack(u"\1\u01cb\37\uffff\1\u01cb"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01cd\37\uffff\1\u01cd"),
         DFA.unpack(u"\1\u01ce\37\uffff\1\u01ce"),
         DFA.unpack(u"\1\u01cf\37\uffff\1\u01cf"),
@@ -8188,40 +7847,40 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01da\37\uffff\1\u01da"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u01db\37\uffff\1\u01db"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01dd\37\uffff\1\u01dd"),
         DFA.unpack(u"\1\u01de\37\uffff\1\u01de"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\4\66\1\u01e0\25\66\4\uffff"
-        u"\1\66\1\uffff\4\66\1\u01e0\25\66"),
+                   u"\1\66\1\uffff\4\66\1\u01e0\25\66"),
         DFA.unpack(u"\1\u01e1\37\uffff\1\u01e1"),
         DFA.unpack(u"\1\u01e2\37\uffff\1\u01e2"),
         DFA.unpack(u"\1\u01e3\37\uffff\1\u01e3"),
         DFA.unpack(u"\1\u01e4\37\uffff\1\u01e4"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u01e7\37\uffff\1\u01e7"),
         DFA.unpack(u"\1\u01e8\37\uffff\1\u01e8"),
         DFA.unpack(u"\1\u01e9\37\uffff\1\u01e9"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u01ec\37\uffff\1\u01ec"),
         DFA.unpack(u"\1\u01ed\37\uffff\1\u01ed"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01ef\37\uffff\1\u01ef"),
         DFA.unpack(u"\1\u01f0\37\uffff\1\u01f0"),
         DFA.unpack(u"\1\u01f1\37\uffff\1\u01f1"),
@@ -8231,138 +7890,138 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u01f5\37\uffff\1\u01f5"),
         DFA.unpack(u"\1\u01f6\37\uffff\1\u01f6"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u01f8\37\uffff\1\u01f8"),
         DFA.unpack(u"\1\u01f9\37\uffff\1\u01f9"),
         DFA.unpack(u"\1\u01fa\37\uffff\1\u01fa"),
         DFA.unpack(u"\1\u01fb\37\uffff\1\u01fb"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u01fd\37\uffff\1\u01fd"),
         DFA.unpack(u"\1\u01fe\37\uffff\1\u01fe"),
         DFA.unpack(u"\1\u01ff\37\uffff\1\u01ff"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0202\37\uffff\1\u0202"),
         DFA.unpack(u"\1\u0203\37\uffff\1\u0203"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0204\37\uffff\1\u0204"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0206\37\uffff\1\u0206"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0208\37\uffff\1\u0208"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u020a\37\uffff\1\u020a"),
         DFA.unpack(u"\1\u020b\37\uffff\1\u020b"),
         DFA.unpack(u"\1\u020c\37\uffff\1\u020c"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u020e\37\uffff\1\u020e"),
         DFA.unpack(u"\1\u020f\37\uffff\1\u020f"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0212\37\uffff\1\u0212"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0213\3\uffff\1\u0214\33\uffff\1\u0213\3\uffff\1"
-        u"\u0214"),
+                   u"\u0214"),
         DFA.unpack(u"\1\u0215\37\uffff\1\u0215"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0218\37\uffff\1\u0218"),
         DFA.unpack(u"\1\u0219\37\uffff\1\u0219"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u021b\37\uffff\1\u021b"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u021d\37\uffff\1\u021d"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u021f\37\uffff\1\u021f"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0221\37\uffff\1\u0221"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0222\37\uffff\1\u0222"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0224\37\uffff\1\u0224"),
         DFA.unpack(u"\1\u0225\37\uffff\1\u0225"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0228\37\uffff\1\u0228"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0229\37\uffff\1\u0229"),
         DFA.unpack(u"\1\u022a\37\uffff\1\u022a"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u022d\37\uffff\1\u022d"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u022e\37\uffff\1\u022e"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0230\37\uffff\1\u0230"),
         DFA.unpack(u"\1\u0231\37\uffff\1\u0231"),
         DFA.unpack(u"\1\u0232\37\uffff\1\u0232"),
         DFA.unpack(u"\1\u0233\37\uffff\1\u0233"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0235\37\uffff\1\u0235"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0237\37\uffff\1\u0237"),
         DFA.unpack(u"\1\u0238\37\uffff\1\u0238"),
         DFA.unpack(u"\1\u0239\37\uffff\1\u0239"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u023a\37\uffff\1\u023a"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u023f\37\uffff\1\u023f"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0241\37\uffff\1\u0241"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0244"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0245\37\uffff\1\u0245"),
@@ -8370,11 +8029,11 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0248\37\uffff\1\u0248"),
         DFA.unpack(u"\1\u0249\37\uffff\1\u0249"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u024b\37\uffff\1\u024b"),
@@ -8383,37 +8042,37 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u024d\37\uffff\1\u024d"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0250\37\uffff\1\u0250"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0253\37\uffff\1\u0253"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0254\37\uffff\1\u0254"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0258\37\uffff\1\u0258"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u025c\37\uffff\1\u025c"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u025d\37\uffff\1\u025d"),
@@ -8421,32 +8080,32 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u025e\37\uffff\1\u025e"),
         DFA.unpack(u"\1\u025f\37\uffff\1\u025f"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0261\37\uffff\1\u0261"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0263\37\uffff\1\u0263"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0265\17\uffff\1\u0264\17\uffff\1\u0265\17\uffff"
-        u"\1\u0264"),
+                   u"\1\u0264"),
         DFA.unpack(u"\1\u0266\37\uffff\1\u0266"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0268\37\uffff\1\u0268"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u026c\37\uffff\1\u026c"),
         DFA.unpack(u""),
         DFA.unpack(u""),
@@ -8459,13 +8118,13 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0271\37\uffff\1\u0271"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0273\37\uffff\1\u0273"),
         DFA.unpack(u"\1\u0274\37\uffff\1\u0274"),
         DFA.unpack(u""),
@@ -8481,34 +8140,34 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u027f\37\uffff\1\u027f"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0281\37\uffff\1\u0281"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u0282\37\uffff\1\u0282"),
         DFA.unpack(u"\1\u0283\37\uffff\1\u0283"),
         DFA.unpack(u"\1\u0284\37\uffff\1\u0284"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0288\37\uffff\1\u0288"),
         DFA.unpack(u"\1\u0289\37\uffff\1\u0289"),
@@ -8518,15 +8177,15 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"\1\u028d\37\uffff\1\u028d"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\22\66\1\u028f\7\66\4\uffff"
-        u"\1\66\1\uffff\22\66\1\u028f\7\66"),
+                   u"\1\66\1\uffff\22\66\1\u028f\7\66"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\u0292\37\uffff\1\u0292"),
         DFA.unpack(u""),
@@ -8535,7 +8194,7 @@ class SQLiteLexer(Lexer):
         DFA.unpack(u"\1\u0294\37\uffff\1\u0294"),
         DFA.unpack(u"\1\u0295\37\uffff\1\u0295"),
         DFA.unpack(u"\1\66\13\uffff\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff"
-        u"\32\66"),
+                   u"\32\66"),
         DFA.unpack(u"")
     ]
 
@@ -8555,7 +8214,7 @@ class SQLiteLexer(Lexer):
 
             _s = s
 
-            if s == 0: 
+            if s == 0:
                 LA26_25 = input.LA(1)
 
                 s = -1
@@ -8567,7 +8226,7 @@ class SQLiteLexer(Lexer):
 
                 if s >= 0:
                     return s
-            elif s == 1: 
+            elif s == 1:
                 LA26_23 = input.LA(1)
 
                 s = -1
@@ -8579,7 +8238,7 @@ class SQLiteLexer(Lexer):
 
                 if s >= 0:
                     return s
-            elif s == 2: 
+            elif s == 2:
                 LA26_24 = input.LA(1)
 
                 s = -1
@@ -8591,7 +8250,7 @@ class SQLiteLexer(Lexer):
 
                 if s >= 0:
                     return s
-            elif s == 3: 
+            elif s == 3:
                 LA26_26 = input.LA(1)
 
                 s = -1
@@ -8607,12 +8266,11 @@ class SQLiteLexer(Lexer):
             nvae = NoViableAltException(self_.getDescription(), 26, _s, input)
             self_.error(nvae)
             raise nvae
- 
-
 
 
 def main(argv, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr):
     from antlr3.main import LexerMain
+
     main = LexerMain(SQLiteLexer)
     main.stdin = stdin
     main.stdout = stdout
