@@ -28,7 +28,8 @@ host = hpfeeds.honeycloud.net
 port = 10000
 secret = 3wis3l2u5l7r3cew
 # channels comma separated
-chan = glastopf.events,glastopf.files
+chan_events = glastopf.events
+chan_files = glastopf.files
 ident = x8yer@hp1
 
 [main-database]

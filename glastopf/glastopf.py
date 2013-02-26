@@ -17,7 +17,6 @@
 
 import os
 import sys
-import json
 import base64
 import Queue
 import threading
@@ -31,7 +30,6 @@ import modules.events.attack as attack
 from modules.handlers.request_handler import RequestHandler
 from modules import logging_handler
 import shutil
-import modules.reporting.auxiliary.hp_feed as hpfeeds
 import modules.privileges as privileges
 import modules.processing.profiler as profiler
 from modules.handlers.emulators.dork_list import dork_file_processor
@@ -67,18 +65,12 @@ class GlastopfHoneypot(object):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
-            "hpfeeds": conf_parser.get("hpfeed", "enabled").encode('latin1'),
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
         }
 
-        if self.options["hpfeeds"] == "True":
-            self.hpfeeds_logger = hpfeeds.HPFeedClient(config=config)
-            logger.info("HPFeeds started")
-
         self.profiler_available = False
-
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
 
         self.dork_generator = self.setup_dork_generator(conf_parser, self.work_dir)
@@ -269,12 +261,3 @@ class GlastopfHoneypot(object):
 
             for logger in self.loggers:
                 logger.insert(attack_event)
-
-            if self.options["hpfeeds"] == "True":
-                self.hpfeeds_logger.handle_send("glastopf.events",
-                                                json.dumps(attack_event.event_dict()))
-                if attack_event.file_name != None:
-                    with file("files/" + attack_event.file_name, 'r') as file_handler:
-                        file_content = file_handler.read()
-                        self.hpfeeds_logger.handle_send("glastopf.files",
-                                                        attack_event.file_name + " " + base64.b64encode(file_content))
