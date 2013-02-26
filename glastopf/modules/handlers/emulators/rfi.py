@@ -80,5 +80,5 @@ class RFIEmulator(base_emulator.BaseEmulator):
                                         attack_event.parsed_request.body)"""
             pass
         if attack_event.file_name:
-            attack_event.response += sandbox.run(attack_event.file_name)
+            attack_event.response += sandbox.run(attack_event.file_name, self.data_dir)
         return attack_event

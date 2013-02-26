@@ -41,6 +41,7 @@ from modules.handlers.emulators.dork_list import dork_page_generator
 from modules.handlers.emulators.dork_list import cluster
 from modules.handlers.emulators.dork_list import mnem_service
 from modules.reporting.main import log_mongodb, log_sql
+from subprocess import call
 from sqlalchemy import create_engine
 
 
@@ -52,8 +53,9 @@ class GlastopfHoneypot(object):
 
     def __init__(self, test=False, config="glastopf.cfg", workdir=os.getcwd()):
         self.work_dir = workdir
+        self.data_dir = os.path.join(self.work_dir, 'data')
         logger.info('Initializing Glastopf using "{0}" as work directory.'.format(self.work_dir))
-        self.prepare_workdir()
+        self.prepare_environment()
         self.test = test
         git_ref = "Unknown"
         if os.path.isfile('.git/refs/heads/master'):
@@ -122,11 +124,10 @@ class GlastopfHoneypot(object):
             if conf_parser.getboolean('dork-db', 'mnem_service') == True:
                 mnemosyne_service = mnem_service.Mnem_Service()
 
-        data_dir = os.path.join(work_dir, 'data')
         return dork_page_generator.DorkPageGenerator(self.dorkdb,
                                                      file_processor,
                                                      clusterer,
-                                                     data_dir=data_dir,
+                                                     data_dir=self.data_dir,
                                                      mnem_service_instance=mnemosyne_service)
 
     def setup_main_database(self, conf_parser):
@@ -159,20 +160,27 @@ class GlastopfHoneypot(object):
             #disable usage of main logging datbase
             return (None, dorkdb)
 
-    def prepare_workdir(self):
-        #TODO: Check if files and directories exists before copying
-        #TODO: Add options to force (overwrite) existing files and directories
+    def prepare_environment(self):
+        """
+        Configures the Glastopf work environment.
 
-        #pack to glastopf package
-        m_path = os.path.dirname(pkgutil.get_loader('glastopf').filename)
+        If this methods completes without exceptions, the environment will look something like:
+        (self.workdir)/
+                      glastopf.cfg
+                      db/
+                      log/
+                      files/
+                      data/
+                          apd_sandbox.php
+                          dork_pages/
+                          virtual_docs/
+                          (and various other module data directories)
+        """
 
         if not os.path.isfile(os.path.join(self.work_dir, 'glastopf.cfg')):
             logger.info('Copying glastopf.cfg to work directory.')
-            shutil.copyfile(os.path.join(m_path, 'glastopf/glastopf.cfg.dist'),
+            shutil.copyfile(os.path.join(package_directory, 'glastopf.cfg.dist'),
                             os.path.join(self.work_dir, 'glastopf.cfg'))
-
-        #copy entire sandbox
-        shutil.copy(os.path.join(''))
 
         #copy emulator level data
         emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
@@ -182,6 +190,21 @@ class GlastopfHoneypot(object):
         for entry in dirs:
             if not os.path.isdir(entry):
                 os.mkdir(entry)
+
+        #create sandbox
+        sandbox_dir = os.path.join(package_directory, 'sandbox')
+
+        #preserve old working dir
+        old_cwd = os.getcwd()
+
+        os.chdir(sandbox_dir)
+
+        #execute makefile and output to self.workdir/data/apd_sandbox.php
+        sandbox_out = os.path.join(self.work_dir, 'data', 'apd_sandbox.php')
+        call(['make', 'out={0}'.format(sandbox_out)])
+
+        #restore state of original working dir
+        os.chdir(old_cwd)
 
     def _handle_proxy(self, attack_event, addr):
         client_ip = attack_event.parsed_request.header['X-Forwarded-For']

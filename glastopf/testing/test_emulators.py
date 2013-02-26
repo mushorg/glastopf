@@ -22,6 +22,7 @@ import shutil
 import os
 import tempfile
 import inspect
+import helpers
 import uuid
 import shutil
 
@@ -145,6 +146,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         print "Sending request:", "http://localhost:8080" + self.event.parsed_request.url
         self.event.matched_pattern = "rfi"
         self.event.response = ""
+        helpers.create_sandbox(self.data_dir)
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         emulator.handle(self.event)

@@ -3,7 +3,8 @@
 import time
 import subprocess
 import threading
-from functools import partial   
+from functools import partial
+import os
 
 VERSION='1.0'
 
@@ -16,10 +17,11 @@ def killer(proc, secs):
     except OSError:
         pass
 
-def sandbox(script, secs):
+def sandbox(script, secs, data_dir):
     proc = None
     try:
-        proc = subprocess.Popen(["php5", "sandbox/apd_sandbox.php", "files/" + script], 
+        proc = subprocess.Popen(["php5", os.path.join(data_dir, "apd_sandbox.php"),
+                                 os.path.join(data_dir, "files", script)],
                 shell = False,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
@@ -32,12 +34,14 @@ def sandbox(script, secs):
     try:
         threading.Thread(target=partial(killer, proc, secs)).start()
         stdout_value, stderr_value = proc.communicate()
+        print stdout_value
+        print stderr_value
     except Exception as e:
         print "Sandbox communication error:", e
     else:
         print "Successfully parsed with sandbox"
     return stdout_value
     
-def run(script):
+def run(script, data_dir):
     secs = 10
-    return sandbox(script, secs)
+    return sandbox(script, secs, data_dir)

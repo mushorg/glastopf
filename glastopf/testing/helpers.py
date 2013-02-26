@@ -5,6 +5,7 @@ import bson
 import os
 import uuid
 import json
+from subprocess import call
 
 file_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -86,6 +87,20 @@ def create_empty_main_db_sqla(engine):
 
         meta.create_all(engine)
 
+def create_sandbox(dest_dir):
+    sandbox_dir = os.path.join(file_dir, '../sandbox')
+
+    #preserve old working dir
+    old_cwd = os.getcwd()
+
+    os.chdir(sandbox_dir)
+
+    #execute makefile and output to self.workdir/data/apd_sandbox.php
+    sandbox_out = os.path.join(dest_dir, 'apd_sandbox.php')
+    call(['make', 'out={0}'.format(sandbox_out)])
+    print sandbox_out
+    #restore state of original working dir
+    os.chdir(old_cwd)
 
 def gen_config(conn_string):
     """
