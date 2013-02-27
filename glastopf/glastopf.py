@@ -51,7 +51,7 @@ class GlastopfHoneypot(object):
         self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
 
-        self.prepare_environment()
+        self.prepare_environment(self.work_dir)
 
         conf_parser = ConfigParser()
         conf_parser.read(config)
@@ -163,7 +163,7 @@ class GlastopfHoneypot(object):
             #disable usage of main logging datbase
             return (None, dorkdb)
 
-    def prepare_environment(self):
+    def prepare_environment(self, directory):
         """
         Configures the Glastopf work environment.
 
@@ -180,32 +180,32 @@ class GlastopfHoneypot(object):
                           (and various other module data directories)
         """
 
-        if not os.path.isfile(os.path.join(self.work_dir, 'glastopf.cfg')):
+        if not os.path.isfile(os.path.join(directory, 'glastopf.cfg')):
             logger.info('Copying glastopf.cfg to work directory.')
             shutil.copyfile(os.path.join(package_directory, 'glastopf.cfg.dist'),
-                            os.path.join(self.work_dir, 'glastopf.cfg'))
+                            os.path.join(directory, 'glastopf.cfg'))
 
         #copy emulator level data
         emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
-        shutil.copytree(emulator_data_dir, os.path.join(self.work_dir, 'data/'))
+        shutil.copytree(emulator_data_dir, os.path.join(directory, 'data/'))
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:
             if not os.path.isdir(entry):
                 os.mkdir(entry)
 
+        GlastopfHoneypot.prepare_sandbox(directory)
+
+    @staticmethod
+    def prepare_sandbox(directory):
         #create sandbox
         sandbox_dir = os.path.join(package_directory, 'sandbox')
-
         #preserve old working dir
         old_cwd = os.getcwd()
-
         os.chdir(sandbox_dir)
-
         #execute makefile and output to self.workdir/data/apd_sandbox.php
-        sandbox_out = os.path.join(self.work_dir, 'data', 'apd_sandbox.php')
+        sandbox_out = os.path.join(directory, 'data', 'apd_sandbox.php')
         call(['make', 'out={0}'.format(sandbox_out)])
-
         #restore state of original working dir
         os.chdir(old_cwd)
 

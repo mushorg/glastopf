@@ -87,7 +87,7 @@ page = $_GET['page']; include(page); ?>"""
             # Then call the PHP sandbox and return the expected results
             # TODO verify if it's a valid PHP code?
             php_file_name = self.store_file(attack_event.parsed_request.body)
-            attack_event.response = sandbox.run(php_file_name)
+            attack_event.response = sandbox.run(php_file_name, self.data_dir)
             return attack_event
 
         # fallback to display vulnerable source code
