@@ -37,9 +37,15 @@ class WebSockListener(EventGen):
             logger.info("Webserver running on: {0}:{1} waiting for connections.".format(host, str(port)))
             self.l._on('connection', self.connection)
             self.glastopf_honeypot = GlastopfHoneypot(workdir)
+            self.glastopf_honeypot.start_bakground_workers()
 
     def connection(self, c, addr):
         self._event('connection', WebSock(c, addr, self.glastopf_honeypot))
+
+    @property
+    def honeypot(self):
+        return self.glastopf_honeypot
+
 
 
 class WebSock(EventGen):
@@ -136,4 +142,8 @@ if __name__ == '__main__':
 
     a._on('connection', new_conn)
 
-    loop()
+    try:
+        loop()
+    except KeyboardInterrupt as ex:
+        glastopf = a.glastopf_honeypot
+        glastopf.stop_bakground_workers()

@@ -54,6 +54,7 @@ class DorkPageGenerator(object):
         if len(self.database.get_dork_list('inurl')) == 0:
             logger.info("Bootstrapping dork database.")
             self.bootstrap_dorkdb()
+        self.enabled = True
 
     def prepare_text(self):
         line_list = []
@@ -123,7 +124,7 @@ class DorkPageGenerator(object):
             return
         if sleep_time < 60:
             sleep_time = 60
-        while True:
+        while self.enabled:
             time.sleep(sleep_time)
             old_pages = self.get_current_pages()
             self.generate_dork_pages()

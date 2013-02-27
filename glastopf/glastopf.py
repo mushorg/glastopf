@@ -17,7 +17,6 @@
 
 import os
 import sys
-import base64
 import Queue
 import threading
 from ConfigParser import ConfigParser
@@ -47,13 +46,12 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class GlastopfHoneypot(object):
-    def __init__(self, test=False, config="glastopf.cfg", work_dir=os.getcwd()):
+    def __init__(self, config="glastopf.cfg", work_dir=os.getcwd()):
         logger.info('Initializing Glastopf using "{0}" as work directory.'.format(work_dir))
         self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
 
         self.prepare_environment()
-        self.test = test
 
         conf_parser = ConfigParser()
         conf_parser.read(config)
@@ -63,37 +61,57 @@ class GlastopfHoneypot(object):
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
         }
 
-        self.profiler_available = False
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
 
         self.dork_generator = self.setup_dork_generator(conf_parser, self.work_dir)
-
-        if not self.test:
-            self.loggers = logging_handler.get_aux_loggers()
 
         if len(self.dork_generator.get_current_pages()) == 0:
             logger.info("Generating initial dork pages - this can take a while.")
             self.dork_generator.regular_generate_dork(0)
 
-        if not test:
-            regular_gen_dork = threading.Thread(
-                target=self.dork_generator.regular_generate_dork, args=(30,))
-            regular_gen_dork.daemon = True
-            regular_gen_dork.start()
-
+        #hmm?
+        self.profiler_available = False
         if self.profiler_available:
             self.profiler = profiler.Profiler(self.maindb)
 
         self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods()
 
+        #used for post processing (logging and analysis) of attack events
         self.post_queue = Queue.Queue()
+        self.workers_enabled = False
+
+    def start_bakground_workers(self):
+        self.workers_enabled = True
+        self.loggers = logging_handler.get_aux_loggers()
+
+        dork_thread = threading.Thread(
+            target=self.dork_generator.regular_generate_dork, args=(30,))
+        dork_thread.daemon = True
+        dork_thread.start()
+
         self.post_processing = threading.Thread(target=self.post_processer)
         self.post_processing.daemon = True
         self.post_processing.start()
-
         privileges.drop(self.options['uid'], self.options['gid'])
-        logger.info('Glastopf instantiated and privileges dropped.')
+        logger.info('Glastopf started and privileges dropped.')
+
+    def stop_bakground_workers(self):
+        logger.info('Stopping Glatopf.')
+        self.dork_generator.enabled = False
+        self.workers_enabled = False
+
+    def post_processer(self):
+        while self.workers_enabled:
+            attack_event = self.post_queue.get()
+
+            self.dork_generator.collect_dork(attack_event)
+
+            if self.maindb:
+                self.maindb.insert(attack_event)
+
+            for logger in self.loggers:
+                logger.insert(attack_event)
 
     def setup_dork_generator(self, conf_parser, work_dir):
         token_pattern = conf_parser.get('dork-db', 'token_pattern')
@@ -233,24 +251,11 @@ class GlastopfHoneypot(object):
             emulator = request_handler.get_handler(attack_event.matched_pattern)
             emulator.handle(attack_event)
             # Logging the event
-            if not self.test:
-                if self.profiler_available:
-                    self.profiler.handle_event(attack_event)
-                self.post_queue.put(attack_event)
+            if self.profiler_available:
+                self.profiler.handle_event(attack_event)
+            self.post_queue.put(attack_event)
             response_code = "200 OK"
         response_util = util.HTTPServerResponse(response_code)
         attack_event.response = response_util.get_header(attack_event) + attack_event.response
         return attack_event.response
 
-    def post_processer(self):
-        while True:
-            attack_event = self.post_queue.get()
-
-            #gen_dork_list.collect_dork(attack_event)
-            self.dork_generator.collect_dork(attack_event)
-
-            if self.maindb:
-                self.maindb.insert(attack_event)
-
-            for logger in self.loggers:
-                logger.insert(attack_event)
