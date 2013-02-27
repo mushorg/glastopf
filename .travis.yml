@@ -31,6 +31,7 @@ before_install:
  - sudo make install
 #TODO: Extract path from output
  - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
+ - php5 --version
  - cd $REPO
  - cd sandbox
  - sudo make
@@ -44,7 +45,9 @@ install:
 # command to run tests
 script: 
  - echo $REPO
+ - pwd
  - nosetests
-notifications:
- irc:
-  - "irc.freenode.org#glastopf"
+ - ls
+#notifications:
+# irc:
+#  - "irc.freenode.org#glastopf"

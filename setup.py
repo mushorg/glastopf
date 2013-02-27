@@ -1,9 +1,7 @@
-#!/usr/bin/env python
+import distribute_setup
+distribute_setup.use_setuptools()
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name='glastopf',
@@ -18,8 +16,8 @@ setup(
     author_email='',
     description='Web application honeypot',
     test_suite='nose.collector',
-    #TODO: Include all dependencies
-    #TODO: Investigate the ANTLR, numpy and scipy issues in regards to virtualenv
-    install_requires=['evnet', 'pyopenssl'],
+    install_requires=['evnet>=1.0-5', 'pyopenssl', 'chardet', 'sqlalchemy>=0.8.0',
+                      'lxml', 'beautifulsoup', 'numpy',
+                      'numpy-dev', 'scipy', 'antlr>=3.1.3'],
     dependency_links=['https://github.com/rep/evnet/tarball/master#egg=evnet']
 )
