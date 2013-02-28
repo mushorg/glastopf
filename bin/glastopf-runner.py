@@ -36,7 +36,7 @@ class WebSockListener(EventGen):
         else:
             logger.info("Webserver running on: {0}:{1} waiting for connections.".format(host, str(port)))
             self.l._on('connection', self.connection)
-            self.glastopf_honeypot = GlastopfHoneypot(workdir)
+            self.glastopf_honeypot = GlastopfHoneypot(work_dir=workdir)
             self.glastopf_honeypot.start_background_workers()
 
     def connection(self, c, addr):
@@ -105,13 +105,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Glastopf runner')
     #defaults to current directory (aka. working directory)
     parser.add_argument('--workdir', dest='workdir', default=os.getcwd())
+    parser.add_argument('--prepare', action='store_true', default=False)
 
     args = parser.parse_args()
 
-    m_path = os.path.dirname(pkgutil.get_loader('glastopf').filename)
-
-    shutil.copyfile(os.path.join(m_path, 'glastopf/glastopf.cfg.dist'),
-                    os.path.join(os.getcwd(), 'glastopf.cfg'))
+    #prepare directory if workdir directory contains no files or if we are asked to do it.
+    if args.prepare or len(os.listdir(args.workdir)) == 0:
+        GlastopfHoneypot.prepare_environment(args.workdir)
 
     conf_parser = ConfigParser()
     if not os.path.isfile("glastopf.cfg"):
@@ -122,6 +122,7 @@ if __name__ == '__main__':
     else:
         logfile = None
     logconsole = conf_parser.getboolean("logging", "consolelog_enabled")
+    logger = logging.getLogger()
     setup_logging(logconsole, logfile)
 
     host = conf_parser.get("webserver", "host")

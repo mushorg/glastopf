@@ -58,6 +58,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         try:
             raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
             source_address = ["127.0.0.1", "12345"]
+            GlastopfHoneypot.prepare_environment(self.tmpdir)
             self.glastopf = GlastopfHoneypot(work_dir=self.tmpdir, config=config_file)
             self.glastopf.options["enabled"] = "False"
             print "Sending request: http://localhost:8080/"
@@ -92,6 +93,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         try:
             raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
             source_address = ["127.0.0.1", "12345"]
+            GlastopfHoneypot.prepare_environment(self.tmpdir)
             self.glastopf = GlastopfHoneypot(work_dir=self.tmpdir, config=config_file)
             self.glastopf.options["enabled"] = "False"
             print "Sending request: http://localhost:8080/"

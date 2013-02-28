@@ -36,8 +36,6 @@ def sandbox(script, secs, data_dir):
     try:
         threading.Thread(target=partial(killer, proc, secs)).start()
         stdout_value, stderr_value = proc.communicate()
-        print stdout_value
-        print stderr_value
     except Exception as e:
         print "Sandbox communication error:", e
     else:

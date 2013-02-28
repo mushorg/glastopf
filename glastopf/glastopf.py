@@ -47,11 +47,13 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 class GlastopfHoneypot(object):
     def __init__(self, config="glastopf.cfg", work_dir=os.getcwd()):
+        """
+        :param work_dir: directory used for data storage and various data files, must be writeable by glastopf. Default: os.getcwd()
+        :param config: path to the glastopf configuration file. Default: glastopf.cfg
+        """
         logger.info('Initializing Glastopf using "{0}" as work directory.'.format(work_dir))
         self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
-
-        self.prepare_environment(self.work_dir)
 
         conf_parser = ConfigParser()
         conf_parser.read(config)
@@ -82,6 +84,9 @@ class GlastopfHoneypot(object):
         self.workers_enabled = False
 
     def start_background_workers(self):
+        """
+        Starts background threads responsible for data processing and logging.
+        """
         self.workers_enabled = True
         self.loggers = logging_handler.get_aux_loggers()
 
@@ -97,6 +102,10 @@ class GlastopfHoneypot(object):
         logger.info('Glastopf started and privileges dropped.')
 
     def stop_bakground_workers(self):
+        """
+        Notifies background threads that they are supposed to stop.
+        This method does not guarantee that the threads actually stops.
+        """
         logger.info('Stopping Glastopf.')
         self.dork_generator.enabled = False
         self.workers_enabled = False
@@ -163,7 +172,8 @@ class GlastopfHoneypot(object):
             #disable usage of main logging datbase
             return (None, dorkdb)
 
-    def prepare_environment(self, directory):
+    @staticmethod
+    def prepare_environment(work_dir):
         """
         Configures the Glastopf work environment.
 
@@ -179,32 +189,34 @@ class GlastopfHoneypot(object):
                           virtual_docs/
                           (and various other module data directories)
         """
-        if not os.path.isfile(os.path.join(directory, 'glastopf.cfg')):
-            logger.info('Copying glastopf.cfg to work directory.')
+        logger.info('Preparing work environment.')
+        if not os.path.isfile(os.path.join(work_dir, 'glastopf.cfg')):
+            logger.info('Copying glastopf.cfg to work work_dir.')
             shutil.copyfile(os.path.join(package_directory, 'glastopf.cfg.dist'),
-                            os.path.join(directory, 'glastopf.cfg'))
+                            os.path.join(work_dir, 'glastopf.cfg'))
 
         #copy emulator level data
         emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
-        shutil.copytree(emulator_data_dir, os.path.join(directory, 'data/'))
+        shutil.copytree(emulator_data_dir, os.path.join(work_dir, 'data/'))
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:
-            dir_path = os.path.join(directory, entry)
+            dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
 
-        GlastopfHoneypot.prepare_sandbox(directory)
+        GlastopfHoneypot.prepare_sandbox(work_dir)
 
     @staticmethod
-    def prepare_sandbox(directory):
+    def prepare_sandbox(work_dir):
+        logger.info('Creating PHP sandbox')
         #create sandbox
         sandbox_dir = os.path.join(package_directory, 'sandbox')
         #preserve old working dir
         old_cwd = os.getcwd()
         os.chdir(sandbox_dir)
         #execute makefile and output to self.workdir/data/apd_sandbox.php
-        sandbox_out = os.path.join(directory, 'data', 'apd_sandbox.php')
+        sandbox_out = os.path.join(work_dir, 'data', 'apd_sandbox.php')
         check_call(['make', '-B', 'out={0}'.format(sandbox_out)])
         #restore state of original working dir
         os.chdir(old_cwd)
