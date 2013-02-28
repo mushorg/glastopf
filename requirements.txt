@@ -1,4 +1,4 @@
-git+git://github.com/rep/evnet.git#egg=evnet
+#git+git://github.com/rep/evnet.git#egg=evnet
 pyopenssl
 sqlalchemy>=0.7.0
 lxml
