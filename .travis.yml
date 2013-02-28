@@ -41,8 +41,8 @@ install:
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
  - cd $REPO
- - pip install cython
- - pip install -r requirements.txt --use-mirrors
+ - sudo pip install cython
+ - sudo pip install -r requirements.txt --use-mirrors
 # command to run tests
 script: 
  - echo $REPO
