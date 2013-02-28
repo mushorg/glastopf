@@ -57,17 +57,6 @@ Download evnet using git::
 
 |
 
-Get Glastopf
-============
-| 
-
-Get the source from the Github repository::
-
-    cd /opt
-    sudo git clone git://github.com/glastopf/glastopf.git
-
-| 
-
 Install and configure the PHP sandbox
 =====================================
 | 
@@ -115,8 +104,7 @@ Prepare glastopf environment::
 	cd myhoneypot
 	glastopf-runner
 
-
-Setup ip address and port in glastopf.cfg using your favorite text editor.
+A new default glastopf.cfg has been created in _myhoneypot_, which can be customized as required.
 
 | 
 
