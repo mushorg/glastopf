@@ -179,7 +179,6 @@ class GlastopfHoneypot(object):
                           virtual_docs/
                           (and various other module data directories)
         """
-
         if not os.path.isfile(os.path.join(directory, 'glastopf.cfg')):
             logger.info('Copying glastopf.cfg to work directory.')
             shutil.copyfile(os.path.join(package_directory, 'glastopf.cfg.dist'),
@@ -191,8 +190,9 @@ class GlastopfHoneypot(object):
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:
-            if not os.path.isdir(entry):
-                os.mkdir(entry)
+            dir_path = os.path.join(directory, entry)
+            if not os.path.isdir(dir_path):
+                os.mkdir(dir_path)
 
         GlastopfHoneypot.prepare_sandbox(directory)
 
