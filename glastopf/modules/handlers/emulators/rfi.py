@@ -21,7 +21,7 @@ import os
 import re
 import logging
 
-import glastopf.sandbox.apd_sandbox as sandbox
+import glastopf.sandbox.sandbox as sandbox
 from glastopf.modules.handlers import base_emulator
 
 

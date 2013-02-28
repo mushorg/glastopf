@@ -19,7 +19,7 @@ import hashlib
 import os
 from glastopf.modules.handlers import base_emulator
 
-import glastopf.sandbox.apd_sandbox as sandbox
+import glastopf.sandbox.sandbox as sandbox
 
 
 class PHPCGIRCE(base_emulator.BaseEmulator):

@@ -184,7 +184,7 @@ class GlastopfHoneypot(object):
                       log/
                       files/
                       data/
-                          apd_sandbox.php
+                          sandbox.php
                           dork_pages/
                           virtual_docs/
                           (and various other module data directories)
@@ -216,7 +216,7 @@ class GlastopfHoneypot(object):
         old_cwd = os.getcwd()
         os.chdir(sandbox_dir)
         #execute makefile and output to self.workdir/data/apd_sandbox.php
-        sandbox_out = os.path.join(work_dir, 'data', 'apd_sandbox.php')
+        sandbox_out = os.path.join(work_dir, 'data', 'sandbox.php')
         check_call(['make', '-B', 'out={0}'.format(sandbox_out)])
         #restore state of original working dir
         os.chdir(old_cwd)

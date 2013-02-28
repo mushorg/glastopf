@@ -22,7 +22,7 @@ def killer(proc, secs):
 def sandbox(script, secs, data_dir):
     proc = None
     try:
-        proc = subprocess.Popen(["php5", os.path.join(data_dir, "apd_sandbox.php"),
+        proc = subprocess.Popen(["php5", os.path.join(data_dir, "sandbox.php"),
                                  os.path.join(data_dir, "files", script)],
                                 shell=False,
                                 stdin=subprocess.PIPE,
