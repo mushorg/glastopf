@@ -18,6 +18,6 @@ setup(
     test_suite='nose.collector',
     install_requires=['evnet>=1.0-5', 'pyopenssl', 'chardet', 'sqlalchemy>=0.8.0',
                       'lxml', 'beautifulsoup', 'numpy',
-                      'numpy-dev', 'scipy', 'antlr>=3.1.3'],
+                      'numpy-dev', 'scipy', 'antlr>=3.1.3', 'requests>=1.0.0'],
     dependency_links=['https://github.com/rep/evnet/tarball/master#egg=evnet']
 )
