@@ -81,7 +81,7 @@ class GlastopfHoneypot(object):
         self.post_queue = Queue.Queue()
         self.workers_enabled = False
 
-    def start_bakground_workers(self):
+    def start_background_workers(self):
         self.workers_enabled = True
         self.loggers = logging_handler.get_aux_loggers()
 
@@ -97,7 +97,7 @@ class GlastopfHoneypot(object):
         logger.info('Glastopf started and privileges dropped.')
 
     def stop_bakground_workers(self):
-        logger.info('Stopping Glatopf.')
+        logger.info('Stopping Glastopf.')
         self.dork_generator.enabled = False
         self.workers_enabled = False
 

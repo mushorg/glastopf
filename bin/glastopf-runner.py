@@ -37,7 +37,7 @@ class WebSockListener(EventGen):
             logger.info("Webserver running on: {0}:{1} waiting for connections.".format(host, str(port)))
             self.l._on('connection', self.connection)
             self.glastopf_honeypot = GlastopfHoneypot(workdir)
-            self.glastopf_honeypot.start_bakground_workers()
+            self.glastopf_honeypot.start_background_workers()
 
     def connection(self, c, addr):
         self._event('connection', WebSock(c, addr, self.glastopf_honeypot))
