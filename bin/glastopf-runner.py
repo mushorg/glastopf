@@ -42,11 +42,6 @@ class WebSockListener(EventGen):
     def connection(self, c, addr):
         self._event('connection', WebSock(c, addr, self.glastopf_honeypot))
 
-    @property
-    def honeypot(self):
-        return self.glastopf_honeypot
-
-
 
 class WebSock(EventGen):
     def __init__(self, c, addr, glastopf):
@@ -147,4 +142,4 @@ if __name__ == '__main__':
         loop()
     except KeyboardInterrupt as ex:
         glastopf = a.glastopf_honeypot
-        glastopf.stop_bakground_workers()
+        glastopf.stop_background_workers()

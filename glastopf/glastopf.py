@@ -101,7 +101,7 @@ class GlastopfHoneypot(object):
         privileges.drop(self.options['uid'], self.options['gid'])
         logger.info('Glastopf started and privileges dropped.')
 
-    def stop_bakground_workers(self):
+    def stop_background_workers(self):
         """
         Notifies background threads that they are supposed to stop.
         This method does not guarantee that the threads actually stops.
