@@ -37,7 +37,7 @@ from modules.handlers.emulators.dork_list import dork_page_generator
 from modules.handlers.emulators.dork_list import cluster
 from modules.handlers.emulators.dork_list import mnem_service
 from modules.reporting.main import log_mongodb, log_sql
-from subprocess import call
+from subprocess import check_call
 from sqlalchemy import create_engine
 
 
@@ -205,7 +205,7 @@ class GlastopfHoneypot(object):
         os.chdir(sandbox_dir)
         #execute makefile and output to self.workdir/data/apd_sandbox.php
         sandbox_out = os.path.join(directory, 'data', 'apd_sandbox.php')
-        call(['make', 'out={0}'.format(sandbox_out)])
+        check_call(['make', '-B', 'out={0}'.format(sandbox_out)])
         #restore state of original working dir
         os.chdir(old_cwd)
 
