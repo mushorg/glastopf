@@ -69,8 +69,9 @@ Get the source from the Github repository::
 | 
 
 Install and configure the PHP sandbox
-======================================
+=====================================
 | 
+Download using git::
 
     cd /opt
     sudo git clone git://github.com/glastopf/BFR.git
@@ -91,13 +92,13 @@ Install glastopf
 ==================
 | 
 
-Install from git:
+Install from git::
 
     git clone https://github.com/glastopf/glastopf.git
     cd glastopf
     python setup.py install
 
-Or install latest version from pypi:
+Or install latest version from pypi::
 
 	pip install glastopf
 
@@ -107,7 +108,7 @@ Configuration
 =========================
 | 
 
-Prepare glastopf environment:
+Prepare glastopf environment::
 
 	cd 
 	mkdir myhoneypot
@@ -115,7 +116,7 @@ Prepare glastopf environment:
 	glastopf-runner --prepare
 
 
-Setup ip address & port for glastopf on the file glastopf.cfg using your favorite text editor.
+Setup ip address & port in glastopf.cfg using your favorite text editor.
 
 | 
 
@@ -124,7 +125,7 @@ Testing the Honeypot
 ====================
 |
 
-Start Glastopf (from your 'myhoneypot' directory):
+Start Glastopf (from your 'myhoneypot' directory)::
 
     glastopf-runner
 
