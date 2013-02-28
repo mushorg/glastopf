@@ -67,7 +67,7 @@ class LogHPFeed(BaseLogger):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
-            "enabled": conf_parser.get("hpfeed", "enabled").encode('latin1'),
+            "enabled": conf_parser.getboolean("hpfeed", "enabled"),
             "host": conf_parser.get("hpfeed", "host"),
             "port": int(conf_parser.getint("hpfeed", "port")),
             "secret": conf_parser.get("hpfeed", "secret").encode('latin1'),
@@ -76,7 +76,7 @@ class LogHPFeed(BaseLogger):
             "ident": conf_parser.get("hpfeed", "ident").encode('latin1').strip(),
         }
 
-        if self.options["enabled"] == 'true':
+        if self.options["enabled"]:
             self.connect()
 
     def broker_read(self):
@@ -125,7 +125,7 @@ class LogHPFeed(BaseLogger):
 
         data = json.dumps(attack_event.event_dict())
         channel = self.options['chan_events']
-        self.send_data(data, channel)
+        self.send_data(channel, data)
 
     def send_data(self, channel, data):
         try:

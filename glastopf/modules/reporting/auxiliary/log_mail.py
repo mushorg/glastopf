@@ -23,7 +23,7 @@ from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogMail(BaseLogger):
-    def __init__(self, config="glastopf.cfg", create_tables=True):
+    def __init__(self, config="glastopf.cfg"):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {

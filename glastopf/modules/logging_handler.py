@@ -47,7 +47,7 @@ def get_aux_loggers(create_tables=True):
         return None
     else:
         for logger_class in logger_classes:
-            logger_instance = logger_class(create_tables=create_tables)
+            logger_instance = logger_class()
             if logger_instance.options['enabled'] == 'True':
                 loggers.append(logger_instance)
         return loggers
