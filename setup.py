@@ -22,5 +22,5 @@ setup(
                       'lxml', 'beautifulsoup>=3.2.0', 'numpy>=1.6.1',
                       'scipy>=0.9.0', 'requests>=1.0.0', 'pymongo>=2.4',
                       'cssselect>=0.7.0', 'scikit_learn>=0.13.0'],
-    dependency_links=['https://github.com/rep/evnet/tarball/master#egg=evnet']
+    dependency_links=['https://github.com/rep/evnet/tarball/master#egg=evnet-1.0-5']
 )
