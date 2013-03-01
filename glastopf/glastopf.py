@@ -87,6 +87,7 @@ class GlastopfHoneypot(object):
         """
         Starts background threads responsible for data processing and logging.
         """
+        privileges.drop(self.work_dir, self.options['uid'], self.options['gid'])
         self.workers_enabled = True
         self.loggers = logging_handler.get_aux_loggers()
 
@@ -98,7 +99,6 @@ class GlastopfHoneypot(object):
         self.post_processing = threading.Thread(target=self.post_processer)
         self.post_processing.daemon = True
         self.post_processing.start()
-        privileges.drop(self.options['uid'], self.options['gid'])
         logger.info('Glastopf started and privileges dropped.')
 
     def stop_background_workers(self):

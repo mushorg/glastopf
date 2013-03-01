@@ -14,7 +14,7 @@ def recursive_chown(path, run_uid, run_gid):
             os.chown(os.path.join(root, single_file), run_uid, run_gid)
 
 
-def drop(new_uid='nobody', new_gid='nogroup'):
+def drop(work_dir, new_uid='nobody', new_gid='nogroup'):
     starting_uid = os.getuid()
     starting_gid = os.getgid()
 
@@ -24,16 +24,7 @@ def drop(new_uid='nobody', new_gid='nogroup'):
         run_uid = pwd.getpwnam(new_uid)[2]
         run_gid = grp.getgrnam(new_gid)[2]
         try:
-            os.chown("files", run_uid, run_gid)
-            os.chown("db", run_uid, run_gid)
-            os.chown("log", run_uid, run_gid)
-            recursive_chown("files", run_uid, run_gid)
-            recursive_chown("db", run_uid, run_gid)
-            recursive_chown("log", run_uid, run_gid)
-            os.chown("modules/handlers/emulators/dork_list/pages",
-                     run_uid, run_gid)
-            os.chown("modules/handlers/emulators/dork_list/comments.txt",
-                     run_uid, run_gid)
+            recursive_chown(work_dir, run_uid, run_gid)
         except OSError as e:
             logger.exception("Could not change file owner: {0}".format(e))
         try:
