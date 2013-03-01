@@ -39,7 +39,7 @@ class Classifier(object):
         #ugly but it works...
         requests_file = os.path.join(package_directory, '../../requests.xml')
         self.tree = parse(requests_file)
-        self.server_files_path = os.path.join(data_dir, 'server_files')
+        self.server_files_path = os.path.join(data_dir, 'data', 'server_files')
         if not os.path.isdir(self.server_files_path):
             os.mkdir(self.server_files_path, 0770)
 

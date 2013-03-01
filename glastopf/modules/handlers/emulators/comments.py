@@ -38,11 +38,16 @@ class CommentPoster(base_emulator.BaseEmulator):
                 with codecs.open(os.path.join(self.data_dir, 'comments.txt'), "a", "utf-8") as comments_txt:
                     comments_txt.write(clean_comment)
                 profiler.Profiler.add_comment(ip_address, comment)
-            with codecs.open(os.path.join(self.data_dir, 'comments.txt'), "r", "utf-8") as comments_txt:
-                general_comments = comments_txt.read()
-                ip_comments = profiler.Profiler.get_comments(ip_address)
-                display_comments = str(ip_comments) + str(general_comments)
-                template = Template(dork_page.read())
-                attack_event.response = template.safe_substitute(
-                    login_msg="",
-                    comments=display_comments)
+            comments_file = os.path.join(self.data_dir, 'comments.txt')
+            if os.path.isfile(comments_file):
+                with codecs.open(os.path.join(self.data_dir, 'comments.txt'), "r", "utf-8") as comments_txt:
+                    general_comments = comments_txt.read()
+            else:
+                general_comments = ''
+
+            ip_comments = profiler.Profiler.get_comments(ip_address)
+            display_comments = str(ip_comments) + str(general_comments)
+            template = Template(dork_page.read())
+            attack_event.response = template.safe_substitute(
+                login_msg="",
+                comments=display_comments)
