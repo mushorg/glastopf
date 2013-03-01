@@ -77,7 +77,7 @@ class GlastopfHoneypot(object):
             self.profiler = profiler.Profiler(self.maindb)
 
         self.HTTP_parser = util.HTTPParser()
-        self.MethodHandlers = method_handler.HTTPMethods()
+        self.MethodHandlers = method_handler.HTTPMethods(self.data_dir)
 
         #used for post processing (logging and analysis) of attack events
         self.post_queue = Queue.Queue()

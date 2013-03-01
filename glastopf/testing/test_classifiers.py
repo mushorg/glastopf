@@ -15,8 +15,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
+import os
+import tempfile
+import shutil
 
 from glastopf.modules.HTTP.util import HTTPRequest
+from glastopf.glastopf import GlastopfHoneypot
 import glastopf.modules.classification.request as request_classifier
 
 
@@ -26,7 +30,15 @@ class TestClassifier(unittest.TestCase):
     """
 
     def setUp(self):
-        self.requestClassifier = request_classifier.Classifier()
+        self.tmpdir = tempfile.mkdtemp()
+        data_dir = os.path.join(self.tmpdir, 'data')
+        GlastopfHoneypot.prepare_environment(self.tmpdir)
+        self.requestClassifier = request_classifier.Classifier(data_dir)
+
+
+    def tearDown(self):
+        if os.path.isdir(self.tmpdir):
+            shutil.rmtree(self.tmpdir)
 
 
     def test_robots_classifier(self):

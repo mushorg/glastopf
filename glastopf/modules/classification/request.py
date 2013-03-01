@@ -34,12 +34,12 @@ class RequestPattern(object):
 class Classifier(object):
     # FIXME: Error handling for errors in the xml file
 
-    def __init__(self, data_dir=os.getcwd()):
+    def __init__(self, data_dir=os.path.join(os.getcwd(), 'data')):
         # TODO: check if file exists
         #ugly but it works...
         requests_file = os.path.join(package_directory, '../../requests.xml')
         self.tree = parse(requests_file)
-        self.server_files_path = os.path.join(data_dir, 'data', 'server_files')
+        self.server_files_path = os.path.join(data_dir, 'server_files')
         if not os.path.isdir(self.server_files_path):
             os.mkdir(self.server_files_path, 0770)
 

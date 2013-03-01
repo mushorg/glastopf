@@ -20,16 +20,17 @@ import glastopf.modules.classification.request as request_classifier
 class HTTPMethods(object):
     # TODO: Add more method handler
 
-    def __init__(self):
+    def __init__(self, data_dir):
+        self.data_dir = data_dir
         pass
 
     def GET(self, parsed_request):
-        RequestClassifier = request_classifier.Classifier()
+        RequestClassifier = request_classifier.Classifier(self.data_dir)
         matched_pattern = RequestClassifier.classify_request(parsed_request)
         return matched_pattern
 
     def POST(self, parsed_request):
-        RequestClassifier = request_classifier.Classifier()
+        RequestClassifier = request_classifier.Classifier(self.data_dir)
         matched_pattern = RequestClassifier.classify_request(parsed_request)
         #parsed_request.body -> File('files/payloads')
         return matched_pattern
