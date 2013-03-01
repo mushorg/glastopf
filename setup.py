@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='glastopf',
-    version='0.1',
+    version='3.0.0',
     packages=find_packages(exclude=['bin', 'testing', 'docs']),
     scripts=['bin/glastopf-runner.py'],
     url='http://glastopf.org',
