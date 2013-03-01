@@ -4,7 +4,7 @@ distribute_setup.use_setuptools()
 from setuptools import setup, find_packages
 
 setup(
-    name='glastopf',
+    name='Glastopf',
     version='3.0.0',
     packages=find_packages(exclude=['bin', 'testing', 'docs']),
     scripts=['bin/glastopf-runner.py'],
