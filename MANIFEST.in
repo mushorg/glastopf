@@ -1,5 +1,5 @@
 include distribute_setup.py
-include glastopf/Makefile
+include glastopf/sandbox/Makefile
 recursive-include glastopf *.*
 recursive-exclude glastopf *.pyc
 recursive-exclude glastopf/testing *.*
