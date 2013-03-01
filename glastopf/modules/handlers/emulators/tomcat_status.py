@@ -23,7 +23,7 @@ class TomcatManagerStatusHandler(base_emulator.BaseEmulator):
         super(TomcatManagerStatusHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        tomcat_manager_path = os.path.join(self.data_dir, '/tomcat/manager_status.html')
+        tomcat_manager_path = os.path.join(self.data_dir, 'tomcat/manager_status.html')
         with open(tomcat_manager_path, 'r') as tomcat_manager_file:
             attack_event.response = tomcat_manager_file.read()
         return attack_event
