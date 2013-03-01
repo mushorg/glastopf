@@ -19,11 +19,11 @@ Installing ANTLR Python runtime
 
 The ANTLR runtime is needed to analyze SQL injections::
 
-	cd /opt
-	sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
-	sudo tar xzf antlr-3.1.3.tar.gz
-	cd antlr-3.1.3/runtime/Python
-	sudo python2.7 setup.py install
+    cd /opt
+    sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
+    sudo tar xzf antlr-3.1.3.tar.gz
+    cd antlr-3.1.3/runtime/Python
+    sudo python2.7 setup.py install
 
 | 
 
@@ -37,10 +37,10 @@ SKLearn
 
 SKLearn takes care of the clustering in Glastopf::
 
-	cd /opt
-	sudo git clone git://github.com/scikit-learn/scikit-learn.git
-	cd scikit-learn
-	sudo python2.7 setup.py install
+    cd /opt
+    sudo git clone git://github.com/scikit-learn/scikit-learn.git
+    cd scikit-learn
+    sudo python2.7 setup.py install
 
 | 
 
@@ -50,77 +50,88 @@ Install evnet module
 
 Download evnet using git::
 
-	cd /opt
-	git clone git://github.com/rep/evnet.git
-	cd evnet
-	sudo python2.7 setup.py install 
+    cd /opt
+    git clone git://github.com/rep/evnet.git
+    cd evnet
+    sudo python2.7 setup.py install
 
 |
 
-Get Glastopf
-============
-| 
-
-Get the source from the Github repository::
-
-	cd /opt
-	sudo git clone git://github.com/glastopf/glastopf.git
-
-| 
-
 Install and configure the PHP sandbox
-======================================
+=====================================
 | 
-
 Download using git::
 
-	cd /opt
-	sudo git clone git://github.com/glastopf/BFR.git
-	cd BFR
-	phpize
-	sudo ./configure --enable-bfr
-	sudo make && sudo make install
+    cd /opt
+    sudo git clone git://github.com/glastopf/BFR.git
+    cd BFR
+    phpize
+    sudo ./configure --enable-bfr
+    sudo make && sudo make install
+
 
 Open the php.ini file and add the following::
 
-	zend_extension = /usr/lib/php5/20100525+lfs/bfr.so
+    zend_extension = /usr/lib/php5/20100525+lfs/bfr.so
 
-| 
+|
 
-Go to sandbox directory */opt/glastopf/sandbox/* and create the apd_sandbox.php using command::
 
-	sudo make
-
-| 
- 
-Configure Glastopf
+Install glastopf
 ==================
 | 
 
-Setup ip address & port for glastopf on the file *glastopf.cfg*
+Install from git::
 
-Run the Honeypot::
-	
-	cd /opt/glastopf
-	sudo screen python2.7 webserver.py
+    git clone https://github.com/glastopf/glastopf.git
+    cd glastopf
+    python setup.py install
+
+Or install latest version from pypi::
+
+	pip install glastopf
 
 | 
+
+Configuration
+=========================
+| 
+
+Prepare glastopf environment::
+
+	cd 
+	mkdir myhoneypot
+	cd myhoneypot
+	glastopf-runner
+
+A new default glastopf.cfg has been created in _myhoneypot_, which can be customized as required.
+
+| 
+
 
 Testing the Honeypot
 ====================
-| 
+|
+
+Start Glastopf (from your 'myhoneypot' directory)::
+
+    glastopf-runner
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
-	2013-01-12 14:06:48,215 (root) Webserver running on: 0.0.0.0:8080 waiting for connections.
-	2013-01-12 14:06:48,651 (glastopf) Starting Glastopf
-	2013-01-12 14:06:48,653 (glastopf) Starting Glastopf
-	2013-01-12 14:06:48,667 (modules.reporting.hp_feed) Connecting to feed broker.
-	2013-01-12 14:06:48,731 (modules.reporting.hp_feed) Connected to hpfeed broker.
-	2013-01-12 14:06:51,758 (glastopf) HPFeeds started
-	2013-01-12 14:06:51,760 (glastopf) Generating initial dork pages - this can take a while.
-	2013-01-12 14:07:30,781 (glastopf) Glastopf instantiated and privileges dropped
-	2013-01-12 14:12:03,447 (glastopf) 192.168.1.142 requested GET / on 192.168.1.112:8080
-	2013-01-12 14:12:03,652 (glastopf) 192.168.1.142 requested GET /style.css on 192.168.1.112:8080
-	2013-01-12 14:12:03,853 (glastopf) 192.168.1.142 requested GET /favicon.ico on 192.168.1.112:8080
+    2013-02-28 22:06:58,149 (root) Webserver running on: 0.0.0.0:8080 waiting for connections.
+    2013-02-28 22:06:58,149 (glastopf.glastopf) Initializing Glastopf using "/home/jkv/glastopf/glastopf/123" as work directory.
+    2013-02-28 22:06:58,151 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+    2013-02-28 22:06:59,709 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
+    2013-02-28 22:06:59,723 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
+    2013-02-28 22:06:59,857 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
+    2013-02-28 22:06:59,986 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 174914
+    2013-02-28 22:07:00,037 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 1000 dorks from the mnemosyne service.
+    2013-02-28 22:07:02,027 (glastopf.glastopf) Generating initial dork pages - this can take a while.
+    2013-02-28 22:07:03,829 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+    2013-02-28 22:07:03,853 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+    2013-02-28 22:07:06,880 (glastopf.glastopf) Glastopf started and privileges dropped.
+    2013-02-28 22:07:12,058 (glastopf.glastopf) 192.168.1.123 requested GET / on 192.168.1.145:8080
+    2013-02-28 22:07:12,087 (glastopf.glastopf) 192.168.1.123 requested GET /style.css on 192.168.1.145:8080
+    2013-02-28 22:07:12,160 (glastopf.glastopf) 192.168.1.123 requested GET /favicon.ico on 192.168.1.145:8080
 
