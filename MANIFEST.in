@@ -1,3 +1,4 @@
+include distribute_setup.py
 recursive-include glastopf *.*
 recursive-exclude glastopf *.pyc
 recursive-exclude glastopf/testing *.*
