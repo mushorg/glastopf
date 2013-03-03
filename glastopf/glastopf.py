@@ -232,7 +232,7 @@ class GlastopfHoneypot(object):
     def handle_request(self, raw_request, addr, connection):
         response_code = "200 OK"
         attack_event = attack.AttackEvent()
-        attack_event.sensor_addr = connection.sock.getsockname()
+        #attack_event.sensor_addr = connection.sock.getsockname()
         attack_event.raw_request = raw_request
         # Parse the request
         try:

@@ -1,4 +1,4 @@
-#git+git://github.com/rep/evnet.git#egg=evnet
+gevent>=0.13.7
 webob
 pyopenssl
 sqlalchemy>=0.7.0

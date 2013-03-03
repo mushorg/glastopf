@@ -9,7 +9,7 @@ Prerequisites OpenBSD
 
 Install the dependencies::
 
-	pkg_add -r python-2.7 py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-numpy py-setuptools py-scipy atlas blas php autoconf automake g77 gfortran plplot-f77 libgfortran mpfr libgfortran gmp gd pango glib2 plplot cairo png jpeg libelf ghostscript mongodb
+	pkg_add -r python-2.7 py-openssl py-webob py-gevent py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-numpy py-setuptools py-scipy atlas blas php autoconf automake g77 gfortran plplot-f77 libgfortran mpfr libgfortran gmp gd pango glib2 plplot cairo png jpeg libelf ghostscript mongodb
 
 | 
 
@@ -58,19 +58,6 @@ SKLearn takes care of the clustering in Glastopf::
 	git clone git://github.com/scikit-learn/scikit-learn.git
 	cd scikit-learn
 	python2.7 setup.py install
-
-| 
-
-Install evnet module
-====================
-| 
-
-Download and install evnet::
-
-	cd /opt
-	git clone git://github.com/rep/evnet.git
-	cd evnet
-	python2.7 setup.py install 
 
 | 
 
