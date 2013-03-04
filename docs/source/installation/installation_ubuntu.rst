@@ -44,19 +44,6 @@ SKLearn takes care of the clustering in Glastopf::
 
 | 
 
-Install evnet module
-====================
-| 
-
-Download evnet using git::
-
-    cd /opt
-    git clone git://github.com/rep/evnet.git
-    cd evnet
-    sudo python2.7 setup.py install
-
-|
-
 Install and configure the PHP sandbox
 =====================================
 | 
