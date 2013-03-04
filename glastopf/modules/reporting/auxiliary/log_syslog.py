@@ -27,19 +27,20 @@ class LogSyslog(BaseLogger):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
-            "enabled": conf_parser.get("syslog", "enabled"),
+            "enabled": conf_parser.getboolean("syslog", "enabled"),
             "socket": conf_parser.get("syslog", "socket"),
         }
 
+        if self.options['enabled']:
         #Make sure we only have one logger
-        try:
-            LogSyslog.logger
-        except AttributeError:
-            LogSyslog.logger = logging.getLogger('glaspot_attack')
-            LogSyslog.logger.propagate = False
-            LogSyslog.log_handler = logging.handlers.SysLogHandler(address=self.options['socket'])
-            LogSyslog.logger.addHandler(self.log_handler)
-            LogSyslog.logger.setLevel(logging.INFO)
+            try:
+                LogSyslog.logger
+            except AttributeError:
+                LogSyslog.logger = logging.getLogger('glaspot_attack')
+                LogSyslog.logger.propagate = False
+                LogSyslog.log_handler = logging.handlers.SysLogHandler(address=self.options['socket'])
+                LogSyslog.logger.addHandler(self.log_handler)
+                LogSyslog.logger.setLevel(logging.INFO)
 
     def insert(self, attack_event):
         message = "Glaspot: %(pattern)s attack method from %(source)s against %(host)s. [%(method)s %(url)s]" % {
