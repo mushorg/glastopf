@@ -7,16 +7,36 @@ Prerequisites OS X (Mountain Lion)
 ==================================
 | 
 
-Xcode and gfortran are required when installing Glastopf on OS X.
+Xcode, gfortran and autoconf are required when installing Glastopf on OS X.
 
 * Xcode can be installed from App Store. 
 * Gfortran can be install using homebrew.
 
-Installing gfortran using homebrew::
+Installing gfortran and autoconf using homebrew::
 
 	brew install gfortran 
+        brew install autoconf
 
 | 
+
+Install and configure the PHP sandbox
+=====================================
+| 
+Download using git::
+
+    cd /opt
+    sudo git clone git://github.com/glastopf/BFR.git
+    cd BFR
+    phpize
+    sudo ./configure --enable-bfr
+    sudo make && sudo make install
+
+
+Open the php.ini file and add bfr.so accordingly to the build output::
+
+    zend_extension = /usr/lib/php/extensions/no-debug-non-zts-20090626/bfr.so
+
+|
 
 Installing and setting up a virtual environment
 ===============================================
