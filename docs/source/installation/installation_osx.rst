@@ -3,24 +3,32 @@ Glastopf Installation
 | 
 | 
 
-Prerequisites OS X (Mountain Lion
-====================
+Prerequisites OS X (Mountain Lion)
+==================================
 | 
 
-Install the xcode and gfortran::  
+Xcode and gfortran are required when installing Glastopf on OS X.
 
-    Install xcode from App Store
-    brew install gfortran
+* Xcode can be installed from App Store. 
+* Gfortran can be install using homebrew.
+
+Installing gfortran using homebrew::
+
+	brew install gfortran 
+
 | 
 
-Setup virtual environment
-================================
+Installing and setting up a virtual environment
+===============================================
 | 
 
-The ANTLR runtime is needed to analyze SQL injections::
+Prepare virtual environment::
 
     virtualenv glastopf-virt --system-site-packages
     source glastopf-virt/glastopf/bin/activate
+
+Install Glastopf using pip::
+
     pip install glastopf
 
 | 
@@ -29,13 +37,14 @@ Starting the honeypot
 =========================
 | 
 
-Prepare glastopf environment::
 Note: Before using the follow command make sure you are operating within the virtual environment.
+
+Prepare glastopf environment::
 
 	cd 
 	mkdir myhoneypot
 	cd myhoneypot
-	glastopf-runner
+	glastopf-runner.py
 
 If you receive errors regarding syslog when starting glastopf, please update the syslog path in glastopf.cfg::
 
@@ -49,7 +58,7 @@ Testing the Honeypot
 
 Start Glastopf (from your 'myhoneypot' directory)::
 
-    glastopf-runner
+    glastopf-runner.py
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
