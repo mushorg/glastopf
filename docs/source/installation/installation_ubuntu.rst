@@ -9,39 +9,9 @@ Prerequisites Ubuntu
 
 Install the dependencies::	
 
-    sudo apt-get install python2.7 python-openssl python-gevent python-webob python2.7-dev build-essential make python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
-    sudo pip install --upgrade pymongo
-| 
-
-Installing ANTLR Python runtime
-================================
-| 
-
-The ANTLR runtime is needed to analyze SQL injections::
-
-    cd /opt
-    sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
-    sudo tar xzf antlr-3.1.3.tar.gz
-    cd antlr-3.1.3/runtime/Python
-    sudo python2.7 setup.py install
-
-| 
-
-ANTLR mirror 1: http://pkgs.fedoraproject.org/repo/pkgs/antlr3/antlr-3.1.3.tar.gz/e0c25460fa8386548871809a819e587a/antlr-3.1.3.tar.gz
-
-| 
-
-SKLearn
-=======
-| 
-
-SKLearn takes care of the clustering in Glastopf::
-
-    cd /opt
-    sudo git clone git://github.com/scikit-learn/scikit-learn.git
-    cd scikit-learn
-    sudo python2.7 setup.py install
-
+    sudo apt-get update
+    sudo apt-get install python2.7 python-openssl python-gevent python2.7-dev build-essential make python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
+    sudo pip install --upgrade distribute
 | 
 
 Install and configure the PHP sandbox
@@ -52,7 +22,7 @@ Download using git::
     cd /opt
     sudo git clone git://github.com/glastopf/BFR.git
     cd BFR
-    phpize
+    sudo phpize
     sudo ./configure --enable-bfr
     sudo make && sudo make install
 
@@ -62,7 +32,6 @@ Open the php.ini file and add the following::
     zend_extension = /usr/lib/php5/20100525+lfs/bfr.so
 
 |
-
 
 Install glastopf
 ==================
