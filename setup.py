@@ -18,7 +18,7 @@ setup(
     test_suite='nose.collector',
     #TODO: How to install the python module from antlr?
     #'antlr>=3.1.3'
-    install_requires=['gevent>=0.13.7', 'webob>=1.1.1', 'pyopenssl', 'chardet', 'sqlalchemy>=0.7.0',
+    install_requires=['gevent>=0.13.7', 'webob>=1.2.0', 'pyopenssl', 'chardet', 'sqlalchemy>=0.7.0',
                       'lxml', 'beautifulsoup>=3.2.0', 'numpy>=1.6.1',
                       'scipy>=0.9.0', 'requests>=1.0.0', 'pymongo>=2.4',
                       'cssselect>=0.7.0', 'scikit_learn>=0.13.0'],

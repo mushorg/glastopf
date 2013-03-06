@@ -1,5 +1,5 @@
 gevent>=0.13.7
-webob
+webob>=1.2.0
 pyopenssl
 sqlalchemy>=0.7.0
 lxml
