@@ -15,12 +15,12 @@ before_install:
  - "sudo apt-get -qq install python-numpy python-numpy-dev python-scipy"
 #dependencies for the php sandbox
  - "sudo apt-get -qq install php5 php5-dev"
-#Install antlr python module
- - cd /opt
- - sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
- - sudo tar xzf antlr-3.1.3.tar.gz
- - cd antlr-3.1.3/runtime/Python
- - sudo python2.7 setup.py install
+##Install antlr python module
+# - cd /opt
+# - sudo wget http://www.antlr3.org/download/antlr-3.1.3.tar.gz
+# - sudo tar xzf antlr-3.1.3.tar.gz
+# - cd antlr-3.1.3/runtime/Python
+# - sudo python2.7 setup.py install
 #Install Better Function Replacer (BFR)
  - cd /tmp
  - git clone git://github.com/glastopf/BFR.git
