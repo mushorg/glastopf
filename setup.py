@@ -12,6 +12,7 @@ setup(
     license='GPL 3',
     author='Glastopf Project',
     include_package_data=True,
+    long_description=open('README.rst').read(),
     package_data={'glastopf': ['sandbox/Makefile']},
     author_email='',
     description='Web application honeypot',
