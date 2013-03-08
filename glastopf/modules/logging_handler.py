@@ -48,6 +48,6 @@ def get_aux_loggers(create_tables=True):
     else:
         for logger_class in logger_classes:
             logger_instance = logger_class()
-            if logger_instance.options['enabled'] == 'True':
+            if logger_instance.options['enabled']:
                 loggers.append(logger_instance)
         return loggers

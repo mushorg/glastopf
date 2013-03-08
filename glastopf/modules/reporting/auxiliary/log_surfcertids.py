@@ -60,7 +60,7 @@ class LogSURFcertIDS(BaseLogger):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
-            "enabled": conf_parser.get("surfcertids", "enabled"),
+            "enabled": conf_parser.getboolean("surfcertids", "enabled"),
             "host": conf_parser.get("surfcertids", "host"),
             "port": conf_parser.getint("surfcertids", "port"),
             "user": conf_parser.get("surfcertids", "user"),

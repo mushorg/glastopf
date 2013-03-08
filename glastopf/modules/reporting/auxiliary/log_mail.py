@@ -27,7 +27,7 @@ class LogMail(BaseLogger):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
-            "enabled": conf_parser.get("mail", "enabled"),
+            "enabled": conf_parser.getboolean("mail", "enabled"),
             "user": conf_parser.get("mail", "user"),
             "pwd": conf_parser.get("mail", "pwd"),
             "mail_from": conf_parser.get("mail", "mail_from"),
