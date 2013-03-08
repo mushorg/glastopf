@@ -7,6 +7,8 @@ from ConfigParser import ConfigParser
 import logging.handlers
 from gevent.wsgi import WSGIServer
 from glastopf.wsgi_wrapper import GlastopfWSGI
+import gevent
+from gevent import Greenlet
 
 import argparse
 
@@ -67,10 +69,14 @@ if __name__ == '__main__':
     port = conf_parser.getint("webserver", "port")
 
     honeypot = GlastopfHoneypot(work_dir=args.workdir)
-    honeypot.start_background_workers()
     wsgi_wrapper = GlastopfWSGI(honeypot)
 
     try:
-        WSGIServer((host, port), wsgi_wrapper.application, log=None).serve_forever()
+        server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
+        wsgi_greenlet = Greenlet(server.start())
+        #start background worker and drop privs
+        honeypot.start_background_workers()
+        gevent.joinall([wsgi_greenlet])
+
     except KeyboardInterrupt as ex:
         honeypot.stop_background_workers()
