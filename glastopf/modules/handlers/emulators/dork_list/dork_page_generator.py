@@ -23,8 +23,10 @@ import random
 import time
 import os
 import logging
-import shutil
+
 from glastopf.modules.handlers.emulators.dork_list import gen_html
+from glastopf.modules.handlers.emulators.surface import create_surface
+
 
 logger = logging.getLogger(__name__)
 package_directory = os.path.dirname(os.path.abspath(__file__))
@@ -55,6 +57,7 @@ class DorkPageGenerator(object):
             logger.info("Bootstrapping dork database.")
             self.bootstrap_dorkdb()
         self.enabled = True
+        self.surface_creator = create_surface.SurfaceCreator()
 
     def prepare_text(self):
         line_list = []
@@ -90,10 +93,10 @@ class DorkPageGenerator(object):
                 body += line_list.pop()
                 href = choice(inurl_cluster)
                 body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
-            dork_page = gen_html.html_template(choice(intitle_list),
-                                               "http://localhost:8080",
-                                               body,
-                                               "Footer Powered By")
+            dork_page = self.surface_creator.get_index(choice(intitle_list),
+                                                       "http://localhost:8080",
+                                                       body,
+                                                       "Footer Powered By")
             page_md5 = hashlib.md5(dork_page).hexdigest()
             with codecs.open("{0}/{1}".format(self.pages_path, page_md5), "w", "utf-8") as dork_file:
                 dork_file.write(dork_page)
