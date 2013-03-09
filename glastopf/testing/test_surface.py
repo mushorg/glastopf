@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist <glaslos@gmail.com>
+# Copyright (C) 2013  Lukas Rist <glaslos@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,24 +15,13 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os
+import unittest
 
-from jinja2 import Environment, FileSystemLoader
-
-
-package_directory = os.path.dirname(os.path.abspath(__file__))
+from glastopf.modules.handlers.emulators.surface import create_surface
 
 
-class SurfaceCreator(object):
+class TestSurfaceCreation(unittest.TestCase):
 
-    def __init__(self):
-        self.template_env = Environment(loader=FileSystemLoader(os.path.join(package_directory, "templates")))
-
-    def get_index(self):
-        template = self.template_env.get_template('index.html')
-        return template.render()
-
-
-if __name__ == "__main__":
-    sc = SurfaceCreator()
-    print sc.get_index()
+    def test_template(self):
+        surface_creator = create_surface.SurfaceCreator()
+        print surface_creator.get_index()
