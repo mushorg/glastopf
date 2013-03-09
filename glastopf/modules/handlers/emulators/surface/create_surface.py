@@ -28,11 +28,14 @@ class SurfaceCreator(object):
     def __init__(self):
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(package_directory, "templates")))
 
-    def get_index(self):
+    def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-        return template.render()
+        surface_page = template.render(title=title, target=target, body=body, footer=footer)
+        with open("test.html", "wb") as surface_test:
+            surface_test.write(surface_page)
+        return surface_page
 
 
 if __name__ == "__main__":
     sc = SurfaceCreator()
-    print sc.get_index()
+    sc.get_index()
