@@ -1,4 +1,6 @@
 {% extends "base.html" %}
-{% block content %}
-        Some content
-{% endblock %}
+{% block title %} {{ title }} {% endblock %}
+{% block page_title %} {{ title }} {% endblock %}
+{% block form_url %}{{ target }}{% endblock %}
+{% block bodystr %} {{ body }} {% endblock %}
+{% block footer %} {{ footer }} {% endblock %}
