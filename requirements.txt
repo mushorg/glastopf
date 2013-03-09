@@ -12,3 +12,4 @@ pymongo>=2.4
 chardet
 scikit_learn>=0.13.0
 antlr_python_runtime
+jinja2
