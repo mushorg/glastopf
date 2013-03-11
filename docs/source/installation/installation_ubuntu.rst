@@ -3,10 +3,9 @@ Glastopf Installation
 | 
 | 
 
-Prerequisites Ubuntu
-====================
-| 
-
+Prerequisites
+=============
+|
 Install the dependencies::	
 
     sudo apt-get update
@@ -36,17 +35,15 @@ Open the php.ini file and add the following::
 Install glastopf
 ==================
 | 
+Install latest stable release from pip::
 
-Install from git::
+	pip install glastopf
+
+Or install latest development version from the repository::
 
     git clone https://github.com/glastopf/glastopf.git
     cd glastopf
     python setup.py install
-
-Or install latest version from pypi::
-
-	pip install glastopf
-
 | 
 
 Configuration
@@ -60,7 +57,7 @@ Prepare glastopf environment::
 	cd myhoneypot
 	glastopf-runner
 
-A new default glastopf.cfg has been created in _myhoneypot_, which can be customized as required.
+A new default glastopf.cfg has been created in *myhoneypot*, which can be customized as required.
 
 | 
 
