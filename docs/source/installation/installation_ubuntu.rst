@@ -55,7 +55,7 @@ Prepare glastopf environment::
 	cd 
 	mkdir myhoneypot
 	cd myhoneypot
-	glastopf-runner
+	glastopf-runner.py
 
 A new default glastopf.cfg has been created in *myhoneypot*, which can be customized as required.
 
