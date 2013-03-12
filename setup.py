@@ -7,7 +7,7 @@ setup(
     name='Glastopf',
     version='3.0.5',
     packages=find_packages(exclude=['bin', 'testing', 'docs']),
-    scripts=['bin/glastopf-runner.py'],
+    scripts=['bin/glastopf-runner'],
     url='http://glastopf.org',
     license='GPL 3',
     author='Glastopf Project',

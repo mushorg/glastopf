@@ -64,7 +64,7 @@ Prepare glastopf environment::
 	cd 
 	mkdir myhoneypot
 	cd myhoneypot
-	glastopf-runner.py
+	glastopf-runner
 
 If you receive errors regarding syslog when starting glastopf, please update the syslog path in glastopf.cfg::
 
@@ -78,7 +78,7 @@ Testing the Honeypot
 
 Start Glastopf (from your 'myhoneypot' directory)::
 
-    glastopf-runner.py
+    glastopf-runner
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
