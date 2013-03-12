@@ -68,7 +68,7 @@ Testing the Honeypot
 
 Start Glastopf (from your 'myhoneypot' directory)::
 
-    glastopf-runner
+    glastopf-runner.py
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
