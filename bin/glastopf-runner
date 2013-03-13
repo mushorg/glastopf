@@ -5,17 +5,17 @@ import logging
 import os
 from ConfigParser import ConfigParser
 import logging.handlers
-from gevent.wsgi import WSGIServer
-from glastopf.wsgi_wrapper import GlastopfWSGI
-import gevent
-from gevent import Greenlet
-
 import argparse
 
+from gevent.wsgi import WSGIServer
+import gevent
+
+from glastopf.wsgi_wrapper import GlastopfWSGI
 from glastopf.glastopf import GlastopfHoneypot
 
 
 logger = logging.getLogger()
+
 
 def setup_logging(logconsole, logfile):
     logger.setLevel(logging.DEBUG)
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     try:
         server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
-        wsgi_greenlet = Greenlet(server.start())
+        wsgi_greenlet = gevent.Greenlet(server.start())
         #start background worker and drop privs
         honeypot.start_background_workers()
         gevent.joinall([wsgi_greenlet])
