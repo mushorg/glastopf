@@ -1,5 +1,5 @@
-Glastopf Installation
-----------------------
+Glastopf Installation - Ubuntu 12.04 LTS
+-----------------------------------------
 | 
 | 
 
@@ -9,7 +9,7 @@ Prerequisites
 Install the dependencies::	
 
     sudo apt-get update
-    sudo apt-get install python2.7 python-openssl python-gevent libevent-dev python2.7-dev build-essential make python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
+    sudo apt-get install python2.7 python-openssl python-gevent libevent-dev python2.7-dev build-essential make python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev 
     sudo pip install --upgrade distribute
 | 
 
@@ -28,7 +28,7 @@ Download using git::
 
 Open the php.ini file and add the following::
 
-    zend_extension = /usr/lib/php5/20100525+lfs/bfr.so
+    zend_extension = /usr/lib/php5/20090626+lfs/bfr.so
 
 |
 
@@ -37,13 +37,14 @@ Install glastopf
 | 
 Install latest stable release from pip::
 
-	pip install glastopf
+	sudo pip install glastopf
 
 Or install latest development version from the repository::
 
-    git clone https://github.com/glastopf/glastopf.git
+    cd /opt
+    sudo git clone https://github.com/glastopf/glastopf.git
     cd glastopf
-    python setup.py install
+    sudo python setup.py install
 | 
 
 Configuration
@@ -52,10 +53,10 @@ Configuration
 
 Prepare glastopf environment::
 
-	cd 
-	mkdir myhoneypot
+	cd /opt
+	sudo mkdir myhoneypot
 	cd myhoneypot
-	glastopf-runner
+	sudo glastopf-runner.py
 
 A new default glastopf.cfg has been created in *myhoneypot*, which can be customized as required.
 
@@ -68,23 +69,16 @@ Testing the Honeypot
 
 Start Glastopf (from your 'myhoneypot' directory)::
 
-    glastopf-runner
+    sudo glastopf-runner.py
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
-    2013-02-28 22:06:58,149 (root) Webserver running on: 0.0.0.0:8080 waiting for connections.
-    2013-02-28 22:06:58,149 (glastopf.glastopf) Initializing Glastopf using "/home/jkv/glastopf/glastopf/123" as work directory.
-    2013-02-28 22:06:58,151 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
-    2013-02-28 22:06:59,709 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
-    2013-02-28 22:06:59,723 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
-    2013-02-28 22:06:59,857 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
-    2013-02-28 22:06:59,986 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 174914
-    2013-02-28 22:07:00,037 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 1000 dorks from the mnemosyne service.
-    2013-02-28 22:07:02,027 (glastopf.glastopf) Generating initial dork pages - this can take a while.
-    2013-02-28 22:07:03,829 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
-    2013-02-28 22:07:03,853 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
-    2013-02-28 22:07:06,880 (glastopf.glastopf) Glastopf started and privileges dropped.
-    2013-02-28 22:07:12,058 (glastopf.glastopf) 192.168.1.123 requested GET / on 192.168.1.145:8080
-    2013-02-28 22:07:12,087 (glastopf.glastopf) 192.168.1.123 requested GET /style.css on 192.168.1.145:8080
-    2013-02-28 22:07:12,160 (glastopf.glastopf) 192.168.1.123 requested GET /favicon.ico on 192.168.1.145:8080
+2013-03-14 08:34:08,129 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+2013-03-14 08:34:08,130 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+2013-03-14 08:34:08,152 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+2013-03-14 08:34:08,227 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+2013-03-14 08:34:11,265 (glastopf.glastopf) Glastopf started and privileges dropped.
+2013-03-14 08:34:32,853 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.102
+2013-03-14 08:34:32,960 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.102
+2013-03-14 08:34:33,021 (glastopf.glastopf) 192.168.10.85 requested GET /favicon.ico on 192.168.10.102
 
