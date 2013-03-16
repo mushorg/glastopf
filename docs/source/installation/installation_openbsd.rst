@@ -9,7 +9,7 @@ Prerequisites OpenBSD
 
 Install the dependencies::
 
-	pkg_add -r python-2.7 py-openssl py-webob py-gevent py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-numpy py-setuptools py-scipy atlas blas php autoconf automake g77 gfortran plplot-f77 libgfortran mpfr libgfortran gmp gd pango glib2 plplot cairo png jpeg libelf ghostscript mongodb
+	pkg_add -r python-2.7 py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-setuptools py-jinja2 py-scipy atlas blas php pear autoconf automake g77 gfortran plplot-f77 libgfortran libevent libelf plplot mongodb wget lapack gettext
 
 | 
 
@@ -31,61 +31,50 @@ Set autoconf and automake versions::
 
 | 
 
-Installing ANTLR Python runtime
-================================
+Install Gevent
+==============
 | 
 
-The ANTLR runtime is needed to analyze SQL injections::
+Download Gevent and compile it::
 
 	cd /opt
-	wget http://www.antlr.org/download/antlr-3.1.3.tar.gz
-	tar xzf antlr-3.1.3.tar.gz
-	cd antlr-3.1.3/runtime/Python
-	wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
-	mv setuptools-0.6c11-py2.7.egg setuptools-0.6c5-py2.7.egg
-	python2.7 setup.py install
-
+	wget https://github.com/downloads/SiteSupport/gevent/gevent-1.0rc2.tar.gz
+	tar xfz gevent-1.0rc2.tar.gz
+	cd gevent-1.0rc2
+	python setup.py install
 
 | 
 
-SKLearn
-=======
+Install WebOb
+==============
 | 
 
-SKLearn takes care of the clustering in Glastopf::
+Download WebOb and compile it::
 
 	cd /opt
-	git clone git://github.com/scikit-learn/scikit-learn.git
-	cd scikit-learn
-	python2.7 setup.py install
+	wget https://pypi.python.org/packages/source/W/WebOb/WebOb-1.2.3.tar.gz
+	tar xfz WebOb-1.2.3.tar.gz
+	cd WebOb-1.2.3
+	python setup.py install
 
 | 
 
-Mongo DB
-========
-|
-
-Download event.bson from http://glastopf.org/events.bson and sample database from http://glastopf.org/glastopf.db.bz2.
-
-Install the database::
-
-	mongorestore -d glastopf -c events events.bson
-
-|
-
-Get Glastopf
-============
+Install Numpy
+==============
 | 
 
-Get the source from the Github repository::
+Download Numpy and compile it::
 
 	cd /opt
-	git clone git://github.com/glastopf/glastopf.git
+	wget http://sourceforge.net/projects/numpy/files/NumPy/1.7.0/numpy-1.7.0.tar.gz/download
+	tar xzf numpy-1.7.0.tar.gz
+	cd numpy-1.7.0
+	python setup.py install
 
 | 
 
-Install and configure the PHP sandbox
-======================================
+Install BFR
+===========
 | 
 
 Download using git::
@@ -96,28 +85,41 @@ Download using git::
 	phpize
 	./configure --enable-bfr
 	make && make install
+
 	Add the following to */etc/php-5.3.ini*
 	zend_extension = /usr/local/lib/php-5.3/modules/bfr.so
 
-
 | 
 
-Go to sandbox directory */opt/glastopf/sandbox/* and create the apd_sandbox.php using command::
-
-	 make
-
-| 
- 
-Configure Glastopf
-==================
+Install Glastopf
+================
 | 
 
-Setup ip address & port for glastopf on the file *glastopf.cfg*
+Install latest stable release from pip::
 
-Run the Honeypot::
-	
-	cd /opt/glastopf
-	screen python2.7 webserver.py
+	pip install glastopf
+
+Or install latest development version from the repository::
+
+    cd /opt
+    git clone https://github.com/glastopf/glastopf.git
+    cd glastopf
+    python setup.py install
+
+|
+
+Configuration
+=============
+| 
+
+Prepare glastopf environment::
+
+	cd /opt
+	mkdir myhoneypot
+	cd myhoneypot
+	glastopf-runner.py
+
+A new default glastopf.cfg has been created in *myhoneypot*, which can be customized as required.
 
 | 
 
@@ -127,15 +129,20 @@ Testing the Honeypot
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
-	2013-01-12 14:06:48,215 (root) Webserver running on: 0.0.0.0:8080 waiting for connections.
-	2013-01-12 14:06:48,651 (glastopf) Starting Glastopf
-	2013-01-12 14:06:48,653 (glastopf) Starting Glastopf
-	2013-01-12 14:06:48,667 (modules.reporting.hp_feed) Connecting to feed broker.
-	2013-01-12 14:06:48,731 (modules.reporting.hp_feed) Connected to hpfeed broker.
-	2013-01-12 14:06:51,758 (glastopf) HPFeeds started
-	2013-01-12 14:06:51,760 (glastopf) Generating initial dork pages - this can take a while.
-	2013-01-12 14:07:30,781 (glastopf) Glastopf instantiated and privileges dropped
-	2013-01-12 14:12:03,447 (glastopf) 192.168.1.142 requested GET / on 192.168.1.112:8080
-	2013-01-12 14:12:03,652 (glastopf) 192.168.1.142 requested GET /style.css on 192.168.1.112:8080
-	2013-01-12 14:12:03,853 (glastopf) 192.168.1.142 requested GET /favicon.ico on 192.168.1.112:8080
+2013-03-15 12:56:42,075 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+2013-03-15 12:56:42,077 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+2013-03-15 12:56:42,146 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
+2013-03-15 12:56:42,159 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
+2013-03-15 12:56:42,622 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
+2013-03-15 12:56:42,753 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 45235
+2013-03-15 12:56:42,831 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 258 dorks from the mnemosyne service.
+2013-03-15 12:56:44,406 (glastopf.glastopf) Generating initial dork pages - this can take a while.
+2013-03-15 12:56:46,382 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+2013-03-15 12:56:46,871 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+2013-03-15 12:56:52,856 (glastopf.glastopf) Glastopf started and privileges dropped.
+2013-03-15 12:57:04,073 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+2013-03-15 12:57:04,149 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
+2013-03-15 12:57:05,766 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+2013-03-15 12:57:05,825 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
+2013-03-15 12:57:06,611 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
 
