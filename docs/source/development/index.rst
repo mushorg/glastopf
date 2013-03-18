@@ -9,3 +9,4 @@ Basics on how to develop Glastopf
 
     guidelines
     braindump
+    emulators
