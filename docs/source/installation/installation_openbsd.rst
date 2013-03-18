@@ -129,20 +129,20 @@ Testing the Honeypot
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
-2013-03-15 12:56:42,075 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
-2013-03-15 12:56:42,077 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
-2013-03-15 12:56:42,146 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
-2013-03-15 12:56:42,159 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
-2013-03-15 12:56:42,622 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
-2013-03-15 12:56:42,753 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 45235
-2013-03-15 12:56:42,831 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 258 dorks from the mnemosyne service.
-2013-03-15 12:56:44,406 (glastopf.glastopf) Generating initial dork pages - this can take a while.
-2013-03-15 12:56:46,382 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
-2013-03-15 12:56:46,871 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
-2013-03-15 12:56:52,856 (glastopf.glastopf) Glastopf started and privileges dropped.
-2013-03-15 12:57:04,073 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
-2013-03-15 12:57:04,149 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
-2013-03-15 12:57:05,766 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
-2013-03-15 12:57:05,825 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
-2013-03-15 12:57:06,611 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+	2013-03-15 12:56:42,075 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+	2013-03-15 12:56:42,077 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+	2013-03-15 12:56:42,146 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
+	2013-03-15 12:56:42,159 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
+	2013-03-15 12:56:42,622 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
+	2013-03-15 12:56:42,753 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 45235
+	2013-03-15 12:56:42,831 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 258 dorks from the mnemosyne service.
+	2013-03-15 12:56:44,406 (glastopf.glastopf) Generating initial dork pages - this can take a while.
+	2013-03-15 12:56:46,382 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+	2013-03-15 12:56:46,871 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+	2013-03-15 12:56:52,856 (glastopf.glastopf) Glastopf started and privileges dropped.
+	2013-03-15 12:57:04,073 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+	2013-03-15 12:57:04,149 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
+	2013-03-15 12:57:05,766 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+	2013-03-15 12:57:05,825 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
+	2013-03-15 12:57:06,611 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
 
