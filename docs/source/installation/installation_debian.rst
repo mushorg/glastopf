@@ -79,12 +79,12 @@ Start Glastopf (from your 'myhoneypot' directory)::
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
-2013-03-13 21:10:33,047 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
-2013-03-13 21:10:33,048 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
-2013-03-13 21:10:33,073 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
-2013-03-13 21:10:33,237 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
-2013-03-13 21:10:36,290 (glastopf.glastopf) Glastopf started and privileges dropped.
-2013-03-13 21:10:56,282 (glastopf.glastopf) 192.168.1.148 requested GET / on 192.168.1.109
-2013-03-13 21:10:56,401 (glastopf.glastopf) 192.168.1.148 requested GET /style.css on 192.168.1.109
-2013-03-13 21:10:56,463 (glastopf.glastopf) 192.168.1.148 requested GET /favicon.ico on 192.168.1.109
+	2013-03-13 21:10:33,047 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+	2013-03-13 21:10:33,048 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+	2013-03-13 21:10:33,073 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+	2013-03-13 21:10:33,237 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+	2013-03-13 21:10:36,290 (glastopf.glastopf) Glastopf started and privileges dropped.
+	2013-03-13 21:10:56,282 (glastopf.glastopf) 192.168.1.148 requested GET / on 192.168.1.109
+	2013-03-13 21:10:56,401 (glastopf.glastopf) 192.168.1.148 requested GET /style.css on 192.168.1.109
+	2013-03-13 21:10:56,463 (glastopf.glastopf) 192.168.1.148 requested GET /favicon.ico on 192.168.1.109
 
