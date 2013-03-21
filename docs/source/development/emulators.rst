@@ -76,3 +76,12 @@ We can now start Glastopf and test our new emulator as follows.
     $ curl http://localhost:8080/beerservice.php?type=Rauchbier
     Rauchbier is a pretty lousy type of beer!
 
+Adding files
+------------
+If you need to add datafiles, you can add these to the data directory at::
+
+    glastopf/modules/handlers/emulators/data
+
+All content of this directory will automatically be copied to the work directory
+of Glastopf, which allows for easy customization. You can get the path to the
+data directory by using ``self.data_dir``.
