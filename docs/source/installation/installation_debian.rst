@@ -50,7 +50,7 @@ Or install latest development version from the repository::
     cd /opt
     git clone https://github.com/glastopf/glastopf.git
     cd glastopf
-    python setup.py Install
+    python setup.py install
 | 
 
 Configuration
