@@ -217,7 +217,7 @@ class GlastopfHoneypot(object):
         os.chdir(sandbox_dir)
         #execute makefile and output to self.workdir/data/apd_sandbox.php
         sandbox_out = os.path.join(work_dir, 'data', 'sandbox.php')
-        check_call(['make', '-B', 'out={0}'.format(sandbox_out)])
+        check_call(['make', '-B', '-s', 'out={0}'.format(sandbox_out)])
         #restore state of original working dir
         os.chdir(old_cwd)
 
