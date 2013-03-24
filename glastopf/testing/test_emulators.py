@@ -200,7 +200,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: http://localhost:8080/
         Expected Result: One of the generated attack surfaces.
         Notes:"""
-        os.mkdir(os.path.join(self.data_dir, 'dork_pages'))
+
         tmp_file = os.path.join(self.data_dir, 'dork_pages', format(str(uuid.uuid4())))
 
         with open(tmp_file, 'w+') as f:
