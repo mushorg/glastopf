@@ -10,6 +10,9 @@ import glastopf.modules.processing.profiler as profiler
 
 
 class CommentPoster(base_emulator.BaseEmulator):
+    MAX_COMMENT_LEN = 2048
+    MAX_FILE_LEN = 33816700  # ~ 3MB
+
     def __init__(self, data_dir):
         super(CommentPoster, self).__init__(data_dir)
 
@@ -24,6 +27,9 @@ class CommentPoster(base_emulator.BaseEmulator):
             dork_page_list.remove('.git')
         dork_page = choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
+
+        comments_file = os.path.join(self.data_dir, 'comments.txt')
+
         with codecs.open(os.path.join(pages_path, dork_page)) as dork_page:
             try:
                 comment = (parse_qs(attack_event.parsed_request.body)
@@ -35,12 +41,21 @@ class CommentPoster(base_emulator.BaseEmulator):
                 comment = ""
                 clean_comment = ""
             else:
-                with codecs.open(os.path.join(self.data_dir, 'comments.txt'), "a", "utf-8") as comments_txt:
-                    comments_txt.write(clean_comment)
-                profiler.Profiler.add_comment(ip_address, comment)
-            comments_file = os.path.join(self.data_dir, 'comments.txt')
+
+                # overwrite the comments file if its size exceeds the max length
+                if os.path.isfile(comments_file):
+                    if os.stat(comments_file).st_size > CommentPoster.MAX_FILE_LEN:
+                        with codecs.open(comments_file, "w", "utf-8") as comments_txt:
+                            comments_txt.write('')
+
+                # store the comment only if its size does not exceed the max length
+                if len(clean_comment) <= CommentPoster.MAX_COMMENT_LEN:
+                    with codecs.open(comments_file, "a", "utf-8") as comments_txt:
+                        comments_txt.write(clean_comment)
+                    profiler.Profiler.add_comment(ip_address, comment)
+
             if os.path.isfile(comments_file):
-                with codecs.open(os.path.join(self.data_dir, 'comments.txt'), "r", "utf-8") as comments_txt:
+                with codecs.open(comments_file, "r", "utf-8") as comments_txt:
                     general_comments = comments_txt.read()
             else:
                 general_comments = ''
