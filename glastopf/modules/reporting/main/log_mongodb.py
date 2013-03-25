@@ -15,12 +15,13 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from pymongo import MongoClient, uri_parser
-
 import logging
-
 logger = logging.getLogger(__name__)
 
+try:
+    from pymongo import MongoClient, uri_parser
+except ImportError:
+    logger.warn('Unable to import module pymongo')
 
 class Database(object):
     def __init__(self, connection_string):
