@@ -1,6 +1,8 @@
-# Releasing Glastopf
+Releasing Glastopf
+==================
 
-## Tagging
+Tagging
+-------
 
 Make sure to add a git tag before making a new release:
 
