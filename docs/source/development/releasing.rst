@@ -1,6 +1,13 @@
 Releasing Glastopf
 ==================
 
+Setup.py
+--------
+
+Bump the version number in the setup.py before tagging:
+
+  version='$VERSION_NUMBER$'
+
 Tagging
 -------
 
