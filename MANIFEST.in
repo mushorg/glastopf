@@ -1,5 +1,6 @@
 include README.md
 include distribute_setup.py
+include requirements.txt
 include glastopf/sandbox/Makefile
 recursive-include glastopf *.*
 recursive-exclude glastopf *.pyc
