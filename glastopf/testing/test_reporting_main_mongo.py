@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
+import warnings
 from datetime import datetime
 
 from glastopf.modules.reporting.main import log_mongodb
@@ -31,6 +32,7 @@ class TestMongoMainDatbase(unittest.TestCase):
     def test_mongodb_insert(self):
 
         conn_string = helpers.create_mongo_database(fill=False)
+
         db_name = uri_parser.parse_uri(conn_string)['database']
 
         try:
@@ -50,7 +52,8 @@ class TestMongoMainDatbase(unittest.TestCase):
 
             maindb.insert(attack_event)
 
-            collection = MongoClient(conn_string)[db_name]['events']
+            with warnings.catch_warnings(record=True):
+                collection = MongoClient(conn_string)[db_name]['events']
             results = list(collection.find())
 
             #Check if database returned the correct amount
