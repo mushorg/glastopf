@@ -26,7 +26,7 @@ Download using git::
     sudo make && sudo make install
 
 
-Open the php.ini file and add the following::
+Open the php.ini file and add bfr.so accordingly to the build output::
 
     zend_extension = /usr/lib/php5/20090626+lfs/bfr.so
 
