@@ -32,7 +32,7 @@ Download using git::
     make &&  make install
 
 
-Open the php.ini file and add the following::
+Copy the search path to bfr.so and add it to php.ini. It can look like this::
 
     zend_extension =   /usr/lib/php5/20090626+lfs/bfr.so
 
