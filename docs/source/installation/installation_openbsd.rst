@@ -86,7 +86,8 @@ Download using git::
 	./configure --enable-bfr
 	make && make install
 
-	Add the following to */etc/php-5.3.ini*
+Copy the search path to bfr.so and add it to */etc/php-5.3.ini*. It can look like this::
+
 	zend_extension = /usr/local/lib/php-5.3/modules/bfr.so
 
 | 
