@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import re
+import warnings
 from datetime import datetime
 
 import logging
@@ -38,7 +39,8 @@ class Database(object):
             raise Exception("Invalid Mongo URI. Database name must be specified.")
 
         try:
-            self.client = MongoClient(connection_string)
+            with warnings.catch_warnings(record=True):
+                self.client = MongoClient(connection_string)
             self.db = self.client[uri_dict['database']]
         except:
             logger.exception("Unable to connect to MongoDB service.")
