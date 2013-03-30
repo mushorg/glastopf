@@ -1,4 +1,3 @@
-from pymongo import MongoClient, uri_parser
 from sqlalchemy import Table, Column, Integer, String, MetaData
 from sqlalchemy import create_engine
 import bson
@@ -11,6 +10,7 @@ file_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_mongo_database(fill=True):
+    from pymongo import MongoClient, uri_parser
     db_name = 'glastopf-test-{0}'.format(str(uuid.uuid4())[0:10])
     conn_string = "mongodb://localhost/{0}".format(db_name)
     c = MongoClient(conn_string)
@@ -25,6 +25,7 @@ def create_mongo_database(fill=True):
 
 
 def delete_mongo_testdata(conn_string):
+    from pymongo import MongoClient, uri_parser
     db_name = uri_parser.parse_uri(conn_string)['database']
     client = MongoClient(conn_string)
     client.drop_database(db_name)
