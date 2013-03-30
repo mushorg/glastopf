@@ -36,8 +36,8 @@ class RFIEmulator(base_emulator.BaseEmulator):
             os.mkdir(self.files_dir)
 
     def extract_url(self, url):
-        protocol_pattern = re.compile("=(ht|f)tps?", re.IGNORECASE)
-        matched_protocol = protocol_pattern.search(url).group(0)
+        protocol_pattern = re.compile("=.*(http(s){0,1}|ftp(s){0,1})", re.IGNORECASE)
+        matched_protocol = protocol_pattern.search(url).group(1)
         # FIXME: Check if the extracted url is actually a url
         injected_url = matched_protocol + url.partition(matched_protocol)[2].split("?")[0]
         return injected_url.strip("=")

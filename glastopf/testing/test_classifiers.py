@@ -92,6 +92,12 @@ class TestClassifier(unittest.TestCase):
         matched_pattern = self.requestClassifier.classify_request(parsed_request)
         self.assertTrue(matched_pattern == 'rfi')
 
+        parsed_request.method = 'GET'
+        parsed_request.url = 're/test.jsp?r=%22http://www.gogole.it/'
+        parsed_request.version = 'HTTP/1.0'
+        matched_pattern = self.requestClassifier.classify_request(parsed_request)
+        self.assertTrue(matched_pattern == 'rfi')
+        
         # TODO enable the tests below when the rfi module can handle such kind of attacks
         #parsed_request.method = 'GET'
         #parsed_request.url = '/index.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpPz4='

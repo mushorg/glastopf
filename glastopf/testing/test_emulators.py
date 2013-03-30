@@ -155,6 +155,26 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.assertEqual(self.event.response, "test successful")
         print "Return value 'test successful', matching our expectation."
 
+    def test_rfi_emulator_with_malformed_uri(self):
+        # TODO: Handle return value from sandbox
+        """Objective: Remote File Injection test with malformed uri
+        Input: http://localhost:8080/test.php?p="http://google.com/index.html
+        Expected Result: The return value from the PHP sandbox.
+        Notes: Injected file contains <?php echo("test successful"); ?>"""
+        GlastopfHoneypot.prepare_sandbox(self.work_dir)
+        print "Starting remote file inclusion test"
+        self.event.parsed_request = util.HTTPRequest()
+        self.event.parsed_request.url = "/test.php?p=%22http://1durch0.de/test_file.txt"
+        print "Sending request:", "http://localhost:8080" + self.event.parsed_request.url
+        self.event.matched_pattern = "rfi"
+        self.event.response = ""
+        helpers.create_sandbox(self.data_dir)
+        request_handler = RequestHandler(self.data_dir)
+        emulator = request_handler.get_handler(self.event.matched_pattern)
+        emulator.handle(self.event)
+        self.assertEqual(self.event.response, "test successful")
+        print "Return value 'test successful', matching our expectation."
+        
     def test_robots_emulator(self):
         """Objective: Test the robots.txt emulator.
         Input: http://localhost:8080/robots.txt
