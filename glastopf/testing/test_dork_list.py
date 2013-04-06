@@ -39,6 +39,30 @@ class TestEmulatorDorkList(unittest.TestCase):
     The test script will connect to an mongodb instance on localhost, and populate
     with data a needed."""
 
+
+    def dork_generator_chain(self, dbtype, pages_dir):
+        """
+        Helper method to constructs chain of objects to satify dependencies for the dork_generator.
+        Returns an instance of dork_page_generator.
+        """
+
+        if dbtype == "sql":
+            engine = create_engine('sqlite:///')
+            #Create mock of empty main db
+            helpers.populate_main_sql_testdatabase(engine)
+            db = database_sqla.Database(engine)
+        elif dbtype == "mongodb":
+            conn_string = helpers.create_mongo_database(fill=True)
+            db = database_mongo.Database(helpers.create_mongo_database)
+        else:
+            raise Exception("Unsupported database type: {0}".format(dbtype))
+        reduced_dorks_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'data/dorks_reduced.txt')
+        file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
+        #setting the bar low for testing
+        clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
+        dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir)
+        return db, engine, dork_generator
+
     def test_db_select_sqlalchemy(self):
         """Objective: Select unique request paths from database.
         Input: Connection to main glastopf database with 500 entries and the pattern 'rfi'.
@@ -207,29 +231,6 @@ class TestEmulatorDorkList(unittest.TestCase):
         finally:
             if os.path.isdir(pages_dir):
                 shutil.rmtree(pages_dir)
-
-    def dork_generator_chain(self, dbtype, pages_dir):
-        """
-        Helper method to constructs chain of objects to satify dependencies for the dork_generator.
-        Returns an instance of dork_page_generator.
-        """
-
-        if dbtype == "sql":
-            engine = create_engine('sqlite:///')
-            #Create mock of empty main db
-            helpers.populate_main_sql_testdatabase(engine)
-            db = database_sqla.Database(engine)
-        elif dbtype == "mongodb":
-            conn_string = helpers.create_mongo_database(fill=True)
-            db = database_mongo.Database(create_mongo_database)
-        else:
-            raise Exception("Unsupported database type: {0}".format(dbtype))
-        reduced_dorks_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'data/dorks_reduced.txt')
-        file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
-        #setting the bar low for testing
-        clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
-        dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir)
-        return (db, engine, dork_generator)
 
         # def test_fetch_dorks(self):
         #     """Objective: Fetch vulnerability information from an external source.
