@@ -25,8 +25,6 @@ import random
 from ConfigParser import ConfigParser
 import logging.handlers
 
-
-
 from modules.HTTP import util
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
@@ -188,7 +186,7 @@ class GlastopfHoneypot(object):
             "/:/bin/sh"
         # If we want to, we could also give a password hash in place of '*'
         s = "\n" + name + ":*:6723:0:99999:7:::"
-        return p,s,g
+        return p, s, g
 
     @staticmethod
     def randomize_vdocs(vpath):
@@ -197,7 +195,7 @@ class GlastopfHoneypot(object):
         shd_path = os.path.join(vpath, 'linux/etc/shadow')
         grp_path = os.path.join(vpath, 'linux/etc/group')
         
-        num_entries = random.randint(1,10) # number of random entries
+        num_entries = random.randint(1, 10) # number of random entries
 
         pwd = open(pwd_path, "a")
         shd = open(shd_path, "a")
