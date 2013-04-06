@@ -37,15 +37,18 @@ class DorkPageGenerator(object):
     Responsible for maintenance of dork pages and collection of dorks from requests.
     """
 
-    def __init__(self, database_instance,
+    def __init__(self,
+                 database_instance,
                  dorks_file_processor_instance,
                  cluster_instance,
-                 dork_service=False,
                  data_dir=os.getcwd(),
+                 pages_dir=None,
                  mnem_service_instance=None):
-        self.dork_service = dork_service
         self.database = database_instance
-        self.pages_path = os.path.join(data_dir, 'dork_pages')
+        if not pages_dir:
+            self.pages_path = os.path.join(data_dir, 'dork_pages')
+        else:
+            self.pages_path = os.path.join(pages_dir, 'dork_pages')
         if not os.path.isdir(self.pages_path):
             os.mkdir(self.pages_path, 0770)
         self.dork_file_processor = dorks_file_processor_instance

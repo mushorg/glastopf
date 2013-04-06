@@ -60,7 +60,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         #setting the bar low for testing
         clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
         data_dir = os.getcwd() + "/modules/handlers/emulators/data"
-        dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir, data_dir=data_dir)
+        dork_generator = DorkPageGenerator(db, file_processor, clusterer, data_dir=data_dir, pages_dir=pages_dir)
         return db, engine, dork_generator
 
     def test_db_select_sqlalchemy(self):
