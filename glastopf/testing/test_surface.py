@@ -15,6 +15,8 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import os
+
 import unittest
 
 from glastopf.modules.handlers.emulators.surface import create_surface
@@ -23,5 +25,6 @@ from glastopf.modules.handlers.emulators.surface import create_surface
 class TestSurfaceCreation(unittest.TestCase):
 
     def test_template(self):
-        surface_creator = create_surface.SurfaceCreator()
+        data_dir = os.getcwd() + "/modules/handlers/emulators/data"
+        surface_creator = create_surface.SurfaceCreator(data_dir=data_dir)
         print surface_creator.get_index()

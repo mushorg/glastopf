@@ -39,7 +39,6 @@ class TestEmulatorDorkList(unittest.TestCase):
     The test script will connect to an mongodb instance on localhost, and populate
     with data a needed."""
 
-
     def dork_generator_chain(self, dbtype, pages_dir):
         """
         Helper method to constructs chain of objects to satify dependencies for the dork_generator.
@@ -60,7 +59,8 @@ class TestEmulatorDorkList(unittest.TestCase):
         file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
         #setting the bar low for testing
         clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
-        dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir)
+        data_dir = os.getcwd() + "/modules/handlers/emulators/data"
+        dork_generator = DorkPageGenerator(db, file_processor, clusterer, pages_dir, data_dir=data_dir)
         return db, engine, dork_generator
 
     def test_db_select_sqlalchemy(self):
