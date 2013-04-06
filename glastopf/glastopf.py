@@ -19,8 +19,13 @@ import os
 import sys
 import Queue
 import threading
+import string       # These two imports are needed for
+import random       # file randomization
+
 from ConfigParser import ConfigParser
 import logging.handlers
+
+
 
 from modules.HTTP import util
 import modules.HTTP.method_handler as method_handler
@@ -204,9 +209,48 @@ class GlastopfHoneypot(object):
             dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
-
+        # Randomize the files in virtualdocs folder
+        GlastopfHoneypot.randomize_vdocs(os.path.join(work_dir, 'data/virtualdocs/'))
         GlastopfHoneypot.prepare_sandbox(work_dir)
 
+    @staticmethod
+    def randomize_vdocs(vpath):
+        # For now, we'll only change the passwd, shadow and group files.
+        pwd_path = os.path.join(vpath, 'linux/etc/passwd')
+        shd_path = os.path.join(vpath, 'linux/etc/shadow')
+        grp_path = os.path.join(vpath, 'linux/etc/group')
+        
+        num_entries = random.randint(1,10) # Random number of entries
+
+        pwd = open(pwd_path, "a")
+        shd = open(shd_path, "a")
+        grp = open(grp_path, "a")
+        for i in xrange(num_entries):
+            # Possible duplication of user id, but very low probability
+            id_ = random.randint(1000, 1500)
+            
+            # p, s and g are entries to the passwd, shadow and group files
+            p,s,g = GlastopfHoneypot._get_entry(id_)
+            pwd.write(p)
+            shd.write(s)
+            grp.write(g)
+        pwd.close()
+        shd.close()
+        grp.close()            
+    
+    @staticmethod
+    def _get_entry(id_):
+        # Random username of 3 characters
+        name = "".join( [random.choice(string.letters[:26]) for i in xrange(3)] )
+        gid = id_
+        uid = id_
+        g = "\n" + name + ":x:" + str(gid) + ":"
+        p = "\n" + name + ":x:" + str(uid) + ":" + str(gid) + "::" + "/home/" + name +\
+            "/:/bin/sh"
+        # If we want to, we could also give a password hash in place of '*'
+        s = "\n" + name + ":*:6723:0:99999:7:::"
+        return p,s,g
+        
     @staticmethod
     def prepare_sandbox(work_dir):
         logger.info('Creating PHP sandbox')
@@ -270,4 +314,3 @@ class GlastopfHoneypot(object):
         response_util = util.HTTPServerResponse(response_code)
         attack_event.response = response_util.get_header(attack_event) + attack_event.response
         return attack_event.response
-
