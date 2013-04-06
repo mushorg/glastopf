@@ -20,13 +20,10 @@ import os
 from jinja2 import Environment, FileSystemLoader
 
 
-package_directory = os.path.dirname(os.path.abspath(__file__))
-
-
 class SurfaceCreator(object):
 
-    def __init__(self):
-        self.template_env = Environment(loader=FileSystemLoader(os.path.join(package_directory, "templates")))
+    def __init__(self, data_dir):
+        self.template_env = Environment(loader=FileSystemLoader(os.path.join(data_dir, "templates")))
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')

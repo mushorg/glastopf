@@ -57,7 +57,7 @@ class DorkPageGenerator(object):
             logger.info("Bootstrapping dork database.")
             self.bootstrap_dorkdb()
         self.enabled = True
-        self.surface_creator = create_surface.SurfaceCreator()
+        self.surface_creator = create_surface.SurfaceCreator(data_dir=data_dir)
 
     def prepare_text(self):
         line_list = []
