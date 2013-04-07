@@ -19,6 +19,9 @@ import os
 import sys
 import Queue
 import threading
+import string
+import random
+
 from ConfigParser import ConfigParser
 import logging.handlers
 
@@ -173,6 +176,57 @@ class GlastopfHoneypot(object):
             return (None, dorkdb)
 
     @staticmethod
+    def _get_entry(user_id):
+        # Random username of 3 characters
+        name = "".join([random.choice(string.letters[:26]) for i in xrange(3)])
+        gid = user_id
+        uid = user_id
+        g = "\n" + name + ":x:" + str(gid) + ":"
+        p = "\n" + name + ":x:" + str(uid) + ":" + str(gid) + "::" + "/home/" + name +\
+            "/:/bin/sh"
+        # If we want to, we could also give a password hash in place of '*'
+        s = "\n" + name + ":*:6723:0:99999:7:::"
+        return p, s, g
+
+    @staticmethod
+    def randomize_vdocs(vpath):
+        # For now, we'll only change the passwd, shadow and group files.
+        pwd_path = os.path.join(vpath, 'linux/etc/passwd')
+        shd_path = os.path.join(vpath, 'linux/etc/shadow')
+        grp_path = os.path.join(vpath, 'linux/etc/group')
+        
+        num_entries = random.randint(1, 10) # number of random entries
+
+        pwd = open(pwd_path, "a")
+        shd = open(shd_path, "a")
+        grp = open(grp_path, "a")
+        for i in xrange(num_entries):
+            # Possible duplication of user id, but very low probability
+            user_id = random.randint(1000, 1500)
+            pwd_entry, shd_entry, grp_entry = GlastopfHoneypot._get_entry(user_id)
+
+            pwd.write(pwd_entry)
+            shd.write(shd_entry)
+            grp.write(grp_entry)
+        pwd.close()
+        shd.close()
+        grp.close()            
+            
+    @staticmethod
+    def prepare_sandbox(work_dir):
+        logger.info('Creating PHP sandbox')
+        #create sandbox
+        sandbox_dir = os.path.join(package_directory, 'sandbox')
+        #preserve old working dir
+        old_cwd = os.getcwd()
+        os.chdir(sandbox_dir)
+        #execute makefile and output to self.workdir/data/apd_sandbox.php
+        sandbox_out = os.path.join(work_dir, 'data', 'sandbox.php')
+        check_call(['make', '-B', '-s', 'out={0}'.format(sandbox_out)])
+        #restore state of original working dir
+        os.chdir(old_cwd)
+
+    @staticmethod
     def prepare_environment(work_dir):
         """
         Configures the Glastopf work environment.
@@ -204,22 +258,9 @@ class GlastopfHoneypot(object):
             dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
-
+        # Randomize the files in virtualdocs folder
+        GlastopfHoneypot.randomize_vdocs(os.path.join(work_dir, 'data/virtualdocs/'))
         GlastopfHoneypot.prepare_sandbox(work_dir)
-
-    @staticmethod
-    def prepare_sandbox(work_dir):
-        logger.info('Creating PHP sandbox')
-        #create sandbox
-        sandbox_dir = os.path.join(package_directory, 'sandbox')
-        #preserve old working dir
-        old_cwd = os.getcwd()
-        os.chdir(sandbox_dir)
-        #execute makefile and output to self.workdir/data/apd_sandbox.php
-        sandbox_out = os.path.join(work_dir, 'data', 'sandbox.php')
-        check_call(['make', '-B', '-s', 'out={0}'.format(sandbox_out)])
-        #restore state of original working dir
-        os.chdir(old_cwd)
 
     def _handle_proxy(self, attack_event, addr):
         client_ip = attack_event.parsed_request.header['X-Forwarded-For']
@@ -270,4 +311,3 @@ class GlastopfHoneypot(object):
         response_util = util.HTTPServerResponse(response_code)
         attack_event.response = response_util.get_header(attack_event) + attack_event.response
         return attack_event.response
-
