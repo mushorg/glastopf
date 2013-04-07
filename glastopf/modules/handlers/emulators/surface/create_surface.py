@@ -23,6 +23,8 @@ from jinja2 import Environment, FileSystemLoader
 class SurfaceCreator(object):
 
     def __init__(self, data_dir):
+        print os.path.join(data_dir, "templates")
+        print os.listdir(os.path.join(data_dir, "templates"))
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(data_dir, "templates")))
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
