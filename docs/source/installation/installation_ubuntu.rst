@@ -56,7 +56,7 @@ Prepare glastopf environment::
 	cd /opt
 	sudo mkdir myhoneypot
 	cd myhoneypot
-	sudo glastopf-runner.py
+	sudo glastopf-runner
 
 A new default glastopf.cfg has been created in *myhoneypot*, which can be customized as required.
 
@@ -69,7 +69,7 @@ Testing the Honeypot
 
 Start Glastopf (from your 'myhoneypot' directory)::
 
-    sudo glastopf-runner.py
+    sudo glastopf-runner
 
 Use your web browser to visit your honeypot. You should see the following output on your command line::
 
