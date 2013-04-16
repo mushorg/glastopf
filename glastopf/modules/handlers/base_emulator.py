@@ -21,7 +21,7 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class BaseEmulator(object):
-    def __init__(self, data_dir=os.path.join(os.getcwd(), 'data')):
+    def __init__(self, data_dir):
         self.data_dir = data_dir
         self.emulator_dir = os.path.join(package_directory, 'emulators')
 

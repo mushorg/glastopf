@@ -41,7 +41,7 @@ class DorkPageGenerator(object):
                  database_instance,
                  dorks_file_processor_instance,
                  cluster_instance,
-                 data_dir=os.getcwd(),
+                 data_dir,
                  pages_dir=None,
                  mnem_service_instance=None):
         self.database = database_instance

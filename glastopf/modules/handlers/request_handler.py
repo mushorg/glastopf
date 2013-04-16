@@ -30,7 +30,7 @@ class RequestHandler:
 
     def get_handler(self, name):
         try:
-            BaseEmulator()
+            BaseEmulator(self.data_dir)
             module_name = "glastopf.modules.handlers.emulators." + name
             __import__(module_name, globals(), locals(), [], -1)
             emulators = BaseEmulator.__subclasses__()
