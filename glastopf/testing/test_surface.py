@@ -16,13 +16,24 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import os
+import tempfile
+import shutil
 
 import unittest
 
+from glastopf.glastopf import GlastopfHoneypot
 from glastopf.modules.handlers.emulators.surface import create_surface
 
 
 class TestSurfaceCreation(unittest.TestCase):
+
+    def setUp(self):
+        self.workdir = tempfile.mkdtemp()
+        self.datadir = os.path.join(self.workdir, 'data')
+        GlastopfHoneypot.prepare_environment(self.workdir)
+
+    def tearDown(self):
+        shutil.rmtree(self.workdir)
 
     def test_template(self):
         data_dir = os.getcwd() + "/modules/handlers/emulators/data"
