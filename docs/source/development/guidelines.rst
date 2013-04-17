@@ -30,7 +30,7 @@ which saves you from doing **python setup.py install** over and over again. Exam
 
   $ python setup.py develop
 
-Checking if the egg was creates as planned::
+Checking if the egg was created as planned::
 
   $ cat /Users/jkv/virtualenv/glastopf/lib/python2.7/site-packages/Glastopf.egg-link
     /Users/jkv/repos/glastopf
