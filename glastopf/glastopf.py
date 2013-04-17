@@ -251,7 +251,11 @@ class GlastopfHoneypot(object):
 
         #copy emulator level data
         emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
-        shutil.copytree(emulator_data_dir, os.path.join(work_dir, 'data/'))
+
+        #ignore all placeholder files
+        ignore_patterns = ('.placeholder',)
+        shutil.copytree(emulator_data_dir, os.path.join(work_dir, 'data/'),
+                        ignore=shutil.ignore_patterns(ignore_patterns))
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:
