@@ -36,6 +36,5 @@ class TestSurfaceCreation(unittest.TestCase):
         shutil.rmtree(self.workdir)
 
     def test_template(self):
-        data_dir = os.getcwd() + "/modules/handlers/emulators/data"
-        surface_creator = create_surface.SurfaceCreator(data_dir=data_dir)
+        surface_creator = create_surface.SurfaceCreator(data_dir=self.datadir)
         print surface_creator.get_index()
