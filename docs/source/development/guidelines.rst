@@ -25,7 +25,7 @@ Environment
 Glastopf-runner for developers
 ------------------------------
 It is recommended to use the *develop* functionality of distutils while hacking on glastopf.
-When using *develop* a egg link pointing to your repository directory wil be places in site-packages - 
+When using *develop* a egg link pointing to your repository directory will be places in site-packages - 
 which saves you from doing **python setup.py install** over and over again. Example::
 
   $ python setup.py develop
