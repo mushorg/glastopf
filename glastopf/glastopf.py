@@ -197,9 +197,15 @@ class GlastopfHoneypot(object):
         
         num_entries = random.randint(1, 10) # number of random entries
 
-        pwd = open(pwd_path, "a")
-        shd = open(shd_path, "a")
-        grp = open(grp_path, "a")
+        try:
+            pwd = open(pwd_path, "a")
+            shd = open(shd_path, "a")
+            grp = open(grp_path, "a")
+        except:
+            # We couldn't open the files
+            logger.info("Couldn't randomize the virtualdocs.")
+            return
+            
         for i in xrange(num_entries):
             # Possible duplication of user id, but very low probability
             user_id = random.randint(1000, 1500)
