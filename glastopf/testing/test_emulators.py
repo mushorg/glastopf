@@ -296,17 +296,17 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.assertTrue("Zend Extension" in self.event.response)
         
 
-    def vir_T_ualdocs(self):
-    	v_files = ('shadow', 'passwd', 'group' )
+    def test_virtualdocs(self):
+    	v_files = ("shadow", "passwd", "group" )
     	f_dir1 = tempfile.mkdtemp()
     	f_dir2 = tempfile.mkdtemp()
-	os.makedirs(os.path.join(f_dir1, 'linux/etc'))
-	os.makedirs(os.path.join(f_dir2, 'linux/etc'))
+	os.makedirs(os.path.join(f_dir1, "linux/etc"))
+	os.makedirs(os.path.join(f_dir2, "linux/etc"))
 	GlastopfHoneypot.randomize_vdocs(f_dir1)
 	GlastopfHoneypot.randomize_vdocs(f_dir2)
 	for v_file in v_files:
-		file_1 = open(os.path.join(f_dir1, 'linux/etc/', v_file), "r")
-		file_2 = open(os.path.join(f_dir2, 'linux/etc/', v_file), "r")
+		file_1 = open(os.path.join(f_dir1, "linux/etc/", v_file), "r")
+		file_2 = open(os.path.join(f_dir2, "linux/etc/", v_file), "r")
 		md5_1 = hashlib.md5(file_1.read()).hexdigest()
 		md5_2 = hashlib.md5(file_2.read()).hexdigest()
 		file_1.close()
