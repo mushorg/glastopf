@@ -24,8 +24,8 @@ mnem_service = True
 
 [hpfeed]
 enabled = True
-host = hpfeeds.honeycloud.net
-port = 10000
+host = hpfriends.honeycloud.net
+port = 20000
 secret = 3wis3l2u5l7r3cew
 # channels comma separated
 chan_events = glastopf.events
