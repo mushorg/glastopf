@@ -295,12 +295,13 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.assertTrue("PHP Version " in self.event.response)
         self.assertTrue("Zend Extension" in self.event.response)
         
+
     def test_virutaldocs(self):
     	v_files=("shadow", "passwd", "group" )
-    	f_dir1	= "/tmp/test1/"
-    	f_dir2	= "/tmp/test2/"
-    	os.makedirs(f_dir1)
-	os.makedirs(f_dir2)
+    	f_dir1	= tempfile.mkdtemp()
+    	f_dir2	= tempfile.mkdtemp()
+	os.makedirs(os.path.join(f_dir1,"linux/etc"))
+	os.makedirs(os.path.join(f_dir2,"linux/etc"))
 	GlastopfHoneypot.randomize_vdocs(f_dir1)
 	GlastopfHoneypot.randomize_vdocs(f_dir2)
 	for v_file in v_files:
@@ -311,5 +312,3 @@ class TestEmulatorIntegration(unittest.TestCase):
 		self.assertNotEqual(md5_1, md5_2)
 	shutil.rmtree(f_dir1)
 	shutil.rmtree(f_dir2)
-	file_1.close()
-	file_2.close()
