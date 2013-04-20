@@ -55,16 +55,6 @@ class Database(object):
             return_list.append(row[0])
         return return_list
 
-    def select_entry(self, starts_with):
-        data = []
-        sql = "SELECT request_url FROM events WHERE request_url LIKE :x"
-        results = self.engine.connect().execute(sql, x=starts_with + "%").fetchall()
-        logger.debug("Searching for: {0}".format(starts_with))
-        for row in results:
-            logger.debug("Got result")
-            data.append(row[0])
-        return data
-
     def create(self, meta, engine):
         tables = {}
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]

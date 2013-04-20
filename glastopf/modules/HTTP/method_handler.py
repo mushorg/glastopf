@@ -24,24 +24,24 @@ class HTTPMethods(object):
         self.data_dir = data_dir
         pass
 
-    def GET(self, parsed_request):
+    def GET(self, http_request):
         RequestClassifier = request_classifier.Classifier(self.data_dir)
-        matched_pattern = RequestClassifier.classify_request(parsed_request)
+        matched_pattern = RequestClassifier.classify_request(http_request)
         return matched_pattern
 
-    def POST(self, parsed_request):
+    def POST(self, http_request):
         RequestClassifier = request_classifier.Classifier(self.data_dir)
-        matched_pattern = RequestClassifier.classify_request(parsed_request)
-        #parsed_request.body -> File('files/payloads')
+        matched_pattern = RequestClassifier.classify_request(http_request)
+        #http_request.body -> File('files/payloads')
         return matched_pattern
 
-    def HEAD(self, parsed_request):
+    def HEAD(self, http_request):
         # TODO: Return the proper HEAD respone
         return "head"
 
-    def TRACE(self, parsed_request):
+    def TRACE(self, http_request):
         return "trace"
 
-    def OPTIONS(self, parsed_request):
+    def OPTIONS(self, http_request):
         # TODO: Return the proper OPTIONS respone
         return "options"

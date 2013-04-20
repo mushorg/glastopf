@@ -46,8 +46,8 @@ class LogSyslog(BaseLogger):
         message = "Glaspot: %(pattern)s attack method from %(source)s against %(host)s. [%(method)s %(url)s]" % {
             'pattern': attack_event.matched_pattern,
             'source': ':'.join((attack_event.source_addr[0], str(attack_event.source_addr[1]))),
-            'host': attack_event.parsed_request.header.get('Host', "None"),
-            'method': attack_event.parsed_request.method,
-            'url': attack_event.parsed_request.url,
+            'host': attack_event.http_request.header.get('Host', "None"),
+            'method': attack_event.http_request.method,
+            'url': attack_event.http_request.url,
         }
         LogSyslog.logger.info(message)

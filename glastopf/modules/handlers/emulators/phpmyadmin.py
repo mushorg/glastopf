@@ -34,7 +34,7 @@ class PMAEmulator(base_emulator.BaseEmulator):
         m = hashlib.md5()
         m.update("%d" % time_stamp)
         page_template = Template(self.page)
-        attack_event.response += page_template.substitute(
-            token_value=m.hexdigest()
-        )
+        response = page_template.substitute(
+            token_value=m.hexdigest() )
+        attack_event.http_request.set_response(response)
         return attack_event

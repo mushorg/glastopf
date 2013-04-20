@@ -53,7 +53,7 @@ class Database(object):
         url_list = []
 
         data = self.db.events.find({'pattern': pattern})
-        data = list(data.distinct('request.url'))
+        data = list(data.distinct('request_url'))
 
         self.num_distinct_results = len(data)
 
@@ -68,7 +68,7 @@ class Database(object):
         Selects URL from main database filterned by name.
         """
         regx = re.compile(starts_with + ".*", re.IGNORECASE)
-        urls = list(self.db.events.find({'request.url': regx}))
+        urls = list(self.db.events.find({'request_url': regx}))
         return urls
 
     def insert_dorks(self, insert_list):

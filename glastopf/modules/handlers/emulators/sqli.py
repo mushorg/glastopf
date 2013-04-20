@@ -39,14 +39,16 @@ class SQLiEmulator(base_emulator.BaseEmulator):
     def handle(self, attack_event, rule="sql_stmt_list"):
         matched_patterns = []
         payload = []
-        for parameter in attack_event.parsed_request.parameters_dict.values():
-            if 'CONCAT' in parameter:
-                parameter = self.query_cleaner.solve_concat(parameter)
-            clean_param = self.query_cleaner._hex_replace(parameter)
+        for value_list in attack_event.http_request.request_query.values():
+            value = value_list[0]
+            print value
+            if 'CONCAT' in value:
+                value = self.query_cleaner.solve_concat(value)
+            clean_value = self.query_cleaner._hex_replace(value)
             matched_patterns.extend(
-                self.pre_classifier.classify_request(clean_param))
-            self.query_parser.parser_query(clean_param, rule)
-            payload.append(clean_param)
+                self.pre_classifier.classify_request(clean_value ))
+            self.query_parser.parser_query(clean_value , rule)
+            payload.append(clean_value )
         payload = ' '.join(payload)
         #print self.query_parser.tokens
         try:
@@ -66,13 +68,13 @@ class SQLiEmulator(base_emulator.BaseEmulator):
             payload_response = re.sub('PAYLOAD',
                                       payload,
                                       response.content)
-            attack_event.response = dedent(payload_response)
+            attack_event.http_request.set_raw_response(dedent(payload_response))
         else:
             try:
-                attack_event.response = dedent(best_query.find("response").text)
+                attack_event.http_request.set_raw_response(dedent(best_query.find("response").text))
             except:
                 response = self.sql_response.get_response('mysql_error')
                 payload_response = re.sub('PAYLOAD',
                                           payload,
                                           response.content)
-                attack_event.response = dedent(payload_response)
+                attack_event.http_request.set_raw_response(dedent(payload_response))

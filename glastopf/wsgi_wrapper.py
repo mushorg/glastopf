@@ -39,15 +39,15 @@ class GlastopfWSGI(object):
 
         #addr tuple as glastopf expects it
         remote_addr = (req_webob.remote_addr, int(environ['REMOTE_PORT']))
-        headers, response = self.honeypot.handle_request(req_webob.as_text(),
-                                                         remote_addr, None).split("\r\n\r\n", 1)
-        #glastopf header to webob headers
-        for h in headers.splitlines():
+        header, body = self.honeypot.handle_request(req_webob.as_text(),
+                                                         remote_addr, None)
+        for h in header.splitlines():
             if ':' in h:
-                h, v = h.split(':')
+                h, v = h.split(':', 1)
                 res_webob.headers[str(h.strip())] = str(v.strip())
         #this will adjust content-length header
-        res_webob.text = unicode(response)
+        res_webob.charset = 'utf8'
+        res_webob.text = unicode(body)
         #WSGI applications are not allowed to create or modify hop-by-hop headers
         self.remove_hop_by_hop_headers(res_webob.headers)
         return res_webob(environ, start_response)

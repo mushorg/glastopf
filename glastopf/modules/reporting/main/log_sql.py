@@ -36,13 +36,7 @@ class Database(object):
     def insert(self, attack_event):
         entry = attack_event.event_dict()
 
-        for key, value in entry['request'].items():
-            entry['request_' + key] = value
-
         entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
-        entry['request_header'] = json.dumps(entry['request_header'])
-
-        del entry['request']
 
         try:
             conn = self.engine.connect()
@@ -83,18 +77,11 @@ class Database(object):
                                   Column('id', Integer, primary_key=True, ),
                                   Column('time', String),
                                   Column('source', String),
-                                  Column('request_method', String),
                                   Column('request_url', String),
-                                  Column('request_parameters', String),
-                                  Column('request_version', String),
-                                  Column('request_header', String),
-                                  Column('request_body', String),
+                                  Column('request_raw', String),
                                   Column('pattern', String),
                                   Column('filename', String),
-                                  Column('response', String),
         )
 
         #only creates if it cant find the schema
         meta.create_all(self.engine)
-        
-    

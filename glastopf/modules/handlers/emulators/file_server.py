@@ -26,9 +26,12 @@ class FileServer(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         server_path = os.path.join(self.data_dir, 'server_files')
-        request_file = attack_event.parsed_request.url.lstrip('/')
+        request_file = attack_event.http_request.request_path.lstrip('/')
         if request_file == "":
             request_file = "index.html"
+        response = ''
         if os.path.isfile(os.path.join(server_path, request_file)):
             with open(os.path.join(server_path, request_file), 'r') as f:
-                attack_event.response += f.read()
+                response += f.read()
+        #response with no content-type header
+        attack_event.http_request.set_response(response, headers=())

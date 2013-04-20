@@ -22,7 +22,7 @@ import shutil
 import tempfile
 
 from lxml.html.soupparser import fromstring
-from glastopf.modules.HTTP import util
+from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.testing import helpers
 from glastopf.modules.handlers.emulators.dork_list.dork_page_generator import DorkPageGenerator
 from glastopf.modules.handlers.emulators.dork_list.dork_file_processor import DorkFileProcessor
@@ -91,8 +91,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         Notes: The test adds the '/test.php' entry to the database."""
         attack_event = attack.AttackEvent()
         attack_event.matched_pattern = "internal_test"
-        attack_event.parsed_request = util.HTTPRequest()
-        attack_event.parsed_request.url = "/thiswillNeVeRHaPPend.php?c=test"
+        attack_event.http_request = HTTPHandler('GET /thiswillNeVeRHaPPend.php?c=test', None)
         print "Attack event prepared."
         (db, engine, dork_generator) = self.dork_generator_chain('sql')
         dork_generator.regular_generate_dork(0)
@@ -161,31 +160,6 @@ class TestEmulatorDorkList(unittest.TestCase):
         print len(data.cssselect('form')), 'form field (<form />)'
         print "which equates our expectation."
 
-    def test_dork_links(self):
-        """Objective: Test if a random link from the dork page exists in the database.
-        Input: A random link from a created dork page.
-        Expected Results: The path of the link should be at least once in the db.
-        Notes: Links have the parameters truncated, so multiple entries are likely."""
-
-        (db, engine, dork_generator) = self.dork_generator_chain('sql')
-        dork_generator.regular_generate_dork(0)
-        sample_file = choice(dork_generator.get_current_pages())
-        print "Randomly selected dork page:", sample_file.rsplit('/', 1)[1]
-        with open(sample_file, 'r') as sample_data:
-            data = fromstring(sample_data)
-        links = data.cssselect('a')
-        test_link_path = choice(links).get('href')
-        print "Randomly selected path:", test_link_path
-        from_livedb = db.select_entry(test_link_path)
-        #the test database has below 100 entries, so it will seeded from the dorkdb
-        from_dorkdb = db.get_dork_list('inurl', starts_with=test_link_path)
-        result_count = len(from_livedb) + len(from_dorkdb)
-        print "Done searching for the entry."
-        self.assertTrue(result_count > 0)
-        print "The dork db returned:",
-        print "{0} entries,".format(result_count),
-        print "which equates our expectation."
-
     def test_dork_page_regeneration(self):
         """Objective: Test if the dork pages get regenerated.
         Input: The list of previously generated dork pages.
@@ -206,19 +180,3 @@ class TestEmulatorDorkList(unittest.TestCase):
         self.assertTrue(len(overlap) == 0)
         print "There are", len(overlap), "overlapping dork pages",
         print "which equates our expectation."
-
-        # def test_fetch_dorks(self):
-        #     """Objective: Fetch vulnerability information from an external source.
-        #     Input: Exploit database dump from http://exploit-db.com. The report contains the vulnerable path.
-        #     Expected Results: New vulnerable paths are extracted from the input.
-        #     Notes: The data is extracted using a regular expression from 8665 vulnerability reports.
-        #     Reports are located in 'modules/handlers/emulators/dork_list/archive/platforms/php/webapps'"""
-        #     print "Starting external dork source test."
-        #     rexp = remote_exploits.ExploitDB()
-        #     rexp.get_dorks()
-        #     print "Done fetching and processing dorks."
-        #     self.assertTrue(len(rexp.vuln_list) > 0)
-        #     self.assertTrue(len(rexp.rfi_list) > 0)
-        #     print 'We found:', len(rexp.vuln_list), 'vulnerable paths and',
-        #     print len(rexp.rfi_list), 'RFI specific ones',
-        #     print "which equates our expectation."

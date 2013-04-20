@@ -35,7 +35,7 @@ class LFIEmulator(base_emulator.BaseEmulator):
         return whitelist
 
     def clean_path(self, attack_event):
-        return attack_event.parsed_request.url.split('\0', 1)[0]
+        return attack_event.http_request.request_path.split('\0', 1)[0]
 
     def file_path(self, cleaned_path):
         try:
@@ -48,13 +48,17 @@ class LFIEmulator(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         path = self.file_path(self.clean_path(attack_event))
+        print '---'
+        print path
         try:
             if path in self.virtualdocs_whitelist():
                 with open(path, "r") as f:
-                    attack_event.response += f.read()
+                    response = f.read()
+                    attack_event.http_request.set_response(response)
             else:
                 raise IOError
         except IOError:
             # TODO: Make it not finger printable
             # Place holder file not found error
-            attack_event.response += "Warning: include(vars1.php): failed to open stream: No such file or directory in /var/www/html/anonymous/test.php on line 6 Warning: include(): Failed opening 'vars1.php' for inclusion (include_path='.:/usr/share/pear:/usr/share/php') in /var/www/html/anonymous/test.php on line 6" 
+            response = "Warning: include(vars1.php): failed to open stream: No such file or directory in /var/www/html/anonymous/test.php on line 6 Warning: include(): Failed opening 'vars1.php' for inclusion (include_path='.:/usr/share/pear:/usr/share/php') in /var/www/html/anonymous/test.php on line 6"
+            attack_event.http_request.set_raw_response(response)

@@ -139,10 +139,10 @@ class DorkPageGenerator(object):
     def collect_dork(self, attack_event):
         if attack_event.matched_pattern != "unknown":
             try:
-                dork = attack_event.parsed_request.url.split('?')[0]
+                dork = attack_event.http_request.path.split('?')[0]
                 self.database.insert_dorks([{'table': "inurl", 'content': dork}])
             except Exception as e:
-                logger.exception("Parsed_request split error: {0}".format(e))
+                logger.exception("http_request split error: {0}".format(e))
 
     def bootstrap_dorkdb(self):
         ignore = ()

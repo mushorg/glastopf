@@ -68,28 +68,36 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
         php_source_code_w = """<?php
 page = $_GET['page']; include(page); ?>"""
 
+        query_dict = attack_event.http_request.request_query
+        url = attack_event.http_request.request_url
+
         # php -h
         #   -s   Output HTML syntax highlighted source.
         #   -w   Output source with stripped comments and whitespace.
-        if attack_event.parsed_request.parameters == '-s' or attack_event.parsed_request.parameters == '-s+%3d':
-            attack_event.response = php_source_code_s
+        if '-s' in query_dict or '-s+%3d' in query_dict:
+            attack_event.http_request.set_raw_response(php_source_code_s)
             return attack_event
 
-        if attack_event.parsed_request.parameters == '-w' or attack_event.parsed_request.parameters == '-w+%3d':
-            attack_event.response = php_source_code_w
+        if '-w' in query_dict or '-w+%3d' in query_dict:
+            attack_event.http_request.set_raw_response(php_source_code_w)
             return attack_event
 
         # Handle remote code execution
-        if attack_event.parsed_request.method == 'POST' and \
-                        'auto_prepend_file=php://input' in attack_event.parsed_request.parameters and \
-                        '-d' in attack_event.parsed_request.parameters:
+        if attack_event.http_request.request_verb == "POST" and \
+           "auto_prepend_file=php://input" in url and \
+           '-d' in url:
+            print 'good stuff'
             # Read the PHP POST payload calculate the md5 checksum and save the file
             # Then call the PHP sandbox and return the expected results
             # TODO verify if it's a valid PHP code?
-            php_file_name = self.store_file(attack_event.parsed_request.body)
-            attack_event.response = sandbox.run(php_file_name, self.data_dir)
+            php_file_name = self.store_file(attack_event.http_request.request_body)
+            response = sandbox.run(php_file_name, self.data_dir)
+            print '---'
+            print response
+            attack_event.http_request.set_raw_response(response)
+            print '---'
             return attack_event
 
         # fallback to display vulnerable source code
-        attack_event.response = php_source_code_w
+        attack_event.http_request.set_raw_response(php_source_code_w)
         return attack_event

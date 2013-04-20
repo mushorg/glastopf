@@ -17,6 +17,7 @@
 import re
 import os
 import urlparse
+import urllib2
 
 from xml.dom.minidom import parse
 
@@ -29,7 +30,6 @@ class RequestPattern(object):
         self.string = string
         self.description = description
         self.module = module
-
 
 class Classifier(object):
     # FIXME: Error handling for errors in the xml file
@@ -74,18 +74,19 @@ class Classifier(object):
             matched_pattern = matched_patterns[0]
         return matched_pattern
 
-    def file_exists(self, parsed_request):
-        request_path = urlparse.urlparse(parsed_request.url).path
+    def file_exists(self, http_request):
+        request_path = urlparse.urlparse(http_request.path).path
         requested_file = request_path.lstrip('/')
         if os.path.isfile(os.path.join(self.server_files_path, requested_file)):
             return True
         return False
 
-    def classify_request(self, parsed_request):
-        if self.file_exists(parsed_request):
+    def classify_request(self, http_request):
+        if self.file_exists(http_request):
             return "file_server"
         patterns = self.get_patterns()
         matched_patterns = []
+        unquoted_url = urllib2.unquote(http_request.request_url)
         for pattern in patterns:
             match = None
             parsed_pattern = self.parse_pattern(pattern)
@@ -93,16 +94,16 @@ class Classifier(object):
             #TODO: Rules for specific method. We should add a tag in the
             # rule to identify which rule it applies.
             # And some forms would send data in GET and POST methods.
-            if parsed_request.method == "GET":
-                match = re_pattern.search(parsed_request.url)
-            elif parsed_request.method == "POST":
-                match = re_pattern.search(parsed_request.url)
+            if http_request.command == "GET":
+                match = re_pattern.search(unquoted_url)
+            elif http_request.command == "POST":
+                match = re_pattern.search(unquoted_url)
                 if match == 'unknown':
-                    match = re_pattern.search(parsed_request.body)
-            elif parsed_request.method == "HEAD":
+                    match = re_pattern.search(http_request.body)
+            elif http_request.command == "HEAD":
                 parsed_pattern.module = 'head'
                 match = True
-            elif parsed_request.method == "TRACE":
+            elif http_request.command == "TRACE":
                 parsed_pattern.module = 'trace'
                 match = True
             else:

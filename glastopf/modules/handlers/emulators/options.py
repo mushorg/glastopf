@@ -23,4 +23,4 @@ class OPTIONSRequest(base_emulator.BaseEmulator):
         super(OPTIONSRequest, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        attack_event.response = "HTTP/1.1 200 OK\r\nAllow: OPTIONS, GET, HEAD, POST\r\n\r\n"
+        attack_event.set_response('', http_code=200, headers=(('Allow', 'OPTIONS, GET, HEAD, POST'),))

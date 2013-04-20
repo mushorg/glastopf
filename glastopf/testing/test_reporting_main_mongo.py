@@ -23,7 +23,7 @@ from glastopf.modules.reporting.main import log_mongodb
 from sqlalchemy import create_engine
 from pymongo import MongoClient, uri_parser
 import glastopf.modules.events.attack as attack
-import glastopf.modules.HTTP.util as util
+from glastopf.modules.HTTP.handler import HTTPHandler
 from pymongo import MongoClient
 from glastopf.testing import helpers
 
@@ -33,42 +33,39 @@ class TestMongoMainDatbase(unittest.TestCase):
 
         conn_string = helpers.create_mongo_database(fill=False)
 
-        db_name = uri_parser.parse_uri(conn_string)['database']
+        db_name = uri_parser.parse_uri(conn_string)["database"]
 
         try:
             maindb = log_mongodb.Database(conn_string)
 
-            #prepare attack event
             attack_event = attack.AttackEvent()
             attack_event.event_time = self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             attack_event.matched_pattern = "test_test"
             attack_event.source_addr = ("192.168.1.201", 12345)
-            attack_event.parsed_request = util.HTTPRequest()
-            attack_event.parsed_request.url = "/breadandbytter.php?a=b"
-            attack_event.parsed_request.method = "GET"
-            attack_event.parsed_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-                                                  'Connection': 'keep-alive'}
-            attack_event.parsed_request.body = "some stuff"
+            request = ("GET /breadandbytter.php?a=b HTTP/1.0\r\n"
+            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n"
+            "ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n"
+            "Connection: keep-alive\r\n\r\n"
+            "some stuff")
+            attack_event.http_request = HTTPHandler(request, None)
+
 
             maindb.insert(attack_event)
 
             with warnings.catch_warnings(record=True):
-                collection = MongoClient(conn_string)[db_name]['events']
+                collection = MongoClient(conn_string)[db_name]["events"]
             results = list(collection.find())
 
             #Check if database returned the correct amount
             self.assertEqual(len(list(results)), 1)
 
             entry = results[0]
-            self.assertEqual(entry["pattern"], "test_test")
-            self.assertEqual(entry["request"]["body"], "some stuff")
-            self.assertEqual(entry["request"]["parameters"], "")
-            self.assertEqual(entry["request"]["url"], "/breadandbytter.php?a=b")
-            self.assertEqual(entry["request"]["header"]['Accept-Charset'], "ISO-8859-1,utf-8;q=0.7,*;q=0.3")
-            self.assertEqual(entry["request"]["header"]['Connection'], "keep-alive")
-            self.assertEqual(entry["request"]["method"], "GET")
+
             self.assertEqual(entry["source"][0], "192.168.1.201")
             self.assertEqual(entry["source"][1], 12345)
+            self.assertEqual(entry["pattern"], "test_test")
+            self.assertEqual(entry["request_raw"], request)
+            self.assertEqual(entry["request_url"], "/breadandbytter.php?a=b")
 
         finally:
             helpers.delete_mongo_testdata(conn_string)

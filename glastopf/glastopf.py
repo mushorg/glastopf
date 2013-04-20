@@ -25,7 +25,7 @@ import random
 from ConfigParser import ConfigParser
 import logging.handlers
 
-from modules.HTTP import util
+from modules.HTTP.handler import HTTPHandler
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers.request_handler import RequestHandler
@@ -79,7 +79,7 @@ class GlastopfHoneypot(object):
         if self.profiler_available:
             self.profiler = profiler.Profiler(self.maindb)
 
-        self.HTTP_parser = util.HTTPParser()
+        #self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods(self.data_dir)
 
         #used for post processing (logging and analysis) of attack events
@@ -267,7 +267,7 @@ class GlastopfHoneypot(object):
         GlastopfHoneypot.prepare_sandbox(work_dir)
 
     def _handle_proxy(self, attack_event, addr):
-        client_ip = attack_event.parsed_request.header['X-Forwarded-For']
+        client_ip = attack_event.http_request.header['X-Forwarded-For']
         client_ip = client_ip.split(',')[-1]
         if client_ip == 'unknown':
             client_ip = '0.0.0.0'
@@ -275,43 +275,38 @@ class GlastopfHoneypot(object):
         attack_event.source_addr = (client_ip, addr[1])
 
     def handle_request(self, raw_request, addr, connection):
-        response_code = "200 OK"
+
         attack_event = attack.AttackEvent()
-        #attack_event.sensor_addr = connection.sock.getsockname()
         attack_event.raw_request = raw_request
-        # Parse the request
-        try:
-            attack_event.parsed_request = self.HTTP_parser.parse_request(
-                raw_request)
-        except util.ParsingError as e:
-            response_code = e.response_code
+
+        attack_event.http_request = HTTPHandler(raw_request, addr)
+
+        if self.options["proxy_enabled"] == "True":
+            self._handle_proxy(attack_event)
         else:
-            if self.options["proxy_enabled"] == "True":
-                self._handle_proxy(attack_event)
-            else:
-                attack_event.source_addr = addr
-            logger.info("{0} requested {1} {2} on {3}".format(
-                attack_event.source_addr[0],
-                attack_event.parsed_request.method,
-                attack_event.parsed_request.url,
-                attack_event.parsed_request.header.get('Host', "None")
-            )
-            )
-            # Handle the HTTP request method
-            attack_event.matched_pattern = getattr(
-                self.MethodHandlers,
-                attack_event.parsed_request.method,
-                self.MethodHandlers.GET
-            )(attack_event.parsed_request)
-            # Handle the request with the specific vulnerability module
-            request_handler = RequestHandler(os.path.join(self.work_dir, 'data/'))
-            emulator = request_handler.get_handler(attack_event.matched_pattern)
-            emulator.handle(attack_event)
-            # Logging the event
-            if self.profiler_available:
-                self.profiler.handle_event(attack_event)
-            self.post_queue.put(attack_event)
-            response_code = "200 OK"
-        response_util = util.HTTPServerResponse(response_code)
-        attack_event.response = response_util.get_header(attack_event) + attack_event.response
-        return attack_event.response
+            attack_event.source_addr = addr
+        logger.info("{0} requested {1} {2} on {3}".format(
+            attack_event.source_addr[0],
+            attack_event.http_request.command,
+            attack_event.http_request.path,
+            attack_event.http_request.headers.get('Host', "None")
+        )
+        )
+        # Handle the HTTP request method
+        attack_event.matched_pattern = getattr(
+            self.MethodHandlers,
+            attack_event.http_request.command,
+            self.MethodHandlers.GET
+        )(attack_event.http_request)
+        # Handle the request with the specific vulnerability module
+        request_handler = RequestHandler(os.path.join(self.work_dir, 'data/'))
+        emulator = request_handler.get_handler(attack_event.matched_pattern)
+        emulator.handle(attack_event)
+        # Logging the event
+        if self.profiler_available:
+            self.profiler.handle_event(attack_event)
+        self.post_queue.put(attack_event)
+
+        header = attack_event.http_request.get_response_header()
+        body = attack_event.http_request.get_response_body()
+        return header, body

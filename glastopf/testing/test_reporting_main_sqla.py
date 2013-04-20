@@ -22,7 +22,7 @@ from glastopf.modules.reporting.main import log_sql
 from sqlalchemy import create_engine
 
 import glastopf.modules.events.attack as attack
-import glastopf.modules.HTTP.util as util
+from glastopf.modules.HTTP.handler import HTTPHandler
 
 
 class TestSQLAlchemy(unittest.TestCase):
@@ -33,15 +33,19 @@ class TestSQLAlchemy(unittest.TestCase):
 
         #prepare attack event
         attack_event = attack.AttackEvent()
-        attack_event.event_time = self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        attack_event.event_time = timestamp
         attack_event.matched_pattern = "test_test"
         attack_event.source_addr = ("192.168.1.201", 12345)
-        attack_event.parsed_request = util.HTTPRequest()
-        attack_event.parsed_request.url = "/breadandbytter.php?a=b"
-        attack_event.parsed_request.method = "GET"
-        attack_event.parsed_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-                                              'Connection': 'keep-alive'}
-        attack_event.parsed_request.body = "some stuff"
+        request = ('GET /breadandbytter.php?a=b HTTP/1.0\r\n'
+        'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n'
+        'ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n'
+        'Connection: keep-alive\r\n\r\n'
+        'some stuff')
+        attack_event.http_request = HTTPHandler(request, None)
+        #attack_event.http_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+        #                                      'Connection': 'keep-alive'}
+        #attack_event.http_request.body = "some stuff"
 
         #insert attack event
         maindb.insert(attack_event)
@@ -51,18 +55,16 @@ class TestSQLAlchemy(unittest.TestCase):
         results = sqla_engine.connect().execute(sql).fetchall()
         #Check if database returned the correct amount
         self.assertEqual(len(list(results)), 1)
-
+        print results[0]
         entry = results[0]
         #check basic attributes
+        #time
+        self.assertEqual(entry[1], timestamp)
         #source
         self.assertEqual(entry[2], "192.168.1.201:12345")
-        #method
-        self.assertEqual(entry[3], "GET")
         #request_url
-        self.assertEqual(entry[4], "/breadandbytter.php?a=b")
-        #resuest_header
-        self.assertEqual(entry[7], '{"Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3", "Connection": "keep-alive"}')
+        self.assertEqual(entry[3], "/breadandbytter.php?a=b")
         #request_body
-        self.assertEqual(entry[8], "some stuff")
+        self.assertEqual(entry[4], request)
         #pattern
-        self.assertEqual(entry[9], "test_test")
+        self.assertEqual(entry[5], "test_test")

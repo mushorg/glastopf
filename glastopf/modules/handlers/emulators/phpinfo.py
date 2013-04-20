@@ -30,5 +30,6 @@ class PHPInfoHandler(base_emulator.BaseEmulator):
         # Ex: Server version, server ip, modules versions, and so on
         robots_path = os.path.join(self.data_dir, 'phpinfo/phpinfo.html')
         with open(robots_path, 'r') as robot_file:
-            attack_event.response = robot_file.read()
+            response = robot_file.read()
+        attack_event.http_request.set_response(response)
         return attack_event

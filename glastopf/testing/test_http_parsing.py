@@ -1,6 +1,6 @@
 import unittest
 
-from glastopf.modules.HTTP.util import HTTPParser
+from glastopf.modules.HTTP.handler import HTTPHandler, HTTPError
 
 
 class TestHTTPParsing(unittest.TestCase):
@@ -9,23 +9,30 @@ class TestHTTPParsing(unittest.TestCase):
 
     def test_simple_get_request(self):
         """Test simple GET request"""
-        simple_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
-        http_parser = HTTPParser()
-        http_obj = http_parser.parse_request(simple_request)
-        self.assertTrue(http_obj.url == "/test")
+        http_handler = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        http_parser = HTTPHandler(http_handler, None)
+        self.assertTrue(http_parser.path == "/test")
 
     def test_get_request_with_encoded_space(self):
         """Test simple GET request with space url encoded in the request path"""
         request_with_spaces = """GET /pathwith%20spaces HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
-        http_parser = HTTPParser()
-        http_obj = http_parser.parse_request(request_with_spaces)
-        self.assertTrue(http_obj.url == "/pathwith%20spaces")
+        http_handler = HTTPHandler(request_with_spaces, None)
+        self.assertTrue(http_handler.path == "/pathwith%20spaces")
 
     def test_get_request_with_space(self):
-        """Test simple GET request with space in the request path"""
-        request_with_spaces = """GET /path with spaces?param1=value1 HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
-        http_parser = HTTPParser()
-        http_obj = http_parser.parse_request(request_with_spaces)
-        self.assertTrue(http_obj.url == "/path with spaces?param1=value1")
-        self.assertTrue(http_obj.parameters == "param1=value1")
-        self.assertTrue(http_obj.version == "HTTP/1.0")
+        """Test that a simple GET request with space in the request path fails"""
+        request_with_spaces = """GET /path with spaces?param1=value1\r\nHTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        self.assertRaises(HTTPError, HTTPHandler, request_with_spaces, None)
+
+    def test_parse_command(self):
+        """ Test if the parser is able to extract the HTTP command (verb)"""
+        get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        http_handler = HTTPHandler(get_request, None)
+        self.assertTrue(http_handler.command == "GET")
+
+    def test_parse_version(self):
+        """ Test if the parser is able to extract the HTTP version"""
+        get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        http_handler = HTTPHandler(get_request, None)
+        self.assertTrue(http_handler.request_version == "HTTP/1.0")
+

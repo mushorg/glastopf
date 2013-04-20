@@ -21,21 +21,20 @@ from datetime import datetime
 class AttackEvent(object):
     def __init__(self):
         self.sensor_add = ("127.0.0.1", "8080")
-        self.parsed_request = None
+        self.http_request = None
         self.raw_request = None
         self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.source_addr = None
         self.matched_pattern = "unknown"
         self.file_name = None
-        self.response = ""
 
     def event_dict(self):
         event_dict = {
             "time": self.event_time,
             "source": self.source_addr,
-            "request": self.parsed_request.request_dict(),
+            "request_url": self.http_request.request_url,
+            "request_raw": self.http_request.request_raw,
             "pattern": self.matched_pattern,
             "filename": self.file_name,
-            "response": self.response
         }
         return event_dict

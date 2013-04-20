@@ -60,5 +60,6 @@ class DorkList(base_emulator.BaseEmulator):
         template, display_comments = self._get_template(attack_event)
         self.template = template.safe_substitute(login_msg="",
                                                  comments=display_comments)
-        attack_event.response += self.template
+        attack_event.http_request.set_response(self.template)
+        #attack_event.response += self.template
         return attack_event
