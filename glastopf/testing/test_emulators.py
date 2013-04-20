@@ -321,7 +321,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Input: Return value from GlastopfHoneypot._get_entry()
         Expected Result: Two runs of GlastopfHoneypot._get_entry() generate different results
         Notes:"""
-        user_id1 = random.randint(1000, 1500) # Realistic user ID
+        user_id1 = random.randint(1000, 1500)  # Realistic user ID
         pwd_entry1, shd_entry1, grp_entry1 = GlastopfHoneypot._get_entry(user_id)
         user_id2 = random.randint(1000, 1500)
         pwd_entry2, shd_entry2, grp_entry2 = GlastopfHoneypot._get_entry(user_id)
