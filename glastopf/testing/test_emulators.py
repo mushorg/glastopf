@@ -23,6 +23,7 @@ import os
 import tempfile
 import inspect
 import helpers
+import random
 
 from glastopf.modules.handlers.request_handler import RequestHandler
 from glastopf.glastopf import GlastopfHoneypot
