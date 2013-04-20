@@ -51,7 +51,6 @@ class TestEmulatorIntegration(unittest.TestCase):
         if os.path.isdir(self.work_dir):
             shutil.rmtree(self.work_dir)
 
-
     def test_dummy_emulator(self):
         """Objective: Tests the dummy emulator added to prove extensibility.
         Input: http://localhost:8080/
@@ -279,14 +278,13 @@ class TestEmulatorIntegration(unittest.TestCase):
         print "Return value:", self.event.response
         self.assertTrue("""testing""" == self.event.response)
 
-
     def test_phpinfo_emulator(self):
         """Objective: Emulator testing for phpinfo.php requests
         Input: http://localhost/phpinfo.php
         Expected Result: Result of the phpinfo() function
         Notes:"""
         self.event.parsed_request = util.HTTPRequest()
-        self.event.parsed_request.method = 'GET'Test for the virtual directory
+        self.event.parsed_request.method = 'GET'
         self.event.parsed_request.url = "/info.php?param1"
         self.event.matched_pattern = "phpinfo"
         request_handler = RequestHandler(self.data_dir)
@@ -294,10 +292,13 @@ class TestEmulatorIntegration(unittest.TestCase):
         emulator.handle(self.event)
         self.assertTrue("PHP Version " in self.event.response)
         self.assertTrue("Zend Extension" in self.event.response)
-        
 
     def test_virtualdocs(self):
-        v_files = ("shadow", "passwd", "group" )
+        """Objective: Test for the creation of random files in the virtual directories
+        Input: Return value from GlastopfHoneypot.randomize_vdocs()
+        Expected Result: Two runs of GlastopfHoneypot.randomize_vdocs() have different results
+        Notes:"""
+        v_files = ("shadow", "passwd", "group")
         f_dir1 = tempfile.mkdtemp()
         f_dir2 = tempfile.mkdtemp()
         os.makedirs(os.path.join(f_dir1, "linux/etc"))
