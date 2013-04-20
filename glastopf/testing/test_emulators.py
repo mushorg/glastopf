@@ -323,9 +323,9 @@ class TestEmulatorIntegration(unittest.TestCase):
         Expected Result: Two runs of GlastopfHoneypot._get_entry() generate different results
         Notes:"""
         user_id1 = random.randint(1000, 1500)  # Realistic user ID
-        pwd_entry1, shd_entry1, grp_entry1 = GlastopfHoneypot._get_entry(user_id)
+        pwd_entry1, shd_entry1, grp_entry1 = GlastopfHoneypot._get_entry(user_id1)
         user_id2 = random.randint(1000, 1500)
-        pwd_entry2, shd_entry2, grp_entry2 = GlastopfHoneypot._get_entry(user_id)
-        assertNotEqual(pwd_entry1, pwd_entry2)
-        assertNotEqual(shd_entry1, shd_entry2)
-        assertNotEqual(grp_entry1, grp_entry2)
+        pwd_entry2, shd_entry2, grp_entry2 = GlastopfHoneypot._get_entry(user_id2)
+        self.assertNotEqual(pwd_entry1, pwd_entry2)
+        self.assertNotEqual(shd_entry1, shd_entry2)
+        self.assertNotEqual(grp_entry1, grp_entry2)
