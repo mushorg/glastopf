@@ -97,23 +97,19 @@ class TestEmulatorIntegration(unittest.TestCase):
         Expected Result: The passwd file from the virtual file system.
         Notes:"""
         print "Starting local file inclusion test"
-        with open(os.path.join(self.data_dir, "virtualdocs/linux/etc/passwd"), 'r') as passwd_file:
-            passwd = passwd_file.read()
-            local_hash = hashlib.md5(passwd).hexdigest()
-            print "Hash of the local 'passwd' file:", local_hash
-        self.event.parsed_request = util.HTTPRequest()
-        self.event.parsed_request.url = "/test.php?p=../../../../../etc/passwd"
-        print "Sending request:", "http://localhost:8080" + self.event.parsed_request.url
-        self.event.matched_pattern = "lfi"
-        self.event.response = ""
+        event = attack.AttackEvent()
+        event.matched_pattern = "lfi"
+        event.parsed_request = HTTPHandler('', None)
+        event.parsed_request.request_path = "/test.php?p=../../../../../etc/passwd"
+        print "Sending request:", "http://localhost:8080" + event.parsed_request.path
         print "Loading the emulator and handling the request."
         request_handler = RequestHandler(self.data_dir)
-        emulator = request_handler.get_handler(self.event.matched_pattern)
-        emulator.handle(self.event)
-        remote_hash = hashlib.md5(self.event.response).hexdigest()
-        self.assertEqual(remote_hash, local_hash)
-        print "Return value:", remote_hash
-        print "matched the hash of the local file."
+        emulator = request_handler.get_handler(event.matched_pattern)
+        emulator.handle(event)
+        #TODO: Check it contains user names...
+        response = event.parsed_request.get_response()
+        self.assertIn('root:x:0:0:root:/root:/bin/bash', response)
+        self.assertIn('daemon:x:1:1:daemon:/usr/sbin:/bin/sh', response)
 
     def test_pma_emulator(self):
         """Objective: Testing an emulator for PHPMyAdmin specific attacks.
