@@ -52,7 +52,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
         #The following instance variables ensures consistent naming.
         url = urlparse.urlparse(self.path)
-        #path +  parameters + query strign + fragment (ex: /mad.php;woot?a=c#beer
+        #path +  parameters + query strign + fragment (ex: /mad.php;woot?a=c#beer.
         self.request_url = self.path
         #the entire http request
         self.request_raw = request_string
@@ -82,11 +82,11 @@ class HTTPHandler(BaseHTTPRequestHandler):
         if not self.raw_requestline:
             self.close_connection = 1
             return
-            #parse_requests parses (duh), throws errors as appropriate
+        #parse_request(duh), parsing errors will result in a proper http response(self.get_get_response())
         if not self.parse_request():
             # An error code has been sent, just exit
             return
-            #In the original implementation this method would had called the 'do_' + self.command method
+        #In the original implementation this method would had called the 'do_' + self.command method
         if not self.command in ('PUT', 'GET', 'POST', 'HEAD', 'TRACE'):
             self.send_error(501, "Unsupported method (%r)" % self.command)
             return
@@ -96,14 +96,13 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.request_body = self.rfile.read()
 
     def set_response(self, body, http_code=200, headers=(('Content-type', 'text/html'),)):
-
         """
         Sets body, response code and headers. Mapping between http_code and error text is handled
         by the parent class.
 
         :param body: the response body.
-        :param http_code: http code to return to the client (default=200).
-        :param headers: tuple of (header, value) pairs for the response header (default=(('Content-type', 'text/html'),)
+        :param http_code: http code to be used in response (default=200).
+        :param headers: tuple of (header, value) pairs for the response header (default= (('Content-type', 'text/html'),))
         """
         self.send_response(http_code)
         for header in headers:
@@ -113,13 +112,12 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     def set_raw_response(self, content):
         """
-        Provides a convenient way to fully control the entire HTTP response. This comes handy when writing attack modules
+        Provides a convenient way to fully control the entire http response. This comes handy when writing attack modules
         which often breaks protocol standards.
         """
         self.wfile = StringIO(content)
 
     def send_error(self, code, message=None):
-
         """
         Generates a proper http error response. This method is guaranteed to raise a HTTPError exception after the
         response has been generated.
@@ -139,7 +137,6 @@ class HTTPHandler(BaseHTTPRequestHandler):
         return self.wfile.getvalue()
 
     def get_response_header(self):
-
         """
         Returns the http response header.
         """
@@ -161,8 +158,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
         pass
 
     def version_string(self):
-        """Return the server software version string.
-        This will be included in the http response"""
+        """
+        Return the server software version string.
+        This will be included in the http response
+        """
         return self.server_version + ' ' + self.sys_version
 
 

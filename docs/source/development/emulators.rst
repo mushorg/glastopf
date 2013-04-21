@@ -19,7 +19,7 @@ Creating a new handler from scratch involves two steps:
 
 Detection pattern
 -----------------
-A detection pattern is regular expression which is tested against the url path of
+A detection pattern is a regular expression which is tested against the url of
 incoming requests. The following pattern will match all requests which starts
 with ``/beerservice.php``.
 
@@ -32,7 +32,7 @@ with ``/beerservice.php``.
      <module>beerservice</module>
     </request>
 
-All request patters can be found in the requests.xml file.
+All request patterns can be found in the requests.xml file.
 
 Adding a basic emulator
 -----------------------
@@ -48,9 +48,9 @@ To create a basic handler we need to create a class with the following character
 - Inherits from ``base_emulator.BaseEmulator``.
 - Override the ``handle(self, attack_event)`` method to provide the needed emulation.
 
-Note that the  ``handle(self, attack_event)`` operates by side-effects and is expected
-to modify the ``response`` variable of the ``attack_event`` object to include data
-which will be returned to the client. The following code shows a simple implementation
+To return http response back to the client you need to call the ``attack_event.http_request.set_response`` method which
+takes care of proper http header and other tedious stuff. If you need full control of the entire http response you can
+use ``attack_event.http_request.set_response`` instead. The following code shows a simple implementation
 of the beerservice emulator.
 
 .. code-block:: python
@@ -63,10 +63,9 @@ of the beerservice emulator.
             super(BeerManager, self).__init__(data_dir)
 
         def handle(self, attack_event):
-            url = urlparse.urlparse(attack_event.parsed_request.url)
-            beer = urlparse.parse_qs(url.query)['type'][0]
+            beer = attack_event.http_request.request_query['type][0]
             reponse = '{0} is a pretty lousy type of beer!'.format(beer)
-            attack_event.response = reponse
+            attack_event.http_request.set_response(reponse)
 
 
 We can now start Glastopf and test our new emulator as follows.
@@ -84,4 +83,4 @@ If you need to add datafiles, you can add these to the data directory at::
 
 All content of this directory will automatically be copied to the work directory
 of Glastopf, which allows for easy customization. You can get the path to the
-data directory by using ``self.data_dir``.
+data directory by reading ``self.data_dir``.
