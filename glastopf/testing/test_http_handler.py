@@ -11,13 +11,13 @@ class TestHTTPParsing(unittest.TestCase):
         """Test simple GET request"""
         http_handler = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_parser = HTTPHandler(http_handler, None)
-        self.assertTrue(http_parser.path == "/test")
+        self.assertTrue(http_parser.request_path == "/test")
 
     def test_get_request_with_encoded_space(self):
         """Test simple GET request with space url encoded in the request path"""
         request_with_spaces = """GET /pathwith%20spaces HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_handler = HTTPHandler(request_with_spaces, None)
-        self.assertTrue(http_handler.path == "/pathwith%20spaces")
+        self.assertTrue(http_handler.request_path == "/pathwith%20spaces")
 
     def test_get_request_with_space(self):
         """Test that a simple GET request with space in the request path fails"""
@@ -28,7 +28,7 @@ class TestHTTPParsing(unittest.TestCase):
         """ Test if the parser is able to extract the HTTP command (verb)"""
         get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_handler = HTTPHandler(get_request, None)
-        self.assertTrue(http_handler.command == "GET")
+        self.assertTrue(http_handler.request_verb == "GET")
 
     def test_parse_version(self):
         """ Test if the parser is able to extract the HTTP version"""
@@ -40,4 +40,4 @@ class TestHTTPParsing(unittest.TestCase):
         """ Test if the http handler is able to customize the server version string. """
         get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_handler = HTTPHandler(get_request, None, server_version="LEET_Server/0.1", sys_version="LEET_OS/1.0")
-        self.assertEqual("LEET Server/0.1 LEET OS/1.", http_handler.version_string())
+        self.assertEqual("LEET_Server/0.1 LEET_OS/1", http_handler.version_string())
