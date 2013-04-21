@@ -6,7 +6,7 @@ from string import Template
 import cgi
 from glastopf.modules.handlers import base_emulator
 
-import glastopf.modules.processing.profiler as profiler
+#import glastopf.modules.processing.profiler as profiler
 
 
 class CommentPoster(base_emulator.BaseEmulator):
@@ -52,7 +52,6 @@ class CommentPoster(base_emulator.BaseEmulator):
                 if len(clean_comment) <= CommentPoster.MAX_COMMENT_LEN:
                     with codecs.open(comments_file, "a", "utf-8") as comments_txt:
                         comments_txt.write(clean_comment)
-                    profiler.Profiler.add_comment(ip_address, comment)
 
             if os.path.isfile(comments_file):
                 with codecs.open(comments_file, "r", "utf-8") as comments_txt:
@@ -60,8 +59,7 @@ class CommentPoster(base_emulator.BaseEmulator):
             else:
                 general_comments = ''
 
-            ip_comments = profiler.Profiler.get_comments(ip_address)
-            display_comments = str(ip_comments) + str(general_comments)
+            display_comments = str(general_comments)
             template = Template(dork_page.read())
             response = template.safe_substitute(login_msg="", comments=display_comments)
             attack_event.http_request.set_response(response)

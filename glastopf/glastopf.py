@@ -32,7 +32,7 @@ from modules.handlers.request_handler import RequestHandler
 from modules import logging_handler
 import shutil
 import modules.privileges as privileges
-import modules.processing.profiler as profiler
+#import modules.processing.profiler as profiler
 from modules.handlers.emulators.dork_list import dork_file_processor
 from modules.handlers.emulators.dork_list import database_sqla
 from modules.handlers.emulators.dork_list import database_mongo
@@ -74,7 +74,7 @@ class GlastopfHoneypot(object):
             logger.info("Generating initial dork pages - this can take a while.")
             self.dork_generator.regular_generate_dork(0)
 
-        #hmm?
+        #profiler disabled until issue #26 is fixed
         self.profiler_available = False
         if self.profiler_available:
             self.profiler = profiler.Profiler(self.maindb)
@@ -159,7 +159,6 @@ class GlastopfHoneypot(object):
                 sqla_engine = create_engine(connection_string)
                 maindb = log_sql.Database(sqla_engine)
                 dorkdb = database_sqla.Database(sqla_engine)
-                self.profiler_available = True
                 return (maindb, dorkdb)
             else:
                 logger.error("Invalid connection string.")
@@ -171,7 +170,6 @@ class GlastopfHoneypot(object):
             sqla_engine = create_engine("sqlite://db/glastopf.db")
             maindb = log_sql.Database(sqla_engine)
             dorkdb = database_sqla.Database(sqla_engine)
-            self.profiler_available = True
             #disable usage of main logging datbase
             return (None, dorkdb)
 
