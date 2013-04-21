@@ -24,7 +24,9 @@ import random
 
 from glastopf.glastopf import GlastopfHoneypot
 
+
 class TestVirtualDocs(unittest.TestCase):
+
     def test_virtualdocs(self):
         """Objective: Test for the creation of random files in the virtual directories
         Input: Return value from GlastopfHoneypot.randomize_vdocs()
@@ -60,4 +62,3 @@ class TestVirtualDocs(unittest.TestCase):
         self.assertNotEqual(pwd_entry1, pwd_entry2)
         self.assertNotEqual(shd_entry1, shd_entry2)
         self.assertNotEqual(grp_entry1, grp_entry2)
-
