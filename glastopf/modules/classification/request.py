@@ -99,7 +99,7 @@ class Classifier(object):
             elif http_request.command == "POST":
                 match = re_pattern.search(unquoted_url)
                 if match == 'unknown':
-                    match = re_pattern.search(http_request.body)
+                    match = re_pattern.search(http_request.request_body)
             elif http_request.command == "HEAD":
                 parsed_pattern.module = 'head'
                 match = True

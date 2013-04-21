@@ -80,7 +80,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
         elif attack_event.http_request.command == 'POST':
             # FIXME: I don't think this is going to work...
             """attack_event.file_name = self.download_file(
-                                        attack_event.http_request.body)"""
+                                        attack_event.http_request.request_body)"""
             pass
         if attack_event.file_name:
             response = sandbox.run(attack_event.file_name, self.data_dir)

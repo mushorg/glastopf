@@ -23,8 +23,6 @@ class CommentPoster(base_emulator.BaseEmulator):
         # TODO: Use the unknown emulators _get_template function.
         pages_path = os.path.join(self.data_dir, 'dork_pages')
         dork_page_list = os.listdir(pages_path)
-        if '.git' in dork_page_list:
-            dork_page_list.remove('.git')
         dork_page = choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
 
@@ -32,7 +30,7 @@ class CommentPoster(base_emulator.BaseEmulator):
 
         with codecs.open(os.path.join(pages_path, dork_page)) as dork_page:
             try:
-                comment = (parse_qs(attack_event.http_request.body)
+                comment = (parse_qs(attack_event.http_request.request_body)
                            ['comment'][0])
                 clean_comment = self.html_escape(comment)
                 clean_comment = "<br/><br/>" + clean_comment

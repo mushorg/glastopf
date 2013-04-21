@@ -28,8 +28,6 @@ class LFIEmulator(base_emulator.BaseEmulator):
     def virtualdocs_whitelist(self):
         whitelist = []
         for root, subFolders, files in os.walk(os.path.join(self.data_dir, 'virtualdocs/')):
-            if ".git" in root:
-                continue
             for dir_file in files:
                 whitelist.append(os.path.join(root, dir_file))
         return whitelist

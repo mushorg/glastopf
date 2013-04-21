@@ -180,7 +180,7 @@ class GlastopfHoneypot(object):
         gid = user_id
         uid = user_id
         g = "\n" + name + ":x:" + str(gid) + ":"
-        p = "\n" + name + ":x:" + str(uid) + ":" + str(gid) + "::" + "/home/" + name +\
+        p = "\n" + name + ":x:" + str(uid) + ":" + str(gid) + "::" + "/home/" + name + \
             "/:/bin/sh"
         # If we want to, we could also give a password hash in place of '*'
         s = "\n" + name + ":*:6723:0:99999:7:::"
@@ -192,7 +192,7 @@ class GlastopfHoneypot(object):
         pwd_path = os.path.join(vpath, 'linux/etc/passwd')
         shd_path = os.path.join(vpath, 'linux/etc/shadow')
         grp_path = os.path.join(vpath, 'linux/etc/group')
-        
+
         num_entries = random.randint(1, 10) # number of random entries
 
         pwd = open(pwd_path, "a")
@@ -208,8 +208,8 @@ class GlastopfHoneypot(object):
             grp.write(grp_entry)
         pwd.close()
         shd.close()
-        grp.close()            
-            
+        grp.close()
+
     @staticmethod
     def prepare_sandbox(work_dir):
         logger.info('Creating PHP sandbox')
@@ -250,19 +250,25 @@ class GlastopfHoneypot(object):
         #copy emulator level data
         emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
 
-        #ignore all placeholder files
-        ignore_patterns = ('.placeholder',)
         shutil.copytree(emulator_data_dir, os.path.join(work_dir, 'data/'),
-                        ignore=shutil.ignore_patterns(ignore_patterns))
+                        ignore=GlastopfHoneypot._ignore_copy_files)
 
         dirs = ('log', 'db', 'files', 'data')
         for entry in dirs:
             dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
-        # Randomize the files in virtualdocs folder
+            # Randomize the files in virtualdocs folder
         GlastopfHoneypot.randomize_vdocs(os.path.join(work_dir, 'data/virtualdocs/'))
         GlastopfHoneypot.prepare_sandbox(work_dir)
+
+    @staticmethod
+    def _ignore_copy_files(path, content):
+        to_ignore = []
+        for file in content:
+            if file in ('.placeholder', '.git'):
+                to_ignore.append(file)
+        return to_ignore
 
     def _handle_proxy(self, attack_event, addr):
         client_ip = attack_event.http_request.header['X-Forwarded-For']

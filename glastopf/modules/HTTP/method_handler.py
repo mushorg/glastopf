@@ -32,7 +32,7 @@ class HTTPMethods(object):
     def POST(self, http_request):
         RequestClassifier = request_classifier.Classifier(self.data_dir)
         matched_pattern = RequestClassifier.classify_request(http_request)
-        #http_request.body -> File('files/payloads')
+        #http_request.request_body -> File('files/payloads')
         return matched_pattern
 
     def HEAD(self, http_request):

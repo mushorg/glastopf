@@ -43,9 +43,6 @@ class TestSQLAlchemy(unittest.TestCase):
         'Connection: keep-alive\r\n\r\n'
         'some stuff')
         attack_event.http_request = HTTPHandler(request, None)
-        #attack_event.http_request.header = {'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-        #                                      'Connection': 'keep-alive'}
-        #attack_event.http_request.body = "some stuff"
 
         #insert attack event
         maindb.insert(attack_event)

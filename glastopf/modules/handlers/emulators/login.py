@@ -31,8 +31,6 @@ class LoginEmulator(base_emulator.BaseEmulator):
     def handle(self, attack_event):
         pages_dir = os.path.join(self.data_dir, 'dork_pages')
         dork_page_list = os.listdir(pages_dir)
-        if '.git' in dork_page_list:
-            dork_page_list.remove('.git')
         dork_page = choice(dork_page_list)
         with codecs.open(os.path.join(pages_dir, dork_page), "r", "utf-8") as dork_page:
             url_dict = parse_qs(attack_event.http_request.request_body)

@@ -64,6 +64,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.request_path = url.path
         #GET, POST, DELETE, TRACE, etc.
         self.request_verb = self.command
+        if hasattr(self, 'headers'):
+            self.request_headers = self.headers
+        else:
+            self.request_headers = BaseHTTPRequestHandler.MessageClass
 
     def handle_one_request(self):
         """

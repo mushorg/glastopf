@@ -38,9 +38,6 @@ class DorkList(base_emulator.BaseEmulator):
         # them with utf-8 encoding
         pages_path = os.path.join(self.data_dir, 'dork_pages')
         dork_page_list = os.listdir(pages_path)
-        for item in ['.git', '.placeholder']:
-            if item in dork_page_list:
-                dork_page_list.remove(item)
         self.dork_page = os.path.join(pages_path, choice(dork_page_list))
         ip_address = attack_event.source_addr[0]
         with codecs.open(self.dork_page, "rb", "utf-8") as dork_page:

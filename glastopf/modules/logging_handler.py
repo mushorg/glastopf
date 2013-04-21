@@ -27,8 +27,8 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 def _get_logger_names(path=os.path.join(package_directory, 'reporting/auxiliary')):
     names = os.listdir(path)
     for name in reversed(names):
-        if (name == 'base_logger.py' or name == '.git'
-            or ".pyc" in name or name == '__init__.py'):
+        if (name == 'base_logger.py' or name == '.pyc'
+            or name == '__init__.py'):
             names.remove(name)
     return names
 
