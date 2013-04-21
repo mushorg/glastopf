@@ -46,9 +46,9 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
         #If not defined default values will be provided by parent.
         if server_version:
-            self.server_version = HTTPHandler.SERVER_VERSION
+            self.server_version = server_version
         if sys_version:
-            self.sys_version = HTTPHandler.SYS_VERSION
+            self.sys_version = sys_version
 
         #The following instance variables ensures consistent naming.
         url = urlparse.urlparse(self.path)

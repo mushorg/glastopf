@@ -36,3 +36,8 @@ class TestHTTPParsing(unittest.TestCase):
         http_handler = HTTPHandler(get_request, None)
         self.assertTrue(http_handler.request_version == "HTTP/1.0")
 
+    def test_parse_version(self):
+        """ Test if the http handler is able to customize the server version string. """
+        get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        http_handler = HTTPHandler(get_request, None, server_version="LEET_Server/0.1", sys_version="LEET_OS/1.0")
+        self.assertEqual("LEET Server/0.1 LEET OS/1.", http_handler.version_string())
