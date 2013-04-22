@@ -40,12 +40,12 @@ def populate_main_sql_testdatabase(engine):
 
     table = Table('events', meta,
                   Column('id', Integer, primary_key=True, ),
-                  Column('time', String),
-                  Column('source', String),
-                  Column('request_url', String),
-                  Column('request_raw', String),
-                  Column('pattern', String),
-                  Column('filename', String),
+                  Column('time', String(30)),
+                  Column('source', String(30)),
+                  Column('request_url', String(500)),
+                  Column('request_raw', String(65536)),
+                  Column('pattern', String(20)),
+                  Column('filename', String(500)),
     )
 
     meta.create_all(engine)
@@ -70,12 +70,12 @@ def create_empty_main_db_sqla(engine):
 
     Table('events', meta,
           Column('id', Integer, primary_key=True, ),
-          Column('time', String),
-          Column('source', String),
-          Column('request_url', String),
-          Column('request_raw', String),
-          Column('pattern', String),
-          Column('filename', String),
+          Column('time', String(30)),
+          Column('source', String(30)),
+          Column('request_url', String(500)),
+          Column('request_raw', String(65536)),
+          Column('pattern', String(20)),
+          Column('filename', String(500)),
     )
 
     meta.create_all(engine)

@@ -76,7 +76,7 @@ class Database(object):
 
         self.events_table = Table('events', meta,
                                   Column('id', Integer, primary_key=True, ),
-                                  Column('time', String(25)),
+                                  Column('time', String(30)),
                                   Column('source', String(30)),
                                   Column('request_url', String(500)),
                                   Column('request_raw', String(65536)),
