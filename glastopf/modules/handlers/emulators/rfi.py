@@ -36,8 +36,6 @@ class RFIEmulator(base_emulator.BaseEmulator):
             os.mkdir(self.files_dir)
 
     def extract_url(self, url):
-        print 'url:'
-        print url
         protocol_pattern = re.compile("=.*(http(s){0,1}|ftp(s){0,1})", re.IGNORECASE)
         matched_protocol = protocol_pattern.search(url).group(1)
         # FIXME: Check if the extracted url is actually a url
@@ -58,7 +56,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
     def download_file(self, url):
         injectd_url = self.extract_url(url)
         try:
-            req = urllib2.Request(injectd_url)
+            req = urllib2.Request(urllib2.unquote(injectd_url))
             # FIXME: We need a timeout on read here
             injected_file = urllib2.urlopen(req, timeout=4).read()
         except IOError as e:
@@ -84,6 +82,5 @@ class RFIEmulator(base_emulator.BaseEmulator):
             pass
         if attack_event.file_name:
             response = sandbox.run(attack_event.file_name, self.data_dir)
-            print 'response: {0}'.format(response)
             attack_event.http_request.set_raw_response(response)
         return attack_event

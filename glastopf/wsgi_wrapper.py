@@ -16,6 +16,7 @@
 
 
 from webob import Request, Response
+from StringIO import StringIO
 
 class GlastopfWSGI(object):
     def __init__(self, honeypot):
@@ -48,6 +49,7 @@ class GlastopfWSGI(object):
         #this will adjust content-length header
         res_webob.charset = 'utf8'
         res_webob.text = unicode(body)
+
         #WSGI applications are not allowed to create or modify hop-by-hop headers
         self.remove_hop_by_hop_headers(res_webob.headers)
         return res_webob(environ, start_response)

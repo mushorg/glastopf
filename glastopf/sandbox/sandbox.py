@@ -5,11 +5,13 @@ import subprocess
 import threading
 from functools import partial
 import os
+import logging
 
 VERSION = '1.0'
 
 """Inspired by Jose Nazario's PHP sandbox, extended/modified by Lukas Rist"""
 
+logger = logging.getLogger(__name__)
 
 def killer(proc, secs):
     time.sleep(secs)
@@ -30,16 +32,16 @@ def sandbox(script, secs, data_dir):
                                 stderr=subprocess.PIPE,
         )
     except Exception as e:
-        print "PARENT : error executing the sandbox:", e
+        logger.exception("Error executing the sandbox:".format(e))
     stdout_value = ""
     stderr_value = ""
     try:
         threading.Thread(target=partial(killer, proc, secs)).start()
         stdout_value, stderr_value = proc.communicate()
     except Exception as e:
-        print "Sandbox communication error:", e
+        logger.exception("Sandbox communication error:".format(e))
     else:
-        print "Successfully parsed with sandbox"
+        logger.info("File successfully parsed with sandbox.")
     return stdout_value
 
 
