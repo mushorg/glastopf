@@ -5,6 +5,7 @@ from ConfigParser import ConfigParser
 import json
 import logging
 import base64
+import os
 
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
@@ -63,7 +64,8 @@ class FeedUnpack(object):
 
 
 class LogHPFeed(BaseLogger):
-    def __init__(self, config="glastopf.cfg"):
+    def __init__(self, data_dir, config="glastopf.cfg"):
+        self.files_dir = os.path.join(data_dir, 'files/')
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
@@ -118,7 +120,7 @@ class LogHPFeed(BaseLogger):
 
         if attack_event.file_name != None:
             channel = self.options['chan_files']
-            with file("files/" + attack_event.file_name, 'r') as file_handler:
+            with file(os.path.join(self.files_dir, attack_event.file_name), 'r') as file_handler:
                 file_content = file_handler.read()
                 data = attack_event.file_name + " " + base64.b64encode(file_content)
                 self.send_data(channel, data)

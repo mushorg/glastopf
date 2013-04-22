@@ -23,7 +23,7 @@ from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogSyslog(BaseLogger):
-    def __init__(self, config="glastopf.cfg"):
+    def __init__(self, data_dir, config="glastopf.cfg"):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         self.options = {
