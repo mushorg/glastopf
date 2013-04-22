@@ -76,12 +76,12 @@ class Database(object):
 
         self.events_table = Table('events', meta,
                                   Column('id', Integer, primary_key=True, ),
-                                  Column('time', String),
-                                  Column('source', String),
-                                  Column('request_url', String),
-                                  Column('request_raw', String),
-                                  Column('pattern', String),
-                                  Column('filename', String),
+                                  Column('time', String(25)),
+                                  Column('source', String(30)),
+                                  Column('request_url', String(500)),
+                                  Column('request_raw', String(65536)),
+                                  Column('pattern', String(20)),
+                                  Column('filename', String(500)),
         )
 
         #only creates if it cant find the schema
