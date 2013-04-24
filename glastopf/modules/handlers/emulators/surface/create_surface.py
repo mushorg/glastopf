@@ -24,7 +24,7 @@ from jinja2 import Environment, FileSystemLoader
 from ConfigParser import ConfigParser
 
 class SurfaceCreator(base_emulator.BaseEmulator):
-    def __init__(self, data_dir, config="../../../../glastopf.cfg"):
+    def __init__(self, data_dir, config="../../../../glastopf.cfg.dst"):
         conf_parser = ConfigParser()
         conf_parser.read(config)
         super(SurfaceCreator, self).__init__(data_dir)
