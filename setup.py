@@ -14,7 +14,7 @@ setup(
     include_package_data=True,
     long_description=open('README.rst').read(),
     package_data={'glastopf': ['sandbox/Makefile']},
-    author_email='',
+    author_email='glastopf@public.honeynet.org',
     description='Web application honeypot',
     test_suite='nose.collector',
     install_requires=open('requirements.txt').read().splitlines(),
