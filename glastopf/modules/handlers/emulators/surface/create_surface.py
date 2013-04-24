@@ -21,17 +21,19 @@ from glastopf.modules.handlers import base_emulator
 
 from jinja2 import Environment, FileSystemLoader
 
-from glastopf.glastopf import GlastopfHoneypot # for conf_parser
+from ConfigParser import ConfigParser
 
 class SurfaceCreator(base_emulator.BaseEmulator):
-    def __init__(self, data_dir):
+    def __init__(self, data_dir, config="../../../../glastopf.cfg"):
+        conf_parser = ConfigParser()
+        conf_parser.read(config)
         super(SurfaceCreator, self).__init__(data_dir)
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(self.data_dir, "templates")))
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-	head = GlastopfHoneypot.conf_parser.get('surfcertids', 'google_meta') + GlastopfHoneypot.conf_parser.get('surfcertids', 'bing_meta')
-        surface_page = template.render(title=title, target=target, head=head, body=body, footer=footer)
+        head_m = conf_parser.get('surface', 'google_meta') + conf_parser.get('surface', 'bing_meta')
+        surface_page = template.render(title=title, target=target, head_meta=head_m, body=body, footer=footer)
         return surface_page
 
 

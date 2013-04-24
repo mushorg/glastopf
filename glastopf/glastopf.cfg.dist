@@ -49,10 +49,6 @@ port = 5432
 user = 
 password = 
 database = idsserver
-#Google web page verification meta "https://www.google.com/webmasters/tools/home?hl=en"
-google_meta =
-#Bing web page verification meta "http://www.microsoft.com/Web/solutions/mstranslator.aspx" 
-bing_meta =  
 
 [syslog]
 enabled = False
@@ -69,3 +65,9 @@ mail_from =
 mail_to = 
 smtp_host = smtp.gmail.com
 smtp_port = 587
+
+[surface]
+#Google web page verification meta "https://www.google.com/webmasters/tools/home?hl=en"
+google_meta =
+#Bing web page verification meta "http://www.microsoft.com/Web/solutions/mstranslator.aspx" 
+bing_meta =
