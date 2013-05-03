@@ -1,0 +1,3 @@
+Glastopf 3.2 (release 2013-05-03)
+    * Fixed support for MySQL (Issue #81)
+    * Now using the builtin BaseHTTPRequestHandler for all HTTP parsing. (Issue #76, #75)
