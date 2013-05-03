@@ -1,3 +1,6 @@
-Glastopf 3.2 (release 2013-05-03)
-    * Fixed support for MySQL (Issue #81)
-    * Now using the builtin BaseHTTPRequestHandler for all HTTP parsing. (Issue #76, #75)
+Glastopf 3.0.7 (release 2013-05-03)
+    * Added support for Jinja2 templates.
+    * Fixed MySQL logging (Issue #81).
+    * Fixed files logging with hpfeed (Issue #81).
+    * Changed http parsing to use the builtin BaseHTTPRequestHandler (Issue #76, #75).
+    * Disabled profiling support.
