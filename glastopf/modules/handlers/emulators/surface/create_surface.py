@@ -20,6 +20,7 @@ import os
 from glastopf.modules.handlers import base_emulator
 
 from jinja2 import Environment, FileSystemLoader
+from ConfigParser import ConfigParser 
 
 
 class SurfaceCreator(base_emulator.BaseEmulator):
@@ -29,7 +30,12 @@ class SurfaceCreator(base_emulator.BaseEmulator):
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-        surface_page = template.render(title=title, target=target, body=body, footer=footer)
+        config = "/opt/glastopf/glastopf/glastopf.cfg.dist" #config file
+        conf_parser = ConfigParser()
+        conf_parser.read(config) 
+        head_google = conf_parser.get('surface', 'google_meta').replace(" ","") #remove all blank space from ID 
+        head_bing = conf_parser.get('surface', 'bing_meta').replace(" ","")
+        surface_page = template.render(title=title, head_metag=head_google, head_metab=head_bing, target=target, body=body, footer=footer)
         return surface_page
 
 

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block title %} {{ title }} {% endblock %}
+{% block headmeta_g %}{{ head_metag }}{% endblock %}
+{% block headmeta_b %}{{ head_metab }}{% endblock %}
 {% block page_title %} {{ title }} {% endblock %}
 {% block form_url %}{{ target }}{% endblock %}
 {% block bodystr %} {{ body }} {% endblock %}
