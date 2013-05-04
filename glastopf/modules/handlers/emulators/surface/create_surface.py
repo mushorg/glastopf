@@ -25,13 +25,13 @@ from ConfigParser import ConfigParser
 
 class SurfaceCreator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
-        config = "../../../../glastopf.cfg.dist"
-        conf_parser = ConfigParser()
-        conf_parser.read(config)
         super(SurfaceCreator, self).__init__(data_dir)
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(self.data_dir, "templates")))
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
+        config = "../../../../glastopf.cfg.dist"
+        conf_parser = ConfigParser()
+        conf_parser.read(config)
         template = self.template_env.get_template('index.html')
         head_google = conf_parser.get('surface', 'google_meta')
         head_bing = conf_parser.get('surface', 'bing_meta')
