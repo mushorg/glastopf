@@ -65,3 +65,10 @@ mail_from =
 mail_to = 
 smtp_host = smtp.gmail.com
 smtp_port = 587
+
+[surface]
+#Google web page verification ID "https://www.google.com/webmasters/tools/home?hl=en"
+google_meta =
+#Bing web page verification ID "https://www.google.com/webmasters/"
+bing_meta =
+
