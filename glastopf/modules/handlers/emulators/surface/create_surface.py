@@ -33,8 +33,10 @@ class SurfaceCreator(base_emulator.BaseEmulator):
         config = "/opt/glastopf/glastopf/glastopf.cfg.dist" #config file
         conf_parser = ConfigParser()
         conf_parser.read(config) 
-        head_google = conf_parser.get('surface', 'google_meta').replace(" ","") #remove all blank space from ID 
-        head_bing = conf_parser.get('surface', 'bing_meta').replace(" ","")
+        head_g = conf_parser.get('surface', 'google_meta').replace(" ","") #remove all blank space from ID 
+        head_b = conf_parser.get('surface', 'bing_meta').replace(" ","")
+        head_google = "<meta name=\"google-site-verification\" content=\"%s\" />"%head_g
+        head_bing = "<meta name=\"msvalidate.01\" content=\"%s\" />"%head_b
         surface_page = template.render(title=title, head_metag=head_google, head_metab=head_bing, target=target, body=body, footer=footer)
         return surface_page
 
