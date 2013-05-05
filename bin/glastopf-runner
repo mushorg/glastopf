@@ -10,6 +10,7 @@ import argparse
 from gevent.wsgi import WSGIServer
 import gevent
 
+import glastopf
 from glastopf.wsgi_wrapper import GlastopfWSGI
 from glastopf.glastopf import GlastopfHoneypot
 
@@ -46,8 +47,14 @@ if __name__ == '__main__':
     #defaults to current directory (aka. working directory)
     parser.add_argument('--workdir', dest='workdir', default=os.getcwd())
     parser.add_argument('--prepare', action='store_true', default=False)
+    parser.add_argument('--version', action='store_true', default=False,
+                        help='Prints version and exists.')
 
     args = parser.parse_args()
+
+    if args.version:
+        print 'Glastopf {0}'.format(glastopf.__version__)
+        sys.exit(0)
 
     #prepare directory if workdir directory contains no files or if we are asked to do it.
     if args.prepare or len(os.listdir(args.workdir)) == 0:

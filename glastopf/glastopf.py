@@ -25,6 +25,7 @@ import random
 from ConfigParser import ConfigParser
 import logging.handlers
 
+from __init__ import __version__
 from modules.HTTP.handler import HTTPHandler
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
@@ -54,7 +55,7 @@ class GlastopfHoneypot(object):
         :param work_dir: directory used for data storage and various data files, must be writeable by glastopf. Default: os.getcwd()
         :param config: path to the glastopf configuration file. Default: glastopf.cfg
         """
-        logger.info('Initializing Glastopf using "{0}" as work directory.'.format(work_dir))
+        logger.info('Initializing Glastopf {0} using "{1}" as work directory.'.format(__version__,work_dir))
         self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
 
