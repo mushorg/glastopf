@@ -15,7 +15,11 @@ Add the Backports repository to your sources.list::
 Install the dependencies::	
 
     apt-get update
-    apt-get install python python-openssl python-gevent libevent-dev python-dev build-essential make python-argparse python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev liblapack-dev gfortran libxml2-dev libxslt-dev
+    apt-get install python python-openssl python-gevent libevent-dev python-dev build-essential make
+    apt-get install python-argparse python-chardet python-requests python-sqlalchemy python-lxml 
+    apt-get install python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools
+    apt-get install python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev liblapack-dev gfortran 
+    apt-get install libxml2-dev libxslt-dev
     pip install --upgrade distribute
 | 
 
