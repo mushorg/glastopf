@@ -1,23 +1,43 @@
+==================
 Releasing Glastopf
 ==================
 
-Setup.py
---------
+Before releasing
+================
 
-Bump the version number in the setup.py before tagging:
+Remove -dev from version numbers in the following files::
 
-  version='$VERSION_NUMBER$'
+* setup.py
+* glastopf/__init__.py
 
-Tagging
--------
-
-Make sure to add a git tag before making a new release:
+Add and push a git tag:
 
   git tag -a $VERSION_NUMBER$
   git push --tag
 
-$VERSION_NUMBER$ should be latest pypi version +1
 
+
+Releasing
+=========
+
+Build package:
+
+  python setup.py sdist
+
+Finally upload the package to PYPI.
+
+
+After releasing
+===============
+
+Append -dev to version numbers in the following files::
+
+* setup.py
+* glastopf/__init__.py
+
+
+Notes
+=====
 
 If you fucked up a tag, you can fix it using the following procedure:
 
