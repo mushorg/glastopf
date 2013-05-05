@@ -9,7 +9,10 @@ Prerequisites
 Install the dependencies::	
 
     sudo apt-get update
-    sudo apt-get install python2.7 python-openssl python-gevent libevent-dev python2.7-dev build-essential make python-chardet python-requests python-sqlalchemy python-lxml python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev 
+    sudo apt-get install python2.7 python-openssl python-gevent libevent-dev python2.7-dev build-essential make
+    sudo apt-get install liblapack-dev  python-chardet python-requests python-sqlalchemy python-lxml
+    sudo apt-get install python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools
+    sudo apt-get install python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev
     sudo pip install --upgrade distribute
 | 
 
