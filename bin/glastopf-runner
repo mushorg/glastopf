@@ -48,7 +48,7 @@ if __name__ == '__main__':
     parser.add_argument('--workdir', dest='workdir', default=os.getcwd())
     parser.add_argument('--prepare', action='store_true', default=False)
     parser.add_argument('--version', action='store_true', default=False,
-                        help='Prints version and exists.')
+                        help='Prints version and exits.')
 
     args = parser.parse_args()
 
