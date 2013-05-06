@@ -35,18 +35,12 @@ class SurfaceCreator(base_emulator.BaseEmulator):
         conf_parser.read(config) 
         head_g = conf_parser.get('surface', 'google_meta').replace(" ","") #remove all blank space from ID 
         head_b = conf_parser.get('surface', 'bing_meta').replace(" ","")
-        if head_g and head_b:
-            head_google = "<meta name=\"google-site-verification\" content=\"%s\" />"%head_g
-            head_bing = "<meta name=\"msvalidate.01\" content=\"%s\" />"%head_b
-        elif head_g:
-            head_google = "<meta name=\"google-site-verification\" content=\"%s\" />"%head_g
-            head_bing = ""
-        elif head_b:
-            head_google = ""
-            head_bing = "<meta name=\"msvalidate.01\" content=\"%s\" />"%head_b  
-        else:
-            head_google = ""
-            head_bing = ""
+        head_google = ""
+        head_bing = ""
+        if head_g:
+            head_google = "<meta name=\"google-site-verification\" content=\"%s\" />" % head_g
+        if head_b:
+            head_bing = "<meta name=\"msvalidate.01\" content=\"%s\" />" % head_b  
         surface_page = template.render(title=title, head_metag=head_google, head_metab=head_bing, target=target, body=body, footer=footer)
         return surface_page
 
