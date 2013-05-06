@@ -27,7 +27,7 @@ class SurfaceCreator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(SurfaceCreator, self).__init__(data_dir)
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(self.data_dir, "templates")))
-        config = os.path.join(os.getcwd(), 'glastopf.cfg')
+        config = os.path.join(self.data_dir, '../glastopf.cfg')
         self.conf_parser = ConfigParser()
         self.conf_parser.read(config)
     
