@@ -30,11 +30,11 @@ class SurfaceCreator(base_emulator.BaseEmulator):
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-        config = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../../../glastopf.cfg.dist') #config file #config file
+        config = os.path.join(self.data_dir, '../glastopf.cfg') #config file
         conf_parser = ConfigParser()
         conf_parser.read(config) 
-        head_g = conf_parser.get('surface', 'google_meta').replace(" ","") #remove all blank space from ID 
-        head_b = conf_parser.get('surface', 'bing_meta').replace(" ","")
+        head_g = conf_parser.get('surface', 'google_meta').strip() #remove all blank space from ID 
+        head_b = conf_parser.get('surface', 'bing_meta').strip()
         head_google = ""
         head_bing = ""
         if head_g:
