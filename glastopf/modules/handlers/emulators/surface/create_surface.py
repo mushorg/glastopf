@@ -20,16 +20,28 @@ import os
 from glastopf.modules.handlers import base_emulator
 
 from jinja2 import Environment, FileSystemLoader
+from ConfigParser import ConfigParser 
 
 
 class SurfaceCreator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(SurfaceCreator, self).__init__(data_dir)
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(self.data_dir, "templates")))
-
+        config = os.path.join(self.data_dir, '../glastopf.cfg')
+        self.conf_parser = ConfigParser()
+        self.conf_parser.read(config)
+    
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-        surface_page = template.render(title=title, target=target, body=body, footer=footer)
+        head_g = self.conf_parser.get('surface', 'google_meta').strip() 
+        head_b = self.conf_parser.get('surface', 'bing_meta').strip()
+        head_google = ""
+        head_bing = ""
+        if head_g:
+            head_google = "<meta name=\"google-site-verification\" content=\"%s\" />" % head_g
+        if head_b:
+            head_bing = "<meta name=\"msvalidate.01\" content=\"%s\" />" % head_b  
+        surface_page = template.render(title=title, head_metag=head_google, head_metab=head_bing, target=target, body=body, footer=footer)
         return surface_page
 
 
