@@ -2,7 +2,7 @@
 Using and Understanding the Sandbox
 ===================================
 
-Glastopf uses sandbox for PHP script Analysis. The latest sandbox implementation is based on Jose Nazario's PHP sandbox [1].
+Glastopf uses sandbox for PHP script Analysis. The latest sandbox implementation is based on Jose Nazario's PHP sandbox.
 
 Understanding the Sandbox
 -------------------------
@@ -13,8 +13,7 @@ As Glastopf's sandbox is PHP based, all tweaks are done with PHP functions. What
 
 Now, other functions that are not in white-list are overridden by sandbox. It means that its default behavior is changed and molded as per output given by that function if it were not overridden. 
 
-For eg, getcwd() function gives the current working directory when executed normally.
-        when this will be executed against the sandbox, it will just return "/var/www".
+For eg, getcwd() function gives the current working directory when executed normally. when this will be executed against the sandbox, it will just return "/var/www".
 
 This is because its default behavior of returning current working directory is changed to returning "/var/www"
 
@@ -70,6 +69,3 @@ execute.py
 
 If developer wants certain function to retain its natural behavior and it must be added in whitelist. 
 
-References
-==========
-1. http://monkey.org/~jose/software/rfi-sandbox/
