@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Glastopf Installation &mdash; Glastopf 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Glastopf 3.0 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="glastopf-installation">
+<h1>Glastopf Installation<a class="headerlink" href="#glastopf-installation" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<div class="section" id="prerequisites-openbsd">
+<h2>Prerequisites OpenBSD<a class="headerlink" href="#prerequisites-openbsd" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Install the dependencies:</p>
+<div class="highlight-python"><pre>pkg_add -r python-2.7 py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-setuptools py-jinja2 py-scipy atlas blas php pear autoconf automake g77 gfortran plplot-f77 libgfortran libevent libelf plplot mongodb wget lapack gettext</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Create symbolic links:</p>
+<div class="highlight-python"><pre>ln -sf /usr/local/bin/php-config-5.3 /usr/local/bin/php-config
+ln -sf /usr/local/bin/phpize-5.3 /usr/local/bin/phpize
+ln -sf /usr/local/bin/python2.7 /usr/local/bin/python
+ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
+ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
+ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Set autoconf and automake versions:</p>
+<div class="highlight-python"><pre>export AUTOCONF_VERSION=2.59
+export AUTOMAKE_VERSION=1.9</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-gevent">
+<h2>Install Gevent<a class="headerlink" href="#install-gevent" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download Gevent and compile it:</p>
+<div class="highlight-python"><pre>cd /opt
+wget https://github.com/downloads/SiteSupport/gevent/gevent-1.0rc2.tar.gz
+tar xfz gevent-1.0rc2.tar.gz
+cd gevent-1.0rc2
+python setup.py install</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-webob">
+<h2>Install WebOb<a class="headerlink" href="#install-webob" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download WebOb and compile it:</p>
+<div class="highlight-python"><pre>cd /opt
+wget https://pypi.python.org/packages/source/W/WebOb/WebOb-1.2.3.tar.gz
+tar xfz WebOb-1.2.3.tar.gz
+cd WebOb-1.2.3
+python setup.py install</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-numpy">
+<h2>Install Numpy<a class="headerlink" href="#install-numpy" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download Numpy and compile it:</p>
+<div class="highlight-python"><pre>cd /opt
+wget http://sourceforge.net/projects/numpy/files/NumPy/1.7.0/numpy-1.7.0.tar.gz/download
+tar xzf numpy-1.7.0.tar.gz
+cd numpy-1.7.0
+python setup.py install</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-bfr">
+<h2>Install BFR<a class="headerlink" href="#install-bfr" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download using git:</p>
+<div class="highlight-python"><pre>cd /opt
+git clone git://github.com/glastopf/BFR.git
+cd BFR
+phpize
+./configure --enable-bfr
+make &amp;&amp; make install</pre>
+</div>
+<p>Copy the search path to bfr.so and add it to <em>/etc/php-5.3.ini</em>. It can look like this:</p>
+<div class="highlight-python"><pre>zend_extension = /usr/local/lib/php-5.3/modules/bfr.so</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-glastopf">
+<h2>Install Glastopf<a class="headerlink" href="#install-glastopf" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Install latest stable release from pip:</p>
+<div class="highlight-python"><pre>pip install glastopf</pre>
+</div>
+<p>Or install latest development version from the repository:</p>
+<div class="highlight-python"><pre>cd /opt
+git clone https://github.com/glastopf/glastopf.git
+cd glastopf
+python setup.py install</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Prepare glastopf environment:</p>
+<div class="highlight-python"><pre>cd /opt
+mkdir myhoneypot
+cd myhoneypot
+glastopf-runner.py</pre>
+</div>
+<p>A new default glastopf.cfg has been created in <em>myhoneypot</em>, which can be customized as required.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="testing-the-honeypot">
+<h2>Testing the Honeypot<a class="headerlink" href="#testing-the-honeypot" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Use your web browser to visit your honeypot. You should see the following output on your command line:</p>
+<div class="highlight-python"><pre>2013-03-15 12:56:42,075 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+2013-03-15 12:56:42,077 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+2013-03-15 12:56:42,146 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
+2013-03-15 12:56:42,159 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
+2013-03-15 12:56:42,622 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
+2013-03-15 12:56:42,753 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 45235
+2013-03-15 12:56:42,831 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 258 dorks from the mnemosyne service.
+2013-03-15 12:56:44,406 (glastopf.glastopf) Generating initial dork pages - this can take a while.
+2013-03-15 12:56:46,382 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+2013-03-15 12:56:46,871 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+2013-03-15 12:56:52,856 (glastopf.glastopf) Glastopf started and privileges dropped.
+2013-03-15 12:57:04,073 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+2013-03-15 12:57:04,149 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
+2013-03-15 12:57:05,766 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97
+2013-03-15 12:57:05,825 (glastopf.glastopf) 192.168.10.85 requested GET /style.css on 192.168.10.97
+2013-03-15 12:57:06,611 (glastopf.glastopf) 192.168.10.85 requested GET / on 192.168.10.97</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Glastopf Installation</a><ul>
+<li><a class="reference internal" href="#prerequisites-openbsd">Prerequisites OpenBSD</a></li>
+<li><a class="reference internal" href="#install-gevent">Install Gevent</a></li>
+<li><a class="reference internal" href="#install-webob">Install WebOb</a></li>
+<li><a class="reference internal" href="#install-numpy">Install Numpy</a></li>
+<li><a class="reference internal" href="#install-bfr">Install BFR</a></li>
+<li><a class="reference internal" href="#install-glastopf">Install Glastopf</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#testing-the-honeypot">Testing the Honeypot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/installation_openbsd.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Glastopf Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

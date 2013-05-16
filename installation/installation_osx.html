@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Glastopf Installation - OS X (Mountain Lion) &mdash; Glastopf 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Glastopf 3.0 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="glastopf-installation-os-x-mountain-lion">
+<h1>Glastopf Installation - OS X (Mountain Lion)<a class="headerlink" href="#glastopf-installation-os-x-mountain-lion" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Xcode, gfortran, autoconf and gevent are required when installing Glastopf on OS X.</p>
+<ul class="simple">
+<li>Xcode can be installed from App Store. Command Line Tools must be installed after Xcode has been installed.</li>
+<li>Gfortran can be install using homebrew.</li>
+</ul>
+<p>Install gfortran, autoconf and gevent using homebrew:</p>
+<div class="highlight-python"><pre>brew install gfortran
+brew install autoconf
+brew install gevent</pre>
+</div>
+<p>Then we need to install pip:</p>
+<div class="highlight-python"><pre>sudo easy_install pip</pre>
+</div>
+</div>
+<div class="section" id="install-and-configure-the-php-sandbox">
+<h2>Install and configure the PHP sandbox<a class="headerlink" href="#install-and-configure-the-php-sandbox" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download using git:</p>
+<div class="highlight-python"><pre>sudo mkdir /opt
+cd /opt
+sudo git clone git://github.com/glastopf/BFR.git
+cd BFR
+sudo phpize
+sudo ./configure --enable-bfr
+sudo make &amp;&amp; sudo make install</pre>
+</div>
+<p>Open the php.ini file and add bfr.so accordingly to the build output:</p>
+<div class="highlight-python"><pre>zend_extension = /usr/lib/php/extensions/no-debug-non-zts-20090626/bfr.so</pre>
+</div>
+</div>
+<div class="section" id="installing-and-setting-up-a-virtual-environment">
+<h2>Installing and setting up a virtual environment<a class="headerlink" href="#installing-and-setting-up-a-virtual-environment" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Prepare virtual environment:</p>
+<div class="highlight-python"><pre>sudo pip install virtualenv
+sudo virtualenv glastopf-virt --system-site-packages
+source glastopf-virt/bin/activate</pre>
+</div>
+<p>Install Glastopf using pip:</p>
+<div class="highlight-python"><pre>sudo pip install glastopf</pre>
+</div>
+</div>
+<div class="section" id="starting-the-honeypot">
+<h2>Starting the honeypot<a class="headerlink" href="#starting-the-honeypot" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Note: Before using the follow command make sure you are operating within the virtual environment.</p>
+<p>Prepare glastopf environment:</p>
+<div class="highlight-python"><pre>cd /opt
+sudo mkdir myhoneypot
+cd myhoneypot
+sudo glastopf-runner</pre>
+</div>
+<p>If you receive errors regarding syslog when starting glastopf, please update the syslog path in glastopf.cfg:</p>
+<div class="highlight-python"><pre>[syslog]
+enabled = False
+socket = /var/run/syslog</pre>
+</div>
+</div>
+<div class="section" id="testing-the-honeypot">
+<h2>Testing the Honeypot<a class="headerlink" href="#testing-the-honeypot" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Start Glastopf (from your &#8216;myhoneypot&#8217; directory):</p>
+<div class="highlight-python"><pre>sudo glastopf-runner</pre>
+</div>
+<p>Use your web browser to visit your honeypot. You should see the following output on your command line:</p>
+<div class="highlight-python"><pre>2013-03-14 09:17:59,004 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+2013-03-14 09:17:59,014 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+2013-03-14 09:17:59,113 (glastopf.modules.handlers.emulators.dork_list.dork_page_generator) Bootstrapping dork database.
+2013-03-14 09:17:59,133 (requests.packages.urllib3.connectionpool) Starting new HTTPS connection (1): mnemosyne.honeycloud.net
+2013-03-14 09:18:00,154 (requests.packages.urllib3.connectionpool) "POST /login HTTP/1.1" 200 30
+2013-03-14 09:18:00,589 (requests.packages.urllib3.connectionpool) "GET /api/v1/aux/dorks?limit=1000 HTTP/1.1" 200 180459
+2013-03-14 09:18:00,711 (glastopf.modules.handlers.emulators.dork_list.mnem_service) Successfully retrieved 1000 dorks from the mnemosyne service.
+2013-03-14 09:18:02,752 (glastopf.glastopf) Generating initial dork pages - this can take a while.
+2013-03-14 09:18:05,223 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+2013-03-14 09:18:05,280 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+2013-03-14 09:18:08,408 (glastopf.glastopf) Glastopf started and privileges dropped.
+2013-03-14 09:18:49,185 (glastopf.glastopf) 172.16.177.131 requested GET / on 172.16.177.131
+2013-03-14 09:18:49,250 (glastopf.glastopf) 172.16.177.131 requested GET /style.css on 172.16.177.131
+2013-03-14 09:18:49,381 (glastopf.glastopf) 172.16.177.131 requested GET /favicon.ico on 172.16.177.131</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Glastopf Installation - OS X (Mountain Lion)</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#install-and-configure-the-php-sandbox">Install and configure the PHP sandbox</a></li>
+<li><a class="reference internal" href="#installing-and-setting-up-a-virtual-environment">Installing and setting up a virtual environment</a></li>
+<li><a class="reference internal" href="#starting-the-honeypot">Starting the honeypot</a></li>
+<li><a class="reference internal" href="#testing-the-honeypot">Testing the Honeypot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/installation_osx.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Glastopf Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

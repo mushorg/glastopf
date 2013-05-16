@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Glastopf Installation - Debian Squeeze &mdash; Glastopf 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Glastopf 3.0 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="glastopf-installation-debian-squeeze">
+<h1>Glastopf Installation - Debian Squeeze<a class="headerlink" href="#glastopf-installation-debian-squeeze" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Add the Backports repository to your sources.list:</p>
+<div class="highlight-python"><pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Install the dependencies:</p>
+<div class="highlight-python"><pre>apt-get update
+apt-get install python python-openssl python-gevent libevent-dev python-dev build-essential make
+apt-get install python-argparse python-chardet python-requests python-sqlalchemy python-lxml
+apt-get install python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools
+apt-get install python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev liblapack-dev gfortran
+apt-get install libxml2-dev libxslt-dev
+pip install --upgrade distribute</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-and-configure-the-php-sandbox">
+<h2>Install and configure the PHP sandbox<a class="headerlink" href="#install-and-configure-the-php-sandbox" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download using git:</p>
+<div class="highlight-python"><pre>cd /opt
+git clone git://github.com/glastopf/BFR.git
+cd BFR
+phpize
+./configure --enable-bfr
+make &amp;&amp;  make install</pre>
+</div>
+<p>Copy the search path to bfr.so and add it to php.ini. It can look like this:</p>
+<div class="highlight-python"><pre>zend_extension =   /usr/lib/php5/20090626+lfs/bfr.so</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-glastopf">
+<h2>Install glastopf<a class="headerlink" href="#install-glastopf" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Install latest stable release from pip:</p>
+<div class="highlight-python"><pre>pip install glastopf</pre>
+</div>
+<p>Or install latest development version from the repository:</p>
+<div class="highlight-python"><pre>cd /opt
+git clone https://github.com/glastopf/glastopf.git
+cd glastopf
+python setup.py install</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Prepare glastopf environment:</p>
+<div class="highlight-python"><pre>cd /opt
+mkdir myhoneypot
+cd myhoneypot
+glastopf-runner</pre>
+</div>
+<p>A new default glastopf.cfg has been created in <em>myhoneypot</em>, which can be customized as required.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="testing-the-honeypot">
+<h2>Testing the Honeypot<a class="headerlink" href="#testing-the-honeypot" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Start Glastopf (from your &#8216;myhoneypot&#8217; directory):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">glastopf</span><span class="o">-</span><span class="n">runner</span>
+</pre></div>
+</div>
+<p>Use your web browser to visit your honeypot. You should see the following output on your command line:</p>
+<div class="highlight-python"><pre>2013-03-13 21:10:33,047 (glastopf.glastopf) Initializing Glastopf using "/opt/myhoneypot" as work directory.
+2013-03-13 21:10:33,048 (glastopf.glastopf) Connecting to main database with: sqlite:///db/glastopf.db
+2013-03-13 21:10:33,073 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connecting to feed broker.
+2013-03-13 21:10:33,237 (glastopf.modules.reporting.auxiliary.log_hpfeeds) Connected to hpfeed broker.
+2013-03-13 21:10:36,290 (glastopf.glastopf) Glastopf started and privileges dropped.
+2013-03-13 21:10:56,282 (glastopf.glastopf) 192.168.1.148 requested GET / on 192.168.1.109
+2013-03-13 21:10:56,401 (glastopf.glastopf) 192.168.1.148 requested GET /style.css on 192.168.1.109
+2013-03-13 21:10:56,463 (glastopf.glastopf) 192.168.1.148 requested GET /favicon.ico on 192.168.1.109</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Glastopf Installation - Debian Squeeze</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#install-and-configure-the-php-sandbox">Install and configure the PHP sandbox</a></li>
+<li><a class="reference internal" href="#install-glastopf">Install glastopf</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#testing-the-honeypot">Testing the Honeypot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/installation/installation_debian.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Glastopf Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

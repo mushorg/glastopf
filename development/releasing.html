@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Releasing Glastopf &mdash; Glastopf 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Glastopf 3.0 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="releasing-glastopf">
+<h1>Releasing Glastopf<a class="headerlink" href="#releasing-glastopf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="before-releasing">
+<h2>Before releasing<a class="headerlink" href="#before-releasing" title="Permalink to this headline">¶</a></h2>
+<p>Remove -dev from version numbers in the following files:</p>
+<div class="highlight-python"><pre>* setup.py
+* glastopf/__init__.py</pre>
+</div>
+<p>Add and push a git tag:</p>
+<blockquote>
+<div>git tag -a $VERSION_NUMBER$
+git push &#8211;tag</div></blockquote>
+</div>
+<div class="section" id="releasing">
+<h2>Releasing<a class="headerlink" href="#releasing" title="Permalink to this headline">¶</a></h2>
+<p>Build package:</p>
+<blockquote>
+<div>python setup.py sdist</div></blockquote>
+<p>Finally upload the package to PYPI.</p>
+</div>
+<div class="section" id="after-releasing">
+<h2>After releasing<a class="headerlink" href="#after-releasing" title="Permalink to this headline">¶</a></h2>
+<p>Append -dev to version numbers in the following files:</p>
+<div class="highlight-python"><pre>* setup.py
+* glastopf/__init__.py</pre>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>If you fucked up a tag, you can fix it using the following procedure:</p>
+<p>Renaming:</p>
+<blockquote>
+<div>git tag new_tag old_tag</div></blockquote>
+<p>Delete the old tag:</p>
+<blockquote>
+<div>git tag -d old_tag</div></blockquote>
+<p>Delete the old tag on remote:</p>
+<blockquote>
+<div>git push origin :refs/tags/old_tag</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Releasing Glastopf</a><ul>
+<li><a class="reference internal" href="#before-releasing">Before releasing</a></li>
+<li><a class="reference internal" href="#releasing">Releasing</a></li>
+<li><a class="reference internal" href="#after-releasing">After releasing</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/development/releasing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Glastopf Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

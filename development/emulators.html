@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Emulators &mdash; Glastopf 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Glastopf 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Development" href="index.html" />
+    <link rel="next" title="Installation" href="../installation/index.html" />
+    <link rel="prev" title="Braindump" href="braindump.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../installation/index.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="braindump.html" title="Braindump"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Development</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="emulators">
+<h1>Emulators<a class="headerlink" href="#emulators" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="developing-an-attack-emulator">
+<h2>Developing an attack emulator<a class="headerlink" href="#developing-an-attack-emulator" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>Glastopf&#8217;s modular design allows for easy extension of the honeypot. This text will
+briefly demonstrate how to build a simple emulator which will emulate the very popular,
+and imaginary, php beerservice.</p>
+<p>Creating a new handler from scratch involves two steps:</p>
+<ol class="arabic simple">
+<li>Adding a detection rule.</li>
+<li>Writing an emulator to handle the request.</li>
+</ol>
+</div>
+<div class="section" id="detection-pattern">
+<h3>Detection pattern<a class="headerlink" href="#detection-pattern" title="Permalink to this headline">¶</a></h3>
+<p>A detection pattern is a regular expression which is tested against the url of
+incoming requests. The following pattern will match all requests which starts
+with <tt class="docutils literal"><span class="pre">/beerservice.php</span></tt>.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;request&gt;</span>
+ <span class="nt">&lt;id&gt;</span>24<span class="nt">&lt;/id&gt;</span>
+ <span class="nt">&lt;patternDescription&gt;</span>beer service<span class="nt">&lt;/patternDescription&gt;</span>
+ <span class="nt">&lt;patternString&gt;</span><span class="cp">&lt;![CDATA[^/beerservice.php]]&gt;</span><span class="nt">&lt;/patternString&gt;</span>
+ <span class="nt">&lt;module&gt;</span>beerservice<span class="nt">&lt;/module&gt;</span>
+<span class="nt">&lt;/request&gt;</span>
+</pre></div>
+</div>
+<p>All request patterns can be found in the requests.xml file.</p>
+</div>
+<div class="section" id="adding-a-basic-emulator">
+<h3>Adding a basic emulator<a class="headerlink" href="#adding-a-basic-emulator" title="Permalink to this headline">¶</a></h3>
+<p>To create this emulator (handler), we need to create a module (file) with a filename
+that matches the <tt class="docutils literal"><span class="pre">&lt;module&gt;</span></tt> tag from the detection pattern. This module needs to be placed
+in the <tt class="docutils literal"><span class="pre">emulators</span></tt> directory. The python file for the beerservice module will be placed at:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">glastopf</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">handlers</span><span class="o">/</span><span class="n">emulators</span><span class="o">/</span><span class="n">beerservice</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>To create a basic handler we need to create a class with the following characteristics:</p>
+<ul class="simple">
+<li>Inherits from <tt class="docutils literal"><span class="pre">base_emulator.BaseEmulator</span></tt>.</li>
+<li>Override the <tt class="docutils literal"><span class="pre">handle(self,</span> <span class="pre">attack_event)</span></tt> method to provide the needed emulation.</li>
+</ul>
+<p>To return http response back to the client you need to call the <tt class="docutils literal"><span class="pre">attack_event.http_request.set_response</span></tt> method which
+takes care of proper http header and other tedious stuff. If you need full control of the entire http response you can
+use <tt class="docutils literal"><span class="pre">attack_event.http_request.set_response</span></tt> instead. The following code shows a simple implementation
+of the beerservice emulator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">glastopf.modules.handlers</span> <span class="kn">import</span> <span class="n">base_emulator</span>
+<span class="kn">import</span> <span class="nn">urlparse</span>
+
+<span class="k">class</span> <span class="nc">BeerManager</span><span class="p">(</span><span class="n">base_emulator</span><span class="o">.</span><span class="n">BaseEmulator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BeerManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack_event</span><span class="p">):</span>
+        <span class="n">beer</span> <span class="o">=</span> <span class="n">attack_event</span><span class="o">.</span><span class="n">http_request</span><span class="o">.</span><span class="n">request_query</span><span class="p">[</span><span class="s">&#39;type][0]</span>
+        <span class="n">reponse</span> <span class="o">=</span> <span class="s">&#39;{0} is a pretty lousy type of beer!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">beer</span><span class="p">)</span>
+        <span class="n">attack_event</span><span class="o">.</span><span class="n">http_request</span><span class="o">.</span><span class="n">set_response</span><span class="p">(</span><span class="n">reponse</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can now start Glastopf and test our new emulator as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>curl http://localhost:8080/beerservice.php?type<span class="o">=</span>Rauchbier
+Rauchbier is a pretty lousy <span class="nb">type </span>of beer!
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-files">
+<h3>Adding files<a class="headerlink" href="#adding-files" title="Permalink to this headline">¶</a></h3>
+<p>If you need to add datafiles, you can add these to the data directory at:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">glastopf</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="n">handlers</span><span class="o">/</span><span class="n">emulators</span><span class="o">/</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>All content of this directory will automatically be copied to the work directory
+of Glastopf, which allows for easy customization. You can get the path to the
+data directory by reading <tt class="docutils literal"><span class="pre">self.data_dir</span></tt>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Emulators</a><ul>
+<li><a class="reference internal" href="#developing-an-attack-emulator">Developing an attack emulator</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#detection-pattern">Detection pattern</a></li>
+<li><a class="reference internal" href="#adding-a-basic-emulator">Adding a basic emulator</a></li>
+<li><a class="reference internal" href="#adding-files">Adding files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="braindump.html"
+                        title="previous chapter">Braindump</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../installation/index.html"
+                        title="next chapter">Installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/development/emulators.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../installation/index.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="braindump.html" title="Braindump"
+             >previous</a> |</li>
+        <li><a href="../index.html">Glastopf 3.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Development</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Glastopf Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
