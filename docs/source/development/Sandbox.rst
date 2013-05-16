@@ -69,3 +69,104 @@ execute.py
 
 If developer wants certain function to retain its natural behavior and it must be added in whitelist. 
 
+BFR - Extension
+---------
+
+As Glastopf overrides the internal core functions of PHP, there must be some extension modifying the way PHP handles
+function calls.
+
+Glastopf uses Better Function Replacer(BFR) `[1] <https://github.com/glastopf/BFR>`_ developed by Lukas Rist. BFR is a Zend extension based on Advanced PHP Debugger(APD).
+BFR extension enables implementation of Overriding and Renaming functions in the PHP sandbox. In order to use the BFR
+extension it must be installed and properly configured, all instructions for the same can be found here `[1] <https://github.com/glastopf/BFR>`_.
+
+BFR - How It Works
+------------------
+
+BFR extension is developed considering its usage in both multi and single threaded application.
+
+General Synatax for rename and override function
+
+rename function
+
+.. code-block:: php
+
+	rename_function('original function', 'new function');
+	
+override function	
+
+.. code-block:: php
+
+	override_function('original function', 'arguments', 'new functions implementation code');
+
+
+Below are two approach followed for developing 'rename' and 'override' functions.
+
+**Approach followed for rename function:**
+
+1 The original function is searched in the global function table and pointer with its function data is returned.
+
+.. code-block:: c
+
+	zend_hash_find(EG(function_table), Z_STRVAL_P(z_orig_fname),
+					  Z_STRLEN_P(z_orig_fname) + 1, (void **) &func); 
+					  
+2 Similarly the new name assigned to the function is checked for presence in the global function table, So that it can be safely assigned to the old function.
+
+3 New function is added in the global function table with function data pointing to old function.
+
+.. code-block:: c
+
+	zend_hash_add(EG(function_table), Z_STRVAL_P(z_new_fname),
+					 Z_STRLEN_P(z_new_fname) + 1, func, sizeof(zend_function),
+					 NULL);
+
+4 Now old function is removed from global function table.
+
+.. code-block:: c
+
+	zend_hash_del(EG(function_table), Z_STRVAL_P(z_orig_fname),
+					 Z_STRLEN_P(z_orig_fname) + 1);
+					 
+Thus old function name is replaced by new function name with function data pointer of old function pointing to new function.
+
+**Approach followed for override function:**
+
+1 All parameters of the override function are obtained and a special function "__overridden__" is created with characteristics of new overridden function. "eval code" represents the "__overridden__" function. TEMP_OVRD_FUNC_NAME represents __overridden__  function.
+
+.. code-block:: c
+	
+	sprintf(eval_code, "function " TEMP_OVRD_FUNC_NAME "(%s){%s}",
+			Z_STRVAL_P(z_function_args), Z_STRVAL_P(z_function_code));
+			
+2 __overridden__ function is executed so that global function table updates itself with new __overridden__ function.
+
+.. code-block:: c
+
+	zend_eval_string(eval_code, NULL, eval_name TSRMLS_CC);
+	
+3 If everything goes well, the new __overridden__ function is searched in the global function table and its function data pointer is reserved.
+
+.. code-block:: c
+	
+	zend_hash_find(EG(function_table), TEMP_OVRD_FUNC_NAME,
+						   sizeof(TEMP_OVRD_FUNC_NAME), (void **) &func);
+						   
+4 Now original function is added back to global function table with its function data pointer pointing to that of __overridden__ functions'.
+
+.. code-block:: c
+	
+	zend_hash_add(EG(function_table), Z_STRVAL_P(z_function_name),
+						 Z_STRLEN_P(z_function_name) + 1, func, sizeof(zend_function),
+						 NULL)
+						 
+Thus original function's implementation is replaced with new overriding implementation.
+
+Note: Still __overridden__ is present in global function table.
+						 
+
+References
+----------
+1. https://github.com/glastopf/BFR
+
+
+
