@@ -65,3 +65,7 @@ mail_from =
 mail_to = 
 smtp_host = smtp.gmail.com
 smtp_port = 587
+
+[misc]
+# Set the web server banner
+banner = Apache/2.0.48
