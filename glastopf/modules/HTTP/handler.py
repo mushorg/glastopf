@@ -19,31 +19,21 @@ import urlparse
 from StringIO import StringIO
 from BaseHTTPServer import BaseHTTPRequestHandler
 import logging
-from ConfigParser import ConfigParser
 
 logger = logging.getLogger(__name__)
 
 
 class HTTPHandler(BaseHTTPRequestHandler):
-    def __init__(self, request_string, client_address, config="glastopf.cfg"):
+    def __init__(self, request_string, client_address, server_version=None, sys_version=None):
 
         """
         Encapsulates http request parsing and facilitates generation of proper (and improper) http response.
 
         :param request_string: raw HTTP request to be parsed.
         :param client_address: tuple containing clients ip and source port.
-	:param config: path to the glastopf configuration file. Default: glastopf.cfg
+        :param server_version: set server version to be used in response header (Optional).
+        :param sys_version: set sys version to be used in response header (Optional).
         """
-	#Read banner value from config
- 	conf_parser = ConfigParser()
-        conf_parser.read(config)
-        self.options = {
-            "banner": conf_parser.get("misc", "banner").encode('latin1'),
-        }
-        #Set banner, sys_version is set to blank default    
-        self.server_version = self.options['banner']
-  	self.sys_version = ''
-
         #Parent class expects fileobjects
         self.rfile = StringIO(request_string)
         self.wfile = StringIO()
@@ -53,6 +43,12 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
         #parse the request
         self.handle_one_request()
+
+        #If not defined default values will be provided by parent.
+        if server_version:
+            self.server_version = server_version
+        if sys_version:
+            self.sys_version = sys_version
 
         #The following instance variables ensures consistent naming.
         url = urlparse.urlparse(self.path)
