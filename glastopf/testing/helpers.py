@@ -144,6 +144,8 @@ def gen_config(conn_string):
         "[main-database]\n",
         "enabled = True\n",
         "connection_string = {0}\n".format(conn_string),
+	"[misc]\n",
+	"banner = Apache/2.0.48\n",
     ]
 
 
