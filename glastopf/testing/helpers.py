@@ -141,6 +141,8 @@ def gen_config(conn_string):
         "uid = nobody\n",
         "gid = nogroup\n",
         "proxy_enabled = False\n",
+	"[misc]\n",
+	"banner = Apache/2.0.48\n",
         "[main-database]\n",
         "enabled = True\n",
         "connection_string = {0}\n".format(conn_string),
