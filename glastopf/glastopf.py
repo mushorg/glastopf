@@ -65,6 +65,7 @@ class GlastopfHoneypot(object):
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
+ 	    "banner": conf_parser.get("misc", "banner").encode('latin1'),
         }
 
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
@@ -284,7 +285,7 @@ class GlastopfHoneypot(object):
         attack_event = attack.AttackEvent()
         attack_event.raw_request = raw_request
 
-        attack_event.http_request = HTTPHandler(raw_request, addr)
+        attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
 
         if self.options["proxy_enabled"] == "True":
             self._handle_proxy(attack_event)
