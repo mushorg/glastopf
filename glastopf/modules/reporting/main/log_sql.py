@@ -18,7 +18,7 @@
 import json
 import logging
 
-from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy import Table, Column, Integer, String, MetaData, TEXT
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 import glastopf.modules.processing.ip_profile as ipp
@@ -79,7 +79,7 @@ class Database(object):
                                   Column('time', String(30)),
                                   Column('source', String(30)),
                                   Column('request_url', String(500)),
-                                  Column('request_raw', String(65536)),
+                                  Column('request_raw', TEXT),
                                   Column('pattern', String(20)),
                                   Column('filename', String(500)),
         )

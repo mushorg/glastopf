@@ -18,6 +18,7 @@
 import logging
 from datetime import datetime
 from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy.sql import text
 from sqlalchemy import select
 
 logger = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ class Database(object):
 
     def get_pattern_requests_sql(self, pattern="rfi"):
         return_list = []
-        sql = "SELECT request_url FROM events WHERE pattern = :x"
+        sql = text("SELECT request_url FROM events WHERE pattern = :x")
         results = self.engine.connect().execute(sql, x=pattern).fetchall()
         for row in results:
             return_list.append(row[0])
@@ -60,7 +61,6 @@ class Database(object):
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablenames:
             tables[table] = Table(table, meta,
-                                  Column('content', String(50), primary_key=True),
                                   Column('content', String(200), primary_key=True),
                                   Column('count', Integer),
                                   Column('firsttime', String(30)),
