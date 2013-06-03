@@ -236,7 +236,6 @@ class GlastopfHoneypot(object):
                       glastopf.cfg
                       db/
                       log/
-                      files/
                       data/
                           sandbox.php
                           dork_pages/
@@ -255,7 +254,7 @@ class GlastopfHoneypot(object):
         shutil.copytree(emulator_data_dir, os.path.join(work_dir, 'data/'),
                         ignore=GlastopfHoneypot._ignore_copy_files)
 
-        dirs = ('log', 'db', 'files', 'data')
+        dirs = ('log', 'db', 'data')
         for entry in dirs:
             dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):

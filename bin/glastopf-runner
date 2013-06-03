@@ -32,7 +32,7 @@ def setup_logging(logconsole, logfile):
         console_log.setFormatter(formatter)
         root_logger.addHandler(console_log)
 
-    if logfile != None:
+    if logfile:
         file_log = logging.handlers.TimedRotatingFileHandler(
             logfile,
             when="midnight",
