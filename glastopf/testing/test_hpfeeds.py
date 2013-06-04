@@ -1,0 +1,50 @@
+# Copyright (C) 2013 Johnny Vestergaard <jkv@unixcluster.dk>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+import unittest
+import os
+import tempfile
+import shutil
+
+import helpers
+import glastopf.modules.events.attack as attack
+from glastopf.modules.reporting.auxiliary.log_hpfeeds import HPFeedsLogger
+from glastopf.modules.HTTP.handler import HTTPHandler
+
+class Test_Loggers(unittest.TestCase):
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        if os.path.isdir(self.tmpdir):
+            shutil.rmtree(self.tmpdir)
+
+    def test_honeypot_mongo(self):
+        """Objective: Testing if glastopf can transmit data using hpfriends."""
+
+        config_file = tempfile.mkstemp()[1]
+        with open(config_file, 'w') as f:
+            f.writelines(helpers.gen_config(''))
+
+        logger = HPFeedsLogger(self.tmpdir, config=config_file, reconnect=False)
+        event = attack.AttackEvent()
+        event.http_request = HTTPHandler('', None)
+        event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
+        logger.insert(event)
+        error_message = logger.hpc.wait(2)
+        self.assertIsNone(error_message)
