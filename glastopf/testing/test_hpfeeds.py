@@ -29,13 +29,15 @@ class Test_Loggers(unittest.TestCase):
 
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp()
+        self.files_dir = os.path.join(self.tmpdir, 'files')
+        os.mkdir(self.files_dir)
 
     def tearDown(self):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
 
-    def test_honeypot_mongo(self):
-        """Objective: Testing if glastopf can transmit data using hpfriends."""
+    def test_hpfeeds_event(self):
+        """Objective: Testing if a basic event can be transmitted using hpfriends."""
 
         config_file = tempfile.mkstemp()[1]
         with open(config_file, 'w') as f:
@@ -45,6 +47,28 @@ class Test_Loggers(unittest.TestCase):
         event = attack.AttackEvent()
         event.http_request = HTTPHandler('', None)
         event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
+        logger.insert(event)
+        error_message = logger.hpc.wait(2)
+        self.assertIsNone(error_message)
+
+    def test_hpfeeds_event_with_file(self):
+        """Objective: Testing if a event containing a file can be transmitted using hpfriends."""
+
+        config_file = tempfile.mkstemp()[1]
+        with open(config_file, 'w') as f:
+            f.writelines(helpers.gen_config(''))
+
+        #create dummy file
+        file_name = 'dummy_file'
+        with open(os.path.join(self.files_dir, file_name), 'w') as f:
+            print self.files_dir
+            f.write('test_test_test_test_test')
+
+        logger = HPFeedsLogger(self.tmpdir, config=config_file, reconnect=False)
+        event = attack.AttackEvent()
+        event.http_request = HTTPHandler('', None)
+        event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
+        event.file_name = file_name
         logger.insert(event)
         error_message = logger.hpc.wait(2)
         self.assertIsNone(error_message)
