@@ -32,6 +32,9 @@ class HPFeedsLogger(BaseLogger):
         self.files_dir = os.path.join(data_dir, 'files/')
 
         self.enabled = False
+        #legacy
+        self.options = {'enabled': self.enabled}
+
         conf_parser = ConfigParser()
         conf_parser.read(config)
 
