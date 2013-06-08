@@ -54,9 +54,9 @@ class RFIEmulator(base_emulator.BaseEmulator):
         return file_name
 
     def download_file(self, url):
-        injectd_url = self.extract_url(url)
+        injectd_url = self.extract_url(urllib2.unquote(url))
         try:
-            req = urllib2.Request(urllib2.unquote(injectd_url))
+            req = urllib2.Request(injectd_url)
             # FIXME: We need a timeout on read here
             injected_file = urllib2.urlopen(req, timeout=4).read()
         except IOError as e:
