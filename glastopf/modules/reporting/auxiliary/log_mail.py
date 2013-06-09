@@ -40,12 +40,7 @@ class LogMail(BaseLogger):
     def _build_mail_body_event(self, attack_event):
         mail_msg = 'New attack from %s with request %s' % (attack_event.source_addr[0], attack_event.http_request.request_url)
         mail_msg += '\nComplete Request:\n\n'
-        mail_msg += '%s %s' % (attack_event.http_request.request_verb, attack_event.http_request.request_url)
-        for header in attack_event.http_request.request_header.keys():
-            mail_msg += '\n%s: %s' % (header, attack_event.http_request.request_header[header])
-
-        if attack_event.http_request.request_body:
-            mail_msg += '\n\n%s' % attack_event.http_request.request_body
+        mail_msg += attack_event.http_request.request_raw
 
         msg = MIMEText(mail_msg)
         return msg
