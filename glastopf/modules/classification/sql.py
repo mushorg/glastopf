@@ -15,18 +15,57 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import difflib
+import os
+import json
+
 import pylibinjection
 
 
 class SQLiClassifier(object):
 
     def __init__(self):
-        pass
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        queries_file = os.path.join(file_dir, 'sql_utils', "token_map.json")
+        with open(queries_file, "rb") as fh:
+            self.token_map = json.load(fh)
 
     def classify(self, string):
         return pylibinjection.detect_sqli(string)
 
+    def _token_squence_matcher(self, query_tokens):
+        best_ratio = 0.0
+        best_query = None
+        for i, val in self.token_map.items():
+            ratio = difflib.SequenceMatcher(None, query_tokens, val["libinj"]["tokens"]).ratio()
+            if ratio > best_ratio:
+                best_ratio = ratio
+                best_query = i
+            if best_ratio == 1.0:
+                break
+        return best_query, best_ratio
+
+    def _query_string_match(self, payload):
+        ratio = 0.8
+        queries = [query["query"].lower() for query in self.token_map.values()]
+        best_matches = difflib.get_close_matches(payload, queries, 1, ratio)
+        if len(best_matches) > 0:
+            for i, val in self.token_map.items():
+                if val["query"].lower() == best_matches[0]:
+                    return i, ratio
+        return None, None
+
+    def query_similarity(self, query_tokens, payload):
+        best_query, best_ratio = self._query_string_match(payload)
+        if best_query is None:
+            best_query, best_ratio = self._token_squence_matcher(query_tokens)
+        return best_query, best_ratio
+
 
 if __name__ == "__main__":
     sqli_c = SQLiClassifier()
-    print sqli_c.classify("anything' OR 'x'='x';")
+    query = "SELECT database()"
+    data = sqli_c.classify(query)
+    print data
+    best_query, best_ratio = sqli_c.query_similarity(data["tokens"], query.lower())
+    print sqli_c.token_map[best_query], best_ratio
