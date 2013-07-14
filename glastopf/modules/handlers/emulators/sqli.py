@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2013  Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -45,13 +45,3 @@ class SQLiEmulator(base_emulator.BaseEmulator):
             response = self.sql_response.get_response("mysql_error").content
             payload_response = re.sub("PAYLOAD", value, response)
             attack_event.http_request.set_raw_response(dedent(payload_response))
-
-
-if __name__ == "__main__":
-    import glastopf.modules.events.attack as attack
-    from glastopf.modules.HTTP.handler import HTTPHandler
-    event = attack.AttackEvent()
-    event.http_request = HTTPHandler('GET /test.php?q=SELECT%20database()', None)
-    se = SQLiEmulator("/")
-    se.handle(event)
-    print event.http_request.get_response()
