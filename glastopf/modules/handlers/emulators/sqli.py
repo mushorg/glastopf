@@ -35,9 +35,9 @@ class SQLiEmulator(base_emulator.BaseEmulator):
         payload = ""
         for value_list in attack_event.http_request.request_query.values():
             value = value_list[0]
-            ret = self.sqli_c.classify(value)
-            if len(ret["tokens"]) > 0:
-                best_query, best_ratio = self.sqli_c.query_similarity(ret["tokens"], value.lower())
+            self.ret = self.sqli_c.classify(value)
+            if len(self.ret["tokens"]) > 0:
+                best_query, best_ratio = self.sqli_c.query_similarity(self.ret["tokens"], value.lower())
                 payload = self.sqli_c.token_map[best_query]
         if payload["resp"]:
             attack_event.http_request.set_raw_response(payload["resp"])
