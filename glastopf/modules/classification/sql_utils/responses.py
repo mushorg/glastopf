@@ -52,9 +52,3 @@ class SQLResponses(object):
         for response in self._get_responses():
             if response.id == 'mysql_error':
                 return response
-
-
-if __name__ == "__main__":
-    sr = SQLResponses(path='responses.xml')
-    sr._get_responses()
-    print sr.responses[0].content
