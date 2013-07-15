@@ -67,5 +67,5 @@ if __name__ == "__main__":
     query = "SELECT database()"
     data = sqli_c.classify(query)
     print data
-    best_query, best_ratio = sqli_c.query_similarity(data["tokens"], query.lower())
+    best_query, best_ratio = sqli_c.query_similarity(data["fingerprint"], query.lower())
     print sqli_c.token_map[best_query], best_ratio
