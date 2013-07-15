@@ -38,7 +38,7 @@ before_install:
  - pwd
 # Clone libinjection
  - cd /opt
- - sudo git clone git://github.com:client9/libinjection.git
+ - sudo git clone git://github.com/client9/libinjection.git
 install:
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
