@@ -53,7 +53,7 @@ class TestSQLiEmulation(unittest.TestCase):
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self._get_test_request(self.event)
         emulator.handle(self.event)
-        self.assertEqual(emulator.ret["tokens"], "Enkn")
+        self.assertEqual(emulator.ret["fingerprint"], "Enkn")
 
     def test_sqli_emulator(self):
         """Objective: Assure that the SQL injection module is integrated.

@@ -36,8 +36,8 @@ class SQLiEmulator(base_emulator.BaseEmulator):
         for value_list in attack_event.http_request.request_query.values():
             value = value_list[0]
             self.ret = self.sqli_c.classify(value)
-            if len(self.ret["tokens"]) > 0:
-                best_query, best_ratio = self.sqli_c.query_similarity(self.ret["tokens"], value.lower())
+            if len(self.ret["fingerprint"]) > 0:
+                best_query, best_ratio = self.sqli_c.query_similarity(self.ret["fingerprint"], value.lower())
                 payload = self.sqli_c.token_map[best_query]
         if payload["resp"]:
             attack_event.http_request.set_raw_response(payload["resp"])
