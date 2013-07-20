@@ -11,6 +11,10 @@ Add the Backports repository to your sources.list::
 
     deb http://backports.debian.org/debian-backports squeeze-backports main
 
+Or (for Wheezy)::
+
+    deb http://ftp.debian.org/debian/ wheezy-backports main
+
 |
 Install the dependencies::	
 
@@ -20,6 +24,7 @@ Install the dependencies::
     apt-get install python-beautifulsoup mongodb python-pip python-dev python-numpy python-setuptools
     apt-get install python-numpy-dev python-scipy libatlas-dev g++ git php5 php5-dev liblapack-dev gfortran 
     apt-get install libxml2-dev libxslt-dev
+    apt-get install libmysqlclient-dev
     pip install --upgrade distribute
 | 
 
