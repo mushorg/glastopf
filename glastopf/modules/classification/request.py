@@ -21,15 +21,19 @@ import urllib2
 
 from xml.dom.minidom import parse
 
+import glastopf.modules.classification.sql as sql
+
+
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class RequestPattern(object):
-    def __init__(self, id, string, description, module):
-        self.id = id
+    def __init__(self, pattern_id, string, description, module):
+        self.id = pattern_id
         self.string = string
         self.description = description
         self.module = module
+
 
 class Classifier(object):
     # FIXME: Error handling for errors in the xml file
@@ -42,6 +46,7 @@ class Classifier(object):
         self.server_files_path = os.path.join(data_dir, 'server_files')
         if not os.path.isdir(self.server_files_path):
             os.mkdir(self.server_files_path, 0770)
+        self.sqli_c = sql.SQLiClassifier()
 
     def get_patterns(self):
         patterns = self.tree.getElementsByTagName("request")
@@ -87,6 +92,10 @@ class Classifier(object):
         patterns = self.get_patterns()
         matched_patterns = []
         unquoted_url = urllib2.unquote(http_request.request_url)
+        # SQLi early exit
+        ret = self.sqli_c.classify(unquoted_url)
+        if ret['sqli']:
+            return "sqli"
         for pattern in patterns:
             match = None
             parsed_pattern = self.parse_pattern(pattern)

@@ -25,5 +25,5 @@ class BaseEmulator(object):
         self.data_dir = data_dir
         self.emulator_dir = os.path.join(package_directory, 'emulators')
 
-    def handle(self):
+    def handle(self, attack_event):
         pass

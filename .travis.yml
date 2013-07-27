@@ -13,14 +13,14 @@ before_install:
  - "sudo apt-get -qq install python-dev libevent-dev"
  - "sudo apt-get -qq install libatlas-dev libatlas-base-dev gfortran"
  - "sudo apt-get -qq install python-numpy python-numpy-dev python-scipy"
-#dependencies for the php sandbox
+# Dependencies for the php sandbox
  - "sudo apt-get -qq install php5 php5-dev"
-#install hpfeeds
+# Install hpfeeds
  - cd /tmp
  - git clone git://github.com/rep/hpfeeds.git hpfeeds
  - cd hpfeeds
  - sudo python setup.py install
-#Install Better Function Replacer (BFR)
+# Install Better Function Replacer (BFR)
  - cd /tmp
  - git clone git://github.com/glastopf/BFR.git
  - cd BFR
@@ -28,7 +28,7 @@ before_install:
  - ./configure --enable-bfr
  - make
  - sudo make install
-#TODO: Extract path from output
+# TODO: Extract path from output
  - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
  - php5 --version
  - cd $REPO
@@ -36,6 +36,9 @@ before_install:
  - cd sandbox
  - sudo make
  - pwd
+# Clone libinjection
+ - cd /opt
+ - sudo git clone git://github.com/client9/libinjection.git
 install:
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
