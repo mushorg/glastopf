@@ -23,7 +23,11 @@ import pylibinjection
 
 
 class SQLiClassifier(object):
+    """ Compares input to known queries
 
+    Compares the input query with a set of known queries.
+    Goal is to select a proper response, no to decide if malicious.
+    """
     def __init__(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))
         queries_file = os.path.join(file_dir, "sql_utils", "token_map.json")
@@ -34,9 +38,14 @@ class SQLiClassifier(object):
         return pylibinjection.detect_sqli(string)
 
     def _token_squence_matcher(self, query_tokens):
+        """ Compares the token squence
+
+        Libinjection tokenizes the query. We compare those tokens with our known list.
+        """
         best_ratio = 0.0
         best_query = None
         for i, val in self.token_map.items():
+            # Sequence comparison
             ratio = difflib.SequenceMatcher(None, query_tokens, val["libinj"]["tokens"]).ratio()
             if ratio > best_ratio:
                 best_ratio = ratio
@@ -46,6 +55,11 @@ class SQLiClassifier(object):
         return best_query, best_ratio
 
     def _query_string_match(self, payload):
+        """ Compares the query string
+
+        Compares the query string with our known list.
+        This is usually less successful than the token comparison but catches corner cases.
+        """
         ratio = 0.8
         queries = [query["query"].lower() for query in self.token_map.values()]
         best_matches = difflib.get_close_matches(payload, queries, 1, ratio)
