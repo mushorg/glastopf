@@ -30,7 +30,7 @@ class SQLResponses(object):
     # FIXME: Error handling for errors in the xml file
     def __init__(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))
-        responses_file = os.path.join(file_dir, 'responses.xml')
+        responses_file = os.path.join(file_dir, "responses.xml")
         tree = ElementTree.parse(responses_file)
         doc = tree.getroot()
         self.xml_responses = doc.findall("response")
@@ -50,5 +50,5 @@ class SQLResponses(object):
             if response.id == r_id:
                 return response
         for response in self._get_responses():
-            if response.id == 'mysql_error':
+            if response.id == "mysql_error":
                 return response

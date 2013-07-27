@@ -26,7 +26,7 @@ class SQLiClassifier(object):
 
     def __init__(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))
-        queries_file = os.path.join(file_dir, 'sql_utils', "token_map.json")
+        queries_file = os.path.join(file_dir, "sql_utils", "token_map.json")
         with open(queries_file, "rb") as fh:
             self.token_map = json.load(fh)
 
