@@ -108,7 +108,7 @@ class TestClassifier(unittest.TestCase):
         Expected Response: matched pattern to sqli
         Note: """
 
-        intput_paths = ('/index.php?id="%20or%201;%20drop%20talble%20users;--',)
+        intput_paths = ('/index.php?id=anything"%20OR%20"x"="x";',)
 
         for path in intput_paths:
             request = 'GET {0} HTTP/1.0'.format(path)
