@@ -26,7 +26,7 @@ class SQLiClassifier(object):
     """ Compares input to known queries
 
     Compares the input query with a set of known queries.
-    Goal is to select a proper response, no to decide if malicious.
+    Goal is to select a proper response, not to decide if malicious.
     """
     def __init__(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))
@@ -82,4 +82,4 @@ if __name__ == "__main__":
     data = sqli_c.classify(query)
     print data
     best_query, best_ratio = sqli_c.query_similarity(data["fingerprint"], query.lower())
-    print sqli_c.token_map[best_query]#, best_ratio
+    print sqli_c.token_map[best_query], best_ratio
