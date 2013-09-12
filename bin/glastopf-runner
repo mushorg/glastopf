@@ -56,8 +56,8 @@ if __name__ == '__main__':
         print 'Glastopf {0}'.format(glastopf.__version__)
         sys.exit(0)
 
-    #prepare directory if workdir directory contains no files or if we are asked to do it.
-    if args.prepare or len(os.listdir(args.workdir)) == 0:
+    #prepare directory if workdir/data doesn't exist or if we are asked to do it.
+    if args.prepare or not os.path.isdir(os.path.join(args.workdir, 'data/')):
         GlastopfHoneypot.prepare_environment(args.workdir)
 
     conf_parser = ConfigParser()
