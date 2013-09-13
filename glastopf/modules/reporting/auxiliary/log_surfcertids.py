@@ -73,7 +73,7 @@ class LogSURFcertIDS(BaseLogger):
             "ptype_host": 63,
             "ptype_pattern": 64,
         }
-        if self.options['enabled'] == 'True':
+        if self.options['enabled'] == True:
             try:
                 import psycopg2
 
@@ -89,7 +89,7 @@ class LogSURFcertIDS(BaseLogger):
                 logger.info("Connected to the SURFcert IDS logserver.")
             except Exception as e:
                 logger.exception("Unable to connect to the SURFcert IDS logserver: {0}".format(e))
-                self.options['enabled'] = 'False'
+                self.options['enabled'] = False
             else:
                 return None
         else:
@@ -108,7 +108,12 @@ class LogSURFcertIDS(BaseLogger):
             severity = 0
         else:
             severity = 1
-        cursor = self.connection.cursor()
+        try:
+            cursor = self.connection.cursor()
+        # TODO: reconnect if there is no connection
+        except Exception as e:
+            logger.error("Connection error : {0}".format(e))
+            return
         cursor.execute("""
             SELECT surfids3_attack_add(%s, %s, %s, %s, %s, NULL, %s);
             """,
