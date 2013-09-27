@@ -7,16 +7,16 @@ from functools import partial
 import os
 import logging
 
-VERSION = '1.0'
-
-"""Inspired by Jose Nazario's PHP sandbox, extended/modified by Lukas Rist"""
+# Inspired by Jose Nazario's PHP sandbox, extended/modified by Lukas Rist
 
 logger = logging.getLogger(__name__)
+
 
 def killer(proc, secs):
     time.sleep(secs)
     try:
-        proc.kill()
+        if proc:
+            proc.kill()
     except OSError:
         pass
 
