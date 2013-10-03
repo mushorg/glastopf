@@ -38,7 +38,6 @@ from modules.handlers.emulators.dork_list import dork_file_processor
 from modules.handlers.emulators.dork_list import database_sqla
 from modules.handlers.emulators.dork_list import database_mongo
 from modules.handlers.emulators.dork_list import dork_page_generator
-from modules.handlers.emulators.dork_list import cluster
 from modules.handlers.emulators.dork_list import mnem_service
 from modules.reporting.main import log_mongodb, log_sql
 from subprocess import check_call
@@ -128,22 +127,15 @@ class GlastopfHoneypot(object):
                 logger.insert(attack_event)
 
     def setup_dork_generator(self, conf_parser, work_dir):
-        token_pattern = conf_parser.get('dork-db', 'token_pattern')
-        n_clusters = conf_parser.getint('dork-db', 'n_clusters')
-        max_iter = conf_parser.getint('dork-db', 'max_iter')
-        n_init = conf_parser.getint('dork-db', 'n_init')
-
         file_processor = dork_file_processor.DorkFileProcessor(self.dorkdb)
 
         mnemosyne_service = None
-        clusterer = cluster.Cluster(token_pattern, n_clusters, max_iter, n_init, min_df=0.0)
         if conf_parser.has_option('dork-db', 'mnem_service'):
             if conf_parser.getboolean('dork-db', 'mnem_service') == True:
                 mnemosyne_service = mnem_service.Mnem_Service()
 
         return dork_page_generator.DorkPageGenerator(self.dorkdb,
                                                      file_processor,
-                                                     clusterer,
                                                      data_dir=self.data_dir,
                                                      mnem_service_instance=mnemosyne_service)
 

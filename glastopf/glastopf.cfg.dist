@@ -14,11 +14,6 @@ logfile = log/glastopf.log
 [dork-db]
 enabled = True
 pattern = rfi
-token_pattern = /\w+
-#parameters for clustering of dorks (KMeans)
-n_clusters = 10
-max_iter = 50
-n_init = 20
 #Extracts dorks from a online dorks service operated by The Honeynet Project
 mnem_service = True
 

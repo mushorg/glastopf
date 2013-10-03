@@ -10,9 +10,7 @@ before_install:
  - echo $REPO
  - pwd
  - "sudo apt-get -qq update"
- - "sudo apt-get -qq install python-dev libevent-dev"
- - "sudo apt-get -qq install libatlas-dev libatlas-base-dev gfortran"
- - "sudo apt-get -qq install python-numpy python-numpy-dev python-scipy"
+ - "sudo apt-get -qq install python-dev libevent-dev gfortran"
 # Dependencies for the php sandbox
  - "sudo apt-get -qq install php5 php5-dev"
 # Install hpfeeds

@@ -9,7 +9,7 @@ Prerequisites OpenBSD
 
 Install the dependencies::
 
-	pkg_add -r python-2.7.3 py-numpy py-pip py-gevent mysql-client py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-setuptools py-jinja2 py-scipy atlas blas php pear autoconf automake g77 gfortran plplot-f77 libgfortran libevent libelf plplot git lapack gettext
+	pkg_add -r python-2.7.3 py-pip py-gevent mysql-client py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-setuptools py-jinja2 py-scipy php pear autoconf automake g77 gfortran plplot-f77 libgfortran libevent libelf plplot git lapack gettext
 
 | 
 

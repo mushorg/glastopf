@@ -40,7 +40,6 @@ class DorkPageGenerator(object):
     def __init__(self,
                  database_instance,
                  dorks_file_processor_instance,
-                 cluster_instance,
                  data_dir,
                  pages_dir=None,
                  mnem_service_instance=None):
@@ -52,7 +51,6 @@ class DorkPageGenerator(object):
         if not os.path.isdir(self.pages_path):
             os.mkdir(self.pages_path, 0770)
         self.dork_file_processor = dorks_file_processor_instance
-        self.clustere = cluster_instance
         self.mnem_service = mnem_service_instance
 
         #check if we need bootstrapping
@@ -82,19 +80,14 @@ class DorkPageGenerator(object):
         if len(inurl_list) < 100:
             dork_seeds = random.sample(self.database.get_dork_list('inurl'), 100)
             inurl_list += dork_seeds
-        clusters = self.clustere.cluster(inurl_list)
-        inurl_cluster = choice(clusters)
+
         intext_list = self.database.get_dork_list('intext')
         intitle_list = self.database.get_dork_list('intitle')
         while len(inurl_list) > 50 and len(line_list) > 56:
             body = ''
-            for i in range(0, 49):
+            for i in range(0, 54):
                 body += line_list.pop()
                 href = inurl_list.pop()
-                body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
-            for i in range(0, 5):
-                body += line_list.pop()
-                href = choice(inurl_cluster)
                 body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
             dork_page = self.surface_creator.get_index(choice(intitle_list),
                                                        "http://localhost:8080",

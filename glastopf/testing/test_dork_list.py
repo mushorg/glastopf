@@ -28,7 +28,6 @@ from glastopf.modules.handlers.emulators.dork_list.dork_page_generator import Do
 from glastopf.modules.handlers.emulators.dork_list.dork_file_processor import DorkFileProcessor
 from glastopf.modules.handlers.emulators.dork_list import database_mongo
 from glastopf.modules.handlers.emulators.dork_list import database_sqla
-from glastopf.modules.handlers.emulators.dork_list import cluster
 from glastopf.modules.events import attack
 from glastopf.glastopf import GlastopfHoneypot
 from sqlalchemy import create_engine
@@ -66,9 +65,7 @@ class TestEmulatorDorkList(unittest.TestCase):
             raise Exception("Unsupported database type: {0}".format(dbtype))
         reduced_dorks_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'data/dorks_reduced.txt')
         file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
-        #setting the bar low for testing
-        clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
-        dork_generator = DorkPageGenerator(db, file_processor, clusterer, self.datadir)
+        dork_generator = DorkPageGenerator(db, file_processor, self.datadir)
         return db, engine, dork_generator
 
     def test_db_select_sqlalchemy(self):
@@ -104,23 +101,6 @@ class TestEmulatorDorkList(unittest.TestCase):
         print "Number of entries in the database matching our URL:",
         print len(result),
         print "which equates our expectation."
-
-
-    def test_result_cluster(self):
-        """Objective: Tests if we are able to create a cluster from the sample database..
-        Input: Connection to the main database with 500 sample events.
-        Expected Results: Requests from the database organized in clusters.
-        Notes: String feature extraction is based on '/\w+' or /[a-zA-Z0-9_]"""
-        print "Starting database cluster test..."
-        (db, engine, dork_generator) = self.dork_generator_chain('sql')
-        dork_generator.regular_generate_dork(0)
-        print "Done clustering database entries."
-        url_list = db.select_data()
-        clusterer = cluster.Cluster("/\w+", 1, 1, 1, min_df=0.0)
-        clusters = clusterer.cluster(url_list)
-        self.assertTrue(len(clusters) > 0)
-        print "Number of clusters:",
-        print len(clusters),
 
     def test_dork_page(self):
         """Objective: Tests if the attack surface generation works.
