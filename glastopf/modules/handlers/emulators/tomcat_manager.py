@@ -25,5 +25,5 @@ class TomcatManagerHandler(base_emulator.BaseEmulator):
     def handle(self, attack_event):
         tomcat_manager_path = os.path.join(self.data_dir, 'tomcat/manager.html')
         with open(tomcat_manager_path, 'r') as tomcat_manager_file:
-            attack_event.response = tomcat_manager_file.read()
+            attack_event.http_request.set_response(tomcat_manager_file.read())
         return attack_event
