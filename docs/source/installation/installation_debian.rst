@@ -58,6 +58,8 @@ Or install latest development version from the repository::
 
     cd /opt
     git clone https://github.com/glastopf/glastopf.git
+    git clone https://github.com/client9/libinjection.git
+    git clone https://github.com/glastopf/pylibinjection.git
     cd glastopf
     python setup.py install
 | 
