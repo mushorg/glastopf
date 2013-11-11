@@ -23,8 +23,8 @@ def drop(work_dir, new_uid='nobody', new_gid='nogroup'):
         return
     if starting_uid == 0:
 
-        #special handling for os x. (getgrname has trouble with gid below 0)
-        if platform.mac_ver()[0]:
+        #special handling for os x < 10.9. (getgrname has trouble with gid below 0)
+        if platform.mac_ver()[0] < '10.9'::
             wanted_gid = -2
         else:
             wanted_gid = grp.getgrnam(new_gid)[2]
