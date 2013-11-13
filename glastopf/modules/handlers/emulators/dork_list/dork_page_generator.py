@@ -90,7 +90,7 @@ class DorkPageGenerator(object):
                 href = inurl_list.pop()
                 body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
             dork_page = self.surface_creator.get_index(choice(intitle_list),
-                                                       "http://localhost:8080",
+                                                       "/index",
                                                        body,
                                                        "Footer Powered By")
             page_md5 = hashlib.md5(dork_page).hexdigest()
