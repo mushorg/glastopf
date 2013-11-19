@@ -33,7 +33,7 @@ class LFIEmulator(base_emulator.BaseEmulator):
         return whitelist
 
     def clean_path(self, attack_event):
-        return attack_event.http_request.request_path.split('\0', 1)[0]
+        return attack_event.http_request.request_url.split('\0', 1)[0]
 
     def file_path(self, cleaned_path):
         try:

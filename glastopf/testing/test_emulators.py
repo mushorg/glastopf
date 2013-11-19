@@ -102,8 +102,8 @@ class TestEmulatorIntegration(unittest.TestCase):
         event = attack.AttackEvent()
         event.matched_pattern = "lfi"
         event.http_request = HTTPHandler('', None)
-        event.http_request.request_path = "/test.php?p=../../../../../etc/passwd"
-        print "Sending request:", "http://localhost:8080" + event.http_request.path
+        event.http_request.request_url = "/test.php?p=../../../../../etc/passwd"
+        print "Sending request:", "http://localhost:8080" + event.http_request.request_url
         print "Loading the emulator and handling the request."
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(event.matched_pattern)
