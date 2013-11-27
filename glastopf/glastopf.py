@@ -123,8 +123,11 @@ class GlastopfHoneypot(object):
             if self.maindb:
                 self.maindb.insert(attack_event)
 
-            for logger in self.loggers:
-                logger.insert(attack_event)
+            for _logger in self.loggers:
+                try:
+                    _logger.insert(attack_event)
+                except Exception as ex:
+                    logger.exception('Error while logging using {0}: {1}'.format(_logger, ex))
 
     def setup_dork_generator(self, conf_parser, work_dir):
         file_processor = dork_file_processor.DorkFileProcessor(self.dorkdb)
