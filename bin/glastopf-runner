@@ -82,8 +82,9 @@ if __name__ == '__main__':
         server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
         wsgi_greenlet = gevent.Greenlet(server.start())
         #start background worker and drop privs
-        honeypot.start_background_workers()
-        gevent.joinall([wsgi_greenlet])
+        workers = honeypot.start_background_workers()
+        workers.append(wsgi_greenlet)
+        gevent.joinall(workers, raise_error=True)
 
     except KeyboardInterrupt as ex:
         honeypot.stop_background_workers()

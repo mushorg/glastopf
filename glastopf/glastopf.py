@@ -15,10 +15,14 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# TODO: Properly implement gevent in glastopf
+from gevent import monkey
+monkey.patch()
+
+import gevent
 import os
 import sys
 import Queue
-import threading
 import string
 import random
 
@@ -95,15 +99,12 @@ class GlastopfHoneypot(object):
         self.workers_enabled = True
         self.loggers = logging_handler.get_aux_loggers(self.data_dir)
 
-        dork_thread = threading.Thread(
-            target=self.dork_generator.regular_generate_dork, args=(30,))
-        dork_thread.daemon = True
-        dork_thread.start()
+        dork_worker = gevent.spawn(self.dork_generator.regular_generate_dork, 30)
 
-        self.post_processing = threading.Thread(target=self.post_processer)
-        self.post_processing.daemon = True
-        self.post_processing.start()
+        post_processor_worker = gevent.spawn(self.post_processer)
         logger.info('Glastopf started and privileges dropped.')
+
+        return [dork_worker, post_processor_worker]
 
     def stop_background_workers(self):
         """
@@ -117,7 +118,6 @@ class GlastopfHoneypot(object):
     def post_processer(self):
         while self.workers_enabled:
             attack_event = self.post_queue.get()
-
             self.dork_generator.collect_dork(attack_event)
 
             if self.maindb:
