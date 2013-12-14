@@ -17,7 +17,7 @@
 
 # TODO: Properly implement gevent in glastopf
 from gevent import monkey
-monkey.patch()
+monkey.patch_all()
 
 import gevent
 import os
