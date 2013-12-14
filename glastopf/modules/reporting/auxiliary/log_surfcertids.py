@@ -145,7 +145,7 @@ class LogSURFcertIDS(BaseLogger):
                                attackid,
                                str(attack_event.sensor_addr[0]),
                                self.options["ptype_referer"],
-                               attack_event.http_request.header.get('Referer', 'None')
+                               attack_event.http_request.request_headers.get('Referer', 'None')
                            )
             )
             cursor.execute("""
@@ -155,7 +155,7 @@ class LogSURFcertIDS(BaseLogger):
                                attackid,
                                str(attack_event.sensor_addr[0]),
                                self.options["ptype_useragent"],
-                               attack_event.http_request.header.get('User-Agent', 'None')
+                               attack_event.http_request.request_headers.get('User-Agent', 'None')
                            )
             )
             cursor.execute("""
@@ -165,7 +165,7 @@ class LogSURFcertIDS(BaseLogger):
                                attackid,
                                str(attack_event.sensor_addr[0]),
                                self.options["ptype_host"],
-                               attack_event.http_request.header.get('Host', 'None')
+                               attack_event.http_request.request_header.get('Host', 'None')
                            )
             )
             cursor.execute("""

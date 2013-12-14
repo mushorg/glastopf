@@ -267,7 +267,7 @@ class GlastopfHoneypot(object):
         return to_ignore
 
     def _handle_proxy(self, attack_event, addr):
-        client_ip = attack_event.http_request.header['X-Forwarded-For']
+        client_ip = attack_event.http_request.request_headers['X-Forwarded-For']
         client_ip = client_ip.split(',')[-1]
         if client_ip == 'unknown':
             client_ip = '0.0.0.0'
@@ -289,7 +289,7 @@ class GlastopfHoneypot(object):
             attack_event.source_addr[0],
             attack_event.http_request.command,
             attack_event.http_request.path,
-            attack_event.http_request.headers.get('Host', "None")
+            attack_event.http_request.request_headers.get('Host', "None")
         )
         )
         # Handle the HTTP request method
