@@ -274,10 +274,11 @@ class GlastopfHoneypot(object):
             # Note: the port number is not relevant in this case
         attack_event.source_addr = (client_ip, addr[1])
 
-    def handle_request(self, raw_request, addr, connection):
+    def handle_request(self, raw_request, addr, sensor_addr):
 
         attack_event = attack.AttackEvent()
         attack_event.raw_request = raw_request
+        attack_event.sensor_addr = sensor_addr
 
         attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
 
@@ -285,13 +286,12 @@ class GlastopfHoneypot(object):
             self._handle_proxy(attack_event)
         else:
             attack_event.source_addr = addr
-        logger.info("{0} requested {1} {2} on {3}".format(
+        logger.info("{0} requested {1} {2} on {3}:{4}".format(
             attack_event.source_addr[0],
             attack_event.http_request.command,
             attack_event.http_request.path,
-            attack_event.http_request.request_headers.get('Host', "None")
-        )
-        )
+            attack_event.sensor_addr[0],
+            attack_event.sensor_addr[1]))
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
             self.MethodHandlers,

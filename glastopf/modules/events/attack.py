@@ -20,7 +20,7 @@ from datetime import datetime
 
 class AttackEvent(object):
     def __init__(self):
-        self.sensor_addr = ("127.0.0.1", "8080")
+        self.sensor_addr = ("", "")
         self.http_request = None
         self.raw_request = None
         self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

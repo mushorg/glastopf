@@ -40,8 +40,13 @@ class GlastopfWSGI(object):
 
         #addr tuple as glastopf expects it
         remote_addr = (req_webob.remote_addr, int(environ['REMOTE_PORT']))
+        if 'HTTP_HOST' in environ:
+            sensor_addr = environ['HTTP_HOST'].split(':')
+        else:
+            sensor_addr = ("", "")
+
         header, body = self.honeypot.handle_request(req_webob.as_text(),
-                                                         remote_addr, None)
+                                                         remote_addr, sensor_addr)
         for h in header.splitlines():
             if ':' in h:
                 h, v = h.split(':', 1)

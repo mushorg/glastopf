@@ -26,11 +26,6 @@ from glastopf.testing import helpers
 from sqlalchemy import create_engine
 
 
-class FakeCon(object):
-    def __init__(self):
-        self.sock = None
-
-
 class TestHoneypotFunctionality(unittest.TestCase):
     """Tests the basic honeypot functionality
     Test set-up instantiates the honeypot.
@@ -58,16 +53,15 @@ class TestHoneypotFunctionality(unittest.TestCase):
         try:
             raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
             source_address = ["127.0.0.1", "12345"]
+            sensor_address = ["1.2.3.4", "8080"]
             GlastopfHoneypot.prepare_environment(self.tmpdir)
             self.glastopf = GlastopfHoneypot(work_dir=self.tmpdir, config=config_file)
             self.glastopf.options["enabled"] = "False"
             print "Sending request: http://localhost:8080/"
-            connection = FakeCon()
-            connection.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
             response = self.glastopf.handle_request(raw_request,
                                                     source_address,
-                                                    connection)
-            connection.sock.close()
+                                                    sensor_address)
             self.assertIsNot(response, None)
         finally:
             helpers.delete_mongo_testdata(conn_string)
@@ -93,16 +87,14 @@ class TestHoneypotFunctionality(unittest.TestCase):
         try:
             raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
             source_address = ["127.0.0.1", "12345"]
+            sensor_address = ["1.2.3.4", "8080"]
             GlastopfHoneypot.prepare_environment(self.tmpdir)
             self.glastopf = GlastopfHoneypot(work_dir=self.tmpdir, config=config_file)
             self.glastopf.options["enabled"] = "False"
             print "Sending request: http://localhost:8080/"
-            connection = FakeCon()
-            connection.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             response = self.glastopf.handle_request(raw_request,
                                                     source_address,
-                                                    connection)
-            connection.sock.close()
+                                                    sensor_address)
             self.assertIsNot(response, None)
         finally:
             if os.path.isfile(config_file):
