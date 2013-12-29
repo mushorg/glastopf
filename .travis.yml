@@ -35,7 +35,7 @@ before_install:
  - sudo make
  - pwd
 # install pylibinjection
- - cd /opt
+ - cd /tmp
  - pip install cython
  - git clone --recursive https://github.com/glastopf/pylibinjection.git
  - cd pylibinjection
