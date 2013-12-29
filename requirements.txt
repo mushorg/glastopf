@@ -1,4 +1,4 @@
-gevent>=0.13.7
+gevent>=1.0
 webob>=1.2.0
 pyopenssl
 chardet
