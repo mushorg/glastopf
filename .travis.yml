@@ -10,14 +10,14 @@ before_install:
  - echo $REPO
  - pwd
  - "sudo apt-get -qq update"
- - "sudo apt-get -qq install python-dev libevent-dev gfortran"
+ - "sudo apt-get -qq install python-dev gfortran"
 # Dependencies for the php sandbox
  - "sudo apt-get -qq install php5 php5-dev"
 # Install hpfeeds
  - cd /tmp
  - git clone git://github.com/rep/hpfeeds.git hpfeeds
  - cd hpfeeds
- - sudo python setup.py install
+ - python setup.py install
 # Install Better Function Replacer (BFR)
  - cd /tmp
  - git clone git://github.com/glastopf/BFR.git
@@ -37,7 +37,7 @@ before_install:
 # install pylibinjection
  - cd /opt
  - pip install cython
- - sudo git clone --recursive https://github.com/glastopf/pylibinjection.git
+ - git clone --recursive https://github.com/glastopf/pylibinjection.git
  - cd pylibinjection
  - python setup.py install
 install:
