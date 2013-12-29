@@ -34,14 +34,16 @@ before_install:
  - cd sandbox
  - sudo make
  - pwd
-# Clone libinjection
+# install pylibinjection
  - cd /opt
- - sudo git clone git://github.com/client9/libinjection.git
+ - pip install cython
+ - sudo git clone --recursive https://github.com/glastopf/pylibinjection.git
+ - cd pylibinjection
+ - python setup.py install
 install:
  - export PYTHONIOENCODING=UTF8 # just in case
  - pwd
  - cd $REPO
- - pip install cython
  - pip install -r requirements.txt --use-mirrors
 # command to run tests
 script: 
