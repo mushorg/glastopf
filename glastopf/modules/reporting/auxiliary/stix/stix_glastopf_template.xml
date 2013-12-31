@@ -6,6 +6,8 @@
                    xmlns:stixCommon="http://stix.mitre.org/common-1"
                    xmlns:incident="http://stix.mitre.org/Incident-1"
                    xmlns:Identity="http://stix.mitre.org/extensions/Identity#CIQIdentity3.0-1"
+                   xmlns:SocketAddressObj="http://cybox.mitre.org/objects#SocketAddressObject-1"
+                   xmlns:NetworkConnectionObj="http://cybox.mitre.org/objects#NetworkConnectionObject-2"
                    xmlns:ciq="urn:oasis:names:tc:ciq:xpil:3"
                    xmlns:n="urn:oasis:names:tc:ciq:xnl:3"
                    xmlns:{{ namespace }}="{{ namespace_uri }}"
@@ -17,6 +19,12 @@
  http://stix.mitre.org/extensions/Address#CIQAddress3.0-1 http://stix.mitre.org/XMLSchema/extensions/address/ciq_address_3.0/1.0.1/ciq_address_3.0.xsd
  http://cybox.mitre.org/cybox-2 http://cybox.mitre.org/XMLSchema/core/2.0.1/cybox_core.xsd
  http://cybox.mitre.org/common-2 http://cybox.mitre.org/XMLSchema/common/2.0.1/cybox_common.xsd
+ ttp://cybox.mitre.org/objects#AddressObject-2 http://cybox.mitre.org/XMLSchema/objects/Address/2.0.1/Address_Object.xsd
+ http://cybox.mitre.org/objects#PortObject-2 http://cybox.mitre.org/XMLSchema/objects/Port/2.0.1/Port_Object.xsd
+ http://cybox.mitre.org/objects#SocketAddressObject-1 http://cybox.mitre.org/XMLSchema/objects/Socket_Address/1.0.1/Socket_Address_Object.xsd
+ http://cybox.mitre.org/objects#ArtifactObject-2 http://cybox.mitre.org/XMLSchema/objects/Artifact/2.0.1/Artifact_Object.xsd
+ http://cybox.mitre.org/objects#CustomObject-1 http://cybox.mitre.org/XMLSchema/objects/Custom/1.0.1/Custom_Object.xsd
+ http://cybox.mitre.org/objects#NetworkConnectionObject-2 http://cybox.mitre.org/XMLSchema/objects/Network_Connection/2.0.1/Network_Connection_Object.xsd"
  id="{{ namespace }}:STIXPackage-{{ package_id }}" version="1.0.1">
 	<stix:STIX_Header>
         <stix:Title>Unauthorized traffic to honeypot</stix:Title>
@@ -51,6 +59,60 @@
                 </stixCommon:Tools>
             </incident:Reporter>
 			<incident:Related_Observables>
+                 <incident:Related_Observable>
+                                        <stixCommon:Observable id="{{ namespace }}:Observable-{{ network_observable_id }}">
+                                                <cybox:Object>
+                                                        <cybox:Properties xsi:type="NetworkConnectionObj:NetworkConnectionObjectType">
+                                                            <NetworkConnectionObj:Layer3_Protocol datatype="string">IPv4</NetworkConnectionObj:Layer3_Protocol>
+                                                            <NetworkConnectionObj:Layer4_Protocol datatype="string">TCP</NetworkConnectionObj:Layer4_Protocol>
+                                                            <NetworkConnectionObj:Layer7_Protocol datatype="string">HTTP</NetworkConnectionObj:Layer7_Protocol>
+                                                            <NetworkConnectionObj:Source_Socket_Address>
+                                                                        <SocketAddressObj:IP_Address category="ipv4-addr" is_source="true">
+                                                                                <AddressObj:Address_Value>{{ source_ip }}</AddressObj:Address_Value>
+                                                                        </SocketAddressObj:IP_Address>
+                                                                        <SocketAddressObj:Port>
+                                                                                <PortObj:Port_Value>{{ source_port }}</PortObj:Port_Value>
+                                                                        </SocketAddressObj:Port>
+                                                                </NetworkConnectionObj:Source_Socket_Address>
+                                                            <NetworkConnectionObj:Layer7_Connections>
+                                                                <NetworkConnectionObj:HTTP_Session>
+                                                                    <HTTPSessionObj:HTTP_Request_Response>
+                                                                        <HTTPSessionObj:HTTP_Client_Request>
+                                                                            <HTTPSessionObj:HTTP_Request_Line>
+                                                                                <HTTPSessionObj:HTTP_Method datatype="string">{{ http_method }}</HTTPSessionObj:HTTP_Method>
+                                                                                 <HTTPSessionObj:Value>{{ http_path }}</HTTPSessionObj:Value>
+                                                                                <HTTPSessionObj:Version>{{ http_version }}</HTTPSessionObj:Version>
+                                                                            </HTTPSessionObj:HTTP_Request_Line>
+                                                                            <HTTPSessionObj:HTTP_Request_Header>
+                                                                                <HTTPSessionObj:Raw_Header>{{ http_raw_header }}</HTTPSessionObj:Raw_Header>
+                                                                                <HTTPSessionObj:Parsed_Header>
+                                                                                    <HTTPSessionObj:Accept_Encoding>gzip</HTTPSessionObj:Accept_Encoding>
+                                                                                    <HTTPSessionObj:Connection>close</HTTPSessionObj:Connection>
+                                                                                </HTTPSessionObj:Parsed_Header>
+                                                                            </HTTPSessionObj:HTTP_Request_Header>
+                                                                            <HTTPSessionObj:HTTP_Message_Body>{{ http_body }}</HTTPSessionObj:HTTP_Message_Body>
+                                                                        </HTTPSessionObj:HTTP_Client_Request>
+                                                                        <HTTPSessionObj:HTTP_Server_Response>
+                                                                            <HTTPSessionObj:HTTP_Status_Line>
+                                                                                <HTTPSessionObj:Version>HTTP/1.1</HTTPSessionObj:Version>
+                                                                                <HTTPSessionObj:Status_Code>200</HTTPSessionObj:Status_Code>
+                                                                                <HTTPSessionObj:Reason_Phrase>OK</HTTPSessionObj:Reason_Phrase>
+                                                                            </HTTPSessionObj:HTTP_Status_Line>
+                                                                            <HTTPSessionObj:HTTP_Response_Header>
+                                                                                <HTTPSessionObj:Parsed_Header>
+                                                                                    <HTTPSessionObj:Server>Apache</HTTPSessionObj:Server>
+                                                                                    <HTTPSessionObj:Transfer_Encoding>chunked</HTTPSessionObj:Transfer_Encoding>
+                                                                                </HTTPSessionObj:Parsed_Header>
+                                                                            </HTTPSessionObj:HTTP_Response_Header>
+                                                                        </HTTPSessionObj:HTTP_Server_Response>
+                                                                    </HTTPSessionObj:HTTP_Request_Response>
+                                                                </NetworkConnectionObj:HTTP_Session>
+                                                            </NetworkConnectionObj:Layer7_Connections>
+                                                        </cybox:Properties>
+                                                </cybox:Object>
+                                        </stixCommon:Observable>
+                                </incident:Related_Observable>
+                 <incident:Related_Observable>
 			</incident:Related_Observables>
             {% if include_contact_info %}
             <incident:Contact>

@@ -30,6 +30,7 @@ class StixTransformer(object):
         self.config = config._sections['taxii']
         self.template = template_env.get_template('stix_glastopf_template.xml')
 
+
     def transform(self, event):
         vars = {'package_id': str(uuid.uuid4()),
                 'namespace': 'Glastopf',
@@ -40,6 +41,16 @@ class StixTransformer(object):
                 'glastopf_version': glastopf.__version__,
                 'include_contact_info': self.config['include_contact_info'],
                 'contact_name': self.config['contact_name'],
-                'contact_mail': self.config['contact_email']}
+                'contact_mail': self.config['contact_email'],
+                'source_ip': event.source_addr[0],
+                'source_port': str(event.source_addr[1]),
+                'honeypot_ip': event.sensor_addr[0],
+                'honeypot_port': event.sensor_addr[1],
+                'http_method': event.http_request.request_verb,
+                'http_version': event.http_request.request_version,
+                'http_path': event.http_request.request_path,
+                'http_body': event.http_request.request_body
+        }
+        #TODO: http_raw_header and matched_pattern to capec attack pattern
 
         return self.template.render(vars)
