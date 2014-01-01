@@ -74,46 +74,41 @@ class Database(object):
             return
 
         conn = self.engine.connect()
-        trans = conn.begin()
-        try:
-            for item in insert_list:
-                tablename = item['table']
-                table = self.tables[tablename]
-                content = item['content']
 
-                #skip empty
-                if not content:
-                    continue
+        for item in insert_list:
+            tablename = item['table']
+            table = self.tables[tablename]
+            content = item['content']
 
-                dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                #check table if content exists - content is primary key.
-                db_content = conn.execute(
-                    select([table]).
-                    where(table.c.content == content)).fetchone()
-                if db_content == None:
-                    conn.execute(
-                        table.insert().values({'content': content,
-                                               'count': 1,
-                                               'firsttime': dt_string,
-                                               'lasttime': dt_string}))
-                else:
-                    #update existing entry
-                    conn.execute(
-                        table.update().
-                        where(table.c.content == content).
-                        values(lasttime=dt_string,
-                               count=table.c.count + 1))
-            trans.commit()
-            conn.close()
-        except Exception as ex:
-            logger.exception("Error while inserting dork into database {0}".format(ex))
-            trans.rollback()
+            #skip empty
+            if not content:
+                continue
+
+            dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            #check table if content exists - content is primary key.
+            db_content = conn.execute(
+                select([table]).
+                where(table.c.content == content)).fetchone()
+            if db_content is None:
+                conn.execute(
+                    table.insert().values({'content': content,
+                                           'count': 1,
+                                           'firsttime': dt_string,
+                                           'lasttime': dt_string}))
+            else:
+                #update existing entry
+                conn.execute(
+                    table.update().
+                    where(table.c.content == content).
+                    values(lasttime=dt_string,
+                           count=table.c.count + 1))
+        conn.close()
 
     def get_dork_list(self, tablename, starts_with=None):
         conn = self.engine.connect()
         table = self.tables[tablename]
 
-        if starts_with == None:
+        if starts_with is None:
             result = conn.execute(select([table]))
         else:
             result = conn.execute(

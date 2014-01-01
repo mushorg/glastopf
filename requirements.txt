@@ -3,7 +3,7 @@ webob>=1.2.0
 pyopenssl
 chardet
 lxml
-sqlalchemy>=0.7.0,<0.9.0
+sqlalchemy>=0.8.0
 jinja2
 beautifulsoup>=3.2.0
 requests>=1.0.0
