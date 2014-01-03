@@ -30,14 +30,20 @@ class StixTransformer(object):
         self.config = config._sections['taxii']
         self.template = template_env.get_template('stix_glastopf_template.xml')
 
-
     def transform(self, event):
+
+
+        #print event.http_request.headers.get('Connection')
+        headers = []
+        for w in event.http_request.headers:
+            headers.append((w, event.http_request.headers.get(w, "")))
+
         vars = {'package_id': str(uuid.uuid4()),
                 'namespace': 'Glastopf',
                 'namespace_uri': 'http://glastopf.org/stix-1',
                 'package_timestamp': datetime.utcnow().isoformat(),
-                'incident_id': event['session_id'],
-                'incident_timestamp': event['timestamp'].isoformat(),
+                'incident_id': event.id,
+                'incident_timestamp': datetime.strptime(event.event_time,"%Y-%m-%d %H:%M:%S").isoformat(),
                 'glastopf_version': glastopf.__version__,
                 'include_contact_info': self.config['include_contact_info'],
                 'contact_name': self.config['contact_name'],
@@ -49,8 +55,10 @@ class StixTransformer(object):
                 'http_method': event.http_request.request_verb,
                 'http_version': event.http_request.request_version,
                 'http_path': event.http_request.request_path,
-                'http_body': event.http_request.request_body
+                'http_body': event.http_request.request_body,
+                'http_raw_header': event.http_request.headers,
+                'http_parsed_header': headers
         }
-        #TODO: http_raw_header and matched_pattern to capec attack pattern
+        #TODO: matched_pattern to capec attack pattern
 
         return self.template.render(vars)

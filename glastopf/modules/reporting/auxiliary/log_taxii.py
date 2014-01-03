@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from datetime import datetime
+import uuid
 from ConfigParser import ConfigParser
 import logging
 
@@ -23,32 +24,32 @@ import libtaxii
 from libtaxii.messages import ContentBlock, InboxMessage, generate_message_id
 from libtaxii.clients import HttpClient
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
+from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
+
 
 logger = logging.getLogger(__name__)
 
 
-class TaxiiLogger(object):
-    def __init__(self, data_dir, config_file):
+class TaxiiLogger(BaseLogger):
+    def __init__(self, data_dir, config_file='glastopf.cfg'):
         config = ConfigParser()
         config.read(config_file)
-        self.enabled = config.getboolean('taxii', 'enabled')
+        self.options = {'enabled': config.getboolean('taxii', 'enabled')}
         self.host = config.get('taxii', 'host')
         self.port = config.getint('taxii', 'port')
         self.inbox_path = config.get('taxii', 'inbox_path')
         self.use_https = config.getboolean('taxii', 'use_https')
-
         self.client = HttpClient()
         self.client.setProxy('noproxy')
         self.stix_transformer = StixTransformer(config)
 
-    def log(self, event):
-        if not self.enabled:
-            return
+    def insert(self, event):
         # converts from conpot log format to STIX compatible xml
         stix_package = self.stix_transformer.transform(event)
 
         # wrapping the stix message in a TAXII envelope
         content_block = ContentBlock(libtaxii.CB_STIX_XML_10, stix_package)
+
         inbox_message = InboxMessage(message_id=generate_message_id(), content_blocks=[content_block])
         inbox_xml = inbox_message.to_xml()
 

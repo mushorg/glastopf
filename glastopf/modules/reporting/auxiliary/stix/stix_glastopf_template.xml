@@ -86,8 +86,9 @@
                                                                             <HTTPSessionObj:HTTP_Request_Header>
                                                                                 <HTTPSessionObj:Raw_Header>{{ http_raw_header }}</HTTPSessionObj:Raw_Header>
                                                                                 <HTTPSessionObj:Parsed_Header>
-                                                                                    <HTTPSessionObj:Accept_Encoding>gzip</HTTPSessionObj:Accept_Encoding>
-                                                                                    <HTTPSessionObj:Connection>close</HTTPSessionObj:Connection>
+                                                                                    {% for header_item in http_parsed_header %}
+                                                                                    <HTTPSessionObj:{{ header_item[0] }}>{{ header_item[1] }}</HTTPSessionObj:{{ header_item[0] }}>
+                                                                                    {% endfor %}
                                                                                 </HTTPSessionObj:Parsed_Header>
                                                                             </HTTPSessionObj:HTTP_Request_Header>
                                                                             <HTTPSessionObj:HTTP_Message_Body>{{ http_body }}</HTTPSessionObj:HTTP_Message_Body>
