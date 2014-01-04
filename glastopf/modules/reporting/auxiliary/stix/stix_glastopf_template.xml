@@ -9,6 +9,7 @@
                    xmlns:SocketAddressObj="http://cybox.mitre.org/objects#SocketAddressObject-1"
                    xmlns:NetworkConnectionObj="http://cybox.mitre.org/objects#NetworkConnectionObject-2"
                    xmlns:ciq="urn:oasis:names:tc:ciq:xpil:3"
+                   xmlns:TTP="http://stix.mitre.org/TTP-1"
                    xmlns:n="urn:oasis:names:tc:ciq:xnl:3"
                    xmlns:{{ namespace }}="{{ namespace_uri }}"
                    xsi:schemaLocation="
@@ -24,7 +25,8 @@
  http://cybox.mitre.org/objects#SocketAddressObject-1 http://cybox.mitre.org/XMLSchema/objects/Socket_Address/1.0.1/Socket_Address_Object.xsd
  http://cybox.mitre.org/objects#ArtifactObject-2 http://cybox.mitre.org/XMLSchema/objects/Artifact/2.0.1/Artifact_Object.xsd
  http://cybox.mitre.org/objects#CustomObject-1 http://cybox.mitre.org/XMLSchema/objects/Custom/1.0.1/Custom_Object.xsd
- http://cybox.mitre.org/objects#NetworkConnectionObject-2 http://cybox.mitre.org/XMLSchema/objects/Network_Connection/2.0.1/Network_Connection_Object.xsd"
+ http://cybox.mitre.org/objects#NetworkConnectionObject-2 http://cybox.mitre.org/XMLSchema/objects/Network_Connection/2.0.1/Network_Connection_Object.xsd
+ http://stix.mitre.org/TTP-1 http://stix.mitre.org/XMLSchema/ttp/1.0.1/ttp.xsd"
  id="{{ namespace }}:STIXPackage-{{ package_id }}" version="1.0.1">
 	<stix:STIX_Header>
         <stix:Title>Unauthorized traffic to honeypot</stix:Title>
@@ -58,6 +60,21 @@
                     </cyboxCommon:Tool>
                 </stixCommon:Tools>
             </incident:Reporter>
+            <incident:Leveraged_TTPs>
+                <incident:Leveraged_TTP>
+                    <stixCommon:TTP xsi:type="TTP:TTPType">
+                        <TTP:Behavior>
+                            <TTP:Attack_Patterns>
+                                {% for capec_id, capec_description in capec.items() %}
+                                <TTP:Attack_Pattern capec_id="{{ capec_id }}">
+                                <TTP:Description>{{ capec_description }}</TTP:Description>
+                            </TTP:Attack_Pattern>
+                                {% endfor %}
+                        </TTP:Attack_Patterns>
+                        </TTP:Behavior>
+                </stixCommon:TTP>
+                </incident:Leveraged_TTP>
+            </incident:Leveraged_TTPs>
 			<incident:Related_Observables>
                  <incident:Related_Observable>
                                         <stixCommon:Observable id="{{ namespace }}:Observable-{{ network_observable_id }}">

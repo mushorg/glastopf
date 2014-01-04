@@ -27,13 +27,17 @@ class StixTransformer(object):
     def __init__(self, config):
         template_loader = jinja2.FileSystemLoader(searchpath=os.path.dirname(__file__))
         template_env = jinja2.Environment(loader=template_loader)
-        self.config = config._sections['taxii']
         self.template = template_env.get_template('stix_glastopf_template.xml')
+
+        self.config = config
+        self.capec_mapping = {'sqli': {'CAPEC-66': 'SQL Injection'},
+                              'rfi':  {'CAPEC-193': 'PHP Remote File Inclusion'},
+                              'lfi':  {'CAPEC-252': 'PHP Local File Inclusion'},
+                              #worst case for php_cgi_rce, we need better classification in modules
+                              'php_cgi_rce': {'CAPEC-193': 'PHP Remote File Inclusion'}}
 
     def transform(self, event):
 
-
-        #print event.http_request.headers.get('Connection')
         headers = []
         for w in event.http_request.headers:
             headers.append((w, event.http_request.headers.get(w, "")))
@@ -45,9 +49,9 @@ class StixTransformer(object):
                 'incident_id': event.id,
                 'incident_timestamp': datetime.strptime(event.event_time,"%Y-%m-%d %H:%M:%S").isoformat(),
                 'glastopf_version': glastopf.__version__,
-                'include_contact_info': self.config['include_contact_info'],
-                'contact_name': self.config['contact_name'],
-                'contact_mail': self.config['contact_email'],
+                'include_contact_info': self.config.getboolean('taxii', 'include_contact_info'),
+                'contact_name': self.config.get('taxii', 'contact_name'),
+                'contact_mail': self.config.get('taxii', 'contact_email'),
                 'source_ip': event.source_addr[0],
                 'source_port': str(event.source_addr[1]),
                 'honeypot_ip': event.sensor_addr[0],
@@ -57,8 +61,15 @@ class StixTransformer(object):
                 'http_path': event.http_request.request_path,
                 'http_body': event.http_request.request_body,
                 'http_raw_header': event.http_request.headers,
-                'http_parsed_header': headers
+                'http_parsed_header': headers,
+                'capec': self._pattern_to_capec(event)
         }
-        #TODO: matched_pattern to capec attack pattern
 
         return self.template.render(vars)
+
+    def _pattern_to_capec(self, event):
+        print event.matched_pattern
+        if event.matched_pattern in self.capec_mapping:
+            return self.capec_mapping[event.matched_pattern]
+        else:
+            return {}
