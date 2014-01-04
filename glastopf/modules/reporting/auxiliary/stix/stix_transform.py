@@ -33,8 +33,9 @@ class StixTransformer(object):
         self.capec_mapping = {'sqli': {'CAPEC-66': 'SQL Injection'},
                               'rfi':  {'CAPEC-193': 'PHP Remote File Inclusion'},
                               'lfi':  {'CAPEC-252': 'PHP Local File Inclusion'},
-                              #worst case for php_cgi_rce, we need better classification in modules
-                              'php_cgi_rce': {'CAPEC-193': 'PHP Remote File Inclusion'}}
+                              # worst case for php_cgi_rce, we need better classification in modules
+                              'php_cgi_rce': {'CAPEC-193': 'PHP Remote File Inclusion'},
+                              'login': {'CAPEC-112': 'Brute force'}}
 
     def transform(self, event):
 
