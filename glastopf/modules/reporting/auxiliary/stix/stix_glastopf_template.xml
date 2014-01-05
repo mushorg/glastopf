@@ -2,6 +2,9 @@
 <stix:STIX_Package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xmlns:cybox="http://cybox.mitre.org/cybox-2"
                    xmlns:cyboxCommon="http://cybox.mitre.org/common-2"
+                   xmlns:AddressObj="http://cybox.mitre.org/objects#AddressObject-2"
+                   xmlns:PortObj="http://cybox.mitre.org/objects#PortObject-2"
+                   xmlns:HTTPSessionObj="http://cybox.mitre.org/objects#HTTPSessionObject-2"
                    xmlns:stix="http://stix.mitre.org/stix-1"
                    xmlns:stixCommon="http://stix.mitre.org/common-1"
                    xmlns:incident="http://stix.mitre.org/Incident-1"
@@ -20,12 +23,13 @@
  http://stix.mitre.org/extensions/Address#CIQAddress3.0-1 http://stix.mitre.org/XMLSchema/extensions/address/ciq_address_3.0/1.0.1/ciq_address_3.0.xsd
  http://cybox.mitre.org/cybox-2 http://cybox.mitre.org/XMLSchema/core/2.0.1/cybox_core.xsd
  http://cybox.mitre.org/common-2 http://cybox.mitre.org/XMLSchema/common/2.0.1/cybox_common.xsd
- ttp://cybox.mitre.org/objects#AddressObject-2 http://cybox.mitre.org/XMLSchema/objects/Address/2.0.1/Address_Object.xsd
+ http://cybox.mitre.org/objects#AddressObject-2 http://cybox.mitre.org/XMLSchema/objects/Address/2.0.1/Address_Object.xsd
  http://cybox.mitre.org/objects#PortObject-2 http://cybox.mitre.org/XMLSchema/objects/Port/2.0.1/Port_Object.xsd
  http://cybox.mitre.org/objects#SocketAddressObject-1 http://cybox.mitre.org/XMLSchema/objects/Socket_Address/1.0.1/Socket_Address_Object.xsd
  http://cybox.mitre.org/objects#ArtifactObject-2 http://cybox.mitre.org/XMLSchema/objects/Artifact/2.0.1/Artifact_Object.xsd
  http://cybox.mitre.org/objects#CustomObject-1 http://cybox.mitre.org/XMLSchema/objects/Custom/1.0.1/Custom_Object.xsd
  http://cybox.mitre.org/objects#NetworkConnectionObject-2 http://cybox.mitre.org/XMLSchema/objects/Network_Connection/2.0.1/Network_Connection_Object.xsd
+ http://cybox.mitre.org/objects#HTTPSessionObject-2 http://cybox.mitre.org/XMLSchema/objects/HTTP_Session/2.0.1/HTTP_Session_Object.xsd
  http://stix.mitre.org/TTP-1 http://stix.mitre.org/XMLSchema/ttp/1.0.1/ttp.xsd"
  id="{{ namespace }}:STIXPackage-{{ package_id }}" version="1.0.1">
 	<stix:STIX_Header>
@@ -60,6 +64,7 @@
                     </cyboxCommon:Tool>
                 </stixCommon:Tools>
             </incident:Reporter>
+            {% if capec %}
             <incident:Leveraged_TTPs>
                 <incident:Leveraged_TTP>
                     <stixCommon:TTP xsi:type="TTP:TTPType">
@@ -72,9 +77,10 @@
                                 {% endfor %}
                         </TTP:Attack_Patterns>
                         </TTP:Behavior>
-                </stixCommon:TTP>
+                    </stixCommon:TTP>
                 </incident:Leveraged_TTP>
             </incident:Leveraged_TTPs>
+            {% endif %}
 			<incident:Related_Observables>
                  <incident:Related_Observable>
                                         <stixCommon:Observable id="{{ namespace }}:Observable-{{ network_observable_id }}">
@@ -97,7 +103,7 @@
                                                                         <HTTPSessionObj:HTTP_Client_Request>
                                                                             <HTTPSessionObj:HTTP_Request_Line>
                                                                                 <HTTPSessionObj:HTTP_Method datatype="string">{{ http_method }}</HTTPSessionObj:HTTP_Method>
-                                                                                 <HTTPSessionObj:Value>{{ http_path }}</HTTPSessionObj:Value>
+                                                                                <HTTPSessionObj:Value>{{ http_path }}</HTTPSessionObj:Value>
                                                                                 <HTTPSessionObj:Version>{{ http_version }}</HTTPSessionObj:Version>
                                                                             </HTTPSessionObj:HTTP_Request_Line>
                                                                             <HTTPSessionObj:HTTP_Request_Header>
@@ -108,21 +114,10 @@
                                                                                     {% endfor %}
                                                                                 </HTTPSessionObj:Parsed_Header>
                                                                             </HTTPSessionObj:HTTP_Request_Header>
-                                                                            <HTTPSessionObj:HTTP_Message_Body>{{ http_body }}</HTTPSessionObj:HTTP_Message_Body>
+                                                                            <HTTPSessionObj:HTTP_Message_Body>
+                                                                                <HTTPSessionObj:Message_Body>{{ http_body }}</HTTPSessionObj:Message_Body>
+                                                                            </HTTPSessionObj:HTTP_Message_Body>
                                                                         </HTTPSessionObj:HTTP_Client_Request>
-                                                                        <HTTPSessionObj:HTTP_Server_Response>
-                                                                            <HTTPSessionObj:HTTP_Status_Line>
-                                                                                <HTTPSessionObj:Version>HTTP/1.1</HTTPSessionObj:Version>
-                                                                                <HTTPSessionObj:Status_Code>200</HTTPSessionObj:Status_Code>
-                                                                                <HTTPSessionObj:Reason_Phrase>OK</HTTPSessionObj:Reason_Phrase>
-                                                                            </HTTPSessionObj:HTTP_Status_Line>
-                                                                            <HTTPSessionObj:HTTP_Response_Header>
-                                                                                <HTTPSessionObj:Parsed_Header>
-                                                                                    <HTTPSessionObj:Server>Apache</HTTPSessionObj:Server>
-                                                                                    <HTTPSessionObj:Transfer_Encoding>chunked</HTTPSessionObj:Transfer_Encoding>
-                                                                                </HTTPSessionObj:Parsed_Header>
-                                                                            </HTTPSessionObj:HTTP_Response_Header>
-                                                                        </HTTPSessionObj:HTTP_Server_Response>
                                                                     </HTTPSessionObj:HTTP_Request_Response>
                                                                 </NetworkConnectionObj:HTTP_Session>
                                                             </NetworkConnectionObj:Layer7_Connections>
@@ -130,21 +125,16 @@
                                                 </cybox:Object>
                                         </stixCommon:Observable>
                                 </incident:Related_Observable>
-                 <incident:Related_Observable>
 			</incident:Related_Observables>
             {% if include_contact_info %}
             <incident:Contact>
                 <stixCommon:Identity xsi:type='Identity:CIQIdentity3.0InstanceType'>
                     <Identity:Specification>
                         <ciq:PartyName>
-                            <n:NameLine>
-                                {{ contact_name }}
-                            </n:NameLine>
+                            <n:NameLine>{{ contact_name }}</n:NameLine>
                         </ciq:PartyName>
                         <ciq:ElectronicAddressIdentifiers>
-                            <ciq:ElectronicAddressIdentifier ciq:Type='EMAIL'>
-                            {{ contact_mail }}
-                            </ciq:ElectronicAddressIdentifier>
+                            <ciq:ElectronicAddressIdentifier ciq:Type='EMAIL'>{{ contact_mail }}</ciq:ElectronicAddressIdentifier>
                         </ciq:ElectronicAddressIdentifiers>
                     </Identity:Specification>
                 </stixCommon:Identity>
