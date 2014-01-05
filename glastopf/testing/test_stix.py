@@ -20,9 +20,10 @@ from StringIO import StringIO
 import unittest
 from ConfigParser import ConfigParser
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
-from glastopf.testing.helpers.mitre_stix_validator import STIXValidator
+from glastopf.testing.mitre_stix_validator import STIXValidator
 from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.modules.events.attack import AttackEvent
+
 
 class Test_Stix(unittest.TestCase):
 
