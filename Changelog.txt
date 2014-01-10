@@ -1,6 +1,7 @@
 Glastopf 3.1 (under development)
     * Fixed surf cert IDS logger (Issue #140).
     * Syslog logger now outputs sensor host/port instead of the attacker supplied HOST header.
+    * Added support STIX/TAXII logger.
 
 Glastopf 3.0.8 (release 2013-06-06)
     * Added configurable server banner.
