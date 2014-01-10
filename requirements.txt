@@ -12,3 +12,4 @@ pymongo>=2.4
 MySQL-python
 hpfeeds
 pylibinjection
+libtaxii
