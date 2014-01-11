@@ -12,6 +12,7 @@ before_install:
  - "sudo apt-get -qq update"
  - "sudo apt-get -qq install python-dev gfortran"
  - "sudo apt-get -y -q upgrade"
+ - "sudo service mongodb start"
 # Dependencies for the php sandbox
  - "sudo apt-get -qq install php5 php5-dev"
 # Install hpfeeds
