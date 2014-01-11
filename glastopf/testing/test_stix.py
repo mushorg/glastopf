@@ -24,6 +24,7 @@ import tempfile
 import hashlib
 from ConfigParser import ConfigParser
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
+from glastopf.modules.reporting.auxiliary.log_taxii import TaxiiLogger
 from glastopf.testing.mitre_stix_validator import STIXValidator
 from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.modules.events.attack import AttackEvent
@@ -32,16 +33,27 @@ from glastopf.modules.events.attack import AttackEvent
 class Test_Stix(unittest.TestCase):
 
     def setUp(self):
-        config = ConfigParser()
-        config.add_section('taxii')
-        config.set('taxii', 'enabled', "True")
-        config.set('taxii', 'include_contact_info', "True")
-        config.set('taxii', 'contact_name', 'James Bond')
-        config.set('taxii', 'contact_email', 'a@b.c')
+        self.config = ConfigParser()
+        self.config.add_section('taxii')
+        self.config.set('taxii', 'enabled', "True")
+        self.config.set('taxii', 'include_contact_info', "True")
+        self.config.set('taxii', 'contact_name', 'James Bond')
+        self.config.set('taxii', 'contact_email', 'a@b.c')
+        self.config.set('taxii', 'host', 'taxiitest.mitre.org')
+        self.config.set('taxii', 'port', '80')
+        self.config.set('taxii', 'inbox_path', '/services/inbox/default/')
+        self.config.set('taxii', 'use_auth_basic', 'False')
+        self.config.set('taxii', 'auth_basic_username', 'your_username')
+        self.config.set('taxii', 'auth_basic_password', 'your_password')
+        self.config.set('taxii', 'use_auth_certificate', 'False')
+        self.config.set('taxii', 'auth_certificate_keyfile', 'keyfile_oath')
+        self.config.set('taxii', 'auth_certificate_certfile', 'certfile_path')
+        self.config.set('taxii', 'use_https', 'True')
+
         self.tmpdir = tempfile.mkdtemp()
         self.files_dir = os.path.join(self.tmpdir, 'files')
         os.mkdir(self.files_dir)
-        self.stix_transformer = StixTransformer(config, self.tmpdir)
+        self.stix_transformer = StixTransformer(self.config, self.tmpdir)
         self.xml_validator = STIXValidator(None, True, False)
 
     def tearDown(self):
@@ -103,3 +115,33 @@ class Test_Stix(unittest.TestCase):
         self.assertTrue('<cyboxCommon:Simple_Hash_Value>0e209064ee6949f6e57b3d77d5b1f92c</cyboxCommon:Simple_Hash_Value>' in stix_package_xml)
         self.assertTrue('<cyboxCommon:Simple_Hash_Value>11a2a92d391f10821dbb90f1f7e6ae0f2374231e0ccd611665c95d6d7a3bb43c</cyboxCommon:Simple_Hash_Value>' in stix_package_xml)
         self.assertTrue('<ArtifactObj:Raw_Artifact datatype="string"><![CDATA[PD9waHAgZWNobyAiPHNjcmlwdD5hbGVydCgidGVzdCIpOzwvc2NyaXB0PiI7Pz4=]]></ArtifactObj:Raw_Artifact>' in stix_package_xml)
+
+    def test_taxii_connectivity(self):
+        """
+        Objective: Test if we can send a message to mitre's test TAXII server.
+        """
+        self.config.set('taxii', 'use_https', 'False')
+        test_event = AttackEvent()
+        test_event.source_addr = ('1.2.3.4', 43811)
+        http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
+
+        taxiiLogger = TaxiiLogger(self.tmpdir, self.config)
+        taxii_result = taxiiLogger.insert(test_event)
+        # TaxiiLogger returns false if the message could not be delivered
+        self.assertTrue(taxii_result)
+
+    def test_taxii_connectivity_https(self):
+        """
+        Objective: Test if we can send a message to mitre's test TAXII server using https.
+        """
+        self.config.set('taxii', 'use_https', 'True')
+        test_event = AttackEvent()
+        test_event.source_addr = ('1.2.3.4', 43811)
+        http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
+        test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
+
+        taxiiLogger = TaxiiLogger(self.tmpdir, self.config)
+        taxii_result = taxiiLogger.insert(test_event)
+        # TaxiiLogger returns false if the message could not be delivered
+        self.assertTrue(taxii_result)

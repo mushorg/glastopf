@@ -21,6 +21,7 @@ from ConfigParser import ConfigParser
 import logging
 
 import libtaxii
+import libtaxii.clients as tc
 from libtaxii.messages import ContentBlock, InboxMessage, generate_message_id
 from libtaxii.clients import HttpClient
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
@@ -31,9 +32,12 @@ logger = logging.getLogger(__name__)
 
 
 class TaxiiLogger(BaseLogger):
-    def __init__(self, data_dir, config_file='glastopf.cfg'):
-        config = ConfigParser()
-        config.read(config_file)
+    def __init__(self, data_dir, config='glastopf.cfg'):
+        if isinstance(config, ConfigParser):
+            config = config
+        else:
+            config = ConfigParser()
+            config.read(config)
         self.options = {'enabled': config.getboolean('taxii', 'enabled')}
         self.host = config.get('taxii', 'host')
         self.port = config.getint('taxii', 'port')
@@ -41,6 +45,22 @@ class TaxiiLogger(BaseLogger):
         self.use_https = config.getboolean('taxii', 'use_https')
         self.client = HttpClient()
         self.client.setProxy('noproxy')
+
+        auth_credentials = {'username': config.get('taxii', 'auth_basic_username'),
+                            'password': config.get('taxii', 'auth_basic_password'),
+                            'key_file': config.get('taxii', 'auth_certificate_keyfile'),
+                            'cert_file': config.get('taxii', 'auth_certificate_certfile')}
+        self.client.setAuthCredentials(auth_credentials)
+
+        if config.getboolean('taxii', 'use_auth_basic'):
+            self.client.setAuthType(tc.HttpClient.AUTH_BASIC)
+        elif config.getboolean('taxii', 'use_auth_certificate'):
+            self.client.setAuthType(tc.HttpClient.AUTH_CERT)
+        elif config.getboolean('taxii', 'use_auth_basic') and config.getboolean('taxii', 'use_auth_certificate'):
+            self.client.setAuthType(tc.HttpClient.AUTH_CERT_BASIC)
+        else:
+            self.client.setAuthType(tc.HttpClient.AUTH_NONE)
+
         self.stix_transformer = StixTransformer(config, data_dir)
 
     def insert(self, event):
