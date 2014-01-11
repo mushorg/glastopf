@@ -14,6 +14,8 @@
                    xmlns:ciq="urn:oasis:names:tc:ciq:xpil:3"
                    xmlns:TTP="http://stix.mitre.org/TTP-1"
                    xmlns:n="urn:oasis:names:tc:ciq:xnl:3"
+                   xmlns:ArtifactObj="http://cybox.mitre.org/objects#ArtifactObject-2"
+                   xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2"
                    xmlns:{{ namespace }}="{{ namespace_uri }}"
                    xsi:schemaLocation="
  http://stix.mitre.org/extensions/Identity#CIQIdentity3.0-1 http://stix.mitre.org/XMLSchema/extensions/identity/ciq_identity_3.0/1.0.1/ciq_identity_3.0.xsd
@@ -30,7 +32,9 @@
  http://cybox.mitre.org/objects#CustomObject-1 http://cybox.mitre.org/XMLSchema/objects/Custom/1.0.1/Custom_Object.xsd
  http://cybox.mitre.org/objects#NetworkConnectionObject-2 http://cybox.mitre.org/XMLSchema/objects/Network_Connection/2.0.1/Network_Connection_Object.xsd
  http://cybox.mitre.org/objects#HTTPSessionObject-2 http://cybox.mitre.org/XMLSchema/objects/HTTP_Session/2.0.1/HTTP_Session_Object.xsd
- http://stix.mitre.org/TTP-1 http://stix.mitre.org/XMLSchema/ttp/1.0.1/ttp.xsd"
+ http://cybox.mitre.org/objects#ArtifactObject-2 http://cybox.mitre.org/XMLSchema/objects/Artifact/2.0.1/Artifact_Object.xsd
+ http://stix.mitre.org/TTP-1 http://stix.mitre.org/XMLSchema/ttp/1.0.1/ttp.xsd
+ http://cybox.mitre.org/default_vocabularies-2 http://cybox.mitre.org/XMLSchema/default_vocabularies/2.0.1/cybox_default_vocabularies.xsd"
  id="{{ namespace }}:STIXPackage-{{ package_id }}" version="1.0.1">
 	<stix:STIX_Header>
         <stix:Title>Unauthorized traffic to honeypot</stix:Title>
@@ -64,25 +68,10 @@
                     </cyboxCommon:Tool>
                 </stixCommon:Tools>
             </incident:Reporter>
-            {% if capec %}
-            <incident:Leveraged_TTPs>
-                <incident:Leveraged_TTP>
-                    <stixCommon:TTP xsi:type="TTP:TTPType">
-                        <TTP:Behavior>
-                            <TTP:Attack_Patterns>
-                                {% for capec_id, capec_description in capec.items() %}
-                                <TTP:Attack_Pattern capec_id="{{ capec_id }}">
-                                <TTP:Description>{{ capec_description }}</TTP:Description>
-                            </TTP:Attack_Pattern>
-                                {% endfor %}
-                        </TTP:Attack_Patterns>
-                        </TTP:Behavior>
-                    </stixCommon:TTP>
-                </incident:Leveraged_TTP>
-            </incident:Leveraged_TTPs>
-            {% endif %}
 			<incident:Related_Observables>
                  <incident:Related_Observable>
+                     <!-- Reconsider this - any better way to put the observable into context? -->
+                     <stixCommon:Relationship>HTTP Request</stixCommon:Relationship>
                                         <stixCommon:Observable id="{{ namespace }}:Observable-{{ network_observable_id }}">
                                                 <cybox:Object>
                                                         <cybox:Properties xsi:type="NetworkConnectionObj:NetworkConnectionObjectType">
@@ -125,7 +114,50 @@
                                                 </cybox:Object>
                                         </stixCommon:Observable>
                                 </incident:Related_Observable>
+                                {% if file_content %}
+                                <incident:Related_Observable>
+                                        <!-- Reconsider this - any better way to put the observable into context? -->
+                                        <stixCommon:Relationship>Attacker injected data(RFI)</stixCommon:Relationship>
+                                        <stixCommon:Observable id="{{ namespace }}:Observable-{{ file_observable_object_id }}">
+                                            <cybox:Object id="{{ namespace }}:Object-{{ file_observable_object_id }}">
+                                                <cybox:Properties xsi:type="ArtifactObj:ArtifactObjectType">
+                                                    <ArtifactObj:Hashes>
+                                                        <cyboxCommon:Hash>
+                                                            <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">MD5</cyboxCommon:Type>
+                                                            <cyboxCommon:Simple_Hash_Value>{{ file_hash_md5 }}</cyboxCommon:Simple_Hash_Value>
+                                                        </cyboxCommon:Hash>
+                                                        <cyboxCommon:Hash>
+                                                            <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
+                                                            <cyboxCommon:Simple_Hash_Value>{{ file_hash_sha256 }}</cyboxCommon:Simple_Hash_Value>
+                                                        </cyboxCommon:Hash>
+                                                    </ArtifactObj:Hashes>
+                                                    <ArtifactObj:Packaging>
+                                                        <ArtifactObj:Encoding algorithm="Base64"/>
+                                                    </ArtifactObj:Packaging>
+                                                    <ArtifactObj:Raw_Artifact datatype="string"><![CDATA[{{ file_content }}]]></ArtifactObj:Raw_Artifact>
+                                                </cybox:Properties>
+                                            </cybox:Object>
+                                        </stixCommon:Observable>
+                                </incident:Related_Observable>
+                                {% endif %}
 			</incident:Related_Observables>
+           {% if capec %}
+            <incident:Leveraged_TTPs>
+                <incident:Leveraged_TTP>
+                    <stixCommon:TTP xsi:type="TTP:TTPType">
+                        <TTP:Behavior>
+                            <TTP:Attack_Patterns>
+                                {% for capec_id, capec_description in capec.items() %}
+                                <TTP:Attack_Pattern capec_id="{{ capec_id }}">
+                                <TTP:Description>{{ capec_description }}</TTP:Description>
+                            </TTP:Attack_Pattern>
+                                {% endfor %}
+                        </TTP:Attack_Patterns>
+                        </TTP:Behavior>
+                    </stixCommon:TTP>
+                </incident:Leveraged_TTP>
+            </incident:Leveraged_TTPs>
+            {% endif %}
             {% if include_contact_info %}
             <incident:Contact>
                 <stixCommon:Identity xsi:type='Identity:CIQIdentity3.0InstanceType'>

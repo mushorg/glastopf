@@ -18,6 +18,8 @@
 from datetime import datetime
 import uuid
 import os
+import hashlib
+import base64
 
 import jinja2
 import glastopf
@@ -38,11 +40,12 @@ CYBOX_HEADERS = set(['Accept', 'Accept_Charset', 'Accept_Language', 'Accept_Date
                      'X_ATT_DeviceId', 'X_Wap_Profile'])
 
 class StixTransformer(object):
-    def __init__(self, config):
+    def __init__(self, config, data_dir):
         template_loader = jinja2.FileSystemLoader(searchpath=os.path.dirname(__file__))
         template_env = jinja2.Environment(loader=template_loader, trim_blocks=True, lstrip_blocks=True)
         self.template = template_env.get_template('stix_glastopf_template.xml')
         self.config = config
+        self.files_dir = os.path.join(data_dir, 'files/')
 
 
     def transform(self, event):
@@ -69,6 +72,15 @@ class StixTransformer(object):
                 'http_parsed_header': self._get_parsed_header(event),
                 'capec': self._pattern_to_capec(event)
         }
+
+        if event.file_name is not None:
+            with file(os.path.join(self.files_dir, event.file_name), 'r') as file_handler:
+                file_data = file_handler.read()
+                file_content = base64.b64encode(file_data)
+                jinja_vars['file_content'] = file_content
+                jinja_vars['file_hash_md5'] = hashlib.md5(file_data).hexdigest()
+                jinja_vars['file_hash_sha256'] = hashlib.sha256(file_data).hexdigest()
+                jinja_vars['file_observable_object_id'] = str(uuid.uuid4())
 
         return self.template.render(jinja_vars)
 

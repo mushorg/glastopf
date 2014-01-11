@@ -41,7 +41,7 @@ class TaxiiLogger(BaseLogger):
         self.use_https = config.getboolean('taxii', 'use_https')
         self.client = HttpClient()
         self.client.setProxy('noproxy')
-        self.stix_transformer = StixTransformer(config)
+        self.stix_transformer = StixTransformer(config, data_dir)
 
     def insert(self, event):
         # converts from conpot log format to STIX compatible xml
