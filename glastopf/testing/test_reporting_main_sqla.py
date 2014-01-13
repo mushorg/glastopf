@@ -37,11 +37,13 @@ class TestSQLAlchemy(unittest.TestCase):
         attack_event.event_time = timestamp
         attack_event.matched_pattern = "test_test"
         attack_event.source_addr = ("192.168.1.201", 12345)
-        request = ('GET /breadandbytter.php?a=b HTTP/1.0\r\n'
-        'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n'
-        'ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n'
-        'Connection: keep-alive\r\n\r\n'
-        'some stuff')
+        request = (
+            'GET /breadandbytter.php?a=b HTTP/1.0\r\n'
+            'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n'
+            'ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n'
+            'Connection: keep-alive\r\n\r\n'
+            'some stuff'
+        )
         attack_event.http_request = HTTPHandler(request, None)
 
         #insert attack event
@@ -65,3 +67,7 @@ class TestSQLAlchemy(unittest.TestCase):
         self.assertEqual(entry[4], request)
         #pattern
         self.assertEqual(entry[5], "test_test")
+
+
+if __name__ == '__main__':
+    unittest.main()

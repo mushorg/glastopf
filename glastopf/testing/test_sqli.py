@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
-import datetime
 import os
 import shutil
 import tempfile
@@ -132,3 +131,7 @@ class TestSQLiEmulation(unittest.TestCase):
         self._get_test_request(self.event)
         emulator.handle(self.event)
         self.assertTrue('<script>alert("XSS");</script>' in self.event.http_request.get_response())
+
+
+if __name__ == '__main__':
+    unittest.main()

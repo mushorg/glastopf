@@ -23,7 +23,6 @@ import os
 import tempfile
 import inspect
 import helpers
-import random
 
 from glastopf.modules.handlers.request_handler import RequestHandler
 from glastopf.glastopf import GlastopfHoneypot
@@ -43,8 +42,6 @@ class TestEmulatorIntegration(unittest.TestCase):
         package_directory = os.path.dirname(os.path.abspath(inspect.getfile(RequestHandler)))
         #original data as stored with new glatopf installations
         self.original_data_dir = os.path.join(package_directory, 'emulators/data/')
-        #copy the data to a isolated data directory
-        #shutil.copytree(self.original_data_dir, self.data_dir)
 
     def tearDown(self):
         if os.path.isdir(self.work_dir):
@@ -67,31 +64,6 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.assertEqual(event.http_request.get_response_body(), "dummy response")
         print "Return value: '" + event.http_request.get_response_body() + "'",
         print "equates our expectation."
-
-    # def test_favicon_emulator(self):
-    #     # TODO: Handle existing favicon
-    #     """Objective: Test the favicon.ico handling module.
-    #     Input: http://localhost:8080/favicon.ico
-    #     Expected Result: Returns a favicon for the browser if available.
-    #     Notes: Providing a unique favicon could improve the deception."""
-    #     print "Starting favicon module test"
-    #     event = attack.AttackEvent()
-    #     event.http_request = HTTPHandler('', None)
-    #     event.http_request.path = "/favicon.ico"
-    #     request_handler = RequestHandler(self.data_dir)
-    #
-    #     emulator = request_handler.get_handler(event.matched_pattern)
-    #     print "Sending request to the module: http://localhost:8080/favicon.ico"
-    #     emulator.handle(event)
-    #     with open(os.path.join(self.original_data_dir, 'favicon/favicon.ico'), 'r') as favicon:
-    #         data = favicon.read()
-    #         local_hash = hashlib.md5(data).hexdigest()
-    #         print "Calculate md5 hash from local favicon file:", local_hash
-    #         remote_hash = hashlib.md5(
-    #             event.http_request.get_response_body().hexdigest() )
-    #     self.assertEqual(remote_hash, local_hash)
-    #     print "Return value", remote_hash,
-    #     print "matched expectation."
 
     def test_lfi_emulator(self):
         """Objective: Local File Inclusion module testing.
@@ -264,7 +236,6 @@ class TestEmulatorIntegration(unittest.TestCase):
         print "Return value:", remote_hash
         print "matched a generated attack surface item."
 
-
     def test_phpcgi_source_code_disclosure_emulator(self):
         """Objective: Emulator testing for PHP CGI source code disclosure CVE-2012-1823
         Input: http://localhost:8080/index.php?-s
@@ -316,3 +287,5 @@ class TestEmulatorIntegration(unittest.TestCase):
         self.assertTrue("Zend Extension" in event.http_request.get_response())
 
 
+if __name__ == '__main__':
+    unittest.main()

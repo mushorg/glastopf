@@ -28,6 +28,7 @@ import re
 from collections import defaultdict
 from lxml import etree as et
 
+
 class XmlValidator(object):
     NS_XML_SCHEMA_INSTANCE = "http://www.w3.org/2001/XMLSchema-instance"
     NS_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema"
@@ -37,17 +38,17 @@ class XmlValidator(object):
         self.__use_schemaloc = use_schemaloc
 
     def _get_target_ns(self, fp):
-        '''Returns the target namespace for a schema file
+        """Returns the target namespace for a schema file
 
         Keyword Arguments
         fp - the path to the schema file
-        '''
+        """
         tree = et.parse(fp)
         root = tree.getroot()
         return root.attrib['targetNamespace'] # throw an error if it doesn't exist...we can't validate
 
     def _get_include_base_schema(self, list_schemas):
-        '''Returns the root schema which defines a namespace.
+        """Returns the root schema which defines a namespace.
 
         Certain schemas, such as OASIS CIQ use xs:include statements in their schemas, where two schemas
         define a namespace (e.g., XAL.xsd and XAL-types.xsd). This makes validation difficult, when we
@@ -60,7 +61,7 @@ class XmlValidator(object):
 
         Keyword Arguments:
         list_schemas - a list of schema file paths that all belong to the same namespace
-        '''
+        """
         parent_schema = None
         tag_include = "{%s}include" % (self.NS_XML_SCHEMA)
 
@@ -75,13 +76,13 @@ class XmlValidator(object):
         return parent_schema
 
     def _build_imports(self, schema_dir):
-        '''Given a directory of schemas, this builds a dictionary of schemas that need to be imported
+        """Given a directory of schemas, this builds a dictionary of schemas that need to be imported
         under a wrapper schema in order to enable validation. This returns a dictionary of the form
-        {namespace : path to schema}.
+        {namespace: path to schema}.
 
         Keyword Arguments
         schema_dir - a directory of schema files
-        '''
+        """
         if not schema_dir:
             return None
 
@@ -103,20 +104,20 @@ class XmlValidator(object):
         return imports
 
     def _build_wrapper_schema(self, import_dict):
-        '''Creates a wrapper schema that imports all namespaces defined by the input dictionary. This enables
+        """Creates a wrapper schema that imports all namespaces defined by the input dictionary. This enables
         validation of instance documents that refer to multiple namespaces and schemas
 
         Keyword Arguments
-        import_dict - a dictionary of the form {namespace : path to schema} that will be used to build the list of xs:import statements
-        '''
-        schema_txt = '''<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://stix.mitre.org/tools/validator" elementFormDefault="qualified" attributeFormDefault="qualified"/>'''
+        import_dict - a dictionary of the form {namespace: path to schema} that will be used to build the list of xs:import statements
+        """
+        schema_txt = """<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://stix.mitre.org/tools/validator" elementFormDefault="qualified" attributeFormDefault="qualified"/>"""
         root = et.fromstring(schema_txt)
 
         tag_import = "{%s}import" % (self.NS_XML_SCHEMA)
         for ns, list_schemaloc in import_dict.iteritems():
             schemaloc = list_schemaloc
             schemaloc = schemaloc.replace("\\", "/")
-            attrib = {'namespace' : ns, 'schemaLocation' : schemaloc}
+            attrib = {'namespace': ns, 'schemaLocation': schemaloc}
             el_import = et.Element(tag_import, attrib=attrib)
             root.append(el_import)
 
@@ -135,28 +136,28 @@ class XmlValidator(object):
         return schemaloc_dict
 
     def validate(self, instance_doc):
-        '''Validates an instance documents.
+        """Validates an instance documents.
 
         Returns a tuple of where the first item is the boolean validation
         result and the second is the validation error if there was one.
 
         Keyword Arguments
         instance_doc - a file-like object to be validated
-        '''
+        """
         if not(self.__use_schemaloc or self.__imports):
-            return (False, "No schemas to validate against! Try instantiating XmlValidator with use_schemaloc=True or setting the schema_dir")
+            return False, "No schemas to validate against! Try instantiating XmlValidator with use_schemaloc=True or setting the schema_dir"
 
         try:
             instance_doc = et.parse(instance_doc)
         except et.XMLSyntaxError as e:
-            return (False, str(e))
+            return False, str(e)
 
         instance_root = instance_doc.getroot()
         if self.__use_schemaloc:
             try:
                 required_imports = self._extract_schema_locations(instance_root)
             except KeyError as e:
-                return (False, "No schemaLocation attribute set on instance document. Unable to validate")
+                return False, "No schemaLocation attribute set on instance document. Unable to validate"
         else:
             required_imports = {}
             for prefix, ns in instance_root.nsmap.iteritems():
@@ -165,20 +166,20 @@ class XmlValidator(object):
                     required_imports[ns] = schemaloc
 
         if not required_imports:
-            return (False, "Unable to determine schemas to validate against")
+            return False, "Unable to determine schemas to validate against"
 
         wrapper_schema_doc = self._build_wrapper_schema(import_dict=required_imports)
         xmlschema = et.XMLSchema(wrapper_schema_doc)
 
         try:
             xmlschema.assertValid(instance_doc)
-            return (True, None)
+            return True, None
         except Exception as e:
-            return (False, str(e))
+            return False, str(e)
 
 
 class STIXValidator(XmlValidator):
-    '''Schema validates STIX v1.0 documents and checks best practice guidance'''
+    """Schema validates STIX v1.0 documents and checks best practice guidance"""
     __stix_version__ = "1.0"
 
     PREFIX_STIX_CORE = 'stix'
@@ -189,16 +190,16 @@ class STIXValidator(XmlValidator):
     NS_STIX_INDICATOR = "http://stix.mitre.org/Indicator-2"
     NS_CYBOX_CORE = "http://cybox.mitre.org/cybox-2"
 
-    NS_MAP = {PREFIX_CYBOX_CORE : NS_CYBOX_CORE,
-              PREFIX_STIX_CORE : NS_STIX_CORE,
-              PREFIX_STIX_INDICATOR : NS_STIX_INDICATOR}
+    NS_MAP = {PREFIX_CYBOX_CORE: NS_CYBOX_CORE,
+              PREFIX_STIX_CORE: NS_STIX_CORE,
+              PREFIX_STIX_INDICATOR: NS_STIX_INDICATOR}
 
     def __init__(self, schema_dir=None, use_schemaloc=False, best_practices=False):
         super(STIXValidator, self).__init__(schema_dir, use_schemaloc)
         self.best_practices = best_practices
 
     def _check_id_presence_and_format(self, instance_doc):
-        '''Checks that the core STIX/CybOX constructs in the STIX instance document
+        """Checks that the core STIX/CybOX constructs in the STIX instance document
         have ids and that each id is formatted as [ns_prefix]:[object-type]-[GUID].
 
         Returns a dictionary of lists. Each dictionary has the following keys:
@@ -207,9 +208,9 @@ class STIXValidator(XmlValidator):
 
         Keyword Arguments
         instance_doc - an etree Element object for a STIX instance document
-        '''
-        return_dict = {'no_id' : [],
-                       'format' : []}
+        """
+        return_dict = {'no_id': [],
+                       'format': []}
 
         elements_to_check = ['stix:Campaign',
                              'stix:Course_Of_Action',
@@ -238,7 +239,7 @@ class STIXValidator(XmlValidator):
         return return_dict
 
     def _check_duplicate_ids(self, instance_doc):
-        '''Looks for duplicate ids in a STIX instance document.
+        """Looks for duplicate ids in a STIX instance document.
 
         Returns a dictionary of lists. Each dictionary uses the offending
         id as a key, which points to a list of etree Element nodes which
@@ -246,7 +247,7 @@ class STIXValidator(XmlValidator):
 
         Keyword Arguments
         instance_doc - an etree.Element object for a STIX instance document
-        '''
+        """
         dict_id_nodes = defaultdict(list)
         dup_dict = {}
         xpath_all_nodes_with_ids = "//*[@id]"
@@ -262,12 +263,12 @@ class STIXValidator(XmlValidator):
         return dup_dict
 
     def _check_idref_resolution(self, instance_doc):
-        '''Checks that all idref attributes in the input document resolve to a local element.
+        """Checks that all idref attributes in the input document resolve to a local element.
         Returns a list etree.Element nodes with unresolveable idrefs.
 
         Keyword Arguments
         instance_doc - an etree.Element object for a STIX instance document
-        '''
+        """
         list_unresolved_ids = []
         xpath_all_idrefs = "//*[@idref]"
         xpath_all_ids = "//@id"
@@ -282,12 +283,12 @@ class STIXValidator(XmlValidator):
         return list_unresolved_ids
 
     def _check_idref_with_content(self, instance_doc):
-        '''Looks for elements that have an idref attribute set, but also have content.
+        """Looks for elements that have an idref attribute set, but also have content.
         Returns a list of etree.Element nodes.
 
         Keyword Arguments:
         instance_doc - an etree.Element object for a STIX instance document
-        '''
+        """
         list_nodes = []
         xpath = "//*[@idref]"
         nodes = instance_doc.xpath(xpath)
@@ -299,7 +300,7 @@ class STIXValidator(XmlValidator):
         return list_nodes
 
     def _check_indicator_practices(self, instance_doc):
-        '''Looks for STIX Indicators that are missing a Title, Description, Type, Valid_Time_Position,
+        """Looks for STIX Indicators that are missing a Title, Description, Type, Valid_Time_Position,
         Indicated_TTP, and/or Confidence
 
         Returns a list of dictionaries. Each dictionary has the following keys:
@@ -309,14 +310,14 @@ class STIXValidator(XmlValidator):
 
         Keyword Arguments
         instance_doc - etree Element for a STIX instance document
-        '''
+        """
         list_indicators = []
         xpath = "//%s:Indicator | %s:Indicator" % (self.PREFIX_STIX_CORE, self.PREFIX_STIX_INDICATOR)
 
         nodes = instance_doc.xpath(xpath, namespaces=self.NS_MAP)
         for node in nodes:
             dict_indicator = defaultdict(list)
-            if not node.attrib.get('idref'): # if this is not an idref node, look at its content
+            if not node.attrib.get('idref'):  # if this is not an idref node, look at its content
                 if node.find('{%s}Title' % (self.NS_STIX_INDICATOR)) is None:
                     dict_indicator['missing'].append('Title')
                 if node.find('{%s}Description' % (self.NS_STIX_INDICATOR)) is None:
@@ -343,9 +344,8 @@ class STIXValidator(XmlValidator):
         else:
             return None
 
-
     def check_best_practices(self, instance_doc):
-        '''Checks that a STIX instance document is following best practice guidance.
+        """Checks that a STIX instance document is following best practice guidance.
 
         Looks for the following:
         + idrefs that do not resolve locally
@@ -358,7 +358,7 @@ class STIXValidator(XmlValidator):
 
         Keyword Arguments
         instance_doc - a file-like object for a STIX instance document
-        '''
+        """
         instance_doc.seek(0)
         tree = et.parse(instance_doc)
         root = tree.getroot()
@@ -370,16 +370,16 @@ class STIXValidator(XmlValidator):
         list_idref_with_content = self._check_idref_with_content(root)
         list_indicators = self._check_indicator_practices(root)
 
-        return {'root_element' : root_element,
-                'unresolved_idrefs' : list_unresolved_idrefs,
-                'duplicate_ids' : dict_duplicate_ids,
-                'missing_ids' : dict_presence_and_format['no_id'],
-                'id_format' : dict_presence_and_format['format'],
-                'idref_with_content' : list_idref_with_content,
-                'indicator_suggestions' : list_indicators }
+        return {'root_element': root_element,
+                'unresolved_idrefs': list_unresolved_idrefs,
+                'duplicate_ids': dict_duplicate_ids,
+                'missing_ids': dict_presence_and_format['no_id'],
+                'id_format': dict_presence_and_format['format'],
+                'idref_with_content': list_idref_with_content,
+                'indicator_suggestions': list_indicators }
 
     def validate(self, instance_doc):
-        '''Validates a STIX document and checks best practice guidance if STIXValidator
+        """Validates a STIX document and checks best practice guidance if STIXValidator
         was initialized with best_practices=True.
 
         Best practices will not be checked if the document is schema-invalid.
@@ -388,7 +388,7 @@ class STIXValidator(XmlValidator):
 
         Keyword Arguments
         instance_doc - a file-like object for a STIX instance document
-        '''
+        """
         (isvalid, validation_error) = super(STIXValidator, self).validate(instance_doc)
 
         if self.best_practices and isvalid:
@@ -396,4 +396,4 @@ class STIXValidator(XmlValidator):
         else:
             best_practice_warnings = None
 
-        return (isvalid, validation_error, best_practice_warnings)
+        return isvalid, validation_error, best_practice_warnings

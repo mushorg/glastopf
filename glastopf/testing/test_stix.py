@@ -15,14 +15,16 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from StringIO import StringIO
-
 import unittest
 import os
 import shutil
 import tempfile
 import hashlib
+
+from StringIO import StringIO
+
 from ConfigParser import ConfigParser
+
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
 from glastopf.modules.reporting.auxiliary.log_taxii import TaxiiLogger
 from glastopf.testing.mitre_stix_validator import STIXValidator
@@ -145,3 +147,7 @@ class Test_Stix(unittest.TestCase):
         taxii_result = taxiiLogger.insert(test_event)
         # TaxiiLogger returns false if the message could not be delivered
         self.assertTrue(taxii_result)
+
+
+if __name__ == '__main__':
+    unittest.main()

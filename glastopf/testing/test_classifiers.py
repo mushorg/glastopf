@@ -150,3 +150,5 @@ class TestClassifier(unittest.TestCase):
             matched_pattern = self.requestClassifier.classify_request(http_handler)
             self.assertTrue(matched_pattern == 'phpinfo', '{0} did not match expected pattern'.format(matched_pattern))
 
+if __name__ == '__main__':
+    unittest.main()

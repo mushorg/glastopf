@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
-import socket
 import tempfile
 import shutil
 import os
@@ -101,3 +100,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
                 os.remove(config_file)
             if os.path.isfile(db_file):
                 os.remove(db_file)
+
+
+if __name__ == '__main__':
+    unittest.main()

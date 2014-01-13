@@ -53,6 +53,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         Returns an instance of dork_page_generator.
         """
 
+        engine = None
         if dbtype == "sql":
             engine = create_engine('sqlite:///')
             #Create mock of empty main db
@@ -73,7 +74,6 @@ class TestEmulatorDorkList(unittest.TestCase):
         Input: Connection to main glastopf database with 500 entries and the pattern 'rfi'.
         Expected Results: 10 data entries in total.
         """
-        pages_dir = tempfile.mkdtemp()
 
         (db, engine, dork_generator) = self.dork_generator_chain('sql')
         dork_generator.regular_generate_dork(0)
@@ -119,7 +119,6 @@ class TestEmulatorDorkList(unittest.TestCase):
         print len(current_pages),
         print "equates our expectation."
 
-
     def test_dork_page_content(self):
         """Objective: Testing the attack surfaces content.
         Input: An attack surface sample. The structure is defined in a template.
@@ -160,3 +159,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         self.assertTrue(len(overlap) == 0)
         print "There are", len(overlap), "overlapping dork pages",
         print "which equates our expectation."
+
+
+if __name__ == '__main__':
+    unittest.main()

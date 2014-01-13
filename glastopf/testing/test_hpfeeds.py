@@ -25,6 +25,7 @@ import glastopf.modules.events.attack as attack
 from glastopf.modules.reporting.auxiliary.log_hpfeeds import HPFeedsLogger
 from glastopf.modules.HTTP.handler import HTTPHandler
 
+
 class Test_Loggers(unittest.TestCase):
 
     def setUp(self):
@@ -72,3 +73,7 @@ class Test_Loggers(unittest.TestCase):
         logger.insert(event)
         error_message = logger.hpc.wait(2)
         self.assertIsNone(error_message)
+
+
+if __name__ == '__main__':
+    unittest.main()

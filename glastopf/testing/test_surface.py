@@ -18,7 +18,6 @@
 import os
 import tempfile
 import shutil
-
 import unittest
 
 from glastopf.glastopf import GlastopfHoneypot
@@ -38,3 +37,7 @@ class TestSurfaceCreation(unittest.TestCase):
     def test_template(self):
         surface_creator = create_surface.SurfaceCreator(data_dir=self.datadir)
         print surface_creator.get_index()
+
+
+if __name__ == '__main__':
+    unittest.main()

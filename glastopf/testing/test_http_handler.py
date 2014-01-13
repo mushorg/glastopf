@@ -41,3 +41,7 @@ class TestHTTPParsing(unittest.TestCase):
         get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_handler = HTTPHandler(get_request, None, server_version="LEET_Server/0.1", sys_version="LEET_OS/1.0")
         self.assertEqual("LEET_Server/0.1 LEET_OS/1.0", http_handler.version_string())
+
+
+if __name__ == '__main__':
+    unittest.main()

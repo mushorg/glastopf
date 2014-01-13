@@ -27,9 +27,7 @@ class TestMnemosyneService(unittest.TestCase):
         """
 
         sut = mnem_service.Mnem_Service()
-
         dorks = sut.get_dorks(username='glastopf_test', password='glastopf_test', limit=10)
-
         self.assertTrue(len(dorks) > 0)
 
     def test_error_login(self):
@@ -40,8 +38,9 @@ class TestMnemosyneService(unittest.TestCase):
 
         #using wrong username/pass to simulate an error
         sut = mnem_service.Mnem_Service()
-
         dorks = sut.get_dorks(username='glastopf_test_invalid', password='glastopf_test_invalid')
-
         self.assertTrue(len(dorks) == 0)
 
+
+if __name__ == '__main__':
+    unittest.main()

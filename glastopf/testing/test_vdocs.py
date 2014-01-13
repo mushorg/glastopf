@@ -62,3 +62,7 @@ class TestVirtualDocs(unittest.TestCase):
         self.assertNotEqual(pwd_entry1, pwd_entry2)
         self.assertNotEqual(shd_entry1, shd_entry2)
         self.assertNotEqual(grp_entry1, grp_entry2)
+
+
+if __name__ == '__main__':
+    unittest.main()

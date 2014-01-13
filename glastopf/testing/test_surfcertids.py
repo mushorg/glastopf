@@ -22,7 +22,7 @@ import tempfile
 
 from glastopf.testing import helpers
 from glastopf.modules.events.attack import AttackEvent
-from glastopf.modules.HTTP.handler import HTTPHandler, HTTPError
+from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.modules.reporting.auxiliary.log_surfcertids import LogSURFcertIDS
 
 
@@ -34,7 +34,6 @@ class Test_Loggers(unittest.TestCase):
     def tearDown(self):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
-
 
     def test_surfcertids(self):
         """Objective: Testing if a basic event can be transmitted using hpfriends."""
@@ -65,11 +64,19 @@ class connectionMock(object):
     class cursorMock(object):
         def execute(self, sql_statement, something):
             pass
+
         def fetchall(self):
             return [1, 2, 3, 4]
+
         def close(self):
             pass
+
     def commit(self):
         pass
+
     def cursor(self):
         return self.cursorMock()
+
+
+if __name__ == '__main__':
+    unittest.main()

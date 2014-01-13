@@ -4,7 +4,6 @@ import bson
 import warnings
 import os
 import uuid
-import json
 from subprocess import call
 
 file_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +55,6 @@ def populate_main_sql_testdatabase(engine):
         new_item = {"source": "{0}:{1}".format(item["source"][0], item["source"][1]),
                     "request_url": item["request"]["url"],
                     "pattern": item["pattern"]}
-
 
         insert_dicts.append(new_item)
 
@@ -160,7 +158,7 @@ def gen_config(conn_string):
         "contact_name = ...\n",
         "contact_email = ...\n",
         "[misc]\n",
-	    "banner = Apache/2.0.48\n",
+        "banner = Apache/2.0.48\n",
         "[main-database]\n",
         "enabled = True\n",
         "connection_string = {0}\n".format(conn_string),

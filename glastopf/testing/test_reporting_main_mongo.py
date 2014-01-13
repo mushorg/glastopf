@@ -20,11 +20,9 @@ import warnings
 from datetime import datetime
 
 from glastopf.modules.reporting.main import log_mongodb
-from sqlalchemy import create_engine
 from pymongo import MongoClient, uri_parser
 import glastopf.modules.events.attack as attack
 from glastopf.modules.HTTP.handler import HTTPHandler
-from pymongo import MongoClient
 from glastopf.testing import helpers
 
 
@@ -49,7 +47,6 @@ class TestMongoMainDatbase(unittest.TestCase):
             "some stuff")
             attack_event.http_request = HTTPHandler(request, None)
 
-
             maindb.insert(attack_event)
 
             with warnings.catch_warnings(record=True):
@@ -69,3 +66,7 @@ class TestMongoMainDatbase(unittest.TestCase):
 
         finally:
             helpers.delete_mongo_testdata(conn_string)
+
+
+if __name__ == '__main__':
+    unittest.main()
