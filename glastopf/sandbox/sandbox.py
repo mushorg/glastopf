@@ -28,6 +28,8 @@ logger = logging.getLogger(__name__)
 
 
 def sandbox(script, secs, data_dir):
+    proc = None
+    stdout_value = ""
     try:
         proc = gevent.subprocess.Popen(
             ["php", os.path.join(data_dir, "sandbox.php"), os.path.join(data_dir, "files", script)],
@@ -38,13 +40,12 @@ def sandbox(script, secs, data_dir):
         )
     except Exception as e:
         logger.exception("Error executing the sandbox:".format(e))
-        raise e
     try:
         with Timeout(secs, False):
-            stdout_value, stderr_value = proc.communicate()
+            if proc:
+                stdout_value, stderr_value = proc.communicate()
     except Exception as e:
         logger.exception("Sandbox communication error:".format(e))
-        raise e
     else:
         logger.info("File successfully parsed with sandbox.")
     return stdout_value
