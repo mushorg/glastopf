@@ -32,12 +32,12 @@ logger = logging.getLogger(__name__)
 
 
 class TaxiiLogger(BaseLogger):
-    def __init__(self, data_dir, config='glastopf.cfg'):
-        if isinstance(config, ConfigParser):
-            config = config
+    def __init__(self, data_dir, configFile='glastopf.cfg'):
+        if isinstance(configFile, ConfigParser):
+            config = configFile
         else:
             config = ConfigParser()
-            config.read(config)
+            config.read(configFile)
         self.options = {'enabled': config.getboolean('taxii', 'enabled')}
         self.host = config.get('taxii', 'host')
         self.port = config.getint('taxii', 'port')
