@@ -34,7 +34,7 @@ from modules.HTTP.handler import HTTPHandler
 import modules.HTTP.method_handler as method_handler
 import modules.events.attack as attack
 from modules.handlers.request_handler import RequestHandler
-from modules import logging_handler
+from modules import logging_handler, vdocs
 import shutil
 import modules.privileges as privileges
 #import modules.processing.profiler as profiler
@@ -55,10 +55,12 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 class GlastopfHoneypot(object):
     def __init__(self, config="glastopf.cfg", work_dir=os.getcwd()):
         """
-        :param work_dir: directory used for data storage and various data files, must be writeable by glastopf. Default: os.getcwd()
-        :param config: path to the glastopf configuration file. Default: glastopf.cfg
+        :param work_dir: directory used for data storage and various data files, must be writeable by glastopf.
+            Default: os.getcwd()
+        :param config: path to the glastopf configuration file.
+            Default: glastopf.cfg
         """
-        logger.info('Initializing Glastopf {0} using "{1}" as work directory.'.format(__version__,work_dir))
+        logger.info('Initializing Glastopf {0} using "{1}" as work directory.'.format(__version__, work_dir))
         self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
 
@@ -68,7 +70,7 @@ class GlastopfHoneypot(object):
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
- 	        "banner": conf_parser.get("misc", "banner").encode('latin1'),
+            "banner": conf_parser.get("misc", "banner").encode('latin1'),
         }
 
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
@@ -134,7 +136,7 @@ class GlastopfHoneypot(object):
 
         mnemosyne_service = None
         if conf_parser.has_option('dork-db', 'mnem_service'):
-            if conf_parser.getboolean('dork-db', 'mnem_service') == True:
+            if conf_parser.getboolean('dork-db', 'mnem_service'):
                 mnemosyne_service = mnem_service.Mnem_Service()
 
         return dork_page_generator.DorkPageGenerator(self.dorkdb,
@@ -150,13 +152,13 @@ class GlastopfHoneypot(object):
             if connection_string.startswith("mongodb://"):
                 maindb = log_mongodb.Database(connection_string)
                 dorkdb = database_mongo.Database(connection_string)
-                return (maindb, dorkdb)
+                return maindb, dorkdb
             elif connection_string.startswith(("sqlite", "mysql",
                                                "oracle", "postgresql")):
                 sqla_engine = create_engine(connection_string)
                 maindb = log_sql.Database(sqla_engine)
                 dorkdb = database_sqla.Database(sqla_engine)
-                return (maindb, dorkdb)
+                return maindb, dorkdb
             else:
                 logger.error("Invalid connection string.")
                 sys.exit(1)
@@ -168,44 +170,7 @@ class GlastopfHoneypot(object):
             maindb = log_sql.Database(sqla_engine)
             dorkdb = database_sqla.Database(sqla_engine)
             #disable usage of main logging datbase
-            return (None, dorkdb)
-
-    @staticmethod
-    def _get_entry(user_id):
-        # Random username of 3 characters
-        name = "".join([random.choice(string.letters[:26]) for i in xrange(3)])
-        gid = user_id
-        uid = user_id
-        g = "\n" + name + ":x:" + str(gid) + ":"
-        p = "\n" + name + ":x:" + str(uid) + ":" + str(gid) + "::" + "/home/" + name + \
-            "/:/bin/sh"
-        # If we want to, we could also give a password hash in place of '*'
-        s = "\n" + name + ":*:6723:0:99999:7:::"
-        return p, s, g
-
-    @staticmethod
-    def randomize_vdocs(vpath):
-        # For now, we'll only change the passwd, shadow and group files.
-        pwd_path = os.path.join(vpath, 'linux/etc/passwd')
-        shd_path = os.path.join(vpath, 'linux/etc/shadow')
-        grp_path = os.path.join(vpath, 'linux/etc/group')
-
-        num_entries = random.randint(1, 10) # number of random entries
-
-        pwd = open(pwd_path, "a")
-        shd = open(shd_path, "a")
-        grp = open(grp_path, "a")
-        for i in xrange(num_entries):
-            # Possible duplication of user id, but very low probability
-            user_id = random.randint(1000, 1500)
-            pwd_entry, shd_entry, grp_entry = GlastopfHoneypot._get_entry(user_id)
-
-            pwd.write(pwd_entry)
-            shd.write(shd_entry)
-            grp.write(grp_entry)
-        pwd.close()
-        shd.close()
-        grp.close()
+            return None, dorkdb
 
     @staticmethod
     def prepare_sandbox(work_dir):
@@ -254,16 +219,16 @@ class GlastopfHoneypot(object):
             dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
-            # Randomize the files in virtualdocs folder
-        GlastopfHoneypot.randomize_vdocs(os.path.join(work_dir, 'data/virtualdocs/'))
+        # Randomize the files in virtualdocs folder
+        vdocs.randomize_vdocs(os.path.join(work_dir, 'data/virtualdocs/'))
         GlastopfHoneypot.prepare_sandbox(work_dir)
 
     @staticmethod
     def _ignore_copy_files(path, content):
         to_ignore = []
-        for file in content:
-            if file in ('.placeholder', '.git'):
-                to_ignore.append(file)
+        for file_name in content:
+            if file_name in ('.placeholder', '.git'):
+                to_ignore.append(file_name)
         return to_ignore
 
     def _handle_proxy(self, attack_event, addr):
@@ -283,7 +248,7 @@ class GlastopfHoneypot(object):
         attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
 
         if self.options["proxy_enabled"] == "True":
-            self._handle_proxy(attack_event)
+            self._handle_proxy(attack_event, addr)
         else:
             attack_event.source_addr = addr
         logger.info("{0} requested {1} {2} on {3}:{4}".format(
