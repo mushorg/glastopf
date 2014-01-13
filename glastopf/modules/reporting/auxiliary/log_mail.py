@@ -16,25 +16,24 @@
 
 
 import smtplib
+
 from email.mime.text import MIMEText
 
-from ConfigParser import ConfigParser
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogMail(BaseLogger):
     def __init__(self, data_dir, config="glastopf.cfg"):
-        conf_parser = ConfigParser()
-        conf_parser.read(config)
+        BaseLogger.__init__(self, config)
         self.options = {
-            "enabled": conf_parser.getboolean("mail", "enabled"),
-            "user": conf_parser.get("mail", "user"),
-            "pwd": conf_parser.get("mail", "pwd"),
-            "mail_from": conf_parser.get("mail", "mail_from"),
-            "mail_to": conf_parser.get("mail", "mail_to"),
-            "smtp_host": conf_parser.get("mail", "smtp_host"),
-            "smtp_port": conf_parser.get("mail", "smtp_port"),
-            "patterns": conf_parser.get("mail", "patterns"),
+            "enabled": self.config.getboolean("mail", "enabled"),
+            "user": self.config.get("mail", "user"),
+            "pwd": self.config.get("mail", "pwd"),
+            "mail_from": self.config.get("mail", "mail_from"),
+            "mail_to": self.config.get("mail", "mail_to"),
+            "smtp_host": self.config.get("mail", "smtp_host"),
+            "smtp_port": self.config.get("mail", "smtp_port"),
+            "patterns": self.config.get("mail", "patterns"),
         }
 
     def _build_mail_body_event(self, attack_event):
@@ -71,4 +70,3 @@ class LogMail(BaseLogger):
         # only if a specified matched pattern is identified
         if attack_event.matched_pattern in patterns.split(","):
             self.send_mail(attack_event)
-

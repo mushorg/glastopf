@@ -15,10 +15,16 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+from ConfigParser import ConfigParser
+
 
 class BaseLogger(object):
-    def __init__(self):
-        pass
+    def __init__(self, config):
+        if not isinstance(config, ConfigParser):
+            self.config = ConfigParser()
+            self.config.read(config)
+        else:
+            self.config = config
 
-    def insert(self):
+    def insert(self, event):
         pass

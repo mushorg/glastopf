@@ -17,18 +17,15 @@
 
 import logging
 
-from ConfigParser import ConfigParser
-
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogSyslog(BaseLogger):
     def __init__(self, data_dir, config="glastopf.cfg"):
-        conf_parser = ConfigParser()
-        conf_parser.read(config)
+        BaseLogger.__init__(self, config)
         self.options = {
-            "enabled": conf_parser.getboolean("syslog", "enabled"),
-            "socket": conf_parser.get("syslog", "socket"),
+            "enabled": self.config.getboolean("syslog", "enabled"),
+            "socket": self.config.get("syslog", "socket"),
         }
 
         if self.options['enabled']:

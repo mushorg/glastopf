@@ -16,7 +16,6 @@
 import json
 import logging
 import os
-from ConfigParser import ConfigParser
 import base64
 
 import hpfeeds
@@ -29,25 +28,22 @@ logger = logging.getLogger(__name__)
 class HPFeedsLogger(BaseLogger):
 
     def __init__(self, data_dir, config="glastopf.cfg", reconnect=True):
+        BaseLogger.__init__(self, config)
         self.files_dir = os.path.join(data_dir, 'files/')
 
         self.enabled = False
         #legacy
         self.options = {'enabled': self.enabled}
-
-        conf_parser = ConfigParser()
-        conf_parser.read(config)
-
-        if conf_parser.getboolean("hpfeed", "enabled"):
-            host = conf_parser.get("hpfeed", "host")
-            port = int(conf_parser.getint("hpfeed", "port"))
-            ident = conf_parser.get("hpfeed", "ident")
-            secret = conf_parser.get("hpfeed", "secret")
+        if self.config.getboolean("hpfeed", "enabled"):
+            host = self.config.get("hpfeed", "host")
+            port = int(self.config.getint("hpfeed", "port"))
+            ident = self.config.get("hpfeed", "ident")
+            secret = self.config.get("hpfeed", "secret")
             self.enabled = True
             #legacy
             self.options = {'enabled': self.enabled}
-            self.chan_files = conf_parser.get("hpfeed", "chan_files")
-            self.chan_events = conf_parser.get("hpfeed", "chan_events")
+            self.chan_files = self.config.get("hpfeed", "chan_files")
+            self.chan_events = self.config.get("hpfeed", "chan_events")
             self.hpc = hpfeeds.new(host, port, ident, secret, reconnect=reconnect)
 
     def insert(self, attack_event):

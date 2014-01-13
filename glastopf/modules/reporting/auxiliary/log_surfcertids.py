@@ -15,7 +15,6 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from ConfigParser import ConfigParser
 import logging
 
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
@@ -57,15 +56,14 @@ class LogSURFcertIDS(BaseLogger):
     """
 
     def __init__(self, data_dir, config="glastopf.cfg"):
-        conf_parser = ConfigParser()
-        conf_parser.read(config)
+        BaseLogger.__init__(self, config)
         self.options = {
-            "enabled": conf_parser.getboolean("surfcertids", "enabled"),
-            "host": conf_parser.get("surfcertids", "host"),
-            "port": conf_parser.getint("surfcertids", "port"),
-            "user": conf_parser.get("surfcertids", "user"),
-            "password": conf_parser.get("surfcertids", "password"),
-            "database": conf_parser.get("surfcertids", "database"),
+            "enabled": self.config.getboolean("surfcertids", "enabled"),
+            "host": self.config.get("surfcertids", "host"),
+            "port": self.config.getint("surfcertids", "port"),
+            "user": self.config.get("surfcertids", "user"),
+            "password": self.config.get("surfcertids", "password"),
+            "database": self.config.get("surfcertids", "database"),
             "atype": 3,
             "ptype_request": 60,
             "ptype_referer": 61,
@@ -73,7 +71,7 @@ class LogSURFcertIDS(BaseLogger):
             "ptype_host": 63,
             "ptype_pattern": 64,
         }
-        if self.options['enabled'] == True:
+        if self.options['enabled']:
             try:
                 import psycopg2
 
@@ -90,21 +88,17 @@ class LogSURFcertIDS(BaseLogger):
             except Exception as e:
                 logger.exception("Unable to connect to the SURFcert IDS logserver: {0}".format(e))
                 self.options['enabled'] = False
-            else:
-                return None
-        else:
-            return None
 
     def insert(self, attack_event):
         """
         Inserts an attack into the SURFcert IDS database, using the
         stored procedures originally made for Dionaea.
         """
-        if (attack_event.matched_pattern == 'unknown'):
+        if attack_event.matched_pattern == 'unknown':
             severity = 0
-        elif (attack_event.matched_pattern == 'robots_txt'):
+        elif attack_event.matched_pattern == 'robots_txt':
             severity = 0
-        elif (attack_event.matched_pattern == 'style_css'):
+        elif attack_event.matched_pattern == 'style_css':
             severity = 0
         else:
             severity = 1

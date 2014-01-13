@@ -15,15 +15,13 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from datetime import datetime
-import uuid
-from ConfigParser import ConfigParser
 import logging
 
 import libtaxii
 import libtaxii.clients as tc
 from libtaxii.messages import ContentBlock, InboxMessage, generate_message_id
 from libtaxii.clients import HttpClient
+
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
@@ -32,36 +30,32 @@ logger = logging.getLogger(__name__)
 
 
 class TaxiiLogger(BaseLogger):
-    def __init__(self, data_dir, configFile='glastopf.cfg'):
-        if isinstance(configFile, ConfigParser):
-            config = configFile
-        else:
-            config = ConfigParser()
-            config.read(configFile)
-        self.options = {'enabled': config.getboolean('taxii', 'enabled')}
-        self.host = config.get('taxii', 'host')
-        self.port = config.getint('taxii', 'port')
-        self.inbox_path = config.get('taxii', 'inbox_path')
-        self.use_https = config.getboolean('taxii', 'use_https')
+    def __init__(self, data_dir, config='glastopf.cfg'):
+        BaseLogger.__init__(self, config)
+        self.options = {'enabled': self.config.getboolean('taxii', 'enabled')}
+        self.host = self.config.get('taxii', 'host')
+        self.port = self.config.getint('taxii', 'port')
+        self.inbox_path = self.config.get('taxii', 'inbox_path')
+        self.use_https = self.config.getboolean('taxii', 'use_https')
         self.client = HttpClient()
         self.client.setProxy('noproxy')
 
-        auth_credentials = {'username': config.get('taxii', 'auth_basic_username'),
-                            'password': config.get('taxii', 'auth_basic_password'),
-                            'key_file': config.get('taxii', 'auth_certificate_keyfile'),
-                            'cert_file': config.get('taxii', 'auth_certificate_certfile')}
+        auth_credentials = {'username': self.config.get('taxii', 'auth_basic_username'),
+                            'password': self.config.get('taxii', 'auth_basic_password'),
+                            'key_file': self.config.get('taxii', 'auth_certificate_keyfile'),
+                            'cert_file': self.config.get('taxii', 'auth_certificate_certfile')}
         self.client.setAuthCredentials(auth_credentials)
 
-        if config.getboolean('taxii', 'use_auth_basic'):
+        if self.config.getboolean('taxii', 'use_auth_basic'):
             self.client.setAuthType(tc.HttpClient.AUTH_BASIC)
-        elif config.getboolean('taxii', 'use_auth_certificate'):
+        elif self.config.getboolean('taxii', 'use_auth_certificate'):
             self.client.setAuthType(tc.HttpClient.AUTH_CERT)
-        elif config.getboolean('taxii', 'use_auth_basic') and config.getboolean('taxii', 'use_auth_certificate'):
+        elif self.config.getboolean('taxii', 'use_auth_basic') and self.config.getboolean('taxii', 'use_auth_certificate'):
             self.client.setAuthType(tc.HttpClient.AUTH_CERT_BASIC)
         else:
             self.client.setAuthType(tc.HttpClient.AUTH_NONE)
 
-        self.stix_transformer = StixTransformer(config, data_dir)
+        self.stix_transformer = StixTransformer(self.config, data_dir)
 
     def insert(self, event):
         # converts from conpot log format to STIX compatible xml
