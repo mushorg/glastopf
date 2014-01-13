@@ -164,7 +164,7 @@ class TestEmulatorIntegration(unittest.TestCase):
         emulator.handle(event)
         self.assertEqual(event.http_request.get_response(), "test successful")
         print "Return value 'test successful', matching our expectation."
-        
+
     def test_robots_emulator(self):
         """Objective: Test the robots.txt emulator.
         Input: http://localhost:8080/robots.txt

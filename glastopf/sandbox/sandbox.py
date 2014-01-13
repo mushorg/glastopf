@@ -1,45 +1,50 @@
 #!/usr/bin/env python
 
-import time
-import subprocess
-import threading
-from functools import partial
+# Copyright (C) 2014  Lukas Rist
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 import os
 import logging
 
-# Inspired by Jose Nazario's PHP sandbox, extended/modified by Lukas Rist
+from gevent import Timeout
+import gevent.subprocess
+
 
 logger = logging.getLogger(__name__)
 
 
-def killer(proc, secs):
-    time.sleep(secs)
-    try:
-        if proc:
-            proc.kill()
-    except OSError:
-        pass
-
-
 def sandbox(script, secs, data_dir):
-    proc = None
     try:
-        proc = subprocess.Popen(["php", os.path.join(data_dir, "sandbox.php"),
-                                 os.path.join(data_dir, "files", script)],
-                                shell=False,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
+        proc = gevent.subprocess.Popen(
+            ["php", os.path.join(data_dir, "sandbox.php"), os.path.join(data_dir, "files", script)],
+            shell=False,
+            stdin=gevent.subprocess.PIPE,
+            stdout=gevent.subprocess.PIPE,
+            stderr=gevent.subprocess.PIPE,
         )
     except Exception as e:
         logger.exception("Error executing the sandbox:".format(e))
-    stdout_value = ""
-    stderr_value = ""
+        raise e
     try:
-        threading.Thread(target=partial(killer, proc, secs)).start()
-        stdout_value, stderr_value = proc.communicate()
+        with Timeout(secs, False):
+            stdout_value, stderr_value = proc.communicate()
     except Exception as e:
         logger.exception("Sandbox communication error:".format(e))
+        raise e
     else:
         logger.info("File successfully parsed with sandbox.")
     return stdout_value
