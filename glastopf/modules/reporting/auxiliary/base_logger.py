@@ -19,7 +19,7 @@ from ConfigParser import ConfigParser
 
 
 class BaseLogger(object):
-    def __init__(self, config):
+    def __init__(self, config='glastopf.cfg'):
         if not isinstance(config, ConfigParser):
             self.config = ConfigParser()
             self.config.read(config)

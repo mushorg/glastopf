@@ -71,31 +71,35 @@ class DorkPageGenerator(object):
         return line_list
 
     def generate_dork_pages(self):
-
         line_list = self.prepare_text()
         shuffle(line_list)
 
         inurl_list = self.database.select_data()
+        shuffle(inurl_list)
         #get data from dorkdb if the live database does not have enough
-        if len(inurl_list) < 100:
-            dork_seeds = random.sample(self.database.get_dork_list('inurl'), 100)
+        if len(inurl_list) < 1000:
+            dork_seeds = random.sample(self.database.get_dork_list('inurl'), 1000)
             inurl_list += dork_seeds
 
         intext_list = self.database.get_dork_list('intext')
         intitle_list = self.database.get_dork_list('intitle')
-        while len(inurl_list) > 50 and len(line_list) > 56:
+
+        # generate 5 dork pages
+        for count_new_pages in range(5):
             body = ''
-            for i in range(0, 54):
-                body += line_list.pop()
-                href = inurl_list.pop()
-                body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
-            dork_page = self.surface_creator.get_index(choice(intitle_list),
-                                                       "/index",
-                                                       body,
-                                                       "Footer Powered By")
-            page_md5 = hashlib.md5(dork_page).hexdigest()
-            with codecs.open("{0}/{1}".format(self.pages_path, page_md5), "w", "utf-8") as dork_file:
-                dork_file.write(dork_page)
+            # each page has 150 dork links
+            for i in range(0, 150):
+                if len(line_list) > 0 and len(inurl_list) > 0:
+                    body += line_list.pop()
+                    href = inurl_list.pop()
+                    body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
+                    dork_page = self.surface_creator.get_index(choice(intitle_list),
+                                                           "/index",
+                                                           body,
+                                                           "Footer Powered By")
+                    page_md5 = hashlib.md5(dork_page).hexdigest()
+                    with codecs.open("{0}/{1}".format(self.pages_path, page_md5), "w", "utf-8") as dork_file:
+                        dork_file.write(dork_page)
 
     def get_current_pages(self):
         dork_page_list = []
@@ -116,18 +120,19 @@ class DorkPageGenerator(object):
 
     def regular_generate_dork(self, sleeper):
         sleep_time = sleeper * 60
-        old_pages = self.get_current_pages()
-        self.generate_dork_pages()
-        self.remove_pages(old_pages)
+        self._rotate_pages()
         if sleeper == 0:
             return
         if sleep_time < 60:
             sleep_time = 60
         while self.enabled:
             time.sleep(sleep_time)
-            old_pages = self.get_current_pages()
-            self.generate_dork_pages()
-            self.remove_pages(old_pages)
+            self._regenerate_pages()
+
+    def _rotate_pages(self):
+        old_pages = self.get_current_pages()
+        self.generate_dork_pages()
+        self.remove_pages(old_pages)
 
     def collect_dork(self, attack_event):
         if attack_event.matched_pattern != "unknown":
