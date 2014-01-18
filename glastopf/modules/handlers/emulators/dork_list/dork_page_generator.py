@@ -72,6 +72,7 @@ class DorkPageGenerator(object):
         return line_list
 
     def generate_dork_pages(self):
+        new_pages = []
         line_list = self.prepare_text()
         shuffle(line_list)
 
@@ -100,8 +101,10 @@ class DorkPageGenerator(object):
                                                            body,
                                                            "Footer Powered By")
             page_md5 = hashlib.md5(dork_page).hexdigest()
+            new_pages.append(page_md5)
             with codecs.open("{0}/{1}".format(self.pages_path, page_md5), "w", "utf-8") as dork_file:
                 dork_file.write(dork_page)
+        return new_pages
 
     def get_current_pages(self):
         dork_page_list = []
@@ -112,13 +115,6 @@ class DorkPageGenerator(object):
             if os.path.isfile(file_path):
                 dork_page_list.append(file_path)
         return dork_page_list
-
-    def remove_pages(self, oldpages):
-        for file_path in oldpages:
-            try:
-                os.unlink(file_path)
-            except Exception as e:
-                raise
 
     def regular_generate_dork(self, sleeper):
         sleep_time = sleeper * 60
@@ -133,8 +129,14 @@ class DorkPageGenerator(object):
 
     def _rotate_pages(self):
         old_pages = self.get_current_pages()
-        self.generate_dork_pages()
-        self.remove_pages(old_pages)
+        new_pages = self.generate_dork_pages()
+
+        for file_full_path in old_pages:
+            if not os.path.basename(file_full_path) in new_pages:
+                try:
+                    os.unlink(file_full_path)
+                except Exception as e:
+                    raise
 
     def collect_dork(self, attack_event):
         if attack_event.matched_pattern != "unknown":
@@ -160,3 +162,4 @@ class DorkPageGenerator(object):
         #combine mnemosyne dorks with file dorks - accordingly to the ignore filter.
         dorks += self.dork_file_processor.process_dorks(ignore)
         self.database.insert_dorks(dorks)
+
