@@ -31,6 +31,7 @@ from glastopf.modules.handlers.emulators.surface import create_surface
 logger = logging.getLogger(__name__)
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
+INURL_MIN_SIZE = 1000
 
 class DorkPageGenerator(object):
     """
@@ -77,9 +78,10 @@ class DorkPageGenerator(object):
         inurl_list = self.database.select_data()
         shuffle(inurl_list)
         #get data from dorkdb if the live database does not have enough
-        if len(inurl_list) < 1000:
-            dork_seeds = random.sample(self.database.get_dork_list('inurl'), 1000)
+        if len(inurl_list) < INURL_MIN_SIZE:
+            dork_seeds = random.sample(self.database.get_dork_list('inurl'), INURL_MIN_SIZE)
             inurl_list += dork_seeds
+            assert(len(inurl_list) >= INURL_MIN_SIZE)
 
         intext_list = self.database.get_dork_list('intext')
         intitle_list = self.database.get_dork_list('intitle')
@@ -93,7 +95,7 @@ class DorkPageGenerator(object):
                     body += line_list.pop()
                     href = inurl_list.pop()
                     body += " <a href='%s'>%s</a> " % (href, choice(intext_list))
-                    dork_page = self.surface_creator.get_index(choice(intitle_list),
+            dork_page = self.surface_creator.get_index(choice(intitle_list),
                                                            "/index",
                                                            body,
                                                            "Footer Powered By")
@@ -148,7 +150,7 @@ class DorkPageGenerator(object):
         if self.mnem_service:
             #get dorks from mnemosyne - note: only 'inurl' at the moment
             dorks = self.mnem_service.get_dorks()
-            if len(dorks) > 0:
+            if len(dorks) >= INURL_MIN_SIZE:
                 #all went well, do not extract inurl from file
                 ignore = ('inurl')
             else:
