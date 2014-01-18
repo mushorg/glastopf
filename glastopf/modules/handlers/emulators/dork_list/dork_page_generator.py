@@ -129,7 +129,7 @@ class DorkPageGenerator(object):
             sleep_time = 60
         while self.enabled:
             time.sleep(sleep_time)
-            self._regenerate_pages()
+            self._rotate_pages()
 
     def _rotate_pages(self):
         old_pages = self.get_current_pages()
