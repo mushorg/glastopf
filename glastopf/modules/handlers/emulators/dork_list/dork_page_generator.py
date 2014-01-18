@@ -99,9 +99,9 @@ class DorkPageGenerator(object):
                                                            "/index",
                                                            body,
                                                            "Footer Powered By")
-                    page_md5 = hashlib.md5(dork_page).hexdigest()
-                    with codecs.open("{0}/{1}".format(self.pages_path, page_md5), "w", "utf-8") as dork_file:
-                        dork_file.write(dork_page)
+            page_md5 = hashlib.md5(dork_page).hexdigest()
+            with codecs.open("{0}/{1}".format(self.pages_path, page_md5), "w", "utf-8") as dork_file:
+                dork_file.write(dork_page)
 
     def get_current_pages(self):
         dork_page_list = []
