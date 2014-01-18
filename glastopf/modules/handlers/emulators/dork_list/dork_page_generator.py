@@ -55,7 +55,7 @@ class DorkPageGenerator(object):
         self.mnem_service = mnem_service_instance
 
         #check if we need bootstrapping
-        if len(self.database.get_dork_list('inurl')) == 0:
+        if len(self.database.get_dork_list('inurl')) <= INURL_MIN_SIZE:
             logger.info("Bootstrapping dork database.")
             self.bootstrap_dorkdb()
         self.enabled = True
