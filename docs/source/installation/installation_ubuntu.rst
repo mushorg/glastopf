@@ -12,7 +12,7 @@ Install the dependencies::
     sudo apt-get install python2.7 python-openssl python-gevent libevent-dev python2.7-dev build-essential make
     sudo apt-get install python-chardet python-requests python-sqlalchemy python-lxml
     sudo apt-get install python-beautifulsoup mongodb python-pip python-dev python-setuptools
-    sudo apt-get install g++ git php5 php5-dev
+    sudo apt-get install g++ git php5 php5-dev liblapack-dev gfortran libmysqlclient-dev
     sudo pip install --upgrade distribute
 | 
 
