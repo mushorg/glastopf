@@ -147,6 +147,7 @@ class DorkPageGenerator(object):
                 logger.exception("http_request split error: {0}".format(e))
 
     def bootstrap_dorkdb(self):
+        logger.debug('Bootstraping dork database.')
         ignore = ()
         dorks = []
         if self.mnem_service:
@@ -162,4 +163,5 @@ class DorkPageGenerator(object):
         #combine mnemosyne dorks with file dorks - accordingly to the ignore filter.
         dorks += self.dork_file_processor.process_dorks(ignore)
         self.database.insert_dorks(dorks)
+        logger.debug('Finished bootstrapping dork database.')
 

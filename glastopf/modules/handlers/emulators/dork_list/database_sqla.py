@@ -57,6 +57,7 @@ class Database(object):
         return return_list
 
     def create(self, meta, engine):
+        logger.debug('Creating SQLite database.')
         tables = {}
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablenames:
@@ -70,6 +71,7 @@ class Database(object):
         return tables
 
     def insert_dorks(self, insert_list):
+        logger.debug('Starting insert of {0} dorks into the database.'.format(len(insert_list)))
         if len(insert_list) == 0:
             return
 
@@ -103,6 +105,7 @@ class Database(object):
                     values(lasttime=dt_string,
                            count=table.c.count + 1))
         conn.close()
+        logger.debug('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
 
     def get_dork_list(self, tablename, starts_with=None):
         conn = self.engine.connect()
@@ -118,4 +121,5 @@ class Database(object):
         return_list = []
         for entry in result:
             return_list.append(entry[0])
+        logger.debug('Returned {0} dorks from the database (starts with: {1})'.format(len(return_list), starts_with))
         return return_list

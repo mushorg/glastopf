@@ -18,17 +18,18 @@ from glastopf.glastopf import GlastopfHoneypot
 logger = logging.getLogger()
 
 
-def setup_logging(logconsole, logfile):
+def setup_logging(logconsole, logfile, verbose):
     logger.setLevel(logging.DEBUG)
     if not os.path.isdir('log'):
         os.mkdir('log')
 
     formatter = logging.Formatter('%(asctime)-15s (%(name)s) %(message)s')
     root_logger = logging.getLogger()
+    log_level = logging.DEBUG if verbose else logging.INFO
 
     if logconsole:
         console_log = logging.StreamHandler()
-        console_log.setLevel(logging.DEBUG)
+        console_log.setLevel(log_level)
         console_log.setFormatter(formatter)
         root_logger.addHandler(console_log)
 
@@ -37,7 +38,7 @@ def setup_logging(logconsole, logfile):
             logfile,
             when="midnight",
             backupCount=31)
-        file_log.setLevel(logging.DEBUG)
+        file_log.setLevel(log_level)
         file_log.setFormatter(formatter)
         root_logger.addHandler(file_log)
 
@@ -49,6 +50,7 @@ if __name__ == '__main__':
     parser.add_argument('--prepare', action='store_true', default=False)
     parser.add_argument('--version', action='store_true', default=False,
                         help='Prints version and exits.')
+    parser.add_argument('-v', '--verbose', action='store_true', default=False)
 
     args = parser.parse_args()
 
@@ -70,7 +72,7 @@ if __name__ == '__main__':
         logfile = None
     logconsole = conf_parser.getboolean("logging", "consolelog_enabled")
     logger = logging.getLogger()
-    setup_logging(logconsole, logfile)
+    setup_logging(logconsole, logfile, args.verbose)
 
     host = conf_parser.get("webserver", "host")
     port = conf_parser.getint("webserver", "port")
