@@ -125,7 +125,7 @@ class Test_Stix(unittest.TestCase):
         self.config.set('taxii', 'use_https', 'False')
         test_event = AttackEvent()
         test_event.source_addr = ('1.2.3.4', 43811)
-        http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n""".encode('utf-8')
+        http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
 
         taxiiLogger = TaxiiLogger(self.tmpdir, self.config)
@@ -140,7 +140,7 @@ class Test_Stix(unittest.TestCase):
         self.config.set('taxii', 'use_https', 'True')
         test_event = AttackEvent()
         test_event.source_addr = ('1.2.3.4', 43811)
-        http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n""".encode('utf-8')
+        http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
 
         taxiiLogger = TaxiiLogger(self.tmpdir, self.config)
