@@ -62,7 +62,8 @@ class TaxiiLogger(BaseLogger):
         stix_package = self.stix_transformer.transform(event)
 
         # wrapping the stix message in a TAXII envelope
-        content_block = ContentBlock(libtaxii.CB_STIX_XML_10, stix_package)
+        bytestream = bytes(bytearray(stix_package, encoding='utf-8'))
+        content_block = ContentBlock(libtaxii.CB_STIX_XML_10, bytestream)
 
         inbox_message = InboxMessage(message_id=generate_message_id(), content_blocks=[content_block])
         inbox_xml = inbox_message.to_xml()
