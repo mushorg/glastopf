@@ -13,6 +13,7 @@ Install the dependencies::
     sudo apt-get install python-chardet python-requests python-sqlalchemy python-lxml
     sudo apt-get install python-beautifulsoup mongodb python-pip python-dev python-setuptools
     sudo apt-get install g++ git php5 php5-dev liblapack-dev gfortran libmysqlclient-dev
+    sudo apt-get install libxml2-dev libxslt-dev
     sudo pip install --upgrade distribute
 | 
 
