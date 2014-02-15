@@ -22,7 +22,7 @@ import os
 import tempfile
 import random
 
-from glastopf.glastopf import GlastopfHoneypot
+from glastopf.modules import vdocs
 
 
 class TestVirtualDocs(unittest.TestCase):
@@ -37,8 +37,8 @@ class TestVirtualDocs(unittest.TestCase):
         f_dir2 = tempfile.mkdtemp()
         os.makedirs(os.path.join(f_dir1, "linux/etc"))
         os.makedirs(os.path.join(f_dir2, "linux/etc"))
-        GlastopfHoneypot.randomize_vdocs(f_dir1)
-        GlastopfHoneypot.randomize_vdocs(f_dir2)
+        vdocs.randomize_vdocs(f_dir1)
+        vdocs.randomize_vdocs(f_dir2)
         for v_file in v_files:
             file_1 = open(os.path.join(f_dir1, "linux/etc/", v_file), "r")
             file_2 = open(os.path.join(f_dir2, "linux/etc/", v_file), "r")
@@ -56,9 +56,9 @@ class TestVirtualDocs(unittest.TestCase):
         Expected Result: Two runs of GlastopfHoneypot._get_entry() generate different results
         Notes:"""
         user_id1 = random.randint(1000, 1500)  # Realistic user ID
-        pwd_entry1, shd_entry1, grp_entry1 = GlastopfHoneypot._get_entry(user_id1)
+        pwd_entry1, shd_entry1, grp_entry1 = vdocs._get_entry(user_id1)
         user_id2 = random.randint(1000, 1500)
-        pwd_entry2, shd_entry2, grp_entry2 = GlastopfHoneypot._get_entry(user_id2)
+        pwd_entry2, shd_entry2, grp_entry2 = vdocs._get_entry(user_id2)
         self.assertNotEqual(pwd_entry1, pwd_entry2)
         self.assertNotEqual(shd_entry1, shd_entry2)
         self.assertNotEqual(grp_entry1, grp_entry2)
