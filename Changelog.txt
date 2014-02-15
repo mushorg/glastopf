@@ -1,7 +1,11 @@
 Glastopf 3.1 (under development)
     * Fixed surf cert IDS logger (Issue #140).
     * Syslog logger now outputs sensor host/port instead of the attacker supplied HOST header.
-    * Added support STIX/TAXII logger.
+    * Added STIX/TAXII logger.
+    * Detection of SQLi attempts are now done using Libinjection from CLient9.
+    * Various minor improvements and bugfixes.
+    * Attack surface now customizable.
+    * Not backwards compatible with Glastopf 3.0.8
 
 Glastopf 3.0.8 (release 2013-06-06)
     * Added configurable server banner.
