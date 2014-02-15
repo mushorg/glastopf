@@ -36,7 +36,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
             os.mkdir(self.files_dir)
 
     def extract_url(self, url):
-        protocol_pattern = re.compile("=.*(http(s){0,1}|ftp(s){0,1})", re.IGNORECASE)
+        protocol_pattern = re.compile("=.*(http(s)?|ftp(s)?)", re.IGNORECASE)
         matched_protocol = protocol_pattern.search(url).group(1)
         # FIXME: Check if the extracted url is actually a url
         injected_url = matched_protocol + url.partition(matched_protocol)[2].split("?")[0]
@@ -76,10 +76,9 @@ class RFIEmulator(base_emulator.BaseEmulator):
             attack_event.file_name = self.download_file(
                 attack_event.http_request.path)
         elif attack_event.http_request.command == 'POST':
-            # FIXME: I don't think this is going to work...
-            """attack_event.file_name = self.download_file(
-                                        attack_event.http_request.request_body)"""
             pass
+        else:
+            logger.error("Unsupported method: {0}".format(attack_event.http_request.command))
         if attack_event.file_name:
             response = sandbox.run(attack_event.file_name, self.data_dir)
             attack_event.http_request.set_raw_response(response)
