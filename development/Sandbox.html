@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using and Understanding the Sandbox &mdash; Glastopf 3.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Glastopf 3.1.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Glastopf 3.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-and-understanding-the-sandbox">
+<h1>Using and Understanding the Sandbox<a class="headerlink" href="#using-and-understanding-the-sandbox" title="Permalink to this headline">¶</a></h1>
+<p>Glastopf uses sandbox for PHP script Analysis. The latest sandbox implementation is based on Jose Nazario&#8217;s PHP sandbox.</p>
+<div class="section" id="understanding-the-sandbox">
+<h2>Understanding the Sandbox<a class="headerlink" href="#understanding-the-sandbox" title="Permalink to this headline">¶</a></h2>
+<p>The general idea for every sandbox is providing controlled access to external scripts executing on the current machine. Glastopf&#8217;s sandbox follows the same approach with a different style of controlled access.</p>
+<p>As Glastopf&#8217;s sandbox is PHP based, all tweaks are done with PHP functions. What Glastopf does is, it overrides internal PHP functions excepts the white-list functions. Glastopf maintains a list of allowed functions called white-list functions. This means when a PHP script is tested against sandbox, all functions in the script that are in white-list behave naturally(as they are defined).</p>
+<p>Now, other functions that are not in white-list are overridden by sandbox. It means that its default behavior is changed and molded as per output given by that function if it were not overridden.</p>
+<p>For eg, getcwd() function gives the current working directory when executed normally. when this will be executed against the sandbox, it will just return &#8220;/var/www&#8221;.</p>
+<p>This is because its default behavior of returning current working directory is changed to returning &#8220;/var/www&#8221;</p>
+<p>Note: Currently not all functions that are internally defined are overridden, but are renamed so no malicious effect can be caused by them when they are executed against sandbox.</p>
+</div>
+<div class="section" id="using-the-sandbox">
+<h2>Using the Sandbox<a class="headerlink" href="#using-the-sandbox" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Developers who want to customize(override) internally defined functions must follow a simple approach.</dt>
+<dd><ol class="first last arabic simple">
+<li>Rename the old function.</li>
+<li>Override the old function and define its new behavior</li>
+<li>Give a dummy name to __overridden__</li>
+</ol>
+</dd>
+</dl>
+<p>A simple approach is followed for defining new behavior for the old function.</p>
+<p>Functions&#8217; implementation can be done in two ways, either returning the output directly or storing the output in the variable provided in argument.</p>
+<p>For directly coding the new implementation, It can be coded directly in &#8220;glastopf/glastopf/sandbox/functions.py&#8221;.</p>
+<p>functions.py</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;disk_free_space;&quot;</span> <span class="p">:</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">return &#39;</span><span class="si">%s</span><span class="s">&#39;;&quot;</span> <span class="o">%</span> <span class="s">&quot;36698988544&quot;</span>
+            <span class="p">}</span>
+</pre></div>
+</div>
+<p>If the function is not returning the output directly rather storing the output in the variable provided as a argument, then it can be implemented as follows:
+A file with function&#8217;s name(overriding function) must be created in &#8220;glastopf/glastopf/sandbox/replacement/&#8221; containing the implementation and this must be imported in &#8220;glastopf/glastopf/sandbox/functions.py&#8221;.</p>
+<p>functions.py</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">replacement</span> <span class="kn">import</span> <span class="n">execute</span>
+
+<span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;exec;$cmd;&amp;$ret;&quot;</span> <span class="p">:</span> <span class="n">execute</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+            <span class="p">}</span>
+</pre></div>
+</div>
+<p>system is created in replacement with implementation defined in &#8220;call&#8221; method.</p>
+<p>execute.py</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">call</span><span class="p">():</span>
+<span class="n">function</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span><span class="se">\t</span><span class="s">if ($cmd == &#39;id&#39;) {</span>
+<span class="s">    </span><span class="se">\t\t</span><span class="s">$ret = array(&#39;uid=0(root) gid=0(root) groups=0(root)&#39;,);</span>
+<span class="s">    </span><span class="se">\t</span><span class="s">}</span>
+<span class="s">    </span><span class="se">\t</span><span class="s">else {</span>
+<span class="s">    </span><span class="se">\t\t</span><span class="s">$ret = array(&#39;None&#39;,);</span>
+<span class="s">    </span><span class="se">\t</span><span class="s">}&quot;&quot;&quot;</span>
+<span class="k">return</span> <span class="n">function</span>
+</pre></div>
+</div>
+<p>If developer wants certain function to retain its natural behavior and it must be added in whitelist.</p>
+</div>
+<div class="section" id="bfr-extension">
+<h2>BFR - Extension<a class="headerlink" href="#bfr-extension" title="Permalink to this headline">¶</a></h2>
+<p>As Glastopf overrides the internal core functions of PHP, there must be some extension modifying the way PHP handles
+function calls.</p>
+<p>Glastopf uses Better Function Replacer(BFR) <a class="reference external" href="https://github.com/glastopf/BFR">[1]</a> developed by Lukas Rist. BFR is a Zend extension based on Advanced PHP Debugger(APD).
+BFR extension enables implementation of Overriding and Renaming functions in the PHP sandbox. In order to use the BFR
+extension it must be installed and properly configured, all instructions for the same can be found here <a class="reference external" href="https://github.com/glastopf/BFR">[1]</a>.</p>
+</div>
+<div class="section" id="bfr-how-it-works">
+<h2>BFR - How It Works<a class="headerlink" href="#bfr-how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>BFR extension is developed considering its usage in both multi and single threaded application.</p>
+<p>General Synatax for rename and override function</p>
+<p>rename function</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">rename_function(&#39;original function&#39;, &#39;new function&#39;);</span>
+</pre></div>
+</div>
+<p>override function</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">override_function(&#39;original function&#39;, &#39;arguments&#39;, &#39;new functions implementation code&#39;);</span>
+</pre></div>
+</div>
+<p>Below are two approach followed for developing &#8216;rename&#8217; and &#8216;override&#8217; functions.</p>
+<p><strong>Approach followed for rename function:</strong></p>
+<p>1 The original function is searched in the global function table and pointer with its function data is returned.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">zend_hash_find</span><span class="p">(</span><span class="n">EG</span><span class="p">(</span><span class="n">function_table</span><span class="p">),</span> <span class="n">Z_STRVAL_P</span><span class="p">(</span><span class="n">z_orig_fname</span><span class="p">),</span>
+                                  <span class="n">Z_STRLEN_P</span><span class="p">(</span><span class="n">z_orig_fname</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="o">**</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">func</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>2 Similarly the new name assigned to the function is checked for presence in the global function table, So that it can be safely assigned to the old function.</p>
+<p>3 New function is added in the global function table with function data pointing to old function.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">zend_hash_add</span><span class="p">(</span><span class="n">EG</span><span class="p">(</span><span class="n">function_table</span><span class="p">),</span> <span class="n">Z_STRVAL_P</span><span class="p">(</span><span class="n">z_new_fname</span><span class="p">),</span>
+                                 <span class="n">Z_STRLEN_P</span><span class="p">(</span><span class="n">z_new_fname</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zend_function</span><span class="p">),</span>
+                                 <span class="nb">NULL</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>4 Now old function is removed from global function table.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">zend_hash_del</span><span class="p">(</span><span class="n">EG</span><span class="p">(</span><span class="n">function_table</span><span class="p">),</span> <span class="n">Z_STRVAL_P</span><span class="p">(</span><span class="n">z_orig_fname</span><span class="p">),</span>
+                                 <span class="n">Z_STRLEN_P</span><span class="p">(</span><span class="n">z_orig_fname</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Thus old function name is replaced by new function name with function data pointer of old function pointing to new function.</p>
+<p><strong>Approach followed for override function:</strong></p>
+<p>1 All parameters of the override function are obtained and a special function &#8220;__overridden__&#8221; is created with characteristics of new overridden function. &#8220;eval code&#8221; represents the &#8220;__overridden__&#8221; function. TEMP_OVRD_FUNC_NAME represents __overridden__  function.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">sprintf</span><span class="p">(</span><span class="n">eval_code</span><span class="p">,</span> <span class="s">&quot;function &quot;</span> <span class="n">TEMP_OVRD_FUNC_NAME</span> <span class="s">&quot;(%s){%s}&quot;</span><span class="p">,</span>
+                <span class="n">Z_STRVAL_P</span><span class="p">(</span><span class="n">z_function_args</span><span class="p">),</span> <span class="n">Z_STRVAL_P</span><span class="p">(</span><span class="n">z_function_code</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>2 __overridden__ function is executed so that global function table updates itself with new __overridden__ function.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">zend_eval_string</span><span class="p">(</span><span class="n">eval_code</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">eval_name</span> <span class="n">TSRMLS_CC</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>3 If everything goes well, the new __overridden__ function is searched in the global function table and its function data pointer is reserved.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">zend_hash_find</span><span class="p">(</span><span class="n">EG</span><span class="p">(</span><span class="n">function_table</span><span class="p">),</span> <span class="n">TEMP_OVRD_FUNC_NAME</span><span class="p">,</span>
+                                           <span class="k">sizeof</span><span class="p">(</span><span class="n">TEMP_OVRD_FUNC_NAME</span><span class="p">),</span> <span class="p">(</span><span class="kt">void</span> <span class="o">**</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">func</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>4 Now original function is added back to global function table with its function data pointer pointing to that of __overridden__ functions&#8217;.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">zend_hash_add</span><span class="p">(</span><span class="n">EG</span><span class="p">(</span><span class="n">function_table</span><span class="p">),</span> <span class="n">Z_STRVAL_P</span><span class="p">(</span><span class="n">z_function_name</span><span class="p">),</span>
+                                         <span class="n">Z_STRLEN_P</span><span class="p">(</span><span class="n">z_function_name</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zend_function</span><span class="p">),</span>
+                                         <span class="nb">NULL</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Thus original function&#8217;s implementation is replaced with new overriding implementation.</p>
+<p>Note: Still __overridden__ is present in global function table.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/glastopf/BFR">https://github.com/glastopf/BFR</a></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using and Understanding the Sandbox</a><ul>
+<li><a class="reference internal" href="#understanding-the-sandbox">Understanding the Sandbox</a></li>
+<li><a class="reference internal" href="#using-the-sandbox">Using the Sandbox</a></li>
+<li><a class="reference internal" href="#bfr-extension">BFR - Extension</a></li>
+<li><a class="reference internal" href="#bfr-how-it-works">BFR - How It Works</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/development/Sandbox.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Glastopf 3.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Glastopf Project.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

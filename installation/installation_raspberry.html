@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Glastopf Installation - Debian Squeeze &mdash; Glastopf 3.1.1 documentation</title>
+    <title>Glastopf Installation - Raspberry - Raspbian &mdash; Glastopf 3.1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -41,8 +41,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="glastopf-installation-debian-squeeze">
-<h1>Glastopf Installation - Debian Squeeze<a class="headerlink" href="#glastopf-installation-debian-squeeze" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="glastopf-installation-raspberry-raspbian">
+<h1>Glastopf Installation - Raspberry - Raspbian<a class="headerlink" href="#glastopf-installation-raspberry-raspbian" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line"><br /></div>
@@ -52,21 +52,15 @@
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>Add the Backports repository to your sources.list:</p>
-<div class="highlight-python"><pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
-</div>
-<p>Or (for Wheezy):</p>
-<div class="highlight-python"><pre>deb http://ftp.debian.org/debian/ wheezy-backports main</pre>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p>Download and install Raspbian wheezy image from:</p>
+<blockquote>
+<div><a class="reference external" href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a></div></blockquote>
 <p>Install the dependencies:</p>
 <div class="highlight-python"><pre>apt-get update
 apt-get install python python-openssl python-gevent libevent-dev python-dev build-essential make
 apt-get install python-argparse python-chardet python-requests python-sqlalchemy python-lxml
-apt-get install python-beautifulsoup mongodb python-pip python-dev python-setuptools
-apt-get install g++ git php5 php5-dev liblapack-dev gfortran
+apt-get install python-beautifulsoup python-pip python-dev python-setuptools
+apt-get install g++ git php5-fpm php5-dev liblapack-dev gfortran cython
 apt-get install libxml2-dev libxslt-dev
 apt-get install libmysqlclient-dev
 pip install --upgrade distribute</pre>
@@ -89,10 +83,24 @@ phpize
 make &amp;&amp;  make install</pre>
 </div>
 <p>Copy the search path to bfr.so and add it to php.ini. It can look like this:</p>
-<div class="highlight-python"><pre>zend_extension =   /usr/lib/php5/20090626+lfs/bfr.so</pre>
+<div class="highlight-python"><pre>zend_extension =   /usr/lib/php5/20100525+lfs/bfr.so</pre>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="install-pylibinjection">
+<h2>Install pylibinjection<a class="headerlink" href="#install-pylibinjection" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Download using git:</p>
+<div class="highlight-python"><pre>cd /opt
+git clone https://github.com/client9/libinjection.git
+git clone https://github.com/glastopf/pylibinjection.git
+rm /opt/pylibinjection/src/pylibinjection.c
+cd pylibinjection/
+python setup.py build</pre>
 </div>
 </div>
 <div class="section" id="install-glastopf">
@@ -106,8 +114,6 @@ make &amp;&amp;  make install</pre>
 <p>Or install latest development version from the repository:</p>
 <div class="highlight-python"><pre>cd /opt
 git clone https://github.com/glastopf/glastopf.git
-git clone https://github.com/client9/libinjection.git
-git clone https://github.com/glastopf/pylibinjection.git
 cd glastopf
 python setup.py install</pre>
 </div>
@@ -161,9 +167,10 @@ glastopf-runner</pre>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Glastopf Installation - Debian Squeeze</a><ul>
+<li><a class="reference internal" href="#">Glastopf Installation - Raspberry - Raspbian</a><ul>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li><a class="reference internal" href="#install-and-configure-the-php-sandbox">Install and configure the PHP sandbox</a></li>
+<li><a class="reference internal" href="#install-pylibinjection">Install pylibinjection</a></li>
 <li><a class="reference internal" href="#install-glastopf">Install glastopf</a></li>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
 <li><a class="reference internal" href="#testing-the-honeypot">Testing the Honeypot</a></li>
@@ -173,7 +180,7 @@ glastopf-runner</pre>
 
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/installation/installation_debian.txt"
+    <li><a href="../_sources/installation/installation_raspberry.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">

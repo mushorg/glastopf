@@ -9,7 +9,7 @@ Prerequisites OpenBSD
 
 Install the dependencies::
 
-	pkg_add -r python-2.7 py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-setuptools py-jinja2 py-scipy atlas blas php pear autoconf automake g77 gfortran plplot-f77 libgfortran libevent libelf plplot mongodb wget lapack gettext
+	pkg_add -r python-2.7.3 py-pip py-gevent mysql-client py-openssl py-chardet py-sqlalchemy py-lxml py-beautifulsoup py-setuptools py-jinja2 py-scipy php pear autoconf automake g77 gfortran plplot-f77 libgfortran libevent libelf plplot git lapack gettext
 
 | 
 
@@ -21,6 +21,7 @@ Create symbolic links::
 	ln -sf /usr/local/bin/python2.7-2to3 /usr/local/bin/2to3
 	ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
 	ln -sf /usr/local/bin/pydoc2.7  /usr/local/bin/pydoc
+	ln -sf /usr/local/bin/pip-2.7 /usr/local/bin/pip
 
 | 
 
@@ -29,47 +30,6 @@ Set autoconf and automake versions::
 	export AUTOCONF_VERSION=2.59
 	export AUTOMAKE_VERSION=1.9 
 
-| 
-
-Install Gevent
-==============
-| 
-
-Download Gevent and compile it::
-
-	cd /opt
-	wget https://github.com/downloads/SiteSupport/gevent/gevent-1.0rc2.tar.gz
-	tar xfz gevent-1.0rc2.tar.gz
-	cd gevent-1.0rc2
-	python setup.py install
-
-| 
-
-Install WebOb
-==============
-| 
-
-Download WebOb and compile it::
-
-	cd /opt
-	wget https://pypi.python.org/packages/source/W/WebOb/WebOb-1.2.3.tar.gz
-	tar xfz WebOb-1.2.3.tar.gz
-	cd WebOb-1.2.3
-	python setup.py install
-
-| 
-
-Install Numpy
-==============
-| 
-
-Download Numpy and compile it::
-
-	cd /opt
-	wget http://sourceforge.net/projects/numpy/files/NumPy/1.7.0/numpy-1.7.0.tar.gz/download
-	tar xzf numpy-1.7.0.tar.gz
-	cd numpy-1.7.0
-	python setup.py install
 
 | 
 
@@ -118,7 +78,7 @@ Prepare glastopf environment::
 	cd /opt
 	mkdir myhoneypot
 	cd myhoneypot
-	glastopf-runner.py
+	glastopf-runner
 
 A new default glastopf.cfg has been created in *myhoneypot*, which can be customized as required.
 
