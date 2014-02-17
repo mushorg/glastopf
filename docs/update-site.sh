@@ -3,8 +3,10 @@
 
 set -e
 
-TMP_REPO=`mktemp -d -t conpot-site`
-TMP_HTML=`mktemp -d -t conpot-site`
+TMP_REPO=`mktemp -d -t glastopf-site.XXX`
+TMP_HTML=`mktemp -d -t glastopf-site.XXX`
+
+git show HEAD:glastopf/__init__.py > source/glastopf_version.py
 
 make html
 cp -R build/html/* $TMP_HTML
