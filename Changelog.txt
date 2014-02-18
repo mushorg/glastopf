@@ -1,4 +1,4 @@
-Glastopf 3.1 (under development)
+Glastopf 3.1.1
     * Fixed surf cert IDS logger (Issue #140).
     * Syslog logger now outputs sensor host/port instead of the attacker supplied HOST header.
     * Added STIX/TAXII logger.
