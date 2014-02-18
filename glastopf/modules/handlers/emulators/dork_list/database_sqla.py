@@ -76,6 +76,7 @@ class Database(object):
             return
 
         conn = self.engine.connect()
+        trans = conn.begin()
 
         for item in insert_list:
             tablename = item['table']
@@ -104,6 +105,7 @@ class Database(object):
                     where(table.c.content == content).
                     values(lasttime=dt_string,
                            count=table.c.count + 1))
+        trans.commit()
         conn.close()
         logger.debug('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
 
