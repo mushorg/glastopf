@@ -25,9 +25,8 @@ logger = logging.getLogger(__name__)
 
 class Mnem_Service():
     #yes google hackers, these credentials are left here by purpose!
-    def get_dorks(self, username='glastopf', password='glastopf', limit=1000):
+    def get_dorks(self, username='glastopf', password='glastopf', limit=1000, timeout=5):
         base_url = 'https://mnemosyne.honeycloud.net:8282'
-        timeout = 8
 
         sess = requests.Session()
         try:
