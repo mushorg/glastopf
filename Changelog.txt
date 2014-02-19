@@ -1,4 +1,7 @@
-Glastopf 3.1.1
+Glastopf 3.1.2 (release 2014-02-19)
+    * Fixed delay while bootstrapping the dork database.
+
+Glastopf 3.1.1 (release 2014-02-17)
     * Fixed surf cert IDS logger (Issue #140).
     * Syslog logger now outputs sensor host/port instead of the attacker supplied HOST header.
     * Added STIX/TAXII logger.
