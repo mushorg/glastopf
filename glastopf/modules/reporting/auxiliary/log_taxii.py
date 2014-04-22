@@ -19,7 +19,7 @@ import logging
 
 import libtaxii
 import libtaxii.clients as tc
-from libtaxii.messages import ContentBlock, InboxMessage, generate_message_id
+from libtaxii.messages_11 import ContentBlock, InboxMessage, generate_message_id
 from libtaxii.clients import HttpClient
 
 from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
@@ -69,7 +69,7 @@ class TaxiiLogger(BaseLogger):
         inbox_xml = inbox_message.to_xml()
 
         # the actual call to the TAXII web service
-        response = self.client.callTaxiiService2(self.host, self.inbox_path, libtaxii.VID_TAXII_XML_10, inbox_xml, self.port)
+        response = self.client.callTaxiiService2(self.host, self.inbox_path, libtaxii.VID_TAXII_XML_11, inbox_xml, self.port)
         response_message = libtaxii.get_message_from_http_response(response, '0')
 
         if response_message.status_type != libtaxii.messages.ST_SUCCESS:
