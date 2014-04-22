@@ -31,7 +31,7 @@ from glastopf.modules.handlers.emulators.surface import create_surface
 logger = logging.getLogger(__name__)
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
-INURL_MIN_SIZE = 1000
+INURL_MIN_SIZE = 500
 
 class DorkPageGenerator(object):
     """
@@ -147,17 +147,19 @@ class DorkPageGenerator(object):
                 logger.exception("http_request split error: {0}".format(e))
 
     def bootstrap_dorkdb(self):
-        logger.debug('Bootstraping dork database.')
+        logger.debug('Bootstrapping dork database.')
         ignore = ()
         dorks = []
         if self.mnem_service:
             #get dorks from mnemosyne - note: only 'inurl' at the moment
             dorks = self.mnem_service.get_dorks()
             if len(dorks) >= INURL_MIN_SIZE:
+                logging.debug('Extracted enough "inurl" dorks from mnenosyne.')
                 #all went well, do not extract inurl from file
                 ignore = ('inurl')
             else:
                 #something went wrong (nothing extracted from mnemosyne), extract all types from file
+                logging.debug('Not enough "inurl" dorks extracted from mnenosyne.')
                 ignore = ()
 
         #combine mnemosyne dorks with file dorks - accordingly to the ignore filter.

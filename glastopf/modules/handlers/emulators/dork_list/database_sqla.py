@@ -78,10 +78,14 @@ class Database(object):
         conn = self.engine.connect()
         trans = conn.begin()
 
+        log = {}
         for item in insert_list:
             tablename = item['table']
             table = self.tables[tablename]
             content = item['content']
+
+            if tablename not in log:
+                log[tablename] = 0
 
             #skip empty
             if not content:
@@ -98,6 +102,7 @@ class Database(object):
                                            'count': 1,
                                            'firsttime': dt_string,
                                            'lasttime': dt_string}))
+                log[tablename] += 1
             else:
                 #update existing entry
                 conn.execute(
@@ -107,7 +112,8 @@ class Database(object):
                            count=table.c.count + 1))
         trans.commit()
         conn.close()
-        logger.debug('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
+        logger.info('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
+        logger.debug('New dorks inserted: {0}'.format(log))
 
     def get_dork_list(self, tablename, starts_with=None):
         conn = self.engine.connect()
