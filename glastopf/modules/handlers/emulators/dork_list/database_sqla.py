@@ -29,6 +29,8 @@ class Database(object):
     Responsible for all dork related communication with the glastopf sql database.
     """
 
+    DORK_MAX_LENGTH = 200
+
     def __init__(self, engine):
 
         meta = MetaData()
@@ -62,7 +64,7 @@ class Database(object):
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablenames:
             tables[table] = Table(table, meta,
-                                  Column('content', String(200), primary_key=True),
+                                  Column('content', String(Database.DORK_MAX_LENGTH), primary_key=True),
                                   Column('count', Integer),
                                   Column('firsttime', String(30)),
                                   Column('lasttime', String(30)),
@@ -90,7 +92,7 @@ class Database(object):
             #skip empty
             if not content:
                 continue
-
+            content = item['content'][:Database.DORK_MAX_LENGTH]
             dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             #check table if content exists - content is primary key.
             db_content = conn.execute(
