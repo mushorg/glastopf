@@ -62,11 +62,10 @@ class Database(object):
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablenames:
             tables[table] = Table(table, meta,
-                                  Column('content', String(200), primary_key=True),
+                                  Column('content', String(), primary_key=True),
                                   Column('count', Integer),
                                   Column('firsttime', String(30)),
-                                  Column('lasttime', String(30)),
-            )
+                                  Column('lasttime', String(30)))
         meta.create_all(engine)
         return tables
 
