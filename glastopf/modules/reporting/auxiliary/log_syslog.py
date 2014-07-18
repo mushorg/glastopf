@@ -36,9 +36,11 @@ class LogSyslog(BaseLogger):
                 LogSyslog.logger = logging.getLogger('glaspot_attack')
                 LogSyslog.logger.propagate = False
                 if ":" in self.options['socket']:
-                    address = self.options['socket'].split(":")
+                    host, port = self.options['socket'].split(":")
+                    address = (host, int(port))
                 else:
-                    address = self.options['socket']
+                    address = (self.options['socket'], 514)
+                logging.info('Using syslog logger on remote {0}.'.format(address))
                 LogSyslog.log_handler = logging.handlers.SysLogHandler(address=address)
                 LogSyslog.logger.addHandler(self.log_handler)
                 LogSyslog.logger.setLevel(logging.INFO)
