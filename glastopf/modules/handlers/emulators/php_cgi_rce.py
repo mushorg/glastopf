@@ -17,6 +17,7 @@
 
 import hashlib
 import os
+import urllib
 from glastopf.modules.handlers import base_emulator
 
 import glastopf.sandbox.sandbox as sandbox
@@ -69,7 +70,7 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
 page = $_GET['page']; include(page); ?>"""
 
         query_dict = attack_event.http_request.request_query
-        url = attack_event.http_request.request_url
+        url = urllib.unquote(attack_event.http_request.request_url).decode('utf8')
 
         # php -h
         #   -s   Output HTML syntax highlighted source.
