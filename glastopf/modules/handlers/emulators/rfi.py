@@ -57,6 +57,8 @@ class RFIEmulator(base_emulator.BaseEmulator):
         injectd_url = self.extract_url(urllib2.unquote(url))
         try:
             req = urllib2.Request(injectd_url)
+	    # Set User-Agent to look more credible 
+	    req.add_unredirected_header('User-Agent','-')
             # FIXME: We need a timeout on read here
             injected_file = urllib2.urlopen(req, timeout=4).read()
         except IOError as e:
