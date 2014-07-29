@@ -26,6 +26,8 @@ secret = 3wis3l2u5l7r3cew
 chan_events = glastopf.events
 chan_files = glastopf.files
 ident = x8yer@hp1
+# set to True transmit STIX xml instead of normal glastopf event data
+use_stix = False
 
 [main-database]
 #If disabled a sqlite database will be created (db/glastopf.db)

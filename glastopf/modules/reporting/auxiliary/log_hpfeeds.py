@@ -20,6 +20,7 @@ import base64
 
 import hpfeeds
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
+from glastopf.modules.reporting.auxiliary.stix.stix_transform import StixTransformer
 
 
 logger = logging.getLogger(__name__)
@@ -44,15 +45,21 @@ class HPFeedsLogger(BaseLogger):
             self.options = {'enabled': self.enabled}
             self.chan_files = self.config.get("hpfeed", "chan_files")
             self.chan_events = self.config.get("hpfeed", "chan_events")
+            if self.config.getboolean("hpfeed", "use_stix"):
+                self.stix_formatter = StixTransformer(self.config, data_dir)
             self.hpc = hpfeeds.new(host, port, ident, secret, reconnect=reconnect)
+            self.stix_formatter = None
 
     def insert(self, attack_event):
-        if attack_event.file_name is not None:
-            with file(os.path.join(self.files_dir, attack_event.file_name), 'r') as file_handler:
-                logger.debug('Sending file ({0}) using hpfriends on {0}'.format(attack_event.file_name, self.chan_files))
-                file_content = file_handler.read()
-                file_data = attack_event.file_name + " " + base64.b64encode(file_content)
-                self.hpc.publish(self.chan_files, file_data)
-
-        event_data = json.dumps(attack_event.event_dict())
+        if self.stix_formatter:
+            event_data = self.stix_formatter.transform(attack_event)
+        else:
+            if attack_event.file_name is not None:
+                with file(os.path.join(self.files_dir, attack_event.file_name), 'r') as file_handler:
+                    logger.debug('Sending file ({0}) using hpfriends on {0}'.format(attack_event.file_name, self.chan_files))
+                    file_content = file_handler.read()
+                    file_data = attack_event.file_name + " " + base64.b64encode(file_content)
+                    self.hpc.publish(self.chan_files, file_data)
+            event_data = json.dumps(attack_event.event_dict())
+        print event_data
         self.hpc.publish(self.chan_events, event_data)
