@@ -62,7 +62,6 @@ class Test_Loggers(unittest.TestCase):
         #create dummy file
         file_name = 'dummy_file'
         with open(os.path.join(self.files_dir, file_name), 'w') as f:
-            print self.files_dir
             f.write('test_test_test_test_test')
 
         logger = HPFeedsLogger(self.tmpdir, config=config_file, reconnect=False)

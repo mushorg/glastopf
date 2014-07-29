@@ -133,6 +133,7 @@ def gen_config(conn_string):
         "secret = XDNNuMGYUuWFaWyi\n",
         "chan_events = test.test\n",
         "chan_files = test.test\n",
+        "use_stix = False\n",
         "ident = HBmU08rR\n",
         "[webserver]\n",
         "proxy_enabled = False\n",
