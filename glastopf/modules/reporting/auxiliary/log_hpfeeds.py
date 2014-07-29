@@ -61,5 +61,4 @@ class HPFeedsLogger(BaseLogger):
                     file_data = attack_event.file_name + " " + base64.b64encode(file_content)
                     self.hpc.publish(self.chan_files, file_data)
             event_data = json.dumps(attack_event.event_dict())
-        print event_data
         self.hpc.publish(self.chan_events, event_data)
