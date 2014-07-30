@@ -45,6 +45,7 @@ class HPFeedsLogger(BaseLogger):
             self.options = {'enabled': self.enabled}
             self.chan_files = self.config.get("hpfeed", "chan_files")
             self.chan_events = self.config.get("hpfeed", "chan_events")
+            self.hpc = None
             gevent.spawn(self._start_connection, host, port, ident, secret, reconnect)
 
     def _start_connection(self, host, port, ident, secret, reconnect):

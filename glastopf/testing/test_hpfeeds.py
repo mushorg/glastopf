@@ -20,6 +20,7 @@ import os
 import tempfile
 import shutil
 
+import gevent
 import helpers
 import glastopf.modules.events.attack as attack
 from glastopf.modules.reporting.auxiliary.log_hpfeeds import HPFeedsLogger
@@ -37,6 +38,7 @@ class Test_Loggers(unittest.TestCase):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
 
+    @unittest.skip('disabled until honeycloud up and running again')
     def test_hpfeeds_event(self):
         """Objective: Testing if a basic event can be transmitted using hpfriends."""
 
@@ -49,9 +51,13 @@ class Test_Loggers(unittest.TestCase):
         event.http_request = HTTPHandler('', None)
         event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
         logger.insert(event)
+        gevent.sleep(2)
+        # if None we did not connect
+        self.assertIsNotNone(logger.hpc.wait)
         error_message = logger.hpc.wait(2)
         self.assertIsNone(error_message)
 
+    @unittest.skip('disabled until honeycloud up and running again')
     def test_hpfeeds_event_with_file(self):
         """Objective: Testing if a event containing a file can be transmitted using hpfriends."""
 
@@ -62,7 +68,6 @@ class Test_Loggers(unittest.TestCase):
         #create dummy file
         file_name = 'dummy_file'
         with open(os.path.join(self.files_dir, file_name), 'w') as f:
-            print self.files_dir
             f.write('test_test_test_test_test')
 
         logger = HPFeedsLogger(self.tmpdir, config=config_file, reconnect=False)
@@ -71,6 +76,9 @@ class Test_Loggers(unittest.TestCase):
         event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
         event.file_name = file_name
         logger.insert(event)
+        gevent.sleep(2)
+        # if None we did not connect
+        self.assertIsNotNone(logger.hpc.wait)
         error_message = logger.hpc.wait(2)
         self.assertIsNone(error_message)
 
