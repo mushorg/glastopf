@@ -66,6 +66,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
             if re.match('^https', injectd_url, re.IGNORECASE):
               host_name = req.get_host()
               cert_file = ssl.get_server_certificate((host_name, 443))
+              cert_name = self.store_file(cert_file)
 
         except IOError as e:
             logger.exception("Failed to fetch injected file, I/O error: {0}".format(e))
@@ -77,7 +78,6 @@ class RFIEmulator(base_emulator.BaseEmulator):
             file_name = None
         else:
             file_name = self.store_file(injected_file)
-            cert_name = self.store_file(cert_file)
         return file_name
 
     def handle(self, attack_event):
