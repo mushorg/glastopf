@@ -45,3 +45,7 @@ class HTTPMethods(object):
     def OPTIONS(self, http_request):
         # TODO: Return the proper OPTIONS respone
         return "options"
+    
+    def PUT(self, http_request):
+        #TODO: Return the proper PUT response
+        return "put"
