@@ -24,7 +24,6 @@ import time
 import os
 import logging
 
-from glastopf.modules.handlers.emulators.dork_list import gen_html
 from glastopf.modules.handlers.emulators.surface import create_surface
 
 
