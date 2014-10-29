@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:14.04.1
 MAINTAINER Lukas Rist <glaslos@gmail.com>
 
 
@@ -17,12 +17,11 @@ RUN apt-get install -y python-chardet python-requests python-sqlalchemy python-l
 RUN apt-get install -y python-beautifulsoup mongodb python-pip python-dev python-setuptools
 RUN apt-get install -y g++ git php5 php5-dev liblapack-dev gfortran libmysqlclient-dev
 RUN apt-get install -y libxml2-dev libxslt-dev
-RUN pip install --upgrade distribute
 
 
 ## Install and configure the PHP sandbox
 RUN git clone git://github.com/glastopf/BFR.git /opt/BFR
-RUN cd /opt/BFR && phpize && ./configure --enable-bfr && make && sudo make install
+RUN cd /opt/BFR && phpize && ./configure --enable-bfr && make && make install
 RUN for i in $(find / -type f -name php.ini); do sed -i "/[PHP]/azend_extension=$(find /usr/lib/php5 -type f -name bfr.so)" $i; done
 
 
