@@ -23,7 +23,8 @@ RUN pip install --upgrade distribute
 ## Install and configure the PHP sandbox
 RUN git clone git://github.com/glastopf/BFR.git /opt/BFR
 RUN cd /opt/BFR && phpize && ./configure --enable-bfr && make && sudo make install
-RUN for i in $(find / -type f -name php.ini); do sed -i "/[PHP]/azend_extension=$(find /usr/lib/php5 -type f -name bfr.so)" $i; done
+RUN echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/apache2/php.ini
+RUN echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/cli/php.ini
 
 
 ## Install glastopf from latest sources
