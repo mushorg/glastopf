@@ -64,9 +64,10 @@ if __name__ == '__main__':
         GlastopfHoneypot.prepare_environment(args.workdir)
 
     conf_parser = ConfigParser()
-    if not os.path.isfile("glastopf.cfg"):
+    config_file = os.path.join(args.workdir, "glastopf.cfg")
+    if not os.path.isfile(config_file):
         sys.exit("Could not find configuration file: glastopf.cfg")
-    conf_parser.read("glastopf.cfg")
+    conf_parser.read(config_file)
     if conf_parser.getboolean("logging", "filelog_enabled"):
         logfile = conf_parser.get("logging", "logfile")
     else:
