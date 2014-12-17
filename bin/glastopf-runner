@@ -18,10 +18,11 @@ from glastopf.glastopf import GlastopfHoneypot
 logger = logging.getLogger()
 
 
-def setup_logging(logconsole, logfile, verbose):
+def setup_logging(logconsole, logfile, verbose, work_dir):
+    log_path = os.path.join(work_dir, 'log')
     logger.setLevel(logging.DEBUG)
-    if not os.path.isdir('log'):
-        os.mkdir('log')
+    if not os.path.isdir(log_path):
+        os.mkdir(log_path)
 
     formatter = logging.Formatter('%(asctime)-15s (%(name)s) %(message)s')
     root_logger = logging.getLogger()
@@ -72,7 +73,7 @@ if __name__ == '__main__':
         logfile = None
     logconsole = conf_parser.getboolean("logging", "consolelog_enabled")
     logger = logging.getLogger()
-    setup_logging(logconsole, logfile, args.verbose)
+    setup_logging(logconsole, logfile, args.verbose, args.workdir)
 
     host = conf_parser.get("webserver", "host")
     port = conf_parser.getint("webserver", "port")
