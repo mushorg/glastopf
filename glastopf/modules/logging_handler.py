@@ -33,7 +33,7 @@ def _get_logger_names(path=os.path.join(package_directory, 'reporting/auxiliary'
     return names
 
 
-def get_aux_loggers(data_dir, create_tables=True):
+def get_aux_loggers(data_dir, work_dir, create_tables=True):
     loggers = []
     try:
         BaseLogger()
@@ -46,7 +46,7 @@ def get_aux_loggers(data_dir, create_tables=True):
         return None
     else:
         for logger_class in logger_classes:
-            logger_instance = logger_class(data_dir)
+            logger_instance = logger_class(data_dir, work_dir)
             if logger_instance.options['enabled']:
                 loggers.append(logger_instance)
         return loggers

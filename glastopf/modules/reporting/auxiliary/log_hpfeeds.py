@@ -28,7 +28,8 @@ logger = logging.getLogger(__name__)
 
 class HPFeedsLogger(BaseLogger):
 
-    def __init__(self, data_dir, config="glastopf.cfg", reconnect=True):
+    def __init__(self, data_dir, work_dir, config="glastopf.cfg", reconnect=True):
+        config = os.path.join(work_dir, config)
         BaseLogger.__init__(self, config)
         self.files_dir = os.path.join(data_dir, 'files/')
         self.enabled = False

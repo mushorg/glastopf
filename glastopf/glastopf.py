@@ -99,7 +99,7 @@ class GlastopfHoneypot(object):
         """
         privileges.drop(self.work_dir, self.options['uid'], self.options['gid'])
         self.workers_enabled = True
-        self.loggers = logging_handler.get_aux_loggers(self.data_dir)
+        self.loggers = logging_handler.get_aux_loggers(self.data_dir, self.work_dir)
 
         dork_worker = gevent.spawn(self.dork_generator.regular_generate_dork, 30)
 

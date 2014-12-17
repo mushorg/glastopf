@@ -16,6 +16,7 @@
 
 
 import smtplib
+import os
 
 from email.mime.text import MIMEText
 
@@ -23,7 +24,8 @@ from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogMail(BaseLogger):
-    def __init__(self, data_dir, config="glastopf.cfg"):
+    def __init__(self, data_dir, work_dir, config="glastopf.cfg"):
+        config = os.path.join(work_dir, config)
         BaseLogger.__init__(self, config)
         self.options = {
             "enabled": self.config.getboolean("mail", "enabled"),
