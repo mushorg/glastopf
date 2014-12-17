@@ -65,7 +65,7 @@ class GlastopfHoneypot(object):
         self.data_dir = os.path.join(self.work_dir, 'data')
 
         conf_parser = ConfigParser()
-        conf_parser.read(config)
+        conf_parser.read(os.path.join(self.work_dir, config))
         self.options = {
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
