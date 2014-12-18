@@ -35,7 +35,7 @@ def setup_logging(logconsole, logfile, verbose, work_dir):
         root_logger.addHandler(console_log)
 
     if logfile:
-        logfile = os.join.path(work_dir, logfile)
+        logfile = os.path.join(work_dir, logfile)
         file_log = logging.handlers.TimedRotatingFileHandler(
             logfile,
             when="midnight",
