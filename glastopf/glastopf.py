@@ -65,7 +65,7 @@ class GlastopfHoneypot(object):
         self.data_dir = os.path.join(self.work_dir, 'data')
 
         conf_parser = ConfigParser()
-        conf_parser.read(config)
+        conf_parser.read(os.path.join(self.work_dir, config))
         self.options = {
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
@@ -99,7 +99,7 @@ class GlastopfHoneypot(object):
         """
         privileges.drop(self.work_dir, self.options['uid'], self.options['gid'])
         self.workers_enabled = True
-        self.loggers = logging_handler.get_aux_loggers(self.data_dir)
+        self.loggers = logging_handler.get_aux_loggers(self.data_dir, self.work_dir)
 
         dork_worker = gevent.spawn(self.dork_generator.regular_generate_dork, 30)
 

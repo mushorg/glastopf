@@ -16,6 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import logging
+import os
 
 import libtaxii
 import libtaxii.clients as tc
@@ -30,7 +31,8 @@ logger = logging.getLogger(__name__)
 
 
 class TaxiiLogger(BaseLogger):
-    def __init__(self, data_dir, config='glastopf.cfg'):
+    def __init__(self, data_dir, work_dir, config='glastopf.cfg'):
+        config = os.path.join(work_dir, config)
         BaseLogger.__init__(self, config)
         self.options = {'enabled': self.config.getboolean('taxii', 'enabled')}
         self.host = self.config.get('taxii', 'host')

@@ -70,7 +70,7 @@ class Test_Loggers(unittest.TestCase):
         with open(os.path.join(self.files_dir, file_name), 'w') as f:
             f.write('test_test_test_test_test')
 
-        logger = HPFeedsLogger(self.tmpdir, config=config_file, reconnect=False)
+        logger = HPFeedsLogger(self.tmpdir, os.getcwd(), config_file, reconnect=False)
         event = attack.AttackEvent()
         event.http_request = HTTPHandler('', None)
         event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"

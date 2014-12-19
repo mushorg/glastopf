@@ -52,6 +52,9 @@ class Test_Stix(unittest.TestCase):
         self.config.set('taxii', 'auth_certificate_certfile', 'certfile_path')
         self.config.set('taxii', 'use_https', 'True')
 
+
+
+
         self.tmpdir = tempfile.mkdtemp()
         self.files_dir = os.path.join(self.tmpdir, 'files')
         os.mkdir(self.files_dir)
@@ -123,30 +126,38 @@ class Test_Stix(unittest.TestCase):
         Objective: Test if we can send a message to mitre's test TAXII server.
         """
         self.config.set('taxii', 'use_https', 'False')
+        config_file = tempfile.mkstemp()[1]
+        with open(config_file, 'w') as f:
+            self.config.write(f)
         test_event = AttackEvent()
         test_event.source_addr = ('1.2.3.4', 43811)
         http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
 
-        taxiiLogger = TaxiiLogger(self.tmpdir, self.config)
+        taxiiLogger = TaxiiLogger(self.tmpdir, os.getcwd(), config_file)
         taxii_result = taxiiLogger.insert(test_event)
         # TaxiiLogger returns false if the message could not be delivered
         self.assertTrue(taxii_result)
+        f.close() #clean the tempfile
 
     def test_taxii_connectivity_https(self):
         """
         Objective: Test if we can send a message to mitre's test TAXII server using https.
         """
         self.config.set('taxii', 'use_https', 'True')
+        config_file = tempfile.mkstemp()[1]
+        with open(config_file, 'w') as f:
+            self.config.write(f)
         test_event = AttackEvent()
         test_event.source_addr = ('1.2.3.4', 43811)
         http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
 
-        taxiiLogger = TaxiiLogger(self.tmpdir, self.config)
+        taxiiLogger = TaxiiLogger(self.tmpdir, os.getcwd(), config_file)
         taxii_result = taxiiLogger.insert(test_event)
         # TaxiiLogger returns false if the message could not be delivered
         self.assertTrue(taxii_result)
+        f.close() #clean the tempfile
 
 
 if __name__ == '__main__':

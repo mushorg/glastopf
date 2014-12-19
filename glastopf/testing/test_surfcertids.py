@@ -53,7 +53,7 @@ class Test_Loggers(unittest.TestCase):
 
             attack_event.http_request = HTTPHandler(request, "1.2.3.4")
             attack_event.source_addr = ('4.3.2.1', 41022)
-            logSURFcertIDS = LogSURFcertIDS(None, config_file)
+            logSURFcertIDS = LogSURFcertIDS(None, os.getcwd(), config_file)
             logSURFcertIDS.connection = connectionMock()
         finally:
             if os.path.isfile(config_file):

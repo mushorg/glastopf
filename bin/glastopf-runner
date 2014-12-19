@@ -18,10 +18,11 @@ from glastopf.glastopf import GlastopfHoneypot
 logger = logging.getLogger()
 
 
-def setup_logging(logconsole, logfile, verbose):
+def setup_logging(logconsole, logfile, verbose, work_dir):
+    log_path = os.path.join(work_dir, 'log')
     logger.setLevel(logging.DEBUG)
-    if not os.path.isdir('log'):
-        os.mkdir('log')
+    if not os.path.isdir(log_path):
+        os.mkdir(log_path)
 
     formatter = logging.Formatter('%(asctime)-15s (%(name)s) %(message)s')
     root_logger = logging.getLogger()
@@ -34,6 +35,7 @@ def setup_logging(logconsole, logfile, verbose):
         root_logger.addHandler(console_log)
 
     if logfile:
+        logfile = os.path.join(work_dir, logfile)
         file_log = logging.handlers.TimedRotatingFileHandler(
             logfile,
             when="midnight",
@@ -63,16 +65,17 @@ if __name__ == '__main__':
         GlastopfHoneypot.prepare_environment(args.workdir)
 
     conf_parser = ConfigParser()
-    if not os.path.isfile("glastopf.cfg"):
+    config_file = os.path.join(args.workdir, "glastopf.cfg")
+    if not os.path.isfile(config_file):
         sys.exit("Could not find configuration file: glastopf.cfg")
-    conf_parser.read("glastopf.cfg")
+    conf_parser.read(config_file)
     if conf_parser.getboolean("logging", "filelog_enabled"):
         logfile = conf_parser.get("logging", "logfile")
     else:
         logfile = None
     logconsole = conf_parser.getboolean("logging", "consolelog_enabled")
     logger = logging.getLogger()
-    setup_logging(logconsole, logfile, args.verbose)
+    setup_logging(logconsole, logfile, args.verbose, args.workdir)
 
     host = conf_parser.get("webserver", "host")
     port = conf_parser.getint("webserver", "port")
