@@ -153,7 +153,7 @@ class Test_Stix(unittest.TestCase):
         http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
 
-        taxiiLogger = TaxiiLogger(self.tmpdir, os.getcwd(), config=self.config)
+        taxiiLogger = TaxiiLogger(self.tmpdir, os.getcwd(), config_file)
         taxii_result = taxiiLogger.insert(test_event)
         # TaxiiLogger returns false if the message could not be delivered
         self.assertTrue(taxii_result)
