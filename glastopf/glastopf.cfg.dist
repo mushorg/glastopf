@@ -14,8 +14,9 @@ logfile = log/glastopf.log
 [dork-db]
 enabled = True
 pattern = rfi
-#Extracts dorks from a online dorks service operated by The Honeynet Project
-mnem_service = True
+# Extracts dorks from a online dorks service operated by The Honeynet Project
+# This service is down until further notice!
+mnem_service = False
 
 [hpfeed]
 enabled = True
