@@ -46,7 +46,7 @@ class Test_Loggers(unittest.TestCase):
         with open(config_file, 'w') as f:
             f.writelines(helpers.gen_config(''))
 
-        logger = HPFeedsLogger(self.tmpdir, config=config_file, reconnect=False)
+        logger = HPFeedsLogger(self.tmpdir, os.getcwd(), config=config_file, reconnect=False)
         event = attack.AttackEvent()
         event.http_request = HTTPHandler('', None)
         event.raw_request = "GET /honeypot_test HTTP/1.1\r\nHost: honeypot\r\n\r\n"
