@@ -27,7 +27,7 @@ from glastopf.modules.reporting.auxiliary.log_hpfeeds import HPFeedsLogger
 from glastopf.modules.HTTP.handler import HTTPHandler
 
 
-class Test_Loggers(unittest.TestCase):
+class TestLoggers(unittest.TestCase):
 
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp()
@@ -38,7 +38,7 @@ class Test_Loggers(unittest.TestCase):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
 
-    #@unittest.skip('disabled until honeycloud up and running again')
+    @unittest.skip('disabled until honeycloud up and running again')
     def test_hpfeeds_event(self):
         """Objective: Testing if a basic event can be transmitted using hpfriends."""
 
@@ -57,7 +57,7 @@ class Test_Loggers(unittest.TestCase):
         error_message = logger.hpc.wait(2)
         self.assertIsNone(error_message)
 
-    #@unittest.skip('disabled until honeycloud up and running again')
+    @unittest.skip('disabled until honeycloud up and running again')
     def test_hpfeeds_event_with_file(self):
         """Objective: Testing if a event containing a file can be transmitted using hpfriends."""
 
