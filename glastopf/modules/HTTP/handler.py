@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Johnny Vestergaard <jkv@unixcluster.dk>
+# Copyright (C) 2015 Johnny Vestergaard <jkv@unixcluster.dk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
             # An error code has been sent, just exit
             return
         #In the original implementation this method would had called the 'do_' + self.command method
-        if not self.command in ('PUT', 'GET', 'POST', 'HEAD', 'TRACE'):
+        if not self.command in ('PUT', 'GET', 'POST', 'HEAD', 'TRACE', 'OPTIONS'):
             self.send_error(501, "Unsupported method (%r)" % self.command)
             return
 

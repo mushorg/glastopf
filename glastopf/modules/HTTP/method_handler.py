@@ -1,4 +1,4 @@
-# Copyright (C) 2011  Lukas Rist
+# Copyright (C) 2015  Lukas Rist
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,7 +36,6 @@ class HTTPMethods(object):
         return matched_pattern
 
     def HEAD(self, http_request):
-        # TODO: Return the proper HEAD respone
         return "head"
 
     def TRACE(self, http_request):
@@ -47,5 +46,4 @@ class HTTPMethods(object):
         return "options"
     
     def PUT(self, http_request):
-        #TODO: Return the proper PUT response
         return "put"
