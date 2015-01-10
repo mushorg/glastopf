@@ -27,6 +27,7 @@ from glastopf.glastopf import GlastopfHoneypot
 from glastopf.modules.handlers.request_handler import RequestHandler
 import glastopf.modules.events.attack as attack
 from glastopf.modules.HTTP.handler import HTTPHandler
+import glastopf.modules.HTTP.method_handler as method_handler
 
 import helpers
 
@@ -295,7 +296,6 @@ class TestEmulatorIntegration(unittest.TestCase):
         event = attack.AttackEvent()
         event.http_request = HTTPHandler('PUT / HTTP/1.0', None)
         self.assertTrue(event.http_request.request_verb == "PUT")
-        import glastopf.modules.HTTP.method_handler as method_handler
         method_handlers = method_handler.HTTPMethods(self.data_dir)
         event.matched_pattern = getattr(
             method_handlers,
