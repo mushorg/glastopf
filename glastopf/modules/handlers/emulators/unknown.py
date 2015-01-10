@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2015  Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,14 +24,15 @@ from string import Template
 from glastopf.modules.handlers import base_emulator
 
 
-if sys.getdefaultencoding() != 'utf-8':
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+#if sys.getdefaultencoding() != 'utf-8':
+#    reload(sys)
+#    sys.setdefaultencoding('utf-8')
 
 
 class DorkList(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(DorkList, self).__init__(data_dir)
+        self.template = None
 
     def _get_template(self, attack_event):
         # TODO: decode the file using chardet or even better create
@@ -39,7 +40,7 @@ class DorkList(base_emulator.BaseEmulator):
         pages_path = os.path.join(self.data_dir, 'dork_pages')
         dork_page_list = os.listdir(pages_path)
         self.dork_page = os.path.join(pages_path, choice(dork_page_list))
-        ip_address = attack_event.source_addr[0]
+        #ip_address = attack_event.source_addr[0]
         with codecs.open(self.dork_page, "rb", "utf-8") as dork_page:
             comments_file = os.path.join(self.data_dir, 'comments.txt')
             if os.path.isfile(comments_file):
