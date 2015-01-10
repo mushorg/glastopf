@@ -25,13 +25,13 @@ class HTTPMethods(object):
         pass
 
     def GET(self, http_request):
-        RequestClassifier = request_classifier.Classifier(self.data_dir)
-        matched_pattern = RequestClassifier.classify_request(http_request)
+        req_classifier = request_classifier.Classifier(self.data_dir)
+        matched_pattern = req_classifier.classify_request(http_request)
         return matched_pattern
 
     def POST(self, http_request):
-        RequestClassifier = request_classifier.Classifier(self.data_dir)
-        matched_pattern = RequestClassifier.classify_request(http_request)
+        req_classifier = request_classifier.Classifier(self.data_dir)
+        matched_pattern = req_classifier.classify_request(http_request)
         #http_request.request_body -> File('files/payloads')
         return matched_pattern
 

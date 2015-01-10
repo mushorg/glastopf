@@ -18,7 +18,7 @@
 import os
 from random import choice
 import codecs
-import sys
+#import sys
 from string import Template
 
 from glastopf.modules.handlers import base_emulator

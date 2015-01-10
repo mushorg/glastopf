@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)
 
 class HTTPHandler(BaseHTTPRequestHandler):
     def __init__(self, request_string, client_address, server_version=None, sys_version=None):
-
         """
         Encapsulates http request parsing and facilitates generation of proper (and improper) http response.
 
@@ -40,6 +39,15 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.rfile.seek(0)
 
         self.client_address = client_address
+
+        self.requestline = ''
+        self.request_version = 'HTTP/1.0'
+        self.path = ''
+        self.command = ''
+        self.query = ''
+        self.raw_requestline = ''
+        self.close_connection = None
+        self.request_body = ''
 
         #parse the request
         self.handle_one_request()
@@ -73,12 +81,6 @@ class HTTPHandler(BaseHTTPRequestHandler):
         """
         Handles and parses the request.
         """
-        self.requestline = ''
-        self.request_version = ''
-        self.path = ''
-        self.command = ''
-        self.query = ''
-
         self.raw_requestline = self.rfile.readline(65537)
         if len(self.raw_requestline) > 65536:
             self.send_error(414)
@@ -86,17 +88,17 @@ class HTTPHandler(BaseHTTPRequestHandler):
         if not self.raw_requestline:
             self.close_connection = 1
             return
-        #parse_request(duh), parsing errors will result in a proper http response(self.get_get_response())
+        # parse_request(duh), parsing errors will result in a proper http response(self.get_get_response())
         if not self.parse_request():
             # An error code has been sent, just exit
             return
-        #In the original implementation this method would had called the 'do_' + self.command method
+        # In the original implementation this method would had called the 'do_' + self.command method
         if not self.command in ('PUT', 'GET', 'POST', 'HEAD', 'TRACE', 'OPTIONS'):
             self.send_error(501, "Unsupported method (%r)" % self.command)
             return
 
-        #at this point we have parsed the headers which means that
-        #the rest of the request is the body
+        # At this point we have parsed the headers which means that
+        # the rest of the request is the body
         self.request_body = self.rfile.read()
 
     def set_response(self, body, http_code=200, headers=(('Content-type', 'text/html'),)):
@@ -158,7 +160,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         else:
             return self.wfile.getvalue()
 
-    def log_message(self, format, *args):
+    def log_message(self, log_format, *args):
         pass
 
     def version_string(self):
