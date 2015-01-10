@@ -1,4 +1,4 @@
-# Copyright (C) 2013  Lukas Rist
+# Copyright (C) 2015  Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,13 +32,13 @@ class SQLiEmulator(base_emulator.BaseEmulator):
         super(SQLiEmulator, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        payload = ""
-        value = ""
+        payload = None
+        value = None
         for value_list in attack_event.http_request.request_query.values():
             value = value_list[0]
-            self.ret = self.sqli_c.classify(value)
-            if len(self.ret["fingerprint"]) > 0:
-                best_query, best_ratio = self.sqli_c.query_similarity(self.ret["fingerprint"], value.lower())
+            ret = self.sqli_c.classify(value)
+            if len(ret["fingerprint"]) > 0:
+                best_query, best_ratio = self.sqli_c.query_similarity(ret["fingerprint"], value.lower())
                 payload = self.sqli_c.token_map[best_query]
         if payload and payload["resp"]:
             attack_event.http_request.set_raw_response(payload["resp"])

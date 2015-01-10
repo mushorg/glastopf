@@ -1,4 +1,4 @@
-# Copyright (C) 2014  Lukas Rist
+# Copyright (C) 2015  Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
         try:
             req = urllib2.Request(injectd_url)
             # Set User-Agent to look more credible
-            req.add_unredirected_header('User-Agent','-')
+            req.add_unredirected_header('User-Agent', '-')
             # FIXME: We need a timeout on read here
             injected_file = urllib2.urlopen(req, timeout=4).read()
         except IOError as e:
