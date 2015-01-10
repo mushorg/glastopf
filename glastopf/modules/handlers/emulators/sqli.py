@@ -27,6 +27,7 @@ class SQLiEmulator(base_emulator.BaseEmulator):
     """Emulates a SQL injection vulnerability and a successful attack."""
 
     def __init__(self, data_dir):
+        self.ret = None
         self.sqli_c = sql.SQLiClassifier()
         self.sql_response = sql_responses.SQLResponses()
         super(SQLiEmulator, self).__init__(data_dir)
@@ -36,9 +37,9 @@ class SQLiEmulator(base_emulator.BaseEmulator):
         value = None
         for value_list in attack_event.http_request.request_query.values():
             value = value_list[0]
-            ret = self.sqli_c.classify(value)
-            if len(ret["fingerprint"]) > 0:
-                best_query, best_ratio = self.sqli_c.query_similarity(ret["fingerprint"], value.lower())
+            self.ret = self.sqli_c.classify(value)
+            if len(self.ret["fingerprint"]) > 0:
+                best_query, best_ratio = self.sqli_c.query_similarity(self.ret["fingerprint"], value.lower())
                 payload = self.sqli_c.token_map[best_query]
         if payload and payload["resp"]:
             attack_event.http_request.set_raw_response(payload["resp"])
