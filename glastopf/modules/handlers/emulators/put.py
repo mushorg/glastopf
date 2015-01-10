@@ -23,4 +23,4 @@ class PUTRequest(base_emulator.BaseEmulator):
         super(PUTRequest, self).__init__(data_dir)
     
     def handle(self, attack_event):
-        attack_event.set_response('', http_code=200)
+        attack_event.http_request.set_response('', http_code=201)
