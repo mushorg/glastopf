@@ -30,17 +30,41 @@ class TestHTTPParsing(unittest.TestCase):
         http_handler = HTTPHandler(get_request, None)
         self.assertTrue(http_handler.request_verb == "GET")
 
-    def test_parse_version(self):
+    def test_parse_version1(self):
         """ Test if the parser is able to extract the HTTP version"""
         get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_handler = HTTPHandler(get_request, None)
         self.assertTrue(http_handler.request_version == "HTTP/1.0")
 
-    def test_parse_version(self):
+    def test_parse_version2(self):
         """ Test if the http handler is able to customize the server version string. """
         get_request = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         http_handler = HTTPHandler(get_request, None, server_version="LEET_Server/0.1", sys_version="LEET_OS/1.0")
         self.assertEqual("LEET_Server/0.1 LEET_OS/1.0", http_handler.version_string())
+
+    def test_put_method(self):
+        http_handler = HTTPHandler('PUT / HTTP/1.0', None)
+        self.assertTrue(http_handler.request_verb == "PUT")
+
+    def test_get_method(self):
+        http_handler = HTTPHandler('GET / HTTP/1.0', None)
+        self.assertTrue(http_handler.request_verb == "GET")
+
+    def test_post_method(self):
+        http_handler = HTTPHandler('POST / HTTP/1.0', None)
+        self.assertTrue(http_handler.request_verb == "POST")
+
+    def test_head_method(self):
+        http_handler = HTTPHandler('HEAD / HTTP/1.0', None)
+        self.assertTrue(http_handler.request_verb == "HEAD")
+
+    def test_trace_method(self):
+        http_handler = HTTPHandler('TRACE / HTTP/1.0', None)
+        self.assertTrue(http_handler.request_verb == "TRACE")
+
+    def test_options_method(self):
+        http_handler = HTTPHandler('OPTIONS / HTTP/1.0', None)
+        self.assertTrue(http_handler.request_verb == "OPTIONS")
 
 
 if __name__ == '__main__':
