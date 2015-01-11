@@ -79,7 +79,7 @@ contact_name = ...
 contact_email = ...
 
 [logstash]
-enabled = True
+enabled = False
 host = localhost
 port = 5659
 handler = AMQP/TCP/UDP 
