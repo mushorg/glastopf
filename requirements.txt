@@ -13,3 +13,4 @@ MySQL-python
 hpfeeds
 pylibinjection
 libtaxii>=1.1
+python-logstash

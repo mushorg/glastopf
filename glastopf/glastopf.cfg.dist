@@ -78,6 +78,12 @@ include_contact_info = False
 contact_name = ...
 contact_email = ...
 
+[logstash]
+enabled = True
+host = localhost
+port = 5659
+handler = AMQP/TCP/UDP 
+
 [misc]
 # set webserver banner
 banner = Apache/2.0.48
