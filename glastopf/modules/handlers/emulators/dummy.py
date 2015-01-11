@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,4 +24,3 @@ class DummyHandler(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         attack_event.http_request.set_response("dummy response")
-

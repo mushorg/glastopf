@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Louis Liu
+# Copyright (C) 2015 Louis Liu
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import os
 class PMAEmulator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(PMAEmulator, self).__init__(data_dir)
+        self.page = None
 
     def handle(self, attack_event, time_stamp=time.time()):
         path = os.path.join(self.data_dir, 'phpmyadmin/script_setup.php')

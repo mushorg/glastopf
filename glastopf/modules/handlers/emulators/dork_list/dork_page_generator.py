@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 INURL_MIN_SIZE = 500
 
+
 class DorkPageGenerator(object):
     """
     Responsible for maintenance of dork pages and collection of dorks from requests.
@@ -60,7 +61,8 @@ class DorkPageGenerator(object):
         self.enabled = True
         self.surface_creator = create_surface.SurfaceCreator(data_dir=data_dir)
 
-    def prepare_text(self):
+    @classmethod
+    def prepare_text(cls):
         line_list = []
         text_file = os.path.join(package_directory, 'data/pride.txt')
         with codecs.open(text_file, "r", "utf-8") as text_file:
@@ -165,4 +167,3 @@ class DorkPageGenerator(object):
         dorks += self.dork_file_processor.process_dorks(ignore)
         self.database.insert_dorks(dorks)
         logger.debug('Finished bootstrapping dork database.')
-

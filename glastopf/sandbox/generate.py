@@ -1,4 +1,4 @@
-# Copyright (C) 2011  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,7 +48,8 @@ for function, return_val in FUNCTIONS.items():
     function_args = ", ".join(parts[1:-1])
     rand_int = random.randint(100, 999)
     print("override_function('%s', '%s', 'return %s_rep(%s);');" % (
-    function_name, function_args, function_name, function_args))
+        function_name, function_args, function_name, function_args)
+    )
     print("function %s_rep(%s) {" % (function_name, function_args))
     if return_val == "None":
         return_val = "\treturn;"

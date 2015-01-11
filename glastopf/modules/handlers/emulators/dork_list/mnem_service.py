@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Johnny Vestergaard <jkv@unixcluster.dk>
+# Copyright (C) 2015 Johnny Vestergaard <jkv@unixcluster.dk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,9 +23,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Mnem_Service():
+class Mnem_Service(object):
     #yes google hackers, these credentials are left here by purpose!
-    def get_dorks(self, username='glastopf', password='glastopf', limit=1000, timeout=5):
+    @classmethod
+    def get_dorks(cls, username='glastopf', password='glastopf', limit=1000, timeout=5):
         base_url = 'https://mnemosyne.honeycloud.net:8282'
 
         sess = requests.Session()

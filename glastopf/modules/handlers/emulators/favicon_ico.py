@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,4 +27,3 @@ class FaviconHandler(base_emulator.BaseEmulator):
         with open(os.path.join(self.data_dir, 'favicon/favicon.ico'), 'r') as favicon:
             data = favicon.read()
             attack_event.http_request.set_response(data, headers=(('Content-Type, image/x-icon'),))
-

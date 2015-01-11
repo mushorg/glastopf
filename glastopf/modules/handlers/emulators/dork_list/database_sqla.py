@@ -45,7 +45,7 @@ class Database(object):
         data = list(set(data))
 
         for request in data:
-            if request != None:
+            if request:
                 url = request.split('=', 1)[0]
                 url_list.append(url)
         return url_list
@@ -58,16 +58,18 @@ class Database(object):
             return_list.append(row[0])
         return return_list
 
-    def create(self, meta, engine):
+    @classmethod
+    def create(cls, meta, engine):
         logger.debug('Creating SQLite database.')
         tables = {}
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablenames:
-            tables[table] = Table(table, meta,
-                                  Column('content', String(Database.DORK_MAX_LENGTH), primary_key=True),
-                                  Column('count', Integer),
-                                  Column('firsttime', String(30)),
-                                  Column('lasttime', String(30)),
+            tables[table] = Table(
+                table, meta,
+                Column('content', String(Database.DORK_MAX_LENGTH), primary_key=True),
+                Column('count', Integer),
+                Column('firsttime', String(30)),
+                Column('lasttime', String(30)),
             )
         meta.create_all(engine)
         return tables

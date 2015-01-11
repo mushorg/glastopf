@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,12 +20,14 @@ import warnings
 from datetime import datetime
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 try:
     from pymongo import MongoClient, uri_parser
 except ImportError:
     logger.warn('Unable to import module pymongo')
+
 
 class Database(object):
     """
@@ -58,7 +60,7 @@ class Database(object):
         self.num_distinct_results = len(data)
 
         for request in data:
-            if request != None:
+            if request:
                 url = request.split('=', 1)[0]
                 url_list.append(url)
         return url_list
@@ -85,7 +87,7 @@ class Database(object):
         """
         Selects dork from dork collection.
         """
-        if starts_with != None:
+        if starts_with:
             regx = re.compile(starts_with + "^{0}".format(starts_with), re.IGNORECASE)
             dorks = list(self.db[collection].find({'content': regx},
                                                   {'content': 1, '_id': 0}))

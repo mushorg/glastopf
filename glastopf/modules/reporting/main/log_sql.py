@@ -1,4 +1,4 @@
-# Copyright (C) 2012 Johnny Vestergaard <jkv@unixcluster.dk>
+# Copyright (C) 2015 Johnny Vestergaard <jkv@unixcluster.dk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,13 +15,13 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import json
+#import json
 import logging
 
 from sqlalchemy import Table, Column, Integer, String, MetaData, TEXT
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
-import glastopf.modules.processing.ip_profile as ipp
+#import glastopf.modules.processing.ip_profile as ipp
 
 logger = logging.getLogger(__name__)
 
@@ -73,16 +73,15 @@ class Database(object):
 
     def setup_mapping(self):
         meta = MetaData()
-
-        self.events_table = Table('events', meta,
-                                  Column('id', Integer, primary_key=True, ),
-                                  Column('time', String(30)),
-                                  Column('source', String(30)),
-                                  Column('request_url', String(500)),
-                                  Column('request_raw', TEXT),
-                                  Column('pattern', String(20)),
-                                  Column('filename', String(500)),
+        self.events_table = Table(
+            'events', meta,
+            Column('id', Integer, primary_key=True, ),
+            Column('time', String(30)),
+            Column('source', String(30)),
+            Column('request_url', String(500)),
+            Column('request_raw', TEXT),
+            Column('pattern', String(20)),
+            Column('filename', String(500)),
         )
-
         #only creates if it cant find the schema
         meta.create_all(self.engine)

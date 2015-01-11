@@ -1,4 +1,4 @@
-# Copyright (C) 2013  Lukas Rist <glaslos@gmail.com>
+# Copyright (C) 2015 Lukas Rist <glaslos@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,7 +37,8 @@ class DorkFileProcessor(object):
                     dork_lines.append(unicodedata.normalize('NFKD', dork_line).encode('ascii', 'ignore'))
         return dork_lines
 
-    def extract_term(self, dork_line):
+    @classmethod
+    def extract_term(cls, dork_line):
         if dork_line.startswith('"'):
             term = re.match('"([^"]+)"', dork_line)
             if term:
@@ -57,7 +58,7 @@ class DorkFileProcessor(object):
         inserts = []
         for dork_line in dork_lines:
             operator = next((oper for oper in search_opers if oper in dork_line), None)
-            if operator != None:
+            if operator:
                 dork_line_split = dork_line.partition(operator)[2]
                 table = operator[:-1]
                 if table not in ignores:

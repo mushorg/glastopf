@@ -2,6 +2,8 @@ from sqlalchemy import Column, String, Integer, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
+
 class IPProfile(Base):
     __tablename__ = 'ip_profiles'
     

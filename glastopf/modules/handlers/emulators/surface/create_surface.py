@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist <glaslos@gmail.com>
+# Copyright (C) 2015 Lukas Rist <glaslos@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,8 +31,3 @@ class SurfaceCreator(base_emulator.BaseEmulator):
         template = self.template_env.get_template('index.html')
         surface_page = template.render(title=title, target=target, body=body, footer=footer)
         return surface_page
-
-
-if __name__ == "__main__":
-    sc = SurfaceCreator()
-    sc.get_index()

@@ -1,4 +1,4 @@
-# Copyright (C) 2011  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -52,7 +52,8 @@ class Classifier(object):
         patterns = self.tree.getElementsByTagName("request")
         return patterns
 
-    def getText(self, nodelist):
+    @classmethod
+    def getText(cls, nodelist):
         rc = []
         for node in nodelist:
             if node.nodeType == node.TEXT_NODE or node.nodeType == node.CDATA_SECTION_NODE:
@@ -69,7 +70,8 @@ class Classifier(object):
                                         pattern_description, pattern_module)
         return parsed_pattern
 
-    def select_pattern(self, matched_patterns):
+    @classmethod
+    def select_pattern(cls, matched_patterns):
         # TODO: add some logic
         matched_pattern = matched_patterns[0]
         if len(matched_patterns) > 1:
@@ -118,7 +120,7 @@ class Classifier(object):
             else:
                 parsed_pattern.module = 'unknown'
                 match = True
-            if match != None:
+            if match:
                 matched_patterns.append(parsed_pattern.module)
         matched_pattern = self.select_pattern(matched_patterns)
         return matched_pattern

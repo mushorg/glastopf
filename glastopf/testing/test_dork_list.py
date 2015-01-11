@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@ import shutil
 import tempfile
 
 from lxml.html.soupparser import fromstring
+
+from glastopf.glastopf import GlastopfHoneypot
 from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.testing import helpers
 from glastopf.modules.handlers.emulators.dork_list.dork_page_generator import DorkPageGenerator
@@ -29,7 +31,7 @@ from glastopf.modules.handlers.emulators.dork_list.dork_file_processor import Do
 from glastopf.modules.handlers.emulators.dork_list import database_mongo
 from glastopf.modules.handlers.emulators.dork_list import database_sqla
 from glastopf.modules.events import attack
-from glastopf.glastopf import GlastopfHoneypot
+
 from sqlalchemy import create_engine
 
 

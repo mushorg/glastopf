@@ -1,4 +1,5 @@
 # Copyright (c) 2013, The MITRE Corporation
+# Copyright (C) 2015  Lukas Rist
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

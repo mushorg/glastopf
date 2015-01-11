@@ -1,4 +1,4 @@
-# Copyright (C) 2013  Lukas Rist
+# Copyright (C) 2015 Lukas Rist
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +34,8 @@ class SQLiClassifier(object):
         with open(queries_file, "rb") as fh:
             self.token_map = json.load(fh)
 
-    def classify(self, string):
+    @classmethod
+    def classify(cls, string):
         return pylibinjection.detect_sqli(string)
 
     def _token_squence_matcher(self, query_tokens):
@@ -74,12 +75,3 @@ class SQLiClassifier(object):
         if best_query is None:
             best_query, best_ratio = self._token_squence_matcher(query_tokens)
         return best_query, best_ratio
-
-
-if __name__ == "__main__":
-    sqli_c = SQLiClassifier()
-    query = "anything' OR 'x'='x';"
-    data = sqli_c.classify(query)
-    print data
-    best_query, best_ratio = sqli_c.query_similarity(data["fingerprint"], query.lower())
-    print sqli_c.token_map[best_query], best_ratio
