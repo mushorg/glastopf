@@ -13,8 +13,18 @@
 # config: $workdir/glastopf.cfg
 # pidfile: none
 
-
-workdir=/opt/myhoneypot
+if [ ! -z "$2" ]; then
+    workdir="$2"
+else
+    echo "Use default directory of /opt/myhoneypot? [y/N]"
+    read RESPONSE
+    if [ $RESPONSE = "y" ]; then
+        workdir=/opt/myhoneypot
+    else
+        echo "[ERROR] No directory specified. Aborting."
+        exit 1
+    fi
+fi
 
 #check that all assets are correct
 
@@ -71,7 +81,7 @@ case "$1" in
     ;;
 
   *)
-	echo "Usage: /etc/init.d/glastopf {start|stop|kill|restart|status|attach}"
+	echo "Usage: /etc/init.d/glastopf {start|stop|kill|restart|status|attach} (workdir)"
 	exit 1
 
 esac
