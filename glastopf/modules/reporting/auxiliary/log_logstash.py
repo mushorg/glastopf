@@ -1,4 +1,5 @@
 import logging
+import os
 import logstash
 
 logger = logging.getLogger(__name__)
@@ -10,7 +11,8 @@ from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
 class LogLogStash(BaseLogger):
-    def __init__(self, data_dir, config="glastopf.cfg"):
+    def __init__(self, data_dir, work_dir, config="glastopf.cfg"):
+        config = os.path.join(work_dir, config)
         BaseLogger.__init__(self, config)
 
         if self.config.getboolean("logstash", "enabled"):
@@ -29,8 +31,9 @@ class LogLogStash(BaseLogger):
                 self.durable = self.config.getboolean("logstash", "durable")
             elif self.handler != "TCP" and self.handler != "UDP":
                 raise Exception("Incorrect logstash handler defined, please use AMQP, UDP or TCP")
-
             self._setupHandler()
+        else:
+            self.options = {"enabled": False}
 
     def _setupHandler(self):
         logstashHandler = None
