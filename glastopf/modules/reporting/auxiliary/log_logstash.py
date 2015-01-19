@@ -19,7 +19,7 @@ class LogLogStash(BaseLogger):
             self.host = self.config.get("logstash", "host")
             self.port = int(self.config.getint("logstash", "port"))
             self.options = {
-            "enabled": self.config.getboolean("logstash", "enabled"),
+                "enabled": self.config.getboolean("logstash", "enabled"),
             }
 
             self.handler = self.config.get("logstash", "handler")
@@ -31,38 +31,39 @@ class LogLogStash(BaseLogger):
                 self.durable = self.config.getboolean("logstash", "durable")
             elif self.handler != "TCP" and self.handler != "UDP":
                 raise Exception("Incorrect logstash handler defined, please use AMQP, UDP or TCP")
-            self._setupHandler()
+            self._setup_handler()
         else:
             self.options = {"enabled": False}
 
-    def _setupHandler(self):
-        logstashHandler = None
+    def _setup_handler(self):
+        logstash_handler = None
 
         if self.handler == 'AMQP':
-            logstashHandler = logstash.AMQPLogstashHandler(version=1,
-                                                           host=self.host,
-                                                           durable=self.durable,
-                                                           username=self.username,
-                                                           password=self.password,
-                                                           exchange=self.exchange)
+            logstash_handler = logstash.AMQPLogstashHandler(version=1,
+                                                            host=self.host,
+                                                            durable=self.durable,
+                                                            username=self.username,
+                                                            password=self.password,
+                                                            exchange=self.exchange)
         elif self.handler == 'TCP':
-            logstashHandler = logstash.LogstashHandler(self.host, self.port, version=1)
+            logstash_handler = logstash.LogstashHandler(self.host, self.port, version=1)
         elif self.handler == "UDP":
-            logstashHandler = logstash.LogstashHandler(self.host, self.port, version=1)
+            logstash_handler = logstash.LogstashHandler(self.host, self.port, version=1)
 
         self.attack_logger = logging.getLogger('python-logstash-handler')
         self.attack_logger.setLevel(logging.INFO)
-        self.attack_logger.addHandler(logstashHandler)
+        self.attack_logger.addHandler(logstash_handler)
 
     def insert(self, attack_event):
-        message = "Glaspot: %(pattern)s attack method from %(source)s against %(host)s:%(port)s. [%(method)s %(url)s]" % {
-        'pattern': attack_event.matched_pattern,
-        'source': ':'.join((attack_event.source_addr[0], str(attack_event.source_addr[1]))),
-        'host': attack_event.sensor_addr[0],
-        'port': attack_event.sensor_addr[1],
-        'method': attack_event.http_request.request_verb,
-        'url': attack_event.http_request.request_url,
-        }
+        message = "Glaspot: %(pattern)s attack method from %(source)s against %(host)s:%(port)s." \
+                  "[%(method)s %(url)s]" % {
+                      'pattern': attack_event.matched_pattern,
+                      'source': ':'.join((attack_event.source_addr[0], str(attack_event.source_addr[1]))),
+                      'host': attack_event.sensor_addr[0],
+                      'port': attack_event.sensor_addr[1],
+                      'method': attack_event.http_request.request_verb,
+                      'url': attack_event.http_request.request_url,
+                  }
         self.attack_logger.info(message)
 
 
