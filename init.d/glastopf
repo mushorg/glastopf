@@ -1,0 +1,90 @@
+#!/bin/bash
+# This file is part of the Glastopf honeypot
+#
+# Main developer - Colleen Blaho <cblaho@sas.upenn.edu>
+# Based on the Kojoney2 script by - Justin C. Klein Keane <jukeane@sas.upenn.edu>
+# And Jose Antonio Coret <joxeankoret@yahoo.es>
+# Last updated 9 Jan 2015
+#
+# chkconfig: 2345 99 15
+# description: Glastopf, the web application honeypot -- http://glastopf.org
+#
+# processname: glastopf
+# config: $workdir/glastopf.cfg
+# pidfile: none
+
+if [ ! -z "$2" ]; then
+    workdir="$2"
+else
+    echo "Use default directory of /opt/myhoneypot? [y/N]"
+    read RESPONSE
+    if [ $RESPONSE = "y" ]; then
+        workdir=/opt/myhoneypot
+    else
+        echo "[ERROR] No directory specified. Aborting."
+        exit 1
+    fi
+fi
+
+#check that all assets are correct
+
+command -v glastopf-runner >/dev/null 2>&1 || { echo >&2 "[ERROR] Glastopf executable not found! Aborting."; exit 1; }
+command -v tmux >/dev/null 2>&1 || { echo >&2 "[ERROR] I require Tmux but it's not installed.  Aborting."; exit 1; }
+
+if [ -e $workdir ]; then
+	if [ ! -d $workdir ]; then
+		echo >&2 "[ERROR] Workdir exists as file! Aborting."
+		exit 1
+    fi
+else
+    echo "[Warning] The workdir specified in this script was not found, so it has been created at $workdir"
+    mkdir $workdir
+fi
+case "$1" in
+  start)
+        echo -n "Starting Glastopf Honeypot"
+	    tmux new-session -d -s glastopf "glastopf-runner --workdir $workdir"
+	    # if you are using a python virtualenv:
+	    #tmux new-session -d -s glastopf "source /opt/glastopf-virt/bin/activate && glastopf-runner --workdir $workdir"
+	;;
+  stop)
+        echo -n "Stopping Glastopf Honeypot"
+	    tmux kill-session -t glastopf
+	;;
+
+  kill)
+        echo -n "Killing Glastopf Honeypot: "
+	    kill -9 `ps aux | grep tmux | grep -v grep | awk '{ print $2 }'`
+	;;
+
+  restart)
+        echo "Restarting Glastopf Honeypot: "
+        /etc/init.d/glastopf stop > /dev/null
+        /etc/init.d/glastopf start > /dev/null
+
+    ;;
+
+  status)
+	    tmux has-session -t glastopf
+
+        value=`ps aux | grep glastopf-runner | grep -v grep | wc -l`
+
+	    if [ $value -eq 0 ]; then
+		    echo "Glastopf is stopped."
+	    else
+		    echo "Glastopf is running."
+	    fi
+	;;
+
+  attach)
+	    tmux attach -t glastopf
+    ;;
+
+  *)
+	echo "Usage: /etc/init.d/glastopf {start|stop|kill|restart|status|attach} (workdir)"
+	exit 1
+
+esac
+
+exit 0
+
