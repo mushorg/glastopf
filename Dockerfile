@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install -y \
         libxml2-dev \
         libxslt-dev \
         make \
-        mongodb \
         php5 \
         php5-dev \
         python-beautifulsoup \
