@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
         libxml2-dev \
         libxslt-dev \
         make \
-        php5 \
+        php5-cli \
         php5-dev \
         python-beautifulsoup \
         python-chardet \
@@ -45,7 +45,6 @@ RUN git clone https://github.com/glastopf/BFR.git /opt/BFR && \
     ./configure --enable-bfr && \
     make && \
     make install && \
-    echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/apache2/php.ini && \
     echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/cli/php.ini && \
     rm -rf /opt/BFR /tmp/* /var/tmp/*
 
