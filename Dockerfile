@@ -1,43 +1,62 @@
 FROM ubuntu:14.04.1
 MAINTAINER Lukas Rist <glaslos@gmail.com>
 
-
-## setup APT
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse' /etc/apt/sources.list
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse' /etc/apt/sources.list
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-backports main restricted universe multiverse' /etc/apt/sources.list
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse' /etc/apt/sources.list
-RUN apt-get update
 ENV DEBIAN_FRONTEND noninteractive
 
+## setup APT
+RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-backports main restricted universe multiverse' /etc/apt/sources.list && \
+    sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse' /etc/apt/sources.list
 
 ## Install dependencies
-RUN apt-get install -y python2.7 python-openssl python-gevent libevent-dev python2.7-dev build-essential make
-RUN apt-get install -y python-chardet python-requests python-sqlalchemy python-lxml
-RUN apt-get install -y python-beautifulsoup mongodb python-pip python-dev python-setuptools
-RUN apt-get install -y g++ git php5 php5-dev liblapack-dev gfortran libmysqlclient-dev
-RUN apt-get install -y libxml2-dev libxslt-dev
-
+RUN apt-get update && apt-get install -y \
+        build-essential \
+        g++ \
+        gfortran \
+        git \
+        libevent-dev \
+        liblapack-dev \
+        libmysqlclient-dev \
+        libxml2-dev \
+        libxslt-dev \
+        make \
+        php5-cli \
+        php5-dev \
+        python-beautifulsoup \
+        python-chardet \
+        python-dev \
+        python-gevent \
+        python-lxml \
+        python-openssl \
+        python-pip \
+        python-requests \
+        python-setuptools \
+        python-sqlalchemy \
+        python2.7 \
+        python2.7-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ## Install and configure the PHP sandbox
-RUN git clone https://github.com/glastopf/BFR.git /opt/BFR
-RUN cd /opt/BFR && phpize && ./configure --enable-bfr && make && make install
-RUN echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/apache2/php.ini
-RUN echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/cli/php.ini
+RUN git clone https://github.com/glastopf/BFR.git /opt/BFR && \
+    cd /opt/BFR && \
+    phpize && \
+    ./configure --enable-bfr && \
+    make && \
+    make install && \
+    echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php5/cli/php.ini && \
+    rm -rf /opt/BFR /tmp/* /var/tmp/*
 
 
 ## Install glastopf from latest sources
-RUN git clone https://github.com/glastopf/glastopf.git /opt/glastopf
-RUN cd /opt/glastopf && python setup.py install
-
+RUN git clone https://github.com/glastopf/glastopf.git /opt/glastopf && \
+    cd /opt/glastopf && \
+    python setup.py install && \
+    rm -rf /opt/glastopf /tmp/* /var/tmp/*
 
 ## Configuration
 RUN mkdir /opt/myhoneypot
-
-
-# Clean up when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 EXPOSE 80
 WORKDIR /opt/myhoneypot
