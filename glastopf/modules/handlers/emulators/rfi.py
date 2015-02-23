@@ -65,9 +65,14 @@ class RFIEmulator(base_emulator.BaseEmulator):
             injected_file = urllib2.urlopen(req, timeout=4).read()
             #  If the file is hosted on a SSL enabled host get the certificate
             if re.match('^https', injectd_url, re.IGNORECASE):
-              host_name = req.get_host()
-              cert_file = ssl.get_server_certificate((host_name, 443))
-              cert_name = self.store_file(cert_file)
+                proto, rest = urllib2.splittype(injectd_url)
+                host, rest = urllib2.splithost(rest)
+                host, port = urllib2.splitport(host)
+                if port is None:
+                    port = 443
+
+                cert_file = ssl.get_server_certificate((host, int(port)))
+                cert_name = self.store_file(cert_file)
 
         except IOError as e:
             logger.exception("Failed to fetch injected file, I/O error: {0}".format(e))
