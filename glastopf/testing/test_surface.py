@@ -38,11 +38,10 @@ class TestSurfaceCreation(unittest.TestCase):
     def test_template(self):
         surface_creator = create_surface.SurfaceCreator(data_dir=self.datadir)
         print surface_creator.get_index()
-    
+ 
     def test_meta(self):
         """
         Objective: Test google/bing page verification support.
-        
         """
         test_meta = ['0cfa9f600839f57e90e5559b8ee54864', 'fbeefa5876ae12675451e144530b2f66']
         config = ConfigParser.RawConfigParser()
