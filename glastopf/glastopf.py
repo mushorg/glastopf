@@ -44,7 +44,7 @@ from modules.handlers.emulators.dork_list import mnem_service
 from modules.reporting.main import log_mongodb, log_sql
 from subprocess import check_call
 from sqlalchemy import create_engine
-
+import re
 
 logger = logging.getLogger(__name__)
 package_directory = os.path.dirname(os.path.abspath(__file__))
@@ -244,6 +244,11 @@ class GlastopfHoneypot(object):
         attack_event.sensor_addr = sensor_addr
 
         attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
+
+        if 'DNT' in attack_event.http_request.request_headers:
+          eff_mode = list(addr)
+          eff_mode[0] = re.sub("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",'xxx.xxx.xxx.xxx',addr[0])
+          addr = tuple(eff_mode)
 
         if self.options["proxy_enabled"] == "True":
             self._handle_proxy(attack_event, addr)
