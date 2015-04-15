@@ -30,15 +30,11 @@ class SurfaceCreator(base_emulator.BaseEmulator):
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-        google_meta = ""
-        bing_meta = ""
+        google_meta = None
+        bing_meta = None
         try:
-            meta_g = self.conf_parser.get('surface', 'google_meta')
-            meta_b = self.conf_parser.get('surface', 'bing_meta')
-            if meta_g:
-                google_meta = "<meta name=\"google-site-verification\" content=\"%s\" />" % meta_g
-            if meta_b:
-                bing_meta = "<meta name=\"msvalidate.01\" content=\"%s\" />" % meta_b
+            google_meta = self.conf_parser.get('surface', 'google_meta')
+            bing_meta = self.conf_parser.get('surface', 'bing_meta')
         except:
             pass
         surface_page = template.render(
