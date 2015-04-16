@@ -23,11 +23,22 @@ from jinja2 import Environment, FileSystemLoader
 
 
 class SurfaceCreator(base_emulator.BaseEmulator):
-    def __init__(self, data_dir):
+    def __init__(self, data_dir, conf_parser=None):
         super(SurfaceCreator, self).__init__(data_dir)
+        self.conf_parser = conf_parser
         self.template_env = Environment(loader=FileSystemLoader(os.path.join(self.data_dir, "templates")))
 
     def get_index(self, title="Title Title", target="/index", body="Some Body", footer="Footer Text"):
         template = self.template_env.get_template('index.html')
-        surface_page = template.render(title=title, target=target, body=body, footer=footer)
+        google_meta = None
+        bing_meta = None
+        try:
+            google_meta = self.conf_parser.get('surface', 'google_meta')
+            bing_meta = self.conf_parser.get('surface', 'bing_meta')
+        except:
+            pass
+        surface_page = template.render(
+            title=title,
+            google_meta=google_meta, bing_meta=bing_meta,
+            target=target, body=body, footer=footer)
         return surface_page

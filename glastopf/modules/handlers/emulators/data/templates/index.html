@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% block title %} {{ title }} {% endblock %}
+{% block meta_tags -%}
+    {%- if google_meta -%}
+        <meta name="google-site-verification" content="{{ google_meta }}" />
+    {%- endif %}
+    {%- if bing_meta -%}
+        <meta name="msvalidate.01" content="{{ bing_meta }}" />
+    {%- endif %}
+{%- endblock %}
 {% block page_title %} {{ title }} {% endblock %}
 {% block form_url %}{{ target }}{% endblock %}
 {% block bodystr %} {{ body }} {% endblock %}

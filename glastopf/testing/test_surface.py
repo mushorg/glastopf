@@ -19,6 +19,7 @@ import os
 import tempfile
 import shutil
 import unittest
+import ConfigParser
 
 from glastopf.glastopf import GlastopfHoneypot
 from glastopf.modules.handlers.emulators.surface import create_surface
@@ -38,6 +39,18 @@ class TestSurfaceCreation(unittest.TestCase):
         surface_creator = create_surface.SurfaceCreator(data_dir=self.datadir)
         print surface_creator.get_index()
 
+    def test_meta(self):
+        """
+        Objective: Test google/bing page verification support.
+        """
+        test_meta = ['0cfa9f600839f57e90e5559b8ee54864', 'fbeefa5876ae12675451e144530b2f66']
+        config = ConfigParser.RawConfigParser()
+        config.add_section('surface')
+        config.set('surface', 'google_meta', test_meta[0])
+        config.set('surface', 'bing_meta', test_meta[1])
+        surface_creator = create_surface.SurfaceCreator(data_dir=self.datadir, conf_parser=config)
+        for meta in test_meta:
+            self.assertTrue(meta in surface_creator.get_index())
 
 if __name__ == '__main__':
     unittest.main()

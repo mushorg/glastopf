@@ -138,6 +138,7 @@ class GlastopfHoneypot(object):
         return dork_page_generator.DorkPageGenerator(self.dorkdb,
                                                      file_processor,
                                                      data_dir=self.data_dir,
+                                                     conf_parser=conf_parser,
                                                      mnem_service_instance=mnemosyne_service)
 
     @staticmethod

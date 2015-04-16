@@ -87,3 +87,9 @@ handler = AMQP/TCP/UDP
 [misc]
 # set webserver banner
 banner = Apache/2.0.48
+
+[surface]
+#https://www.google.com/webmasters/
+google_meta =
+#http://www.bing.com/toolbox/webmaster
+bing_meta =
