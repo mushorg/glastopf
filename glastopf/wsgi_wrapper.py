@@ -17,7 +17,6 @@
 
 from webob import Request, Response
 
-
 class GlastopfWSGI(object):
     def __init__(self, honeypot):
         self.honeypot = honeypot
@@ -48,11 +47,17 @@ class GlastopfWSGI(object):
 
         header, body = self.honeypot.handle_request(req_webob.as_text(),
                                                          remote_addr, sensor_addr)
+        proto, code, msg = ['HTTP/1.0','200','OK']
+
         for h in header.splitlines():
             if ":" in h:
                 h, v = h.split(":", 1)
                 res_webob.headers[str(h.strip())] = str(v.strip())
+            else:
+                proto, code, msg = h.split(" ",2)
+
         # this will adjust content-length header
+        res_webob.status = code
         res_webob.charset = "utf8"
         res_webob.text = body.decode("utf-8", "ignore")
 
