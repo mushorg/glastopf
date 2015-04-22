@@ -92,7 +92,7 @@ if __name__ == '__main__':
     wsgi_wrapper = GlastopfWSGI(honeypot)
 
     try:
-        if conf_parser.get("ssl", "enabled"):
+        if conf_parser.get("ssl", "enabled") == True:
             server = WSGIServer((host, port), wsgi_wrapper.application, log=None, **ssl)
         else:
             server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
