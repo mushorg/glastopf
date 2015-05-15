@@ -9,6 +9,14 @@ from glastopf.modules.processing.scans_table import ScansTable
 from glastopf.modules.processing.scan import Scan
 import glastopf.modules.processing.ip_profile as ipp
 
+import logging
+import os
+
+from glastopf.modules import logging_handler
+from glastopf.modules.reporting.auxiliary.log_profiler import LogProfiler
+
+logger = logging.getLogger(__name__)
+
 
 class Profiler(object):
     def __init__(self, maindb):
@@ -22,7 +30,7 @@ class Profiler(object):
         self.deque_read_interval = 15
         self.cymru_min_timeout = 2
         self.cymru_timeout = 3
-        #self.loggers = logging_handler.get_loggers()
+        # self.loggers = logging_handler.get_loggers()
         thread.start_new_thread(self.run, ())
 
     # Reverse the IP address for querying origin.asn.cymru.com
@@ -37,7 +45,20 @@ class Profiler(object):
             return ""
 
     def handle_event(self, event):
+        source_ip = event.source_addr[0].split(',')[0]
+        ip_profile = self.maindb.get_profile(source_ip)
+        if ip_profile is None:
+            ip_profile = self.create_new_profile(source_ip)
+            self.maindb.insert_profile(ip_profile)
+            logger.info('Attack event occured from new IP source (%s). A new profile got stored in the database.',
+                        source_ip)
+        else:
+            waittime = lambda: self.profile_update_time - datetime.now() \
+                       if self.profile_update_time > datetime.now() else '0:00:00.000000'
+            logger.info('Attack event from known IP (%s). Profile updates will be provided in %s',
+                        source_ip, waittime() )
         self.events_deque.appendleft(event)
+        logger.info('Attack event added to a queue for processing.')
 
     @staticmethod
     def add_comment(ip_address, comment):
@@ -50,7 +71,15 @@ class Profiler(object):
         # for logger in supported_loggers:
         #    logger.add_comment(ip_address, comment)
         #=======================================================================
-        pass
+        work_dir = os.getcwd()
+        data_dir = os.path.join(work_dir, 'data')
+        loggers = logging_handler.get_aux_loggers(data_dir, work_dir)
+        for _logger in loggers:
+            if type(_logger) is LogProfiler:
+                _logger.add_comment(ip_address, comment)
+                break
+        else:
+            logger.info('An issue occured with the dedicated logger. Please check the configuration file.')
 
     @staticmethod
     def get_comments(ip_address):
@@ -63,7 +92,15 @@ class Profiler(object):
         #    return supported_loggers[0].get_comments(ip_address)
         #else:
         #    return ''
-        return ''
+        work_dir = os.getcwd()
+        data_dir = os.path.join(work_dir, 'data')
+        loggers = logging_handler.get_aux_loggers(data_dir, work_dir)
+        for _logger in loggers:
+            if type(_logger) is LogProfiler:
+                return _logger.get_comments(ip_address)
+        else:
+            logger.info('An issue occured with the dedicated logger. Please check the configuration file.')
+            return ''
 
     def update_scan(self, event):
         source_ip = event.source_addr[0].split(',')[0]
@@ -184,6 +221,8 @@ class Profiler(object):
                     self.update_profiles()
                     #self.profile_update_time += timedelta(hours=24)
                     self.profile_update_time += timedelta(seconds=30)
+                    logger.info('Regular database profile updating finished. Next update will be at %s',
+                                self.profile_update_time)
                 time.sleep(self.deque_read_interval)
                 continue
             self.update_scan(self.events_deque.pop())

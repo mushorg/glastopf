@@ -99,3 +99,6 @@ banner = Apache/2.0.48
 google_meta =
 #http://www.bing.com/toolbox/webmaster
 bing_meta =
+
+[profiler]
+enabled = True
