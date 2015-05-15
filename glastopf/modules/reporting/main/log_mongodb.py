@@ -44,3 +44,13 @@ class Database(object):
 
     def insert(self, attack_event):
         self.db["events"].insert(attack_event.event_dict())
+
+    # TODO: add support for mongo in the log_profiler
+    def insert_profile(self, ip_profile):
+        pass
+
+    def update_db(self):
+        pass
+
+    def get_profile(self, source_ip):
+        pass

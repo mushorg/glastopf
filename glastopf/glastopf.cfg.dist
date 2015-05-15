@@ -102,3 +102,6 @@ bing_meta =
 
 [sensor]
 sensorid = None
+
+[profiler]
+enabled = True

@@ -21,7 +21,7 @@ import logging
 from sqlalchemy import Table, Column, Integer, String, MetaData, TEXT
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
-#import glastopf.modules.processing.ip_profile as ipp
+import glastopf.modules.processing.ip_profile as ipp
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 class Database(object):
     def __init__(self, engine):
         self.engine = engine
-        #ipp.Base.metadata.create_all(self.engine)
+        ipp.Base.metadata.create_all(self.engine)
         self.setup_mapping()
         self.session = sessionmaker(bind=self.engine)()
 
@@ -45,31 +45,30 @@ class Database(object):
             message = str(e)[:35]
             logger.error("Error inserting attack event into main database: {0}".format(message))
 
-    #all profiling support disabled until issue #26 is fixed
-    # def insert_profile(self, ip_profile):
-    #     #print "last_event_time for ip %s:%s"%(
-    #     #             ip_profile.ip, ip_profile.last_event_time)
-    #     # .split()[0] is added to deal with multiple ASNs
-    #     self.session.add(ip_profile)
-    #     try:
-    #         self.session.commit()
-    #     except exc.OperationalError as e:
-    #         self.session.rollback()
-    #         message = str(e)[:35]
-    #        logger.error("Error inserting profile into main database: {0}".format(message))
+    def insert_profile(self, ip_profile):
+        # print "last_event_time for ip %s:%s"%(
+        #             ip_profile.ip, ip_profile.last_event_time)
+        # .split()[0] is added to deal with multiple ASNs
+        self.session.add(ip_profile)
+        try:
+            self.session.commit()
+        except exc.OperationalError as e:
+            self.session.rollback()
+            message = str(e)[:35]
+            logger.error("Error inserting profile into main database: {0}".format(message))
 
-    # def update_db(self):
-    #     try:
-    #         self.session.commit()
-    #     except exc.OperationalError as e:
-    #         self.session.rollback()
-    #         message = str(e)[:35]
-    #         logger.error("Error updating profile in main database: {0}".format(message))
-    #
-    # def get_profile(self, source_ip):
-    #     ip_profile = self.session.query(ipp.IPProfile).filter(
-    #         ipp.IPProfile.ip == source_ip).first()
-    #     return ip_profile
+    def update_db(self):
+        try:
+            self.session.commit()
+        except exc.OperationalError as e:
+            self.session.rollback()
+            message = str(e)[:35]
+            logger.error("Error updating profile in main database: {0}".format(message))
+
+    def get_profile(self, source_ip):
+        ip_profile = self.session.query(ipp.IPProfile).filter(
+            ipp.IPProfile.ip == source_ip).first()
+        return ip_profile
 
     def setup_mapping(self):
         meta = MetaData()
