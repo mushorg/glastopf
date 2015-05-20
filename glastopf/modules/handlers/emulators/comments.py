@@ -32,7 +32,7 @@ class CommentPoster(base_emulator.BaseEmulator):
             try:
                 comment = (parse_qs(attack_event.http_request.request_body)
                            ['comment'][0])
-                clean_comment = self.html_escape(comment)
+                clean_comment = self.html_escape(comment.encode('ascii', 'backslashreplace'))
                 clean_comment = "<br/><br/>" + clean_comment
                 comment = "<br/><br/>" + comment
             except KeyError:
@@ -57,7 +57,7 @@ class CommentPoster(base_emulator.BaseEmulator):
             else:
                 general_comments = ''
 
-            display_comments = str(general_comments)
+            display_comments = general_comments.decode('string_escape')
             template = Template(dork_page.read())
             response = template.safe_substitute(login_msg="", comments=display_comments)
             attack_event.http_request.set_response(response)
