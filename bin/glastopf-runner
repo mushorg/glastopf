@@ -79,12 +79,23 @@ if __name__ == '__main__':
 
     host = conf_parser.get("webserver", "host")
     port = conf_parser.getint("webserver", "port")
+    
+    if conf_parser.get("ssl", "enabled"):
+        ssl = {
+            'certfile': conf_parser.get("ssl", "certfile"),
+            'keyfile': conf_parser.get("ssl", "keyfile"),
+            'ciphers': 'RC4',
+        }
+
 
     honeypot = GlastopfHoneypot(work_dir=args.workdir)
     wsgi_wrapper = GlastopfWSGI(honeypot)
 
     try:
-        server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
+        if conf_parser.get("ssl", "enabled") == True:
+            server = WSGIServer((host, port), wsgi_wrapper.application, log=None, **ssl)
+        else:
+            server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
         wsgi_greenlet = gevent.Greenlet(server.start())
         #start background worker and drop privs
         workers = honeypot.start_background_workers()

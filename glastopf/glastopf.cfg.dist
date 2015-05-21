@@ -5,6 +5,12 @@ uid = nobody
 gid = nogroup
 proxy_enabled = False
 
+[ssl]
+enabled = False
+certfile = 
+keyfile = 
+
+
 #Generic logging for general monitoring
 [logging]
 consolelog_enabled = True
