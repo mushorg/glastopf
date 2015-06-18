@@ -244,6 +244,9 @@ class GlastopfHoneypot(object):
         attack_event.raw_request = raw_request
         attack_event.sensor_addr = sensor_addr
 
+        # Add glastopf version
+        attack_event.version = __version__
+
         attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
 
         if self.options["proxy_enabled"] == "True":
