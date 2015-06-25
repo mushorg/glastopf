@@ -161,10 +161,10 @@ class GlastopfHoneypot(object):
                 logger.error("Invalid connection string.")
                 sys.exit(1)
         else:
-            default_db = "sqlite://db/glastopf.db"
+            default_db = "sqlite:///db/glastopf.db"
             logger.info("Main datbase has been disabled, dorks will be stored in: {0}".format(default_db))
             #db will only be used for dorks
-            sqla_engine = create_engine("sqlite://db/glastopf.db")
+            sqla_engine = create_engine("sqlite:///db/glastopf.db")
             #maindb = log_sql.Database(sqla_engine)
             dorkdb = database_sqla.Database(sqla_engine)
             #disable usage of main logging datbase
