@@ -164,7 +164,7 @@ class GlastopfHoneypot(object):
             default_db = "sqlite:///db/glastopf.db"
             logger.info("Main database has been disabled, dorks will be stored in: {0}".format(default_db))
             #db will only be used for dorks
-            sqla_engine = create_engine("sqlite:///db/glastopf.db")
+            sqla_engine = create_engine(default_db)
             #maindb = log_sql.Database(sqla_engine)
             dorkdb = database_sqla.Database(sqla_engine)
             #disable usage of main logging datbase
