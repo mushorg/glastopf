@@ -33,7 +33,7 @@ from glastopf.modules.handlers.emulators.dork_list import database_sqla
 from glastopf.modules.events import attack
 
 from sqlalchemy import create_engine
-
+from ConfigParser import ConfigParser
 
 class TestEmulatorDorkList(unittest.TestCase):
     """Tests the honeypots vulnerable string selection.
@@ -42,6 +42,9 @@ class TestEmulatorDorkList(unittest.TestCase):
     with data a needed."""
 
     def setUp(self):
+        self.config= ConfigParser()
+        self.config.add_section('main-database')
+        self.config.set('main-database', 'enabled', "True")
         self.workdir = tempfile.mkdtemp()
         self.datadir = os.path.join(self.workdir, 'data')
         GlastopfHoneypot.prepare_environment(self.workdir)
@@ -68,7 +71,7 @@ class TestEmulatorDorkList(unittest.TestCase):
             raise Exception("Unsupported database type: {0}".format(dbtype))
         reduced_dorks_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'data/dorks_reduced.txt')
         file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
-        dork_generator = DorkPageGenerator(db, file_processor, self.datadir)
+        dork_generator = DorkPageGenerator(db, file_processor, self.datadir, conf_parser=self.config)
         return db, engine, dork_generator
 
     def test_db_select_sqlalchemy(self):

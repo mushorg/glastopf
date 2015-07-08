@@ -46,6 +46,7 @@ class DorkPageGenerator(object):
                  pages_dir=None,
                  mnem_service_instance=None):
         self.database = database_instance
+        self.conf_parser = conf_parser
         if not pages_dir:
             self.pages_path = os.path.join(data_dir, 'dork_pages')
         else:
@@ -78,7 +79,10 @@ class DorkPageGenerator(object):
         line_list = self.prepare_text()
         shuffle(line_list)
 
-        inurl_list = self.database.select_data()
+        if self.conf_parser.getboolean("main-database", "enabled"):
+            inurl_list = self.database.select_data()
+        else:
+            inurl_list = self.database.get_dork_list('inurl')
         shuffle(inurl_list)
         #get data from dorkdb if the live database does not have enough
         if len(inurl_list) < INURL_MIN_SIZE:
