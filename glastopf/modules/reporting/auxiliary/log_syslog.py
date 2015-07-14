@@ -48,13 +48,12 @@ class LogSyslog(BaseLogger):
                 LogSyslog.logger.setLevel(logging.INFO)
 
     def insert(self, attack_event):
-        message = "Glastopf: %(pattern)s attack method from %(source)s against %(host)s:%(port)s. [%(method)s %(url)s] v:%(version)s" % {
+        message = "Glastopf: %(pattern)s attack method from %(source)s against %(host)s:%(port)s. [%(method)s %(url)s]" % {
             'pattern': attack_event.matched_pattern,
             'source': ':'.join((attack_event.source_addr[0], str(attack_event.source_addr[1]))),
             'host': attack_event.sensor_addr[0],
             'port': attack_event.sensor_addr[1],
             'method': attack_event.http_request.request_verb,
             'url': attack_event.http_request.request_url,
-            'version': attack_event.version,
         }
         LogSyslog.logger.info(message)
