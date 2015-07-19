@@ -162,6 +162,8 @@ def gen_config(conn_string):
         "[main-database]\n",
         "enabled = True\n",
         "connection_string = {0}\n".format(conn_string),
+        "[profiler]\n",
+        "enabled = True\n",
     ]
 
 

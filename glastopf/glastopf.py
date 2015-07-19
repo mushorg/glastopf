@@ -35,7 +35,7 @@ from modules.handlers.request_handler import RequestHandler
 from modules import logging_handler, vdocs
 import shutil
 import modules.privileges as privileges
-#import modules.processing.profiler as profiler
+import modules.processing.profiler as profiler
 from modules.handlers.emulators.dork_list import dork_file_processor
 from modules.handlers.emulators.dork_list import database_sqla
 from modules.handlers.emulators.dork_list import database_mongo
@@ -80,10 +80,9 @@ class GlastopfHoneypot(object):
             logger.info("Generating initial dork pages - this can take a while.")
             self.dork_generator.regular_generate_dork(0)
 
-        #profiler disabled until issue #26 is fixed
-        self.profiler_available = False
-        #if self.profiler_available:
-        #    self.profiler = profiler.Profiler(self.maindb)
+        self.profiler_available = conf_parser.getboolean("profiler", "enabled")
+        if self.profiler_available:
+            self.profiler = profiler.Profiler(self.maindb)
 
         #self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods(self.data_dir)
@@ -270,8 +269,8 @@ class GlastopfHoneypot(object):
         emulator = request_handler.get_handler(attack_event.matched_pattern)
         emulator.handle(attack_event)
         # Logging the event
-        #if self.profiler_available:
-        #    self.profiler.handle_event(attack_event)
+        if self.profiler_available:
+            self.profiler.handle_event(attack_event)
         self.post_queue.put(attack_event)
 
         header = attack_event.http_request.get_response_header()
