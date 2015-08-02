@@ -159,6 +159,8 @@ def gen_config(conn_string):
         "contact_email = ...\n",
         "[misc]\n",
         "banner = Apache/2.0.48\n",
+        "[sensor]\n",
+        "sensorid = None\n",
         "[main-database]\n",
         "enabled = True\n",
         "connection_string = {0}\n".format(conn_string),
