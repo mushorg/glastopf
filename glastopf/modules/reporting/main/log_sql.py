@@ -83,6 +83,7 @@ class Database(object):
             Column('pattern', String(20)),
             Column('filename', String(500)),
             Column('version', String(10)),
+            Column('sensorid', String(36)),
         )
         #only creates if it cant find the schema
         meta.create_all(self.engine)

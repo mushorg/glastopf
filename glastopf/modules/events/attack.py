@@ -30,6 +30,7 @@ class AttackEvent(object):
         self.matched_pattern = "unknown"
         self.file_name = None
         self.version = None
+        self.sensorid = None
 
     def event_dict(self):
         event_dict = {
@@ -40,5 +41,6 @@ class AttackEvent(object):
             "pattern": self.matched_pattern,
             "filename": self.file_name,
             "version": self.version,
+            "sensorid": self.sensorid,
         }
         return event_dict

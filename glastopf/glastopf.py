@@ -23,6 +23,7 @@ import gevent
 import os
 import sys
 import Queue
+import uuid
 
 from ConfigParser import ConfigParser
 import logging.handlers
@@ -62,15 +63,23 @@ class GlastopfHoneypot(object):
         self.work_dir = work_dir
         self.data_dir = os.path.join(self.work_dir, 'data')
         self.loggers = logging_handler.get_aux_loggers(self.data_dir, self.work_dir)
+        self.config_path = os.path.join(self.work_dir, config)
 
         conf_parser = ConfigParser()
-        conf_parser.read(os.path.join(self.work_dir, config))
+        conf_parser.read(self.config_path)
         self.options = {
             "uid": conf_parser.get("webserver", "uid").encode('latin1'),
             "gid": conf_parser.get("webserver", "gid").encode('latin1'),
             "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
             "banner": conf_parser.get("misc", "banner").encode('latin1'),
+            "sensorid": conf_parser.get("sensor", "sensorid").encode('latin1'),
         }
+
+        if self.options['sensorid'] == "None":
+            self.options['sensorid'] = str(uuid.uuid4())
+            conf_parser.set('sensor', 'sensorid', self.options['sensorid'])
+            with open((self.config_path), 'wb') as configfile:
+                conf_parser.write(configfile)
 
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
 
@@ -246,6 +255,9 @@ class GlastopfHoneypot(object):
 
         # Add glastopf version
         attack_event.version = __version__
+
+        # Add sensor name
+        attack_event.sensorid = self.options['sensorid']
 
         attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
 
