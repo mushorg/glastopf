@@ -42,8 +42,7 @@ class Database(object):
             conn = self.engine.connect()
             conn.execute(self.events_table.insert(entry))
         except exc.OperationalError as e:
-            message = str(e)[:35]
-            logger.error("Error inserting attack event into main database: {0}".format(message))
+            logger.error("Error inserting attack event into main database: {0}".format(e))
 
     def insert_profile(self, ip_profile):
         # print "last_event_time for ip %s:%s"%(
@@ -54,16 +53,14 @@ class Database(object):
             self.session.commit()
         except exc.OperationalError as e:
             self.session.rollback()
-            message = str(e)[:35]
-            logger.error("Error inserting profile into main database: {0}".format(message))
+            logger.error("Error inserting profile into main database: {0}".format(e))
 
     def update_db(self):
         try:
             self.session.commit()
         except exc.OperationalError as e:
             self.session.rollback()
-            message = str(e)[:35]
-            logger.error("Error updating profile in main database: {0}".format(message))
+            logger.error("Error updating profile in main database: {0}".format(e))
 
     def get_profile(self, source_ip):
         ip_profile = self.session.query(ipp.IPProfile).filter(
