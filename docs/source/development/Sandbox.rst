@@ -75,9 +75,9 @@ BFR - Extension
 As Glastopf overrides the internal core functions of PHP, there must be some extension modifying the way PHP handles
 function calls.
 
-Glastopf uses Better Function Replacer(BFR) `[1] <https://github.com/glastopf/BFR>`_ developed by Lukas Rist. BFR is a Zend extension based on Advanced PHP Debugger(APD).
+Glastopf uses Better Function Replacer(BFR) `[1] <https://github.com/mushorg/BFR>`_ developed by Lukas Rist. BFR is a Zend extension based on Advanced PHP Debugger(APD).
 BFR extension enables implementation of Overriding and Renaming functions in the PHP sandbox. In order to use the BFR
-extension it must be installed and properly configured, all instructions for the same can be found here `[1] <https://github.com/glastopf/BFR>`_.
+extension it must be installed and properly configured, all instructions for the same can be found here `[1] <https://github.com/mushorg/BFR>`_.
 
 BFR - How It Works
 ------------------
@@ -166,7 +166,7 @@ Note: Still __overridden__ is present in global function table.
 
 References
 ----------
-1. https://github.com/glastopf/BFR
+1. https://github.com/mushorg/BFR
 
 
 

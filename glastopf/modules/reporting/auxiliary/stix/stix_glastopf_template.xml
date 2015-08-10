@@ -61,7 +61,7 @@
                         <cyboxCommon:Type>Honeypot</cyboxCommon:Type>
                         <cyboxCommon:Description>Glastopf is a Honeypot which emulates thousands of vulnerabilities to gather data from attacks targeting web applications.</cyboxCommon:Description>
                          <cyboxCommon:References>
-                            <cyboxCommon:Reference reference_type="Source">https://github.com/glastopf/glastopf</cyboxCommon:Reference>
+                            <cyboxCommon:Reference reference_type="Source">https://github.com/mushorg/glastopf</cyboxCommon:Reference>
                             <cyboxCommon:Reference reference_type="Other">http://glastopf.org/</cyboxCommon:Reference>
                         </cyboxCommon:References>
                         <cyboxCommon:Version>{{ glastopf_version }}</cyboxCommon:Version>

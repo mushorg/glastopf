@@ -11,7 +11,7 @@ git show HEAD:glastopf/__init__.py > source/glastopf_version.py
 make html
 cp -R build/html/* $TMP_HTML
 
-git clone git@github.com:glastopf/glastopf.git $TMP_REPO
+git clone git@github.com:mushorg/glastopf.git $TMP_REPO
 cd $TMP_REPO
 git checkout gh-pages
 git symbolic-ref HEAD refs/heads/gh-pages

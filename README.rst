@@ -1,8 +1,8 @@
 Glastopf |Build Status|
 =======================
 
-.. |Build Status| image:: https://travis-ci.org/glastopf/glastopf.png?branch=master
-                       :target: https://travis-ci.org/glastopf/glastopf
+.. |Build Status| image:: https://travis-ci.org/mushorg/glastopf.png?branch=master
+                       :target: https://travis-ci.org/mushorg/glastopf
 
 ABOUT
 -----
@@ -34,4 +34,4 @@ Thanks to JetBrains for free PyCharm licenses!
 
 INSTALL
 -------
-Installation instructions can be found `here <https://github.com/glastopf/glastopf/tree/master/docs/source/installation>`_.
+Installation instructions can be found `here <https://github.com/mushorg/glastopf/tree/master/docs/source/installation>`_.
