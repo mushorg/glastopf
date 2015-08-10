@@ -5,7 +5,7 @@ python:
   - "2.7"
 virtualenv:
   system_site_packages: true
-sudo: false
+sudo: required
 cache:
 - apt
 - pip
@@ -34,14 +34,14 @@ before_install:
  - phpize
  - ./configure --enable-bfr
  - make
- - make install
+ - sudo make install
 # TODO: Extract path from output
- - bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
+ - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
  - php5 --version
  - cd $REPO
  - cd glastopf
  - cd sandbox
- - make
+ - sudo make
  - pwd
 # install pylibinjection
  - cd /tmp
