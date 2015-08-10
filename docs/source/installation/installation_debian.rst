@@ -34,7 +34,7 @@ Install and configure the PHP sandbox
 Download using git::
 
     cd /opt
-    git clone git://github.com/glastopf/BFR.git
+    git clone git://github.com/mushorg/BFR.git
     cd BFR
     phpize
     ./configure --enable-bfr
@@ -57,9 +57,9 @@ Install latest stable release from pip::
 Or install latest development version from the repository::
 
     cd /opt
-    git clone https://github.com/glastopf/glastopf.git
+    git clone https://github.com/mushorg/glastopf.git
     git clone https://github.com/client9/libinjection.git
-    git clone https://github.com/glastopf/pylibinjection.git
+    git clone https://github.com/mushorg/pylibinjection.git
     cd glastopf
     python setup.py install
 | 

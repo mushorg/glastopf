@@ -23,7 +23,7 @@ Install and configure the PHP sandbox
 Download using git::
 
     cd /opt
-    sudo git clone git://github.com/glastopf/BFR.git
+    sudo git clone git://github.com/mushorg/BFR.git
     cd BFR
     sudo phpize
     sudo ./configure --enable-bfr
@@ -46,7 +46,7 @@ Install latest stable release from pip::
 Or install latest development version from the repository::
 
     cd /opt
-    sudo git clone https://github.com/glastopf/glastopf.git
+    sudo git clone https://github.com/mushorg/glastopf.git
     cd glastopf
     sudo python setup.py install
 | 

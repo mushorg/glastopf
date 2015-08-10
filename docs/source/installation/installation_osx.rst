@@ -31,7 +31,7 @@ Download using git::
 
     sudo mkdir /opt
     cd /opt
-    sudo git clone git://github.com/glastopf/BFR.git
+    sudo git clone git://github.com/mushorg/BFR.git
     cd BFR
     sudo phpize
     sudo ./configure --enable-bfr

@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ## Install and configure the PHP sandbox
-RUN git clone https://github.com/glastopf/BFR.git /opt/BFR && \
+RUN git clone https://github.com/mushorg/BFR.git /opt/BFR && \
     cd /opt/BFR && \
     phpize && \
     ./configure --enable-bfr && \
@@ -50,7 +50,7 @@ RUN git clone https://github.com/glastopf/BFR.git /opt/BFR && \
 
 
 ## Install glastopf from latest sources
-RUN git clone https://github.com/glastopf/glastopf.git /opt/glastopf && \
+RUN git clone https://github.com/mushorg/glastopf.git /opt/glastopf && \
     cd /opt/glastopf && \
     python setup.py install && \
     rm -rf /opt/glastopf /tmp/* /var/tmp/*
