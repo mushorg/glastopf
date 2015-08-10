@@ -5,16 +5,23 @@ python:
   - "2.7"
 virtualenv:
   system_site_packages: true
+sudo: required
+cache:
+- apt
+- pip
+addons:
+  apt:
+    packages:
+    - python-dev
+    - gfortran
+    - libxml2
+# Dependencies for the php sandbox
+    - php5
+    - php5-dev
 before_install:
  - REPO=`pwd`
  - echo $REPO
  - pwd
- - "sudo apt-get -qq update"
- - "sudo apt-get -qq install python-dev gfortran"
- - "sudo apt-get install -y -q libxml2"
- - "sudo service mongodb start"
-# Dependencies for the php sandbox
- - "sudo apt-get -qq install php5 php5-dev"
 # Install hpfeeds
  - cd /tmp
  - git clone git://github.com/rep/hpfeeds.git hpfeeds
