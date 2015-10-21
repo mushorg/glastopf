@@ -25,7 +25,7 @@ import sys
 import Queue
 import uuid
 
-from ConfigParser import ConfigParser
+from ConfigParser import ConfigParser, NoSectionError, NoOptionError
 import logging.handlers
 
 from __init__ import __version__
@@ -89,7 +89,11 @@ class GlastopfHoneypot(object):
             logger.info("Generating initial dork pages - this can take a while.")
             self.dork_generator.regular_generate_dork(0)
 
-        self.profiler_available = conf_parser.getboolean("profiler", "enabled")
+        self.profiler_available = False
+        try:
+            self.profiler_available = conf_parser.getboolean("profiler", "enabled")
+        except (NoSectionError, NoOptionError):
+            pass
         if self.profiler_available:
             self.profiler = profiler.Profiler(self.maindb)
 

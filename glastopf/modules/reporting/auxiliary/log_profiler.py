@@ -7,6 +7,7 @@ import os
 # import pyodbc
 import sqlite3
 
+from ConfigParser import NoSectionError, NoOptionError
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
 
@@ -14,10 +15,14 @@ class LogProfiler(BaseLogger):
     def __init__(self, data_dir, work_dir, config="glastopf.cfg"):
         config = os.path.join(work_dir, config)
         BaseLogger.__init__(self, config)
-        self.options = {
-            "enabled": self.config.getboolean("profiler", "enabled"),
-            "database": self.config.get("main-database", "connection_string")
-        }
+        self.options = {'enabled': False}
+        try:
+            self.options = {
+                "enabled": self.config.getboolean("profiler", "enabled"),
+                "database": self.config.get("main-database", "connection_string")
+            }
+        except (NoSectionError, NoOptionError):
+            return
         self.logger = logging.getLogger(__name__)
 
     def insert(self, ip_profile):
