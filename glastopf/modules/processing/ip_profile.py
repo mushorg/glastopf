@@ -7,18 +7,18 @@ Base = declarative_base()
 class IPProfile(Base):
     __tablename__ = 'ip_profiles'
     
-    ip = Column(String, primary_key=True)
-    as_number = Column(String)
-    as_name = Column(String)
-    country_code = Column(String)
+    ip = Column(String(15), primary_key=True)
+    as_number = Column(String(10))
+    as_name = Column(String(120))
+    country_code = Column(String(10))
     total_requests = Column(Integer)
     total_scans = Column(Integer)
-    bgp_prefix = Column(String)
+    bgp_prefix = Column(String(100))
     requests_per_scan = Column(Float)
     avg_scan_duration = Column(Float)
     scan_time_period = Column(Float)
-    last_event_time = Column(String)
-    comments = Column(String)
+    last_event_time = Column(String(30))
+    comments = Column(String(65536))
        
     def __init__(
             self, ip=None, as_number=None, as_name=None,
