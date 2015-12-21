@@ -43,7 +43,7 @@ Download using git::
 
 Copy the search path to bfr.so and add it to php.ini. It can look like this::
 
-    zend_extension =   /usr/lib/php5/20090626+lfs/bfr.so
+    zend_extension =   /usr/lib/php5/20131226/bfr.so
 
 |
 
