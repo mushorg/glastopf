@@ -116,7 +116,7 @@ class Database(object):
                            count=table.c.count + 1))
         trans.commit()
         conn.close()
-        logger.info('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
+        logger.debug('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
         logger.debug('New dorks inserted: {0}'.format(log))
 
     def get_dork_list(self, tablename, starts_with=None):
