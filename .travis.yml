@@ -30,7 +30,7 @@ before_install:
  - make
  - sudo make install
 # TODO: Extract path from output
- - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
+ - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20131226/bfr.so" >> /etc/php5/cli/php.ini'
  - php5 --version
  - cd $REPO
  - cd glastopf
