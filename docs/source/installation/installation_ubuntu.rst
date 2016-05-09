@@ -31,6 +31,7 @@ Download using git::
 
 
 Open the php.ini file and add bfr.so accordingly to the build output
+
 default location: /etc/php5/apache2/php.ini::
 
     zend_extension = /usr/lib/php5/20090626+lfs/bfr.so
