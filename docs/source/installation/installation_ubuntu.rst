@@ -32,7 +32,11 @@ Download using git::
 
 Open the php.ini file and add bfr.so accordingly to the build output
 
-default location: /etc/php5/apache2/php.ini::
+default locations of php.ini: 
+
+/etc/php5/apache2/php.ini (Ubuntu 14.04 LTS with apache)
+
+/etc/php/5.6/cli/php.ini (Ubuntu 16.04 LTS)
 
     zend_extension = /usr/lib/php5/20090626+lfs/bfr.so
 
