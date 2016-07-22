@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y \
         python-requests \
         python-setuptools \
         python-sqlalchemy \
+        python-mysqldb \
+        cython \
+        python-dateutil \
         python2.7 \
         python2.7-dev && \
     apt-get clean && \
