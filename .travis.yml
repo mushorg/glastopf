@@ -9,13 +9,14 @@ before_install:
  - REPO=`pwd`
  - echo $REPO
  - pwd
+ - "sudo add-apt-repository ppa:ondrej/php"
  - "sudo apt-get -qq update"
  - "sudo apt-get -qq install python-dev gfortran"
  - "sudo apt-get install -y -q libxml2"
  - "sudo apt-get install dnsutils"
  - "sudo service mongodb start"
 # Dependencies for the php sandbox
- - "sudo apt-get -qq install php5 php5-dev"
+ - "sudo apt-get -qq install php7.0 php7.0-dev"
 # Install hpfeeds
  - cd /tmp
  - git clone git://github.com/rep/hpfeeds.git hpfeeds
@@ -25,13 +26,13 @@ before_install:
  - cd /tmp
  - git clone git://github.com/mushorg/BFR.git
  - cd BFR
- - phpize
+ - phpize7.0
  - ./configure --enable-bfr
  - make
  - sudo make install
 # TODO: Extract path from output
- - sudo bash -c 'echo "zend_extension = /usr/lib/php5/20090626/bfr.so" >> /etc/php5/cli/php.ini'
- - php5 --version
+ - sudo bash -c 'echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php/7.0/cli/php.ini'
+ - php7 --version
  - cd $REPO
  - cd glastopf
  - cd sandbox
