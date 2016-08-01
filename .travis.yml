@@ -9,7 +9,7 @@ before_install:
  - REPO=`pwd`
  - echo $REPO
  - pwd
- - "sudo locale-gen en_US.UTF-8 && sudo export LANG=en_US.UTF-8 && sudo LC_ALL=en_US.UTF-8"
+ - "locale-gen en_US.UTF-8 && export LANG=en_US.UTF-8 && LC_ALL=en_US.UTF-8"
  - "sudo add-apt-repository -y ppa:ondrej/php"
  - "sudo apt-get -qq update"
  - "sudo apt-get -qq install python-dev gfortran"
