@@ -32,7 +32,7 @@ class FileServer(base_emulator.BaseEmulator):
         response = ''
         full_file_path = os.path.abspath(os.path.join(server_path, request_file))
         if full_file_path.startswith(self.data_dir) and os.path.isfile(full_file_path):
-            with open(os.path.join(server_path, request_file), 'r') as f:
+            with open(full_file_path, 'r') as f:
                 response += f.read()
         #response with no content-type header
         attack_event.http_request.set_response(response, headers=())
