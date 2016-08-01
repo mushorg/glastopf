@@ -30,7 +30,8 @@ class FileServer(base_emulator.BaseEmulator):
         if request_file == "":
             request_file = "index.html"
         response = ''
-        if os.path.isfile(os.path.join(server_path, request_file)):
+        full_file_path = os.path.abspath(os.path.join(server_path, request_file))
+        if full_file_path.startswith(self.data_dir) and os.path.isfile(full_file_path):
             with open(os.path.join(server_path, request_file), 'r') as f:
                 response += f.read()
         #response with no content-type header
