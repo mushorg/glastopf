@@ -85,6 +85,7 @@ class Classifier(object):
         request_path = urlparse.urlparse(http_request.path).path
         requested_file = request_path.lstrip('/')
         full_file_path = os.path.abspath(os.path.join(self.server_files_path, requested_file))
+        # path traversal protection
         if full_file_path.startswith(self.server_files_path) and os.path.isfile(full_file_path):
             return True
         return False
