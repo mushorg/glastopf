@@ -31,6 +31,7 @@ class FileServer(base_emulator.BaseEmulator):
             request_file = "index.html"
         response = ''
         full_file_path = os.path.abspath(os.path.join(server_path, request_file))
+        # path traversal protection
         if full_file_path.startswith(self.data_dir) and os.path.isfile(full_file_path):
             with open(full_file_path, 'r') as f:
                 response += f.read()
