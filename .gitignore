@@ -1,5 +1,6 @@
 *.py[cod]
 *.swp
+__pycache__
 
 # C extensions
 *.so
@@ -34,6 +35,11 @@ nosetests.xml
 .project
 .pydevproject
 glastopf.cfg
-.idea
+
+glastopf/sandbox/sandbox.php
+log/
+work_dir/
+data/
+db/
 
 *.gz

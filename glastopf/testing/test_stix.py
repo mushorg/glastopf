@@ -121,6 +121,7 @@ class Test_Stix(unittest.TestCase):
         self.assertTrue('<cyboxCommon:Simple_Hash_Value>11a2a92d391f10821dbb90f1f7e6ae0f2374231e0ccd611665c95d6d7a3bb43c</cyboxCommon:Simple_Hash_Value>' in stix_package_xml)
         self.assertTrue('<ArtifactObj:Raw_Artifact datatype="string"><![CDATA[PD9waHAgZWNobyAiPHNjcmlwdD5hbGVydCgidGVzdCIpOzwvc2NyaXB0PiI7Pz4=]]></ArtifactObj:Raw_Artifact>' in stix_package_xml)
 
+    @unittest.skip('disabled until stix server up and running again')
     def test_taxii_connectivity(self):
         """
         Objective: Test if we can send a message to mitre's test TAXII server.
@@ -140,6 +141,7 @@ class Test_Stix(unittest.TestCase):
         self.assertTrue(taxii_result)
         f.close() #clean the tempfile
 
+    @unittest.skip('disabled until stix server up and running again')
     def test_taxii_connectivity_https(self):
         """
         Objective: Test if we can send a message to mitre's test TAXII server using https.

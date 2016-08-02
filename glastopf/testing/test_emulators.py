@@ -117,7 +117,8 @@ class TestEmulatorIntegration(unittest.TestCase):
         GlastopfHoneypot.prepare_sandbox(self.work_dir)
         print "Starting remote file inclusion test using unquoted url"
         event = attack.AttackEvent()
-        event.http_request = HTTPHandler('GET /test.php?p=http://1durch0.de/test_file.txt HTTP/1.0', None)
+        url = "https://gist.githubusercontent.com/glaslos/02c4c4be39fb03b3bbee5c862cd304c6/raw/adf146469e8eeee4498874164ecd80c70ffb4e7a/test_file.txt"
+        event.http_request = HTTPHandler('GET /test.php?p={} HTTP/1.0'.format(url), None)
         event.matched_pattern = "rfi"
         print "Sending request:", "http://localhost:8080" + event.http_request.path
         helpers.create_sandbox(self.data_dir)
@@ -136,7 +137,8 @@ class TestEmulatorIntegration(unittest.TestCase):
         GlastopfHoneypot.prepare_sandbox(self.work_dir)
         print "Starting remote file inclusion test using quoted url."
         event = attack.AttackEvent()
-        event.http_request = HTTPHandler('GET /test.php?p=http%3A%2F%2F1durch0.de%2Ftest_file.txt HTTP/1.0', None)
+        url = "https%3A%2F%2Fgist.githubusercontent.com%2Fglaslos/02c4c4be39fb03b3bbee5c862cd304c6/raw/adf146469e8eeee4498874164ecd80c70ffb4e7a/test_file.txt"
+        event.http_request = HTTPHandler('GET /test.php?p={} HTTP/1.0'.format(url), None)
         event.matched_pattern = "rfi"
         print "Sending request:", "http://localhost:8080" + event.http_request.path
         helpers.create_sandbox(self.data_dir)
@@ -157,7 +159,8 @@ class TestEmulatorIntegration(unittest.TestCase):
         GlastopfHoneypot.prepare_sandbox(self.work_dir)
         print "Starting remote file inclusion test"
         event = attack.AttackEvent()
-        event.http_request = HTTPHandler('GET /test.php?p=http://1durch0.de/test_file.txt HTTP/1.0', None)
+        url = "https://gist.githubusercontent.com/glaslos/02c4c4be39fb03b3bbee5c862cd304c6/raw/adf146469e8eeee4498874164ecd80c70ffb4e7a/test_file.txt"
+        event.http_request = HTTPHandler('GET /test.php?p={} HTTP/1.0'.format(url), None)
         event.matched_pattern = "rfi"
         helpers.create_sandbox(self.data_dir)
         request_handler = RequestHandler(self.data_dir)
