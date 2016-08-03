@@ -18,7 +18,7 @@ class IPProfile(Base):
     avg_scan_duration = Column(Float)
     scan_time_period = Column(Float)
     last_event_time = Column(String(30))
-    comments = Column(String(65536))
+    comments = Column(String(65535))
        
     def __init__(
             self, ip=None, as_number=None, as_name=None,
