@@ -43,7 +43,7 @@ class TestSQLiEmulation(unittest.TestCase):
 
     def test_sqli_lexer(self):
         """Objective: Tests the SQL injection lexer.
-        Input: 'SELECT A FROM B'
+        Input: SELECT A FROM B
         Expected Results:
         Notes:
         """
@@ -56,7 +56,7 @@ class TestSQLiEmulation(unittest.TestCase):
 
     def test_sqli_emulator(self):
         """Objective: Assure that the SQL injection module is integrated.
-        Input: Inject 'SELECT a FROM b' in parameter q.
+        Input: Inject SELECT a FROM b in parameter q.
         Expected Results: MySQL error message.
         Notes: As there is no table b, the honeypot returns an error message."""
         self.event.matched_pattern = "sqli"

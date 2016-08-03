@@ -7,8 +7,8 @@ proxy_enabled = False
 
 [ssl]
 enabled = False
-certfile = 
-keyfile = 
+certfile =
+keyfile =
 
 
 #Generic logging for general monitoring
@@ -25,7 +25,7 @@ pattern = rfi
 mnem_service = False
 
 [hpfeed]
-enabled = True
+enabled = False
 host = hpfriends.honeycloud.net
 port = 20000
 secret = 3wis3l2u5l7r3cew
@@ -48,8 +48,8 @@ connection_string = sqlite:///db/glastopf.db
 enabled = False
 host = localhost
 port = 5432
-user = 
-password = 
+user =
+password =
 database = idsserver
 
 [syslog]
@@ -64,7 +64,7 @@ patterns = rfi,lfi
 user =
 pwd =
 mail_from =
-mail_to = 
+mail_to =
 smtp_host = smtp.gmail.com
 smtp_port = 587
 
@@ -88,7 +88,7 @@ contact_email = ...
 enabled = False
 host = localhost
 port = 5659
-handler = AMQP/TCP/UDP 
+handler = AMQP/TCP/UDP
 
 [misc]
 # set webserver banner

@@ -37,6 +37,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
 
+    @unittest.skip('disabled until mongodb is a real database')
     def test_honeypot_mongo(self):
         """Objective: Testing overall Honeypot integration.
         Input: Loads the honeypot module with mongodb as main database.
