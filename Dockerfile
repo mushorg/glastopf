@@ -35,7 +35,9 @@ RUN apt-get update && apt-get install -y \
         cython \
         python-dateutil \
         python2.7 \
-        python2.7-dev && \
+        python2.7-dev \
+        software-properties-common \
+	&& \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
