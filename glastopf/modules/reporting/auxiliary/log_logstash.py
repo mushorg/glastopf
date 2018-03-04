@@ -46,9 +46,9 @@ class LogLogStash(BaseLogger):
                                                             password=self.password,
                                                             exchange=self.exchange)
         elif self.handler == 'TCP':
-            logstash_handler = logstash.LogstashHandler(self.host, self.port, version=1)
+            logstash_handler = logstash.TCPLogstashHandler(self.host, self.port, version=1)
         elif self.handler == "UDP":
-            logstash_handler = logstash.LogstashHandler(self.host, self.port, version=1)
+            logstash_handler = logstash.UDPLogstashHandler(self.host, self.port, version=1)
 
         self.attack_logger = logging.getLogger('python-logstash-handler')
         self.attack_logger.setLevel(logging.INFO)
@@ -64,6 +64,17 @@ class LogLogStash(BaseLogger):
                       'method': attack_event.http_request.request_verb,
                       'url': attack_event.http_request.request_url,
                   }
-        self.attack_logger.info(message)
+
+        extra = {
+            "pattern":     attack_event.matched_pattern,
+            "source_addr": attack_event.source_addr[0],
+            "source_port": attack_event.source_addr[1],
+            "sensor_addr": attack_event.sensor_addr[0],
+            "sensor_port": attack_event.sensor_addr[1],
+            "method":      attack_event.http_request.request_verb,
+            "url":         attack_event.http_request.request_url,
+        }
+
+        self.attack_logger.info(message, extra = extra)
 
 
