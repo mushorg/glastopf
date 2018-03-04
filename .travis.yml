@@ -15,7 +15,7 @@ before_install:
  - "sudo apt-get -qq install python-dev gfortran"
  - "sudo apt-get install -y -q libxml2"
  - "sudo apt-get install dnsutils"
- - "sudo service mongod start"
+ - "sudo service mongod restart"
 # Dependencies for the php sandbox
  - "sudo apt-get -qq install php7.0 php7.0-dev"
 # Install hpfeeds
