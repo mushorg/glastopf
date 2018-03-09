@@ -15,4 +15,3 @@ pylibinjection
 libtaxii>=1.1
 python-logstash
 botocore
-
