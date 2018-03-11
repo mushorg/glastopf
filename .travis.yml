@@ -40,9 +40,8 @@ before_install:
  - python setup.py install
 install:
  - export PYTHONIOENCODING=UTF8 # just in case
- - pwd
  - cd $REPO
- - pip install -r requirements.txt --use-mirrors
+ - pip install -r requirements.txt
 # command to run tests
 script:
  - nosetests
