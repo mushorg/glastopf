@@ -8,10 +8,10 @@ virtualenv:
 before_install:
  - phpenv shell 7.0
  - phpenv versions
- - "sudo add-apt-repository -y ppa:ondrej/php"
- - "sudo apt-get -qq update"
- - "sudo apt-get -qq install python-dev gfortran libxml2 dnsutils php7.0-dev"
- - "sudo service mongod restart"
+ - sudo add-apt-repository -y ppa:ondrej/php
+ - sudo apt-get -qq update
+ - sudo apt-get -qq install python-dev gfortran libxml2 dnsutils php7.0-dev
+ - sudo service mongod restart
 # Install hpfeeds
  - cd /tmp
  - git clone git://github.com/rep/hpfeeds.git hpfeeds
@@ -26,10 +26,11 @@ before_install:
  - make
  - sudo make install
 # TODO: Extract path from output
- - ls /etc/php/
  - sudo bash -c 'echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php/7.0/cli/php.ini'
  - php7.0 --version
- - cd $REPO/glastopf/sandbox
+ - cd $REPO
+ - cd glastopf
+ - cd sandbox
  - sudo make
  - pwd
 # install pylibinjection
