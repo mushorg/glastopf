@@ -6,6 +6,7 @@ python:
 virtualenv:
   system_site_packages: true
 before_install:
+ - REPO=`pwd`
  - phpenv shell 7.0
  - phpenv versions
  - sudo add-apt-repository -y ppa:ondrej/php
@@ -28,9 +29,7 @@ before_install:
 # TODO: Extract path from output
  - sudo bash -c 'echo "zend_extension = "$(find /usr -name bfr.so) >> /etc/php/7.0/cli/php.ini'
  - php7.0 --version
- - cd $REPO
- - cd glastopf
- - cd sandbox
+ - cd $REPO/glastopf/sandbox
  - sudo make
  - pwd
 # install pylibinjection
@@ -46,6 +45,4 @@ install:
  - pip install -r requirements.txt --use-mirrors
 # command to run tests
 script:
- - echo $REPO
- - pwd
  - nosetests
