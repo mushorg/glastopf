@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 class RFIEmulator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(RFIEmulator, self).__init__(data_dir)
+        self.downloaded_file_exists = False
         self.files_dir = os.path.join(self.data_dir, 'files/')
         if not os.path.exists(self.files_dir):
             os.mkdir(self.files_dir)
@@ -53,6 +54,8 @@ class RFIEmulator(base_emulator.BaseEmulator):
         if not os.path.exists(os.path.join(self.files_dir, file_name)):
             with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(injected_file)
+        else:
+            self.downloaded_file_exists = True
         return file_name
 
     def download_file(self, url):
@@ -94,4 +97,5 @@ class RFIEmulator(base_emulator.BaseEmulator):
         if attack_event.file_name:
             response = sandbox.run(attack_event.file_name, self.data_dir)
             attack_event.http_request.set_raw_response(response)
+        attack_event.known_file = self.downloaded_file_exists
         return attack_event

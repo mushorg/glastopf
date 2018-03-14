@@ -18,7 +18,7 @@
 #import json
 import logging
 
-from sqlalchemy import Table, Column, Integer, String, MetaData, TEXT
+from sqlalchemy import Table, Column, Integer, String, MetaData, TEXT, Boolean
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 import glastopf.modules.processing.ip_profile as ipp
@@ -80,6 +80,8 @@ class Database(object):
             Column('filename', String(500)),
             Column('version', String(10)),
             Column('sensorid', String(36)),
+            Column('known_file', Boolean()),
+
         )
         #only creates if it cant find the schema
         meta.create_all(self.engine)

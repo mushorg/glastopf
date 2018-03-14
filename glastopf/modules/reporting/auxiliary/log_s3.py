@@ -62,12 +62,21 @@ class S3Logger(BaseLogger):
     def insert(self, attack_event):
         if self._initial_connection_happend:
             if attack_event.file_name is not None:
-                with file(os.path.join(self.files_dir, attack_event.file_name), 'r') as file_handler:
-                    try:
-                        self.s3client.put_object(Bucket=self.bucket, Body=file_handler, Key=attack_event.sensorid+"/"+attack_event.file_name)
-                        logger.debug('Sending file ({0}) using s3 bucket "{1}" on {2}'.format(attack_event.file_name, self.bucket, self.endpoint))
-                    except ClientError as e:
-                        logger.warning("Received error: %s", e.response['Error']['Message'])
+                if attack_event.known_file:
+                    logger.error('{0} is a known file, it will not be uploaded.'.format(attack_event.file_name))
+                else:
+                    with file(os.path.join(self.files_dir, attack_event.file_name), 'r') as file_handler:
+                        try:
+                            # check if file exists in bucket
+                            searchFile = self.s3client.list_objects_v2(Bucket=self.bucket, Prefix=attack_event.file_name)
+                            if (len(searchFile.get('Contents', []))) == 1 and str(searchFile.get('Contents', [])[0]['Key']) == attack_event.file_name:
+                                logger.error('Not storing file ({0}) to s3 bucket "{1}" on {2} as it already exists in the bucket.'.format(attack_event.file_name, self.bucket, self.endpoint))
+                            else:
+                                # upload file to s3
+                                self.s3client.put_object(Bucket=self.bucket, Body=file_handler, Key=attack_event.file_name)
+                                logger.error('Storing file ({0}) using s3 bucket "{1}" on {2}'.format(attack_event.file_name, self.bucket, self.endpoint))
+                        except ClientError as e:
+                            logger.warning("Received error: %s", e.response['Error']['Message'])
         else:
             logger.warning('Not storing attack file because initial s3 connect has not succeeded')
 

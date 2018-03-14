@@ -31,6 +31,7 @@ class AttackEvent(object):
         self.file_name = None
         self.version = None
         self.sensorid = None
+        self.known_file = False
 
     def event_dict(self):
         event_dict = {
@@ -42,5 +43,6 @@ class AttackEvent(object):
             "filename": self.file_name,
             "version": self.version,
             "sensorid": self.sensorid,
+            "known_file": self.known_file
         }
         return event_dict
