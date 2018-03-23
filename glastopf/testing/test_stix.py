@@ -104,14 +104,14 @@ class Test_Stix(unittest.TestCase):
         """
 
         rfi_data = """<?php echo "<script>alert("test");</script>";?>"""
-        rfi_md5 = hashlib.md5(rfi_data).hexdigest()
-        with open(os.path.join(self.files_dir, rfi_md5), 'w') as rfi_file:
+        rfi_sha256 = hashlib.sha256(rfi_data).hexdigest()
+        with open(os.path.join(self.files_dir, rfi_sha256), 'w') as rfi_file:
             rfi_file.writelines(rfi_data)
 
         test_event = AttackEvent()
         test_event.source_addr = ('1.2.3.4', 43811)
         test_event.matched_pattern = 'rfi'
-        test_event.file_name = rfi_md5
+        test_event.file_name = rfi_sha256
         http_request_content = """GET /test HTTP/1.0\r\nUser-Agent: test\r\n\r\n"""
         test_event.http_request = HTTPHandler(http_request_content, None, server_version="", sys_version="")
         stix_package_xml = self.stix_transformer.transform(test_event)

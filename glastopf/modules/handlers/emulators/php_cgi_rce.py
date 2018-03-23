@@ -45,12 +45,13 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(PHPCGIRCE, self).__init__(data_dir)
         self.files_dir = os.path.join(self.data_dir, 'files/')
+        self.downloaded_file_exists = False
         if not os.path.exists(self.files_dir):
             os.mkdir(self.files_dir)
 
     # TODO duplicate code from rfi.py, refactor it
     def get_filename(self, php_code):
-        file_name = hashlib.md5(php_code).hexdigest()
+        file_name = hashlib.sha256(php_code).hexdigest()
         return file_name
 
     def store_file(self, php_code):
@@ -58,10 +59,12 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
         if not os.path.exists(os.path.join(self.files_dir, file_name)):
             with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(php_code)
+        else:
+            self.downloaded_file_exists = True
         return file_name
 
     def handle(self, attack_event):
-
+        attack_event.known_file = self.downloaded_file_exists
         php_source_code_s = """<code><span style="color: #000000">
 <span style="color: #0000BB">&lt;?php<br />page&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'page'</span><span style="color: #007700">];<br />include(</span><span style="color: #0000BB">page</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">?&gt;<br /></span>
 </span>"""

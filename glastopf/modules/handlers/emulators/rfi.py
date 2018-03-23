@@ -46,7 +46,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
 
     @classmethod
     def get_filename(cls, injected_file):
-        file_name = hashlib.md5(injected_file).hexdigest()
+        file_name = hashlib.sha256(injected_file).hexdigest()
         return file_name
 
     def store_file(self, injected_file):
