@@ -78,10 +78,10 @@ class Database(object):
             Column('request_raw', TEXT),
             Column('pattern', String(20)),
             Column('filename', String(500)),
+            Column('file_sha256', String(500)),
             Column('version', String(10)),
             Column('sensorid', String(36)),
-            Column('known_file', Boolean()),
-
+            Column('known_file', Boolean())
         )
         #only creates if it cant find the schema
         meta.create_all(self.engine)

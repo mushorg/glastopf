@@ -46,17 +46,18 @@ class RFIEmulator(base_emulator.BaseEmulator):
 
     @classmethod
     def get_filename(cls, injected_file):
-        file_name = hashlib.sha256(injected_file).hexdigest()
-        return file_name
+        file_name = hashlib.md5(injected_file).hexdigest()
+        file_sha256 = hashlib.sha256(injected_file).hexdigest()
+        return file_name, file_sha256
 
     def store_file(self, injected_file):
-        file_name = self.get_filename(injected_file)
+        file_name, file_sha256 = self.get_filename(injected_file)
         if not os.path.exists(os.path.join(self.files_dir, file_name)):
             with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(injected_file)
         else:
             self.downloaded_file_exists = True
-        return file_name
+        return file_name, file_sha256
 
     def download_file(self, url):
         injectd_url = self.extract_url(urllib2.unquote(url))
@@ -83,12 +84,12 @@ class RFIEmulator(base_emulator.BaseEmulator):
             # the injected file but pretend to be vulnerable.
             file_name = None
         else:
-            file_name = self.store_file(injected_file)
-        return file_name
+            file_name, file_sha256 = self.store_file(injected_file)
+        return file_name, file_sha256
 
     def handle(self, attack_event):
         if attack_event.http_request.command == 'GET':
-            attack_event.file_name = self.download_file(
+            attack_event.file_name, attack_event.file_sha256  = self.download_file(
                 attack_event.http_request.path)
         elif attack_event.http_request.command == 'POST':
             pass
