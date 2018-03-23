@@ -22,6 +22,7 @@ import shutil
 import tempfile
 
 from lxml.html.soupparser import fromstring
+from lxml.etree import tostring
 
 from glastopf.glastopf import GlastopfHoneypot
 from glastopf.modules.HTTP.handler import HTTPHandler
@@ -35,6 +36,7 @@ from glastopf.modules.events import attack
 from sqlalchemy import create_engine
 from ConfigParser import ConfigParser
 
+
 class TestEmulatorDorkList(unittest.TestCase):
     """Tests the honeypots vulnerable string selection.
     We first start with the integration test and continue with unit tests.
@@ -42,7 +44,7 @@ class TestEmulatorDorkList(unittest.TestCase):
     with data a needed."""
 
     def setUp(self):
-        self.config= ConfigParser()
+        self.config = ConfigParser()
         self.config.add_section('main-database')
         self.config.set('main-database', 'enabled', "True")
         self.workdir = tempfile.mkdtemp()
@@ -61,7 +63,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         engine = None
         if dbtype == "sql":
             engine = create_engine('sqlite:///')
-            #Create mock of empty main db
+            # Create mock of empty main db
             helpers.populate_main_sql_testdatabase(engine)
             db = database_sqla.Database(engine)
         elif dbtype == "mongodb":
@@ -82,7 +84,7 @@ class TestEmulatorDorkList(unittest.TestCase):
 
         (db, engine, dork_generator) = self.dork_generator_chain('sql')
         dork_generator.regular_generate_dork(0)
-        print "Starting database SELECT test..."
+        print("Starting database SELECT test...")
         result = db.select_data("rfi")
         self.assertEqual(len(result), 10)
 
@@ -94,35 +96,36 @@ class TestEmulatorDorkList(unittest.TestCase):
         attack_event = attack.AttackEvent()
         attack_event.matched_pattern = "internal_test"
         attack_event.http_request = HTTPHandler('GET /thiswillNeVeRHaPPend.php?c=test', None)
-        print "Attack event prepared."
+        print("Attack event prepared.")
         (db, engine, dork_generator) = self.dork_generator_chain('sql')
         dork_generator.regular_generate_dork(0)
         dork_generator.collect_dork(attack_event)
-        print "Done collecting the path from the event and writing to the database."
+        print("Done collecting the path from the event and writing to the database.")
         sql = "SELECT * FROM inurl WHERE content = :x"
         result = engine.connect().execute(sql, x='/thiswillNeVeRHaPPend.php').fetchall()
-        print "Done fetching the entries matching the request URL"
+        print("Done fetching the entries matching the request URL")
         self.assertTrue(len(result) > 0)
-        print "Number of entries in the database matching our URL:",
-        print len(result),
-        print "which equates our expectation."
+        print("Number of entries in the database matching our URL:")
+        print(len(result))
+        print("which equates our expectation.")
 
     def test_dork_page(self):
         """Objective: Tests if the attack surface generation works.
         Input: Data from the dork database.
         Expected Results: HTML pages ready to be served to the adversary.
-        Notes: This test covers the generation of the HTML pages from the dork database. The page number is proportional to database entries."""
+        Notes: This test covers the generation of the HTML pages from the dork database.
+        The page number is proportional to database entries."""
 
-        print "Starting dork page test."
+        print("Starting dork page test.")
 
         (db, engine, dork_generator) = self.dork_generator_chain('sql')
         dork_generator.regular_generate_dork(0)
-        print "Done creating dork pages."
+        print("Done creating dork pages.")
         current_pages = dork_generator.get_current_pages()
         self.assertTrue(len(current_pages) > 0)
-        print "Number of created HTML pages:",
-        print len(current_pages),
-        print "equates our expectation."
+        print("Number of created HTML pages:")
+        print(len(current_pages))
+        print("equates our expectation.")
 
     def test_dork_page_content(self):
         """Objective: Testing the attack surfaces content.
@@ -138,11 +141,11 @@ class TestEmulatorDorkList(unittest.TestCase):
         self.assertTrue(len(data.cssselect('a')) > 0)
         self.assertTrue(len(data.cssselect('title')) > 0)
         self.assertTrue(len(data.cssselect('form')) > 0)
-        print "The content analysis of a random HTML page returned:"
-        print len(data.cssselect('a')), 'links (<a href=""></a>)',
-        print len(data.cssselect('title')), 'page title (<title />)',
-        print len(data.cssselect('form')), 'form field (<form />)'
-        print "which equates our expectation."
+        print("The content analysis of a random HTML page returned:")
+        print(len(data.cssselect('a')), 'links (<a href=""></a>)')
+        print(len(data.cssselect('title')), 'page title (<title />)')
+        print(len(data.cssselect('form')), 'form field (<form />)')
+        print("which equates our expectation.")
 
     def test_dork_page_regeneration(self):
         """Objective: Test if the dork pages get regenerated.
@@ -153,17 +156,17 @@ class TestEmulatorDorkList(unittest.TestCase):
         (db, engine, dork_generator) = self.dork_generator_chain('sql')
         dork_generator.regular_generate_dork(0)
         old_list = dork_generator.get_current_pages()
-        print "There are %s previously generated dork pages" % len(old_list),
+        print("There are %s previously generated dork pages" % len(old_list))
         old_sample_file = choice(old_list)
-        print "For example:", old_sample_file.rsplit('/', 1)[1]
+        print("For example:", old_sample_file.rsplit('/', 1)[1])
         dork_generator.regular_generate_dork(0)
-        print "Done generating new dork pages.",
-        print "Old dork pages has been removed."
+        print("Done generating new dork pages.")
+        print("Old dork pages has been removed.")
         new_list = dork_generator.get_current_pages()
         overlap = set(new_list).intersection(old_list)
         self.assertTrue(len(overlap) == 0)
-        print "There are", len(overlap), "overlapping dork pages",
-        print "which equates our expectation."
+        print("There are", len(overlap), "overlapping dork pages")
+        print("which equates our expectation.")
 
 
 if __name__ == '__main__':
