@@ -21,6 +21,14 @@ import os
 import re
 import logging
 import ssl
+import socket
+import requests
+from urlparse import urlparse
+from socket import inet_aton
+from struct import unpack
+from requests.utils import requote_uri
+
+
 
 import glastopf.sandbox.sandbox as sandbox
 from glastopf.modules.handlers import base_emulator
@@ -54,9 +62,86 @@ class RFIEmulator(base_emulator.BaseEmulator):
             with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
                 local_file.write(injected_file)
         return file_name
+    
+    @classmethod
+    def check_ssrf(self, url):
+        hostname = urlparse(url).hostname
+
+        def ip2long(ip_addr):
+            return unpack("!L", inet_aton(ip_addr))[0]
+
+        def is_inner_ipaddress(ip):
+            ip = ip2long(ip)
+            return ip2long('127.0.0.0') >> 24 == ip >> 24 or \
+                    ip2long('10.0.0.0') >> 24 == ip >> 24 or \
+                    ip2long('172.16.0.0') >> 20 == ip >> 20 or \
+                    ip2long('192.168.0.0') >> 16 == ip >> 16
+
+        try:
+            # print re.match(r"^http(s)?://(.*?)$", url)
+            # if not re.match(r"^https?://.*/.*$", url):
+            if not re.match(r"^http(s)?://(.*?)$", url):
+                raise BaseException("url format error")
+            # print socket.getaddrinfo(hostname, 'http')
+            ip_address = socket.getaddrinfo(hostname, 'http')[0][4][0]
+            if is_inner_ipaddress(ip_address):
+                raise BaseException("inner ip address attack")
+            return True, "success"
+        except BaseException as e:
+            return False, str(e)
+        except:
+            return False, "unknow error"
+
+    @classmethod
+    def safe_request_url(self, url, **kwargs):
+        def _request_check_location(r, *args, **kwargs):
+            if not r.is_redirect:
+                return
+            url = r.headers['location']
+
+            # The scheme should be lower case...
+            parsed = urlparse(url)
+            url = parsed.geturl()
+
+            # Facilitate relative 'location' headers, as allowed by RFC 7231.
+            # (e.g. '/path/to/resource' instead of 'http://domain.tld/path/to/resource')
+            # Compliant with RFC3986, we percent encode the url.
+            if not parsed.netloc:
+                url = urljoin(r.url, requote_uri(url))
+            else:
+                url = requote_uri(url)
+
+            succ, errstr = self.check_ssrf(url)
+            if not succ:
+                raise requests.exceptions.InvalidURL("SSRF Attack: %s" % (errstr, ))
+
+        success, errstr = self.check_ssrf(url)
+        if not success:
+            raise requests.exceptions.InvalidURL("SSRF Attack: %s" % (errstr,))
+
+        all_hooks = kwargs.get('hooks', dict())
+        if 'response' in all_hooks:
+            if hasattr(all_hooks['response'], '__call__'):
+                r_hooks = [all_hooks['response']]
+            else:
+                r_hooks = all_hooks['response']
+
+            r_hooks.append(_request_check_location)
+        else:
+            r_hooks = [_request_check_location]
+
+        all_hooks['response'] = r_hooks
+        kwargs['hooks'] = all_hooks
+        return requests.get(url, **kwargs)
 
     def download_file(self, url):
         injectd_url = self.extract_url(urllib2.unquote(url))
+        try:
+            r = self.safe_request_url(injectd_url)
+        except Exception as e:
+            logger.info(e)
+            file_name = None 
+            return file_name
         try:
             req = urllib2.Request(injectd_url)
             # Set User-Agent to look more credible
@@ -85,6 +170,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         if attack_event.http_request.command == 'GET':
+            #pass
             attack_event.file_name = self.download_file(
                 attack_event.http_request.path)
         elif attack_event.http_request.command == 'POST':
