@@ -55,6 +55,7 @@ def check_ssrf(url):
             raise BaseException("url format error")
         # print socket.getaddrinfo(hostname, 'http')
         ip_address = socket.getaddrinfo(hostname, 'http')[0][4][0]
+        logger.info(ip_address)
         if is_inner_ipaddress(ip_address):
             raise BaseException("inner ip address attack")
         return True, "success"
