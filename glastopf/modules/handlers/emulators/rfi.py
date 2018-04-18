@@ -64,44 +64,9 @@ def check_ssrf(url):
         return False, "unknow error"
 
 def safe_request_url(url, **kwargs):
-    def _request_check_location(r, *args, **kwargs):
-        if not r.is_redirect:
-            return
-        url = r.headers['location']
-
-        # The scheme should be lower case...
-        parsed = urlparse(url)
-        url = parsed.geturl()
-
-        # Facilitate relative 'location' headers, as allowed by RFC 7231.
-        # (e.g. '/path/to/resource' instead of 'http://domain.tld/path/to/resource')
-        # Compliant with RFC3986, we percent encode the url.
-        if not parsed.netloc:
-            url = urljoin(r.url, requote_uri(url))
-        else:
-            url = requote_uri(url)
-
-        succ, errstr = check_ssrf(url)
-        if not succ:
-            raise requests.exceptions.InvalidURL("SSRF Attack: %s" % (errstr, ))
-
     success, errstr = check_ssrf(url)
     if not success:
         raise requests.exceptions.InvalidURL("SSRF Attack: %s" % (errstr,))
-
-    all_hooks = kwargs.get('hooks', dict())
-    if 'response' in all_hooks:
-        if hasattr(all_hooks['response'], '__call__'):
-            r_hooks = [all_hooks['response']]
-        else:
-            r_hooks = all_hooks['response']
-
-        r_hooks.append(_request_check_location)
-    else:
-        r_hooks = [_request_check_location]
-
-    all_hooks['response'] = r_hooks
-    kwargs['hooks'] = all_hooks
     return requests.get(url, **kwargs)
 
 
