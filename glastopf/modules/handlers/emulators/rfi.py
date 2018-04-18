@@ -132,34 +132,6 @@ class RFIEmulator(base_emulator.BaseEmulator):
                 local_file.write(injected_file)
         return file_name
     
-    def check_ssrf(self, url):
-        hostname = urlparse(url).hostname
-
-        def ip2long(ip_addr):
-            return unpack("!L", inet_aton(ip_addr))[0]
-
-        def is_inner_ipaddress(ip):
-            ip = ip2long(ip)
-            return ip2long('127.0.0.0') >> 24 == ip >> 24 or \
-                    ip2long('10.0.0.0') >> 24 == ip >> 24 or \
-                    ip2long('172.16.0.0') >> 20 == ip >> 20 or \
-                    ip2long('192.168.0.0') >> 16 == ip >> 16
-
-        try:
-            # print re.match(r"^http(s)?://(.*?)$", url)
-            # if not re.match(r"^https?://.*/.*$", url):
-            if not re.match(r"^http(s)?://(.*?)$", url):
-                raise BaseException("url format error")
-            # print socket.getaddrinfo(hostname, 'http')
-            ip_address = socket.getaddrinfo(hostname, 'http')[0][4][0]
-            if is_inner_ipaddress(ip_address):
-                raise BaseException("inner ip address attack")
-            return True, "success"
-        except BaseException as e:
-            return False, str(e)
-        except:
-            return False, "unknow error"
-
     def download_file(self, url):
         injectd_url = self.extract_url(urllib2.unquote(url))
         try:
