@@ -105,3 +105,6 @@ sensorid = None
 
 [profiler]
 enabled = False
+
+[check]
+check_ssrf = True
