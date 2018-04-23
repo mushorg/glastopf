@@ -29,7 +29,7 @@ from struct import unpack
 from requests.utils import requote_uri
 
 
-
+from ConfigParser import ConfigParser, NoSectionError, NoOptionError
 import glastopf.sandbox.sandbox as sandbox
 from glastopf.modules.handlers import base_emulator
 
@@ -49,11 +49,8 @@ def check_ssrf(url):
                 ip2long('192.168.0.0') >> 16 == ip >> 16
 
     try:
-    	# print re.match(r"^http(s)?://(.*?)$", url)
-        # if not re.match(r"^https?://.*/.*$", url):
         if not re.match(r"^http(s)?://(.*?)$", url):
             raise BaseException("url format error")
-        # print socket.getaddrinfo(hostname, 'http')
         ip_address = socket.getaddrinfo(hostname, 'http')[0][4][0]
         if is_inner_ipaddress(ip_address):
             logger.info("inner ip address attack")
@@ -65,8 +62,8 @@ def check_ssrf(url):
         return False, "unknow error"
 
 def safe_request_url(url, **kwargs):
-    success, errstr = check_ssrf(url)
-    if not success:
+    is_success, errstr = check_ssrf(url)
+    if not is_success:
         raise requests.exceptions.InvalidURL("SSRF Attack: %s" % (errstr,))
     return requests.get(url, **kwargs)
 
@@ -100,12 +97,16 @@ class RFIEmulator(base_emulator.BaseEmulator):
     
     def download_file(self, url):
         injectd_url = self.extract_url(urllib2.unquote(url))
-        try:
-            r = safe_request_url(injectd_url)
-        except Exception as e:
-            logger.info(e)
-            file_name = None 
-            return file_name
+        conf_parser = ConfigParser()
+        config_path = os.path.join(os.getcwd(), "glastopf.cfg")
+        conf_parser.read(config_path)
+        is_check_ssrf = conf_parser.getboolean("check", "check_ssrf")
+        if is_check_ssrf:
+            try:
+                r = safe_request_url(injectd_url)
+            except Exception as e:
+                logger.error(e)
+                return None
         try:
             req = urllib2.Request(injectd_url)
             # Set User-Agent to look more credible
@@ -134,7 +135,6 @@ class RFIEmulator(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         if attack_event.http_request.command == 'GET':
-            #pass
             attack_event.file_name = self.download_file(
                 attack_event.http_request.path)
         elif attack_event.http_request.command == 'POST':
