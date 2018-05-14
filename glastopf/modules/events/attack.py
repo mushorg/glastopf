@@ -29,8 +29,10 @@ class AttackEvent(object):
         self.source_addr = None
         self.matched_pattern = "unknown"
         self.file_name = None
+        self.file_sha256 = None
         self.version = None
         self.sensorid = None
+        self.known_file = False
 
     def event_dict(self):
         event_dict = {
@@ -40,7 +42,9 @@ class AttackEvent(object):
             "request_raw": self.http_request.request_raw,
             "pattern": self.matched_pattern,
             "filename": self.file_name,
+            "file_sha256": self.file_sha256,
             "version": self.version,
             "sensorid": self.sensorid,
+            "known_file": self.known_file
         }
         return event_dict

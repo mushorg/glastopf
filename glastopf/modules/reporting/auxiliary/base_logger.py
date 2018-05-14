@@ -15,13 +15,14 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from ConfigParser import ConfigParser
+from ConfigParser import SafeConfigParser
+import os
 
 
 class BaseLogger(object):
     def __init__(self, config='glastopf.cfg'):
-        if not isinstance(config, ConfigParser):
-            self.config = ConfigParser()
+        if not isinstance(config, SafeConfigParser):
+            self.config = SafeConfigParser(os.environ)
             self.config.read(config)
         else:
             self.config = config
