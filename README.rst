@@ -1,3 +1,5 @@
+We highly recommend to check out the Glastopf successor `SNARE <https://github.com/mushorg/snare>`_ and `TANNER <https://github.com/mushorg/tanner/>`_.
+
 Glastopf |Build Status|
 =======================
 
@@ -20,3 +22,5 @@ General approach:
 INSTALL
 -------
 Installation instructions can be found `here <https://github.com/mushorg/glastopf/tree/master/docs/source/installation>`_.
+
+It is highly recommended to customize the default attack surface to avoid trivial detection of the honeypot.
