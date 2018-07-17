@@ -1,3 +1,5 @@
+We highly recommend to check out the Glastopf successor `SNARE <https://github.com/mushorg/snare>`_ and `TANNER <https://github.com/mushorg/tanner/>`_.
+
 Glastopf |Build Status|
 =======================
 
@@ -17,21 +19,8 @@ General approach:
 - Adversaries usually use search engines and special crafted search requests to find their victims. In order to attract them, Glastopf provides those keywords (AKA "dork") and additionally extracts them from requests, extending its attack surface automatically. As a result, the honeypot gets more and more attractive with each new attack attempted on it.
 - We will make the SQL injection emulator public, provide IP profiling for crawler recognition and intelligent dork selection.
 
-HPFEEDS
--------
-
-The honeypot has hpfeeds, our central logging feature, enabled by
-default. If you don't want to report your events, turn off hpfeeds in
-glastopf.cfg. By sending your data via hpfeeds you consent to sharing
-your data with third parties. If you are interested in the data
-collected by Glastopf instances, please contact Lukas at
-glaslos@gmail.com
-
-SUPPORT
--------
-
-Thanks to JetBrains for free PyCharm licenses!
-
 INSTALL
 -------
 Installation instructions can be found `here <https://github.com/mushorg/glastopf/tree/master/docs/source/installation>`_.
+
+It is highly recommended to customize the default attack surface to avoid trivial detection of the honeypot.
