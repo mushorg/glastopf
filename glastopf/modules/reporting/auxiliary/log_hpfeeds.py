@@ -65,7 +65,10 @@ class HPFeedsLogger(BaseLogger):
 
             event_data_dict=attack_event.event_dict()
             event_data_dict['http_host'] = attack_event.http_request.http_host
-            event_data_dict['sensor_addr'] = attack_event.sensor_addr
+            event_data_dict['sensor_ip'] = attack_event.sensor_addr[0]
+            event_data_dict['sensor_port'] = attack_event.sensor_addr[1]
+            event_data_dict['source_ip'] = attack_event.source_addr[0]
+            event_data_dict['source_port'] = attack_event.source_addr[1]
             event_data = json.dumps(event_data_dict)
             self.hpc.publish(self.chan_events, event_data)
         else:
