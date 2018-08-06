@@ -53,7 +53,7 @@ class GlastopfWSGI(object):
             if ":" in h:
                 h, v = h.split(":", 1)
                 res_webob.headers[str(h.strip())] = str(v.strip())
-            else:
+            elif "HTTP/" in h:
                 proto, code, msg = h.split(" ",2)
 
         # this will adjust content-length header
