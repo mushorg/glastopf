@@ -41,7 +41,7 @@ class GlastopfWSGI(object):
         remote_addr = (req_webob.remote_addr, int(environ["REMOTE_PORT"]))
         if "SERVER_NAME" in environ and "SERVER_PORT" in environ:
             # we could use socket.gethostbyname to get the ip...
-            sensor_addr = (environ["SERVER_NAME"], environ["SERVER_PORT"])
+            sensor_addr = (environ['wsgi.input'].rfile._sock.getsockname()[0], environ['wsgi.input'].rfile._sock.getsockname()[1])
         else:
             sensor_addr = ("", "")
 
@@ -53,7 +53,7 @@ class GlastopfWSGI(object):
             if ":" in h:
                 h, v = h.split(":", 1)
                 res_webob.headers[str(h.strip())] = str(v.strip())
-            else:
+            elif "HTTP/" in h:
                 proto, code, msg = h.split(" ",2)
 
         # this will adjust content-length header

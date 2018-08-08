@@ -18,7 +18,6 @@ import logging
 import os
 import base64
 import gevent
-
 import hpfeeds
 from glastopf.modules.reporting.auxiliary.base_logger import BaseLogger
 
@@ -64,7 +63,13 @@ class HPFeedsLogger(BaseLogger):
                     file_data = attack_event.file_name + " " + base64.b64encode(file_content)
                     self.hpc.publish(self.chan_files, file_data)
 
-            event_data = json.dumps(attack_event.event_dict())
+            event_data_dict=attack_event.event_dict()
+            event_data_dict['http_host'] = attack_event.http_request.http_host
+            event_data_dict['sensor_ip'] = attack_event.sensor_addr[0]
+            event_data_dict['sensor_port'] = attack_event.sensor_addr[1]
+            event_data_dict['source_ip'] = attack_event.source_addr[0]
+            event_data_dict['source_port'] = attack_event.source_addr[1]
+            event_data = json.dumps(event_data_dict)
             self.hpc.publish(self.chan_events, event_data)
         else:
             logger.warning('Not logging event because initial hpfeeds connect has not happend yet')
