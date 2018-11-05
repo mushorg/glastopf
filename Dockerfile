@@ -1,13 +1,7 @@
-FROM ubuntu:14.04.1
+FROM ubuntu:14.06
 MAINTAINER Lukas Rist <glaslos@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
-
-## setup APT
-RUN sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse' /etc/apt/sources.list && \
-    sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse' /etc/apt/sources.list && \
-    sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-backports main restricted universe multiverse' /etc/apt/sources.list && \
-    sed -i '1ideb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse' /etc/apt/sources.list
 
 ## Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -37,13 +31,11 @@ RUN apt-get update && apt-get install -y \
         python2.7 \
         python2.7-dev \
         software-properties-common \
-	&& \
+        php7.0 \
+        php7.0-dev \
+    	&& \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN locale-gen en_US.UTF-8 && export LANG=en_US.UTF-8 && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php && apt-get update
-
-RUN apt-get install -y --force-yes  php7.0 php7.0-dev
 
 ## Install and configure the PHP sandbox
 RUN git clone https://github.com/mushorg/BFR.git /opt/BFR && \
@@ -57,7 +49,7 @@ RUN git clone https://github.com/mushorg/BFR.git /opt/BFR && \
 
 
 ## Install glastopf from latest sources
-RUN git clone https://github.com/mushorg/glastopf.git /opt/glastopf && \
+RUN git clone https://github.com/hallmanhe/glastopf.git /opt/glastopf && \
     cd /opt/glastopf && \
     python setup.py install && \
     rm -rf /opt/glastopf /tmp/* /var/tmp/*
