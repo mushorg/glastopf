@@ -1,4 +1,4 @@
-FROM ubuntu:14.06
+FROM ubuntu:14.04
 MAINTAINER Lukas Rist <glaslos@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
