@@ -1,12 +1,11 @@
 gevent>=1.0
 webob>=1.2.0
 pyopenssl
-chardet
 lxml
 sqlalchemy>=0.8.0
 jinja2
 beautifulsoup>=3.2.0
-requests>=1.0.0
+requests==2.20.0
 cssselect>=0.7.0
 pymongo>=2.4
 MySQL-python
