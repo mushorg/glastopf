@@ -1,10 +1,6 @@
 We highly recommend to check out the Glastopf successor `SNARE <https://github.com/mushorg/snare>`_ and `TANNER <https://github.com/mushorg/tanner/>`_.
 
-Glastopf |Build Status|
-=======================
-
-.. |Build Status| image:: https://travis-ci.org/mushorg/glastopf.png?branch=master
-                       :target: https://travis-ci.org/mushorg/glastopf
+[![Build Status](https://travis-ci.orsg/hallmanhe/glastopf.svg?branch=master)](https://travis-ci.org/hallmanhe/glastopf)
 
 ABOUT
 -----
