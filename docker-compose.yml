@@ -1,0 +1,11 @@
+version: '2'
+services:
+  dionaea:
+    build: 
+     context: .
+    ports:
+     - "80:80" #http
+    image: hallmanhe/glastopf
+    container_name: glastopf
+    volumes:
+     - /root/glastopf_honeypot:/opt/myhoneypot
