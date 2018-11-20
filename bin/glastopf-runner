@@ -83,7 +83,7 @@ if __name__ == '__main__':
         ssl = {
             'certfile': conf_parser.get("ssl", "certfile"),
             'keyfile': conf_parser.get("ssl", "keyfile"),
-            'ciphers': 'RC4',
+            'ciphers': 'AES256',
         }
 
 
