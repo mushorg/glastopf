@@ -79,6 +79,8 @@ if __name__ == '__main__':
 
     host = conf_parser.get("webserver", "host")
     ports = conf_parser.get('webserver', 'port').split(',')
+    ssl_ports = conf_parser.get('ssl', 'port').split(',')
+
     if conf_parser.get("ssl", "enabled"):
         ssl = {
             'certfile': conf_parser.get("ssl", "certfile"),
@@ -86,20 +88,18 @@ if __name__ == '__main__':
             'ciphers': 'AES256',
         }
 
-
     honeypot = GlastopfHoneypot(work_dir=args.workdir)
     wsgi_wrapper = GlastopfWSGI(honeypot)
 
     try:
         workers = []
         if conf_parser.get("ssl", "enabled") == "True":
-            for port in ports:
+            for port in ssl_ports:
                 server = WSGIServer((host, int(port)), wsgi_wrapper.application, log=None, **ssl)
                 workers.append(gevent.Greenlet(server.start()))
-        else:
-            for port in ports:
-                server = WSGIServer((host, int(port)), wsgi_wrapper.application, log=None)
-                workers.append(gevent.Greenlet(server.start()))
+        for port in ports:
+            server = WSGIServer((host, int(port)), wsgi_wrapper.application, log=None)
+            workers.append(gevent.Greenlet(server.start()))
         # start background worker and drop privs
         workers.extend(honeypot.start_background_workers())
         gevent.joinall(workers, raise_error=True)
