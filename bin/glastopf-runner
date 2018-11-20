@@ -78,8 +78,7 @@ if __name__ == '__main__':
     setup_logging(logconsole, logfile, args.verbose, args.workdir)
 
     host = conf_parser.get("webserver", "host")
-    port = conf_parser.getint("webserver", "port")
-    
+    ports = conf_parser.get('webserver', 'port').split(',')
     if conf_parser.get("ssl", "enabled"):
         ssl = {
             'certfile': conf_parser.get("ssl", "certfile"),
@@ -92,15 +91,19 @@ if __name__ == '__main__':
     wsgi_wrapper = GlastopfWSGI(honeypot)
 
     try:
-        if conf_parser.get("ssl", "enabled") == True:
-            server = WSGIServer((host, port), wsgi_wrapper.application, log=None, **ssl)
+        workers = []
+        if conf_parser.get("ssl", "enabled") == "True":
+            for port in ports:
+                server = WSGIServer((host, int(port)), wsgi_wrapper.application, log=None, **ssl)
+                workers.append(gevent.Greenlet(server.start()))
         else:
-            server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
-        wsgi_greenlet = gevent.Greenlet(server.start())
-        #start background worker and drop privs
-        workers = honeypot.start_background_workers()
-        workers.append(wsgi_greenlet)
+            for port in ports:
+                server = WSGIServer((host, int(port)), wsgi_wrapper.application, log=None)
+                workers.append(gevent.Greenlet(server.start()))
+        # start background worker and drop privs
+        workers.extend(honeypot.start_background_workers())
         gevent.joinall(workers, raise_error=True)
+
 
     except KeyboardInterrupt as ex:
         honeypot.stop_background_workers()
