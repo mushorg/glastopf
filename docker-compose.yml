@@ -1,6 +1,6 @@
 version: '2'
 services:
-  dionaea:
+  glastopf:
     build: 
      context: .
     ports:
