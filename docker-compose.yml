@@ -5,7 +5,7 @@ services:
      context: .
     ports:
      - "80:80" #http
-    image: hallmanhe/glastopf
+    image: mushorg/glastopf
     container_name: glastopf
     volumes:
      - /root/glastopf_honeypot:/opt/myhoneypot
