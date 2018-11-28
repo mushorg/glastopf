@@ -27,6 +27,7 @@ before_install:
  - make
  - sudo make install
 # TODO: Extract path from output
+ - sudo bash -c 'echo "enable_dl = On >> /etc/php/7.0/cli/php.ini"'
  - sudo bash -c 'echo "zend_extension = "$(find /home/travis/.phpenv/versions -name bfr.so) >> /etc/php/7.0/cli/php.ini'
  - php7.0 --version
  - cd $REPO/glastopf/sandbox
