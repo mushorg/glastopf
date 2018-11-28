@@ -6,11 +6,11 @@ import os
 from ConfigParser import ConfigParser
 import logging.handlers
 import argparse
+import random
 
 from gevent.wsgi import WSGIServer
 import gevent
 from OpenSSL import crypto
-import random
 
 import glastopf
 from glastopf.wsgi_wrapper import GlastopfWSGI
@@ -46,6 +46,14 @@ def setup_logging(logconsole, logfile, verbose, work_dir):
         file_log.setFormatter(formatter)
         root_logger.addHandler(file_log)
 
+def start_webserver(workers, host, port, wsgi_wrapper, ssl):
+    if ssl:
+        server = WSGIServer((host, port), wsgi_wrapper.application, log=None, **ssl)
+        logger.info("Glastopf listening on ssl port %d " % port)
+    else:
+        server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
+        logger.info("Glastopf listening on http port %d " % port)
+    workers.append(gevent.Greenlet(server.start()))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Glastopf runner')
@@ -81,12 +89,12 @@ if __name__ == '__main__':
 
     host = conf_parser.get("webserver", "host")
 
-    ports=[]
-    if conf_parser.get('webserver', 'port') and conf_parser.get('webserver', 'port')!='' :
+    ports = []
+    if conf_parser.get('webserver', 'port') and conf_parser.get('webserver', 'port') != '':
         ports = map(int, conf_parser.get('webserver', 'port').split(','))
-    ssl_ports=[]
-    if conf_parser.has_option('ssl','port') and conf_parser.get('ssl', 'port')!='':
-            ssl_ports =  map(int, conf_parser.get('ssl', 'port').split(','))
+    ssl_ports = []
+    if conf_parser.has_option('ssl', 'port') and conf_parser.get('ssl', 'port') != '':
+        ssl_ports = map(int, conf_parser.get('ssl', 'port').split(','))
 
 
     if conf_parser.get("ssl", "enabled"):
@@ -97,8 +105,9 @@ if __name__ == '__main__':
         }
         # create ssl certificate if none is present.
         if (ssl['certfile']) and (ssl['keyfile']):
-            if (not os.path.exists(args.workdir+'/'+ssl['certfile'])) or (not os.path.exists(args.workdir+'/'+ssl['keyfile'])):
-                logger.error("SSL keys do not exist, creating new ssl keys.")
+            if (not os.path.exists(os.path.join(args.workdir, ssl['certfile']))) \
+                    or (not os.path.exists(os.path.join(args.workdir, ssl['certfile']))):
+                logger.warning("SSL keys do not exist, creating new ssl keys.")
                 client_key = crypto.PKey()
                 client_key.generate_key(crypto.TYPE_RSA, 2048)
                 client_cert = crypto.X509()
@@ -112,9 +121,9 @@ if __name__ == '__main__':
                 client_cert.set_pubkey(client_key)
                 client_cert.sign(client_key, 'sha256')
 
-                with open(ssl['certfile'], "wt") as f:
+                with open(os.path.join(args.workdir, ssl['certfile']), "wt") as f:
                     f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, client_cert))
-                with open(ssl['keyfile'], "wt") as f:
+                with open(os.path.join(args.workdir, ssl['keyfile']), "wt") as f:
                     f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, client_key))
         else:
             logger.error("Glastopf SSL config broken. Check SSL config section.")
@@ -126,29 +135,21 @@ if __name__ == '__main__':
         workers = []
 
         # dedicated ports from ssl section
-        if conf_parser.get("ssl", "enabled") == "True" and len(ssl_ports)>0:
+        if conf_parser.get("ssl", "enabled") == "True" and len(ssl_ports) > 0:
             # use ports from ssl config selection
             for port in ssl_ports:
-                server = WSGIServer((host, port), wsgi_wrapper.application, log=None, **ssl)
-                workers.append(gevent.Greenlet(server.start()))
-                logger.info("Glastopf listening on ssl port %d " % port)
-            # for http use ports from webserver section
+                start_webserver(workers, host, port, wsgi_wrapper, ssl)
+            # for http use ports from webserver config section
             for port in ports:
-                server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
-                workers.append(gevent.Greenlet(server.start()))
-                logger.info("Glastopf listening on http port %d " % port)
+                start_webserver(workers, host, port, wsgi_wrapper, False)
         # no dedicated ssl ports, take ports from webserver section and use ssl
-        elif conf_parser.get("ssl", "enabled") == "True" and len(ssl_ports)==0:
+        elif conf_parser.get("ssl", "enabled") == "True" and len(ssl_ports) == 0:
             for port in ports:
-                server = WSGIServer((host, port), wsgi_wrapper.application, log=None, **ssl)
-                workers.append(gevent.Greenlet(server.start()))
-                logger.info("Glastopf listening on ssl port %d " % port)
+                start_webserver(workers, host, port, wsgi_wrapper, ssl)
         else:
-            # use only ports from webserver section, no ssl
+            # use only ports from webserver config section, no ssl
             for port in ports:
-                server = WSGIServer((host, port), wsgi_wrapper.application, log=None)
-                workers.append(gevent.Greenlet(server.start()))
-                logger.info("Glastopf listening on http port %d " % port)
+                start_webserver(workers, host, port, wsgi_wrapper, False)
 
         # start background worker and drop privs
         workers.extend(honeypot.start_background_workers())
