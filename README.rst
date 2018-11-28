@@ -3,7 +3,7 @@ We highly recommend to check out the Glastopf successor `SNARE <https://github.c
 Glastopf |Build Status|
 =======================
 
-.. |Build Status| image:: https://travis-ci.org/mushorg/glastopf.png?branch=master
+.. |Build Status| image:: https://travis-ci.org/mushorg/glastopf.svg?branch=master
                        :target: https://travis-ci.org/mushorg/glastopf
 
 ABOUT

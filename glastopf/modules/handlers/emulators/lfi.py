@@ -46,8 +46,6 @@ class LFIEmulator(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         path = self.file_path(self.clean_path(attack_event))
-        print '---'
-        print path
         try:
             if path in self.virtualdocs_whitelist():
                 with open(path, "r") as f:

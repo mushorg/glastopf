@@ -114,8 +114,6 @@ class TestClassifier(unittest.TestCase):
         for path in intput_paths:
             request = 'GET {0} HTTP/1.0'.format(path)
             http_handler = HTTPHandler(request, None)
-            print http_handler.request_path
-            print http_handler.request_query
             matched_pattern = self.requestClassifier.classify_request(http_handler)
             self.assertTrue(matched_pattern == 'sqli', '{0} did not match expected pattern'.format(matched_pattern))
 

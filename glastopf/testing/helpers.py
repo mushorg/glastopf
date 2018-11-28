@@ -59,7 +59,6 @@ def populate_main_sql_testdatabase(engine):
         insert_dicts.append(new_item)
 
     conn = engine.connect()
-    print "Inserted: {0}".format(len(insert_dicts))
     conn.execute(table.insert(), insert_dicts)
 
 
@@ -90,7 +89,6 @@ def create_sandbox(dest_dir):
     #execute makefile and output to self.workdir/data/apd_sandbox.php
     sandbox_out = os.path.join(dest_dir, 'apd_sandbox.php')
     call(['make', 'out={0}'.format(sandbox_out)])
-    print sandbox_out
     #restore state of original working dir
     os.chdir(old_cwd)
 

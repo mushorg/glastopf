@@ -75,10 +75,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.request_verb = self.command
         if hasattr(self, 'headers'):
             self.request_headers = self.headers
+            #http host from request
+            self.http_host = self.headers.get('Host')
         else:
             self.request_headers = BaseHTTPRequestHandler.MessageClass
-        #http host from request
-        self.http_host = self.headers.get('Host')
 
     def handle_one_request(self):
         """

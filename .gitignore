@@ -38,6 +38,7 @@ venv/
 .project
 .pydevproject
 glastopf.cfg
+.vscode
 
 glastopf/sandbox/sandbox.php
 log/

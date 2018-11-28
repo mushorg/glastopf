@@ -85,18 +85,13 @@ page = $_GET['page']; include(page); ?>"""
 
         # Handle remote code execution
         if attack_event.http_request.request_verb == "POST" and \
-           "auto_prepend_file=php://input" in url and \
-           '-d' in url:
-            print 'good stuff'
+           "auto_prepend_file=php://input" in url and '-d' in url:
             # Read the PHP POST payload calculate the md5 checksum and save the file
             # Then call the PHP sandbox and return the expected results
             # TODO verify if it's a valid PHP code?
             php_file_name = self.store_file(attack_event.http_request.request_body)
             response = sandbox.run(php_file_name, self.data_dir)
-            print '---'
-            print response
             attack_event.http_request.set_raw_response(response)
-            print '---'
             return attack_event
 
         # fallback to display vulnerable source code
