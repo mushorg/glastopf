@@ -23,7 +23,7 @@ before_install:
  - git clone git://github.com/mushorg/BFR.git
  - cd BFR
  - phpize7.0
- - ./configure --enable-bfr
+ - ./configure --enable-bfr --disable-maintainer-zts
  - make
  - sudo make install
 # TODO: Extract path from output
