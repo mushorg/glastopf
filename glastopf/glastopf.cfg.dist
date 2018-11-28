@@ -9,7 +9,7 @@ proxy_enabled = False
 enabled = False
 certfile =
 keyfile =
-
+port =
 
 #Generic logging for general monitoring
 [logging]
