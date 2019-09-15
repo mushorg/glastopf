@@ -7,10 +7,8 @@ virtualenv:
   system_site_packages: true
 before_install:
  - REPO=`pwd`
- - curl -L https://raw.githubusercontent.com/phpenv/phpenv-installer/master/bin/phpenv-installer | bash
- - phpenv local 7.0
- - phpenv shell 7.0
- - phpenv versions
+ #- phpenv versions
+ #- phpenv shell 7.1
  - sudo add-apt-repository -y ppa:ondrej/php
  - sudo apt-get -qq update
  - sudo apt-get -qq install python-dev gfortran libxml2 dnsutils php7.0-dev
