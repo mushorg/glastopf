@@ -16,8 +16,7 @@
 
 import re
 import os
-import urlparse
-import urllib2
+from urllib.parse import urlparse, unquote
 
 from xml.dom.minidom import parse
 
@@ -45,7 +44,7 @@ class Classifier(object):
         self.tree = parse(requests_file)
         self.server_files_path = os.path.join(data_dir, 'server_files')
         if not os.path.isdir(self.server_files_path):
-            os.mkdir(self.server_files_path, 0770)
+            os.mkdir(self.server_files_path, 770)
         self.sqli_c = sql.SQLiClassifier()
 
     def get_patterns(self):
@@ -95,7 +94,7 @@ class Classifier(object):
             return "file_server"
         patterns = self.get_patterns()
         matched_patterns = []
-        unquoted_url = urllib2.unquote(http_request.request_url)
+        unquoted_url = unquote(http_request.request_url)
         # SQLi early exit
         ret = self.sqli_c.classify(unquoted_url)
         if ret['sqli']:

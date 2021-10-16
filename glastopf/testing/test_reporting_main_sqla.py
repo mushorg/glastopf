@@ -54,7 +54,7 @@ class TestSQLAlchemy(unittest.TestCase):
         results = sqla_engine.connect().execute(sql).fetchall()
         #Check if database returned the correct amount
         self.assertEqual(len(list(results)), 1)
-        print results[0]
+        print(results[0])
         entry = results[0]
         #check basic attributes
         #time

@@ -40,8 +40,8 @@ class TestVirtualDocs(unittest.TestCase):
         vdocs.randomize_vdocs(f_dir1)
         vdocs.randomize_vdocs(f_dir2)
         for v_file in v_files:
-            file_1 = open(os.path.join(f_dir1, "linux/etc/", v_file), "r")
-            file_2 = open(os.path.join(f_dir2, "linux/etc/", v_file), "r")
+            file_1 = open(os.path.join(f_dir1, "linux/etc/", v_file), "rb")
+            file_2 = open(os.path.join(f_dir2, "linux/etc/", v_file), "rb")
             md5_1 = hashlib.md5(file_1.read()).hexdigest()
             md5_2 = hashlib.md5(file_2.read()).hexdigest()
             file_1.close()

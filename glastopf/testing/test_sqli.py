@@ -28,9 +28,12 @@ from glastopf.modules.HTTP.handler import HTTPHandler
 class TestSQLiEmulation(unittest.TestCase):
     """Tests the honeypots SQL injection emulation module.
     We first start with the integration test and continue with unit test"""
+
     def setUp(self):
         self.event = attack.AttackEvent()
-        self.event.http_request = HTTPHandler('GET /test.php?q=SELECT%20A%20FROM%20B', None)
+        self.event.http_request = HTTPHandler(
+            "GET /test.php?q=SELECT%20A%20FROM%20B", None
+        )
         self.data_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -64,8 +67,10 @@ class TestSQLiEmulation(unittest.TestCase):
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self._get_test_request(self.event)
         emulator.handle(self.event)
-        response = "Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your " \
-                   "MySQL server version for the right syntax to use near 'SELECT A FROM B' at line 1"
+        response = (
+            "Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your "
+            "MySQL server version for the right syntax to use near 'SELECT A FROM B' at line 1"
+        )
         self.assertEqual(self.event.http_request.get_response(), response)
 
     def test_sqli_error_based(self):
@@ -81,8 +86,10 @@ class TestSQLiEmulation(unittest.TestCase):
         }
         self._get_test_request(self.event)
         emulator.handle(self.event)
-        response = "Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your " \
-                   "MySQL server version for the right syntax to use near ''' at line 1"
+        response = (
+            "Invalid query: You have an error in your SQL syntax; check the manual that corresponds to your "
+            "MySQL server version for the right syntax to use near ''' at line 1"
+        )
         self.assertEqual(self.event.http_request.get_response(), response)
 
     def test_sqli_select_user(self):
@@ -126,12 +133,14 @@ class TestSQLiEmulation(unittest.TestCase):
         request_handler = RequestHandler(self.data_dir)
         emulator = request_handler.get_handler(self.event.matched_pattern)
         self.event.http_request.request_query = {
-            'q': ['<script>alert("XSS");</script>'],
+            "q": ['<script>alert("XSS");</script>'],
         }
         self._get_test_request(self.event)
         emulator.handle(self.event)
-        self.assertTrue('<script>alert("XSS");</script>' in self.event.http_request.get_response())
+        self.assertTrue(
+            '<script>alert("XSS");</script>' in self.event.http_request.get_response()
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

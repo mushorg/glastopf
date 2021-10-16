@@ -56,7 +56,7 @@ of the beerservice emulator.
 .. code-block:: python
 
     from glastopf.modules.handlers import base_emulator
-    import urlparse
+    from urllib.parse import urlparse
 
     class BeerManager(base_emulator.BaseEmulator):
         def __init__(self, data_dir):

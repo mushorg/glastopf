@@ -52,7 +52,7 @@ class DorkPageGenerator(object):
         else:
             self.pages_path = os.path.join(pages_dir, 'dork_pages')
         if not os.path.isdir(self.pages_path):
-            os.mkdir(self.pages_path, 0770)
+            os.mkdir(self.pages_path, 770)
         self.dork_file_processor = dorks_file_processor_instance
         self.mnem_service = mnem_service_instance
 

@@ -1,7 +1,7 @@
 import os
 from random import choice
 import codecs
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 from string import Template
 import cgi
 from glastopf.modules.handlers import base_emulator

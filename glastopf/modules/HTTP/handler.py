@@ -15,9 +15,9 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import urlparse
-from StringIO import StringIO
-from BaseHTTPServer import BaseHTTPRequestHandler
+from urllib.parse import urlparse, parse_qs
+from io import StringIO
+from http.server import BaseHTTPRequestHandler
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         :param sys_version: set sys version to be used in response header (Optional).
         """
         #Parent class expects fileobjects
-        self.rfile = StringIO(request_string)
+        self.rfile = StringIO(str(request_string))
         self.wfile = StringIO()
         self.rfile.seek(0)
 
@@ -45,7 +45,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.path = ''
         self.command = ''
         self.query = ''
-        self.raw_requestline = ''
+        self.raw_requestline = b''
         self.close_connection = None
         self.request_body = ''
         self.http_host = ''
@@ -60,13 +60,13 @@ class HTTPHandler(BaseHTTPRequestHandler):
             self.sys_version = sys_version
 
         #The following instance variables ensures consistent naming.
-        url = urlparse.urlparse(self.path)
+        url = urlparse(self.path)
         #path +  parameters + query strign + fragment (ex: /mad.php;woot?a=c#beer.
         self.request_url = self.path
         #the entire http request
         self.request_raw = request_string
         #parsed query dictionary. See http://docs.python.org/2/library/urlparse.html for the format.
-        self.request_query = urlparse.parse_qs(url.query, True)
+        self.request_query = parse_qs(url.query, True)
         #parameters (no, this it NOT the query string!)
         self.request_params = url.params
         #the clean path. (ex: /info.php)
@@ -85,20 +85,19 @@ class HTTPHandler(BaseHTTPRequestHandler):
         Handles and parses the request.
         """
         self.raw_requestline = self.rfile.readline(65537)
+        print(str(self.raw_requestline))
         if len(self.raw_requestline) > 65536:
             self.send_error(414)
-            return
         if not self.raw_requestline:
             self.close_connection = 1
             return
         # parse_request(duh), parsing errors will result in a proper http response(self.get_get_response())
         if not self.parse_request():
-            # An error code has been sent, just exit
+            # An error code has been sent, just return
             return
         # In the original implementation this method would had called the 'do_' + self.command method
         if not self.command in ('PUT', 'GET', 'POST', 'HEAD', 'TRACE', 'OPTIONS'):
-            self.send_error(501, "Unsupported method (%r)" % self.command)
-            return
+            self.send_error(501, "Unsupported method (%s)" % self.command)
 
         # At this point we have parsed the headers which means that
         # the rest of the request is the body
@@ -126,7 +125,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         """
         self.wfile = StringIO(content)
 
-    def send_error(self, code, message=None):
+    def send_error(self, code, message=None, explain=None):
         """
         Generates a proper http error response. This method is guaranteed to raise a HTTPError exception after the
         response has been generated.
@@ -135,7 +134,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         :param message: error message in plain text, if not provided a text match will be lookup using the error code. (Optional).
         :raise: HTTPError
         """
-        BaseHTTPRequestHandler.send_error(self, code, message)
+        BaseHTTPRequestHandler.send_error(self, code, message, explain)
         #raise error so that we can make sure this request is not passed to attack handlers
         raise HTTPError(self.get_response())
 
