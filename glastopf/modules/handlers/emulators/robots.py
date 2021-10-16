@@ -24,8 +24,8 @@ class RobotsHandler(base_emulator.BaseEmulator):
         super(RobotsHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        robots_path = os.path.join(self.data_dir, 'robots/robots.txt')
-        with open(robots_path, 'r') as robot_file:
+        robots_path = os.path.join(self.data_dir, "robots/robots.txt")
+        with open(robots_path, "r") as robot_file:
             response = robot_file.read()
             attack_event.http_request.set_raw_response(response)
         return attack_event

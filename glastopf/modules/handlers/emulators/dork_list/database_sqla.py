@@ -46,7 +46,7 @@ class Database(object):
 
         for request in data:
             if request:
-                url = request.split('=', 1)[0]
+                url = request.split("=", 1)[0]
                 url_list.append(url)
         return url_list
 
@@ -60,22 +60,25 @@ class Database(object):
 
     @classmethod
     def create(cls, meta, engine):
-        logger.debug('Creating SQLite database.')
+        logger.debug("Creating SQLite database.")
         tables = {}
         tablenames = ["intitle", "intext", "inurl", "filetype", "ext", "allinurl"]
         for table in tablenames:
             tables[table] = Table(
-                table, meta,
-                Column('content', String(Database.DORK_MAX_LENGTH), primary_key=True),
-                Column('count', Integer),
-                Column('firsttime', String(30)),
-                Column('lasttime', String(30)),
+                table,
+                meta,
+                Column("content", String(Database.DORK_MAX_LENGTH), primary_key=True),
+                Column("count", Integer),
+                Column("firsttime", String(30)),
+                Column("lasttime", String(30)),
             )
         meta.create_all(engine)
         return tables
 
     def insert_dorks(self, insert_list):
-        logger.debug('Starting insert of {0} dorks into the database.'.format(len(insert_list)))
+        logger.debug(
+            "Starting insert of {0} dorks into the database.".format(len(insert_list))
+        )
         if len(insert_list) == 0:
             return
 
@@ -84,40 +87,47 @@ class Database(object):
 
         log = {}
         for item in insert_list:
-            tablename = item['table']
+            tablename = item["table"]
             table = self.tables[tablename]
-            content = item['content']
+            content = item["content"]
 
             if tablename not in log:
                 log[tablename] = 0
 
-            #skip empty
+            # skip empty
             if not content:
                 continue
-            content = item['content'][:Database.DORK_MAX_LENGTH]
+            content = item["content"][: Database.DORK_MAX_LENGTH]
             dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            #check table if content exists - content is primary key.
+            # check table if content exists - content is primary key.
             db_content = conn.execute(
-                select([table]).
-                where(table.c.content == content)).fetchone()
+                select([table]).where(table.c.content == content)
+            ).fetchone()
             if db_content is None:
                 conn.execute(
-                    table.insert().values({'content': content,
-                                           'count': 1,
-                                           'firsttime': dt_string,
-                                           'lasttime': dt_string}))
+                    table.insert().values(
+                        {
+                            "content": content,
+                            "count": 1,
+                            "firsttime": dt_string,
+                            "lasttime": dt_string,
+                        }
+                    )
+                )
                 log[tablename] += 1
             else:
-                #update existing entry
+                # update existing entry
                 conn.execute(
-                    table.update().
-                    where(table.c.content == content).
-                    values(lasttime=dt_string,
-                           count=table.c.count + 1))
+                    table.update()
+                    .where(table.c.content == content)
+                    .values(lasttime=dt_string, count=table.c.count + 1)
+                )
         trans.commit()
         conn.close()
-        logger.debug('Done with insert of {0} dorks into the database.'.format(len(insert_list)))
-        logger.debug('New dorks inserted: {0}'.format(log))
+        logger.debug(
+            "Done with insert of {0} dorks into the database.".format(len(insert_list))
+        )
+        logger.debug("New dorks inserted: {0}".format(log))
 
     def get_dork_list(self, tablename, starts_with=None):
         conn = self.engine.connect()
@@ -127,11 +137,15 @@ class Database(object):
             result = conn.execute(select([table]))
         else:
             result = conn.execute(
-                table.select().
-                where(table.c.content.like('%{0}'.format(starts_with))))
+                table.select().where(table.c.content.like("%{0}".format(starts_with)))
+            )
 
         return_list = []
         for entry in result:
             return_list.append(entry[0])
-        logger.debug('Returned {0} dorks from the database (starts with: {1})'.format(len(return_list), starts_with))
+        logger.debug(
+            "Returned {0} dorks from the database (starts with: {1})".format(
+                len(return_list), starts_with
+            )
+        )
         return return_list

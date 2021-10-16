@@ -25,15 +25,15 @@ class FileServer(base_emulator.BaseEmulator):
         super(FileServer, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        server_path = os.path.join(self.data_dir, 'server_files')
-        request_file = attack_event.http_request.request_path.lstrip('/')
+        server_path = os.path.join(self.data_dir, "server_files")
+        request_file = attack_event.http_request.request_path.lstrip("/")
         if request_file == "":
             request_file = "index.html"
-        response = ''
+        response = ""
         full_file_path = os.path.abspath(os.path.join(server_path, request_file))
         # path traversal protection
         if full_file_path.startswith(self.data_dir) and os.path.isfile(full_file_path):
-            with open(full_file_path, 'r') as f:
+            with open(full_file_path, "r") as f:
                 response += f.read()
-        #response with no content-type header
+        # response with no content-type header
         attack_event.http_request.set_response(response, headers=())

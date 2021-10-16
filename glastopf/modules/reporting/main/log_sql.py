@@ -15,7 +15,7 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#import json
+# import json
 import logging
 
 from sqlalchemy import Table, Column, Integer, String, MetaData, TEXT, Boolean
@@ -36,13 +36,15 @@ class Database(object):
     def insert(self, attack_event):
         entry = attack_event.event_dict()
 
-        entry['source'] = (entry['source'][0] + ":" + str(entry['source'][1]))
+        entry["source"] = entry["source"][0] + ":" + str(entry["source"][1])
 
         try:
             conn = self.engine.connect()
             conn.execute(self.events_table.insert(entry))
         except exc.OperationalError as e:
-            logger.error("Error inserting attack event into main database: {0}".format(e))
+            logger.error(
+                "Error inserting attack event into main database: {0}".format(e)
+            )
 
     def insert_profile(self, ip_profile):
         # print "last_event_time for ip %s:%s"%(
@@ -63,25 +65,33 @@ class Database(object):
             logger.error("Error updating profile in main database: {0}".format(e))
 
     def get_profile(self, source_ip):
-        ip_profile = self.session.query(ipp.IPProfile).filter(
-            ipp.IPProfile.ip == source_ip).first()
+        ip_profile = (
+            self.session.query(ipp.IPProfile)
+            .filter(ipp.IPProfile.ip == source_ip)
+            .first()
+        )
         return ip_profile
 
     def setup_mapping(self):
         meta = MetaData()
         self.events_table = Table(
-            'events', meta,
-            Column('id', Integer, primary_key=True, ),
-            Column('time', String(30)),
-            Column('source', String(30)),
-            Column('request_url', String(500)),
-            Column('request_raw', TEXT),
-            Column('pattern', String(20)),
-            Column('filename', String(500)),
-            Column('file_sha256', String(500)),
-            Column('version', String(10)),
-            Column('sensorid', String(36)),
-            Column('known_file', Boolean())
+            "events",
+            meta,
+            Column(
+                "id",
+                Integer,
+                primary_key=True,
+            ),
+            Column("time", String(30)),
+            Column("source", String(30)),
+            Column("request_url", String(500)),
+            Column("request_raw", TEXT),
+            Column("pattern", String(20)),
+            Column("filename", String(500)),
+            Column("file_sha256", String(500)),
+            Column("version", String(10)),
+            Column("sensorid", String(36)),
+            Column("known_file", Boolean()),
         )
-        #only creates if it cant find the schema
+        # only creates if it cant find the schema
         meta.create_all(self.engine)

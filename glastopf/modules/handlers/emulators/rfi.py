@@ -15,7 +15,7 @@
 # Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import hashlib
 import os
 import re
@@ -32,7 +32,7 @@ class RFIEmulator(base_emulator.BaseEmulator):
     def __init__(self, data_dir):
         super(RFIEmulator, self).__init__(data_dir)
         self.downloaded_file_exists = False
-        self.files_dir = os.path.join(self.data_dir, 'files/')
+        self.files_dir = os.path.join(self.data_dir, "files/")
         if not os.path.exists(self.files_dir):
             os.mkdir(self.files_dir)
 
@@ -41,7 +41,9 @@ class RFIEmulator(base_emulator.BaseEmulator):
         protocol_pattern = re.compile("=.*(http(s)?|ftp(s)?)", re.IGNORECASE)
         matched_protocol = protocol_pattern.search(url).group(1)
         # FIXME: Check if the extracted url is actually a url
-        injected_url = matched_protocol + url.partition(matched_protocol)[2].split("?")[0]
+        injected_url = (
+            matched_protocol + url.partition(matched_protocol)[2].split("?")[0]
+        )
         return injected_url.strip("=")
 
     @classmethod
@@ -53,25 +55,25 @@ class RFIEmulator(base_emulator.BaseEmulator):
     def store_file(self, injected_file):
         file_name, file_sha256 = self.get_filename(injected_file)
         if not os.path.exists(os.path.join(self.files_dir, file_name)):
-            with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
+            with open(os.path.join(self.files_dir, file_name), "w+") as local_file:
                 local_file.write(injected_file)
         else:
             self.downloaded_file_exists = True
         return file_name, file_sha256
 
     def download_file(self, url):
-        injectd_url = self.extract_url(urllib2.unquote(url))
+        injectd_url = self.extract_url(urllib.parse.unquote(url))
         try:
-            req = urllib2.Request(injectd_url)
+            req = urllib.request.Request(injectd_url)
             # Set User-Agent to look more credible
-            req.add_unredirected_header('User-Agent', '-')
+            req.add_unredirected_header("User-Agent", "-")
             # FIXME: We need a timeout on read here
-            injected_file = urllib2.urlopen(req, timeout=4).read()
+            injected_file = urllib.request.urlopen(req, timeout=4).read()
             #  If the file is hosted on a SSL enabled host get the certificate
-            if re.match('^https', injectd_url, re.IGNORECASE):
-                proto, rest = urllib2.splittype(injectd_url)
-                host, rest = urllib2.splithost(rest)
-                host, port = urllib2.splitport(host)
+            if re.match("^https", injectd_url, re.IGNORECASE):
+                proto, rest = urllib.parse.splittype(injectd_url)
+                host, rest = urllib.parse.splithost(rest)
+                host, port = urllib.parse.splitport(host)
                 if port is None:
                     port = 443
 
@@ -88,13 +90,16 @@ class RFIEmulator(base_emulator.BaseEmulator):
         return file_name, file_sha256
 
     def handle(self, attack_event):
-        if attack_event.http_request.command == 'GET':
-            attack_event.file_name, attack_event.file_sha256  = self.download_file(
-                attack_event.http_request.path)
-        elif attack_event.http_request.command == 'POST':
+        if attack_event.http_request.command == "GET":
+            attack_event.file_name, attack_event.file_sha256 = self.download_file(
+                attack_event.http_request.path
+            )
+        elif attack_event.http_request.command == "POST":
             pass
         else:
-            logger.error("Unsupported method: {0}".format(attack_event.http_request.command))
+            logger.error(
+                "Unsupported method: {0}".format(attack_event.http_request.command)
+            )
         if attack_event.file_name:
             response = sandbox.run(attack_event.file_name, self.data_dir)
             attack_event.http_request.set_raw_response(response)

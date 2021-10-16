@@ -27,10 +27,11 @@ class Response(object):
 
 
 class SQLResponses(object):
-    """ Fetches a response from the list of responses
+    """Fetches a response from the list of responses
 
     The xml file provides a place to store responses.
     """
+
     # FIXME: Error handling for errors in the xml file
     def __init__(self):
         file_dir = os.path.dirname(os.path.abspath(__file__))

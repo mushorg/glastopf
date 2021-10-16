@@ -26,7 +26,6 @@ from glastopf.modules import vdocs
 
 
 class TestVirtualDocs(unittest.TestCase):
-
     def test_virtualdocs(self):
         """Objective: Test for the creation of random files in the virtual directories
         Input: Return value from GlastopfHoneypot.randomize_vdocs()
@@ -64,5 +63,5 @@ class TestVirtualDocs(unittest.TestCase):
         self.assertNotEqual(grp_entry1, grp_entry2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

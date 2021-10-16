@@ -203,6 +203,7 @@ def download_setuptools(
     # making sure we use the absolute path
     to_dir = os.path.abspath(to_dir)
     from urllib.request import urlopen
+
     tgz_name = "distribute-%s.tar.gz" % version
     url = download_base + tgz_name
     saveto = os.path.join(to_dir, tgz_name)

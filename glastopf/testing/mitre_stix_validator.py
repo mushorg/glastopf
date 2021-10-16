@@ -46,7 +46,9 @@ class XmlValidator(object):
         """
         tree = et.parse(fp)
         root = tree.getroot()
-        return root.attrib['targetNamespace'] # throw an error if it doesn't exist...we can't validate
+        return root.attrib[
+            "targetNamespace"
+        ]  # throw an error if it doesn't exist...we can't validate
 
     def _get_include_base_schema(self, list_schemas):
         """Returns the root schema which defines a namespace.
@@ -71,7 +73,9 @@ class XmlValidator(object):
             root = tree.getroot()
             includes = root.findall(tag_include)
 
-            if len(includes) > 0: # this is a hack that assumes if the schema includes others, it is the base schema for the namespace
+            if (
+                len(includes) > 0
+            ):  # this is a hack that assumes if the schema includes others, it is the base schema for the namespace
                 return fn
 
         return parent_schema
@@ -90,12 +94,12 @@ class XmlValidator(object):
         imports = defaultdict(list)
         for top, dirs, files in os.walk(schema_dir):
             for f in files:
-                if f.endswith('.xsd'):
+                if f.endswith(".xsd"):
                     fp = os.path.join(top, f)
                     target_ns = self._get_target_ns(fp)
                     imports[target_ns].append(fp)
 
-        for k,v in imports.iteritems():
+        for k, v in list(imports.items()):
             if len(v) > 1:
                 base_schema = self._get_include_base_schema(v)
                 imports[k] = base_schema
@@ -115,10 +119,10 @@ class XmlValidator(object):
         root = et.fromstring(schema_txt)
 
         tag_import = "{%s}import" % (self.NS_XML_SCHEMA)
-        for ns, list_schemaloc in import_dict.iteritems():
+        for ns, list_schemaloc in list(import_dict.items()):
             schemaloc = list_schemaloc
             schemaloc = schemaloc.replace("\\", "/")
-            attrib = {'namespace': ns, 'schemaLocation': schemaloc}
+            attrib = {"namespace": ns, "schemaLocation": schemaloc}
             el_import = et.Element(tag_import, attrib=attrib)
             root.append(el_import)
 
@@ -129,7 +133,7 @@ class XmlValidator(object):
 
         tag_schemaloc = "{%s}schemaLocation" % (self.NS_XML_SCHEMA_INSTANCE)
         schemaloc = root.attrib[tag_schemaloc].split()
-        schemaloc_pairs = zip(schemaloc[::2], schemaloc[1::2])
+        schemaloc_pairs = list(zip(schemaloc[::2], schemaloc[1::2]))
 
         for ns, loc in schemaloc_pairs:
             schemaloc_dict[ns] = loc
@@ -145,8 +149,11 @@ class XmlValidator(object):
         Keyword Arguments
         instance_doc - a file-like object to be validated
         """
-        if not(self.__use_schemaloc or self.__imports):
-            return False, "No schemas to validate against! Try instantiating XmlValidator with use_schemaloc=True or setting the schema_dir"
+        if not (self.__use_schemaloc or self.__imports):
+            return (
+                False,
+                "No schemas to validate against! Try instantiating XmlValidator with use_schemaloc=True or setting the schema_dir",
+            )
 
         try:
             instance_doc = et.parse(instance_doc)
@@ -158,10 +165,13 @@ class XmlValidator(object):
             try:
                 required_imports = self._extract_schema_locations(instance_root)
             except KeyError as e:
-                return False, "No schemaLocation attribute set on instance document. Unable to validate"
+                return (
+                    False,
+                    "No schemaLocation attribute set on instance document. Unable to validate",
+                )
         else:
             required_imports = {}
-            for prefix, ns in instance_root.nsmap.iteritems():
+            for prefix, ns in list(instance_root.nsmap.items()):
                 schemaloc = self.__imports.get(ns)
                 if schemaloc:
                     required_imports[ns] = schemaloc
@@ -181,19 +191,22 @@ class XmlValidator(object):
 
 class STIXValidator(XmlValidator):
     """Schema validates STIX v1.0 documents and checks best practice guidance"""
+
     __stix_version__ = "1.0"
 
-    PREFIX_STIX_CORE = 'stix'
-    PREFIX_CYBOX_CORE = 'cybox'
-    PREFIX_STIX_INDICATOR = 'indicator'
+    PREFIX_STIX_CORE = "stix"
+    PREFIX_CYBOX_CORE = "cybox"
+    PREFIX_STIX_INDICATOR = "indicator"
 
     NS_STIX_CORE = "http://stix.mitre.org/stix-1"
     NS_STIX_INDICATOR = "http://stix.mitre.org/Indicator-2"
     NS_CYBOX_CORE = "http://cybox.mitre.org/cybox-2"
 
-    NS_MAP = {PREFIX_CYBOX_CORE: NS_CYBOX_CORE,
-              PREFIX_STIX_CORE: NS_STIX_CORE,
-              PREFIX_STIX_INDICATOR: NS_STIX_INDICATOR}
+    NS_MAP = {
+        PREFIX_CYBOX_CORE: NS_CYBOX_CORE,
+        PREFIX_STIX_CORE: NS_STIX_CORE,
+        PREFIX_STIX_INDICATOR: NS_STIX_INDICATOR,
+    }
 
     def __init__(self, schema_dir=None, use_schemaloc=False, best_practices=False):
         super(STIXValidator, self).__init__(schema_dir, use_schemaloc)
@@ -210,21 +223,22 @@ class STIXValidator(XmlValidator):
         Keyword Arguments
         instance_doc - an etree Element object for a STIX instance document
         """
-        return_dict = {'no_id': [],
-                       'format': []}
+        return_dict = {"no_id": [], "format": []}
 
-        elements_to_check = ['stix:Campaign',
-                             'stix:Course_Of_Action',
-                             'stix:Exploit_Target',
-                             'stix:Incident',
-                             'stix:Indicator',
-                             'stix:STIX_Package',
-                             'stix:Threat_Actor',
-                             'stix:TTP',
-                             'cybox:Observable',
-                             'cybox:Object',
-                             'cybox:Event',
-                             'cybox:Action']
+        elements_to_check = [
+            "stix:Campaign",
+            "stix:Course_Of_Action",
+            "stix:Exploit_Target",
+            "stix:Incident",
+            "stix:Indicator",
+            "stix:STIX_Package",
+            "stix:Threat_Actor",
+            "stix:TTP",
+            "cybox:Observable",
+            "cybox:Object",
+            "cybox:Event",
+            "cybox:Action",
+        ]
 
         for tag in elements_to_check:
             xpath = ".//%s" % (tag)
@@ -232,10 +246,10 @@ class STIXValidator(XmlValidator):
 
             for e in elements:
                 try:
-                    if not re.match(r'\w+:\w+-', e.attrib['id']): # not the best regex
-                        return_dict['format'].append(e)
+                    if not re.match(r"\w+:\w+-", e.attrib["id"]):  # not the best regex
+                        return_dict["format"].append(e)
                 except KeyError as ex:
-                    return_dict['no_id'].append(e)
+                    return_dict["no_id"].append(e)
 
         return return_dict
 
@@ -255,9 +269,9 @@ class STIXValidator(XmlValidator):
 
         all_nodes_with_ids = instance_doc.xpath(xpath_all_nodes_with_ids)
         for node in all_nodes_with_ids:
-            dict_id_nodes[node.attrib['id']].append(node)
+            dict_id_nodes[node.attrib["id"]].append(node)
 
-        for k,v in dict_id_nodes.iteritems():
+        for k, v in list(dict_id_nodes.items()):
             if len(v) > 1:
                 dup_dict[k] = v
 
@@ -278,7 +292,7 @@ class STIXValidator(XmlValidator):
         all_ids = instance_doc.xpath(xpath_all_ids)
 
         for node in all_idrefs:
-            if node.attrib['idref'] not in all_ids:
+            if node.attrib["idref"] not in all_ids:
                 list_unresolved_ids.append(node)
 
         return list_unresolved_ids
@@ -313,28 +327,36 @@ class STIXValidator(XmlValidator):
         instance_doc - etree Element for a STIX instance document
         """
         list_indicators = []
-        xpath = "//%s:Indicator | %s:Indicator" % (self.PREFIX_STIX_CORE, self.PREFIX_STIX_INDICATOR)
+        xpath = "//%s:Indicator | %s:Indicator" % (
+            self.PREFIX_STIX_CORE,
+            self.PREFIX_STIX_INDICATOR,
+        )
 
         nodes = instance_doc.xpath(xpath, namespaces=self.NS_MAP)
         for node in nodes:
             dict_indicator = defaultdict(list)
-            if not node.attrib.get('idref'):  # if this is not an idref node, look at its content
-                if node.find('{%s}Title' % (self.NS_STIX_INDICATOR)) is None:
-                    dict_indicator['missing'].append('Title')
-                if node.find('{%s}Description' % (self.NS_STIX_INDICATOR)) is None:
-                    dict_indicator['missing'].append('Description')
-                if node.find('{%s}Type' % (self.NS_STIX_INDICATOR)) is None:
-                    dict_indicator['missing'].append('Type')
-                if node.find('{%s}Valid_Time_Position' % (self.NS_STIX_INDICATOR)) is None:
-                    dict_indicator['missing'].append('Valid_Time_Position')
-                if node.find('{%s}Indicated_TTP' % (self.NS_STIX_INDICATOR)) is None:
-                    dict_indicator['missing'].append('TTP')
-                if node.find('{%s}Confidence' % (self.NS_STIX_INDICATOR)) is None:
-                    dict_indicator['missing'].append('Confidence')
+            if not node.attrib.get(
+                "idref"
+            ):  # if this is not an idref node, look at its content
+                if node.find("{%s}Title" % (self.NS_STIX_INDICATOR)) is None:
+                    dict_indicator["missing"].append("Title")
+                if node.find("{%s}Description" % (self.NS_STIX_INDICATOR)) is None:
+                    dict_indicator["missing"].append("Description")
+                if node.find("{%s}Type" % (self.NS_STIX_INDICATOR)) is None:
+                    dict_indicator["missing"].append("Type")
+                if (
+                    node.find("{%s}Valid_Time_Position" % (self.NS_STIX_INDICATOR))
+                    is None
+                ):
+                    dict_indicator["missing"].append("Valid_Time_Position")
+                if node.find("{%s}Indicated_TTP" % (self.NS_STIX_INDICATOR)) is None:
+                    dict_indicator["missing"].append("TTP")
+                if node.find("{%s}Confidence" % (self.NS_STIX_INDICATOR)) is None:
+                    dict_indicator["missing"].append("Confidence")
 
                 if dict_indicator:
-                    dict_indicator['id'] = node.attrib.get('id')
-                    dict_indicator['node'] = node
+                    dict_indicator["id"] = node.attrib.get("id")
+                    dict_indicator["node"] = node
                     list_indicators.append(dict_indicator)
 
         return list_indicators
@@ -371,13 +393,15 @@ class STIXValidator(XmlValidator):
         list_idref_with_content = self._check_idref_with_content(root)
         list_indicators = self._check_indicator_practices(root)
 
-        return {'root_element': root_element,
-                'unresolved_idrefs': list_unresolved_idrefs,
-                'duplicate_ids': dict_duplicate_ids,
-                'missing_ids': dict_presence_and_format['no_id'],
-                'id_format': dict_presence_and_format['format'],
-                'idref_with_content': list_idref_with_content,
-                'indicator_suggestions': list_indicators }
+        return {
+            "root_element": root_element,
+            "unresolved_idrefs": list_unresolved_idrefs,
+            "duplicate_ids": dict_duplicate_ids,
+            "missing_ids": dict_presence_and_format["no_id"],
+            "id_format": dict_presence_and_format["format"],
+            "idref_with_content": list_idref_with_content,
+            "indicator_suggestions": list_indicators,
+        }
 
     def validate(self, instance_doc):
         """Validates a STIX document and checks best practice guidance if STIXValidator

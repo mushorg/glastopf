@@ -21,18 +21,19 @@ class CommentPoster(base_emulator.BaseEmulator):
 
     def handle(self, attack_event):
         # TODO: Use the unknown emulators _get_template function.
-        pages_path = os.path.join(self.data_dir, 'dork_pages')
+        pages_path = os.path.join(self.data_dir, "dork_pages")
         dork_page_list = os.listdir(pages_path)
         dork_page = choice(dork_page_list)
         ip_address = attack_event.source_addr[0]
 
-        comments_file = os.path.join(self.data_dir, 'comments.txt')
+        comments_file = os.path.join(self.data_dir, "comments.txt")
 
         with codecs.open(os.path.join(pages_path, dork_page)) as dork_page:
             try:
-                comment = (parse_qs(attack_event.http_request.request_body)
-                           ['comment'][0])
-                clean_comment = self.html_escape(comment.encode('ascii', 'backslashreplace'))
+                comment = parse_qs(attack_event.http_request.request_body)["comment"][0]
+                clean_comment = self.html_escape(
+                    comment.encode("ascii", "backslashreplace")
+                )
                 clean_comment = "<br/><br/>" + clean_comment
                 comment = "<br/><br/>" + comment
             except KeyError:
@@ -44,7 +45,7 @@ class CommentPoster(base_emulator.BaseEmulator):
                 if os.path.isfile(comments_file):
                     if os.stat(comments_file).st_size > CommentPoster.MAX_FILE_LEN:
                         with codecs.open(comments_file, "w", "utf-8") as comments_txt:
-                            comments_txt.write('')
+                            comments_txt.write("")
 
                 # store the comment only if its size does not exceed the max length
                 if len(clean_comment) <= CommentPoster.MAX_COMMENT_LEN:
@@ -56,11 +57,11 @@ class CommentPoster(base_emulator.BaseEmulator):
                 with codecs.open(comments_file, "r", "utf-8") as comments_txt:
                     general_comments = comments_txt.read()
             else:
-                general_comments = ''
+                general_comments = ""
 
             ip_comments = profiler.Profiler.get_comments(ip_address)
             # TODO: handle the ip_comments in the desired way
-            display_comments = general_comments.decode('string_escape')
+            display_comments = general_comments.decode("string_escape")
             template = Template(dork_page.read())
             response = template.safe_substitute(login_msg="", comments=display_comments)
             attack_event.http_request.set_response(response)

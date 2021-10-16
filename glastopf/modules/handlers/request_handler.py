@@ -33,7 +33,9 @@ class RequestHandler:
             __import__(module_name, globals(), locals(), [], -1)
             emulators = BaseEmulator.__subclasses__()
         except ImportError as e:
-            logging.exception("Error while importing emulator: {0}: {1}".format(name, e))
+            logging.exception(
+                "Error while importing emulator: {0}: {1}".format(name, e)
+            )
             return self.get_handler("unknown")
         else:
             for emulator in emulators:

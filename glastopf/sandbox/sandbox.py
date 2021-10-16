@@ -32,7 +32,11 @@ def sandbox(script, secs, data_dir):
     stdout_value = ""
     try:
         proc = gevent.subprocess.Popen(
-            ["php", os.path.join(data_dir, "sandbox.php"), os.path.join(data_dir, "files", script)],
+            [
+                "php",
+                os.path.join(data_dir, "sandbox.php"),
+                os.path.join(data_dir, "files", script),
+            ],
             shell=False,
             stdin=gevent.subprocess.PIPE,
             stdout=gevent.subprocess.PIPE,

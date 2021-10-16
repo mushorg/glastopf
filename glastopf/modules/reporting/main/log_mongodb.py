@@ -24,20 +24,20 @@ try:
     from pymongo import MongoClient, uri_parser
 except ImportError:
     MongoClient, uri_parser = None, None
-    logger.warn('Unable to import module pymongo')
+    logger.warn("Unable to import module pymongo")
 
 
 class Database(object):
     def __init__(self, connection_string):
 
         uri_dict = uri_parser.parse_uri(connection_string)
-        if not uri_dict['database']:
+        if not uri_dict["database"]:
             raise Exception("Invalid Mongo URI. Database name must be specified.")
 
         try:
             with warnings.catch_warnings(record=True):
                 client = MongoClient(connection_string)
-            self.db = client[uri_dict['database']]
+            self.db = client[uri_dict["database"]]
         except:
             logger.exception("Unable to connect to MongoDB service.")
             raise

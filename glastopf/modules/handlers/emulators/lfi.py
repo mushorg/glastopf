@@ -27,19 +27,21 @@ class LFIEmulator(base_emulator.BaseEmulator):
 
     def virtualdocs_whitelist(self):
         whitelist = []
-        for root, subFolders, files in os.walk(os.path.join(self.data_dir, 'virtualdocs/')):
+        for root, subFolders, files in os.walk(
+            os.path.join(self.data_dir, "virtualdocs/")
+        ):
             for dir_file in files:
                 whitelist.append(os.path.join(root, dir_file))
         return whitelist
 
     def clean_path(self, attack_event):
-        return attack_event.http_request.request_url.split('\0', 1)[0]
+        return attack_event.http_request.request_url.split("\0", 1)[0]
 
     def file_path(self, cleaned_path):
         try:
-            pattern = re.compile(r'(\.\./)*')
+            pattern = re.compile(r"(\.\./)*")
             result = pattern.split(cleaned_path, maxsplit=1)
-            path = os.path.join(self.data_dir, 'virtualdocs/linux', result[2])
+            path = os.path.join(self.data_dir, "virtualdocs/linux", result[2])
         except:
             path = None
         return path

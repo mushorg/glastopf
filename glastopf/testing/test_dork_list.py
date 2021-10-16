@@ -27,14 +27,18 @@ from lxml.etree import tostring
 from glastopf.glastopf import GlastopfHoneypot
 from glastopf.modules.HTTP.handler import HTTPHandler
 from glastopf.testing import helpers
-from glastopf.modules.handlers.emulators.dork_list.dork_page_generator import DorkPageGenerator
-from glastopf.modules.handlers.emulators.dork_list.dork_file_processor import DorkFileProcessor
+from glastopf.modules.handlers.emulators.dork_list.dork_page_generator import (
+    DorkPageGenerator,
+)
+from glastopf.modules.handlers.emulators.dork_list.dork_file_processor import (
+    DorkFileProcessor,
+)
 from glastopf.modules.handlers.emulators.dork_list import database_mongo
 from glastopf.modules.handlers.emulators.dork_list import database_sqla
 from glastopf.modules.events import attack
 
 from sqlalchemy import create_engine
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 
 class TestEmulatorDorkList(unittest.TestCase):
@@ -45,10 +49,10 @@ class TestEmulatorDorkList(unittest.TestCase):
 
     def setUp(self):
         self.config = ConfigParser()
-        self.config.add_section('main-database')
-        self.config.set('main-database', 'enabled', "True")
+        self.config.add_section("main-database")
+        self.config.set("main-database", "enabled", "True")
         self.workdir = tempfile.mkdtemp()
-        self.datadir = os.path.join(self.workdir, 'data')
+        self.datadir = os.path.join(self.workdir, "data")
         GlastopfHoneypot.prepare_environment(self.workdir)
 
     def tearDown(self):
@@ -62,7 +66,7 @@ class TestEmulatorDorkList(unittest.TestCase):
 
         engine = None
         if dbtype == "sql":
-            engine = create_engine('sqlite:///')
+            engine = create_engine("sqlite:///")
             # Create mock of empty main db
             helpers.populate_main_sql_testdatabase(engine)
             db = database_sqla.Database(engine)
@@ -71,9 +75,13 @@ class TestEmulatorDorkList(unittest.TestCase):
             db = database_mongo.Database(helpers.create_mongo_database)
         else:
             raise Exception("Unsupported database type: {0}".format(dbtype))
-        reduced_dorks_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], 'data/dorks_reduced.txt')
+        reduced_dorks_file = os.path.join(
+            os.path.split(os.path.abspath(__file__))[0], "data/dorks_reduced.txt"
+        )
         file_processor = DorkFileProcessor(db, dorks_file=reduced_dorks_file)
-        dork_generator = DorkPageGenerator(db, file_processor, self.datadir, conf_parser=self.config)
+        dork_generator = DorkPageGenerator(
+            db, file_processor, self.datadir, conf_parser=self.config
+        )
         return db, engine, dork_generator
 
     def test_db_select_sqlalchemy(self):
@@ -82,7 +90,7 @@ class TestEmulatorDorkList(unittest.TestCase):
         Expected Results: 10 data entries in total.
         """
 
-        (db, engine, dork_generator) = self.dork_generator_chain('sql')
+        (db, engine, dork_generator) = self.dork_generator_chain("sql")
         dork_generator.regular_generate_dork(0)
         print("Starting database SELECT test...")
         result = db.select_data("rfi")
@@ -95,18 +103,20 @@ class TestEmulatorDorkList(unittest.TestCase):
         Notes: The test adds the '/test.php' entry to the database."""
         attack_event = attack.AttackEvent()
         attack_event.matched_pattern = "internal_test"
-        attack_event.http_request = HTTPHandler('GET /thiswillNeVeRHaPPend.php?c=test', None)
+        attack_event.http_request = HTTPHandler(
+            "GET /thiswillNeVeRHaPPend.php?c=test", None
+        )
         print("Attack event prepared.")
-        (db, engine, dork_generator) = self.dork_generator_chain('sql')
+        (db, engine, dork_generator) = self.dork_generator_chain("sql")
         dork_generator.regular_generate_dork(0)
         dork_generator.collect_dork(attack_event)
         print("Done collecting the path from the event and writing to the database.")
         sql = "SELECT * FROM inurl WHERE content = :x"
-        result = engine.connect().execute(sql, x='/thiswillNeVeRHaPPend.php').fetchall()
+        result = engine.connect().execute(sql, x="/thiswillNeVeRHaPPend.php").fetchall()
         print("Done fetching the entries matching the request URL")
         self.assertTrue(len(result) > 0)
         print("Number of entries in the database matching our URL:")
-        print(len(result))
+        print((len(result)))
         print("which equates our expectation.")
 
     def test_dork_page(self):
@@ -118,13 +128,13 @@ class TestEmulatorDorkList(unittest.TestCase):
 
         print("Starting dork page test.")
 
-        (db, engine, dork_generator) = self.dork_generator_chain('sql')
+        (db, engine, dork_generator) = self.dork_generator_chain("sql")
         dork_generator.regular_generate_dork(0)
         print("Done creating dork pages.")
         current_pages = dork_generator.get_current_pages()
         self.assertTrue(len(current_pages) > 0)
         print("Number of created HTML pages:")
-        print(len(current_pages))
+        print((len(current_pages)))
         print("equates our expectation.")
 
     def test_dork_page_content(self):
@@ -133,18 +143,18 @@ class TestEmulatorDorkList(unittest.TestCase):
         Expected Results: The attack surface should be a HTML page containing text and links.
         Notes: We extract and count the elements in the HTML document."""
 
-        dork_generator = self.dork_generator_chain('sql')[2]
+        dork_generator = self.dork_generator_chain("sql")[2]
         dork_generator.regular_generate_dork(0)
         sample_file = choice(dork_generator.get_current_pages())
-        with open(sample_file, 'r') as sample_data:
+        with open(sample_file, "r") as sample_data:
             data = fromstring(sample_data)
-        self.assertTrue(len(data.cssselect('a')) > 0)
-        self.assertTrue(len(data.cssselect('title')) > 0)
-        self.assertTrue(len(data.cssselect('form')) > 0)
+        self.assertTrue(len(data.cssselect("a")) > 0)
+        self.assertTrue(len(data.cssselect("title")) > 0)
+        self.assertTrue(len(data.cssselect("form")) > 0)
         print("The content analysis of a random HTML page returned:")
-        print(len(data.cssselect('a')), 'links (<a href=""></a>)')
-        print(len(data.cssselect('title')), 'page title (<title />)')
-        print(len(data.cssselect('form')), 'form field (<form />)')
+        print((len(data.cssselect("a")), 'links (<a href=""></a>)'))
+        print((len(data.cssselect("title")), "page title (<title />)"))
+        print((len(data.cssselect("form")), "form field (<form />)"))
         print("which equates our expectation.")
 
     def test_dork_page_regeneration(self):
@@ -153,21 +163,21 @@ class TestEmulatorDorkList(unittest.TestCase):
         Expected Results: A new list of dork pages.
         Notes: A productive system generates new pages in a configurable interval."""
 
-        (db, engine, dork_generator) = self.dork_generator_chain('sql')
+        (db, engine, dork_generator) = self.dork_generator_chain("sql")
         dork_generator.regular_generate_dork(0)
         old_list = dork_generator.get_current_pages()
-        print("There are %s previously generated dork pages" % len(old_list))
+        print(("There are %s previously generated dork pages" % len(old_list)))
         old_sample_file = choice(old_list)
-        print("For example:", old_sample_file.rsplit('/', 1)[1])
+        print(("For example:", old_sample_file.rsplit("/", 1)[1]))
         dork_generator.regular_generate_dork(0)
         print("Done generating new dork pages.")
         print("Old dork pages has been removed.")
         new_list = dork_generator.get_current_pages()
         overlap = set(new_list).intersection(old_list)
         self.assertTrue(len(overlap) == 0)
-        print("There are", len(overlap), "overlapping dork pages")
+        print(("There are", len(overlap), "overlapping dork pages"))
         print("which equates our expectation.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

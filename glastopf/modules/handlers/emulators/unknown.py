@@ -31,27 +31,28 @@ class DorkList(base_emulator.BaseEmulator):
     def _get_template(self, attack_event):
         # TODO: decode the file using chardet or even better create
         # them with utf-8 encoding
-        pages_path = os.path.join(self.data_dir, 'dork_pages')
+        pages_path = os.path.join(self.data_dir, "dork_pages")
         dork_page_list = os.listdir(pages_path)
         self.dork_page = os.path.join(pages_path, choice(dork_page_list))
-        #ip_address = attack_event.source_addr[0]
+        # ip_address = attack_event.source_addr[0]
         with codecs.open(self.dork_page, "rb", "utf-8") as dork_page:
-            comments_file = os.path.join(self.data_dir, 'comments.txt')
+            comments_file = os.path.join(self.data_dir, "comments.txt")
             if os.path.isfile(comments_file):
                 with codecs.open(comments_file, "r", "utf-8") as comments_txt:
                     general_comments = comments_txt.read()
-                    #ip_comments = profiler.Profiler.get_comments(ip_address)
-                    #display_comments = str(ip_comments) + str(general_comments)
-                    display_comments = '' + str(general_comments)
+                    # ip_comments = profiler.Profiler.get_comments(ip_address)
+                    # display_comments = str(ip_comments) + str(general_comments)
+                    display_comments = "" + str(general_comments)
             else:
-                display_comments = ''
+                display_comments = ""
             template = Template(dork_page.read())
         return template, display_comments
 
     def handle(self, attack_event):
         template, display_comments = self._get_template(attack_event)
-        self.template = template.safe_substitute(login_msg="",
-                                                 comments=display_comments)
+        self.template = template.safe_substitute(
+            login_msg="", comments=display_comments
+        )
         attack_event.http_request.set_response(self.template)
-        #attack_event.response += self.template
+        # attack_event.response += self.template
         return attack_event

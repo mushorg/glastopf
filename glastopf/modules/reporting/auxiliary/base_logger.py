@@ -20,7 +20,7 @@ import os
 
 
 class BaseLogger(object):
-    def __init__(self, config='glastopf.cfg'):
+    def __init__(self, config="glastopf.cfg"):
         if not isinstance(config, SafeConfigParser):
             self.config = SafeConfigParser(os.environ)
             self.config.read(config)

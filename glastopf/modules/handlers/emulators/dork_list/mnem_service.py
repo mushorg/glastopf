@@ -24,36 +24,53 @@ logger = logging.getLogger(__name__)
 
 
 class Mnem_Service(object):
-    #yes google hackers, these credentials are left here by purpose!
+    # yes google hackers, these credentials are left here by purpose!
     @classmethod
-    def get_dorks(cls, username='glastopf', password='glastopf', limit=1000, timeout=5):
-        base_url = 'https://mnemosyne.honeycloud.net:8282'
+    def get_dorks(cls, username="glastopf", password="glastopf", limit=1000, timeout=5):
+        base_url = "https://mnemosyne.honeycloud.net:8282"
 
         sess = requests.Session()
         try:
-            #login and store session cookie
-            payload = {'username': username, 'password': password}
-            response = sess.post(base_url + '/login', payload, timeout=timeout, verify=False)
+            # login and store session cookie
+            payload = {"username": username, "password": password}
+            response = sess.post(
+                base_url + "/login", payload, timeout=timeout, verify=False
+            )
             if response.status_code != 200:
-                logger.warning("Error while requesting session cookie from mnemosyne: {0}".format(response.status_code))
+                logger.warning(
+                    "Error while requesting session cookie from mnemosyne: {0}".format(
+                        response.status_code
+                    )
+                )
                 return []
 
-            #get the dorks
-            response = sess.get(base_url + '/api/v1/aux/dorks?limit={0}'.format(limit), timeout=timeout, verify=False)
+            # get the dorks
+            response = sess.get(
+                base_url + "/api/v1/aux/dorks?limit={0}".format(limit),
+                timeout=timeout,
+                verify=False,
+            )
 
             if response.status_code == 200:
-                dorks = json.loads(response.text)['dorks']
-                logger.debug("Successfully retrieved {0} dorks from the mnemosyne service.".format(len(dorks)))
+                dorks = json.loads(response.text)["dorks"]
+                logger.debug(
+                    "Successfully retrieved {0} dorks from the mnemosyne service.".format(
+                        len(dorks)
+                    )
+                )
             else:
-                logger.warning("Error while requesting dorks from mnemosyne: {0}".format(response.status_code))
+                logger.warning(
+                    "Error while requesting dorks from mnemosyne: {0}".format(
+                        response.status_code
+                    )
+                )
                 return []
         except (Timeout, ConnectionError) as e:
             logger.warning("Error while communication with mnemosyne: {0}".format(e))
             return []
 
-        #align with glastopf db setup
+        # align with glastopf db setup
         return_list = []
         for item in dorks:
-            return_list.append({'content': item['content'],
-                                'table': item['type']})
+            return_list.append({"content": item["content"], "table": item["type"]})
         return return_list

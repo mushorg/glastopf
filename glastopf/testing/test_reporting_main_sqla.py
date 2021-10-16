@@ -27,47 +27,47 @@ from glastopf.modules.HTTP.handler import HTTPHandler
 
 class TestSQLAlchemy(unittest.TestCase):
     def test_sqla_insert(self):
-        #in-memory sqlite database
+        # in-memory sqlite database
         sqla_engine = create_engine("sqlite:///")
         maindb = log_sql.Database(sqla_engine)
 
-        #prepare attack event
+        # prepare attack event
         attack_event = attack.AttackEvent()
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         attack_event.event_time = timestamp
         attack_event.matched_pattern = "test_test"
         attack_event.source_addr = ("192.168.1.201", 12345)
         request = (
-            'GET /breadandbytter.php?a=b HTTP/1.0\r\n'
-            'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n'
-            'ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n'
-            'Connection: keep-alive\r\n\r\n'
-            'some stuff'
+            "GET /breadandbytter.php?a=b HTTP/1.0\r\n"
+            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n"
+            "ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n"
+            "Connection: keep-alive\r\n\r\n"
+            "some stuff"
         )
         attack_event.http_request = HTTPHandler(request, None)
 
-        #insert attack event
+        # insert attack event
         maindb.insert(attack_event)
 
-        #try to extract event from the database
+        # try to extract event from the database
         sql = "SELECT * FROM events"
         results = sqla_engine.connect().execute(sql).fetchall()
-        #Check if database returned the correct amount
+        # Check if database returned the correct amount
         self.assertEqual(len(list(results)), 1)
-        print(results[0])
+        print((results[0]))
         entry = results[0]
-        #check basic attributes
-        #time
+        # check basic attributes
+        # time
         self.assertEqual(entry[1], timestamp)
-        #source
+        # source
         self.assertEqual(entry[2], "192.168.1.201:12345")
-        #request_url
+        # request_url
         self.assertEqual(entry[3], "/breadandbytter.php?a=b")
-        #request_body
+        # request_body
         self.assertEqual(entry[4], request)
-        #pattern
+        # pattern
         self.assertEqual(entry[5], "test_test")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

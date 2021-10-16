@@ -29,13 +29,12 @@ class PMAEmulator(base_emulator.BaseEmulator):
         self.page = None
 
     def handle(self, attack_event, time_stamp=time.time()):
-        path = os.path.join(self.data_dir, 'phpmyadmin/script_setup.php')
-        with open(path, 'r') as setup_php:
+        path = os.path.join(self.data_dir, "phpmyadmin/script_setup.php")
+        with open(path, "r") as setup_php:
             self.page = setup_php.read()
         m = hashlib.md5()
         m.update("%d" % time_stamp)
         page_template = Template(self.page)
-        response = page_template.substitute(
-            token_value=m.hexdigest() )
+        response = page_template.substitute(token_value=m.hexdigest())
         attack_event.http_request.set_response(response)
         return attack_event

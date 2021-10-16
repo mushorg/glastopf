@@ -27,7 +27,7 @@ from glastopf.testing import helpers
 
 
 class TestMongoMainDatbase(unittest.TestCase):
-    @unittest.skip('disabled until mongodb is a real database')
+    @unittest.skip("disabled until mongodb is a real database")
     def test_mongodb_insert(self):
 
         conn_string = helpers.create_mongo_database(fill=False)
@@ -38,14 +38,18 @@ class TestMongoMainDatbase(unittest.TestCase):
             maindb = log_mongodb.Database(conn_string)
 
             attack_event = attack.AttackEvent()
-            attack_event.event_time = self.event_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            attack_event.event_time = self.event_time = datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
             attack_event.matched_pattern = "test_test"
             attack_event.source_addr = ("192.168.1.201", 12345)
-            request = ("GET /breadandbytter.php?a=b HTTP/1.0\r\n"
-            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n"
-            "ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n"
-            "Connection: keep-alive\r\n\r\n"
-            "some stuff")
+            request = (
+                "GET /breadandbytter.php?a=b HTTP/1.0\r\n"
+                "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3\r\n"
+                "ISO-8859-1,utf-8;q=0.7,*;q=0.3r\n"
+                "Connection: keep-alive\r\n\r\n"
+                "some stuff"
+            )
             attack_event.http_request = HTTPHandler(request, None)
 
             maindb.insert(attack_event)
@@ -54,7 +58,7 @@ class TestMongoMainDatbase(unittest.TestCase):
                 collection = MongoClient(conn_string)[db_name]["events"]
             results = list(collection.find())
 
-            #Check if database returned the correct amount
+            # Check if database returned the correct amount
             self.assertEqual(len(list(results)), 1)
 
             entry = results[0]
@@ -69,5 +73,5 @@ class TestMongoMainDatbase(unittest.TestCase):
             helpers.delete_mongo_testdata(conn_string)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

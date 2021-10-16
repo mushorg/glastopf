@@ -118,8 +118,18 @@ def _get_entry(user_id):
     gid = user_id
     uid = user_id
     g = "\n" + name + ":x:" + str(gid) + ":"
-    p = "\n" + name + ":x:" + str(uid) + ":" + str(gid) + "::" + "/home/" + name + \
-        "/:/bin/sh"
+    p = (
+        "\n"
+        + name
+        + ":x:"
+        + str(uid)
+        + ":"
+        + str(gid)
+        + "::"
+        + "/home/"
+        + name
+        + "/:/bin/sh"
+    )
     # If we want to, we could also give a password hash in place of '*'
     s = "\n" + name + ":*:6723:0:99999:7:::"
     return p, s, g
@@ -136,7 +146,7 @@ def _gen_data():
 
 
 def _create_passwd(vpath, data):
-    pwd_path = os.path.join(vpath, 'linux/etc/passwd')
+    pwd_path = os.path.join(vpath, "linux/etc/passwd")
     with open(pwd_path, "wb") as pwd:
         pwd.write(str.encode(PASSWD_STATIC))
         for entry in data:
@@ -144,7 +154,7 @@ def _create_passwd(vpath, data):
 
 
 def _create_shadow(vpath, data):
-    shd_path = os.path.join(vpath, 'linux/etc/shadow')
+    shd_path = os.path.join(vpath, "linux/etc/shadow")
     with open(shd_path, "wb") as shd:
         shd.write(str.encode(SHADOW_STATIC))
         for entry in data:
@@ -152,7 +162,7 @@ def _create_shadow(vpath, data):
 
 
 def _create_group(vpath, data):
-    grp_path = os.path.join(vpath, 'linux/etc/group')
+    grp_path = os.path.join(vpath, "linux/etc/group")
     with open(grp_path, "wb") as grp:
         grp.write(str.encode(GROUP_STATIC))
         for entry in data:

@@ -73,34 +73,37 @@ class LogSURFcertIDS(BaseLogger):
             "ptype_host": 63,
             "ptype_pattern": 64,
         }
-        if self.options['enabled']:
+        if self.options["enabled"]:
             try:
                 import psycopg2
 
                 self.connection = psycopg2.connect(
-                    "host=%s port=%s user=%s password=%s dbname=%s" % (
-                        self.options['host'],
-                        self.options['port'],
-                        self.options['user'],
-                        self.options['password'],
-                        self.options['database'],
+                    "host=%s port=%s user=%s password=%s dbname=%s"
+                    % (
+                        self.options["host"],
+                        self.options["port"],
+                        self.options["user"],
+                        self.options["password"],
+                        self.options["database"],
                     )
                 )
                 logger.info("Connected to the SURFcert IDS logserver.")
             except Exception as e:
-                logger.exception("Unable to connect to the SURFcert IDS logserver: {0}".format(e))
-                self.options['enabled'] = False
+                logger.exception(
+                    "Unable to connect to the SURFcert IDS logserver: {0}".format(e)
+                )
+                self.options["enabled"] = False
 
     def insert(self, attack_event):
         """
         Inserts an attack into the SURFcert IDS database, using the
         stored procedures originally made for Dionaea.
         """
-        if attack_event.matched_pattern == 'unknown':
+        if attack_event.matched_pattern == "unknown":
             severity = 0
-        elif attack_event.matched_pattern == 'robots_txt':
+        elif attack_event.matched_pattern == "robots_txt":
             severity = 0
-        elif attack_event.matched_pattern == 'style_css':
+        elif attack_event.matched_pattern == "style_css":
             severity = 0
         else:
             severity = 1
@@ -110,69 +113,75 @@ class LogSURFcertIDS(BaseLogger):
         except Exception as e:
             logger.error("Connection error : {0}".format(e))
             return
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT surfids3_attack_add(%s, %s, %s, %s, %s, NULL, %s);
             """,
-                       (
-                           severity,
-                           str(attack_event.source_addr[0]),
-                           str(attack_event.source_addr[1]),
-                           str(attack_event.sensor_addr[0]),
-                           str(attack_event.sensor_addr[1]),
-                           self.options["atype"]
-                       )
+            (
+                severity,
+                str(attack_event.source_addr[0]),
+                str(attack_event.source_addr[1]),
+                str(attack_event.sensor_addr[0]),
+                str(attack_event.sensor_addr[1]),
+                self.options["atype"],
+            ),
         )
         attackid = cursor.fetchall()[0]
         if attackid > 0:
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                           (
-                               attackid,
-                               str(attack_event.sensor_addr[0]),
-                               self.options["ptype_request"],
-                               attack_event.http_request.request_url
-                           )
+                (
+                    attackid,
+                    str(attack_event.sensor_addr[0]),
+                    self.options["ptype_request"],
+                    attack_event.http_request.request_url,
+                ),
             )
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                           (
-                               attackid,
-                               str(attack_event.sensor_addr[0]),
-                               self.options["ptype_referer"],
-                               attack_event.http_request.request_headers.get('Referer', 'None')
-                           )
+                (
+                    attackid,
+                    str(attack_event.sensor_addr[0]),
+                    self.options["ptype_referer"],
+                    attack_event.http_request.request_headers.get("Referer", "None"),
+                ),
             )
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                           (
-                               attackid,
-                               str(attack_event.sensor_addr[0]),
-                               self.options["ptype_useragent"],
-                               attack_event.http_request.request_headers.get('User-Agent', 'None')
-                           )
+                (
+                    attackid,
+                    str(attack_event.sensor_addr[0]),
+                    self.options["ptype_useragent"],
+                    attack_event.http_request.request_headers.get("User-Agent", "None"),
+                ),
             )
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                           (
-                               attackid,
-                               str(attack_event.sensor_addr[0]),
-                               self.options["ptype_host"],
-                               attack_event.http_request.request_headers.get('Host', 'None')
-                           )
+                (
+                    attackid,
+                    str(attack_event.sensor_addr[0]),
+                    self.options["ptype_host"],
+                    attack_event.http_request.request_headers.get("Host", "None"),
+                ),
             )
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT surfids3_detail_add(%s, %s, %s, %s);
                 """,
-                           (
-                               attackid,
-                               str(attack_event.sensor_addr[0]),
-                               self.options["ptype_pattern"],
-                               attack_event.matched_pattern
-                           )
+                (
+                    attackid,
+                    str(attack_event.sensor_addr[0]),
+                    self.options["ptype_pattern"],
+                    attack_event.matched_pattern,
+                ),
             )
         self.connection.commit()
         cursor.close()

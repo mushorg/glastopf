@@ -24,7 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 class HTTPHandler(BaseHTTPRequestHandler):
-    def __init__(self, request_string, client_address, server_version=None, sys_version=None):
+    def __init__(
+        self, request_string, client_address, server_version=None, sys_version=None
+    ):
         """
         Encapsulates http request parsing and facilitates generation of proper (and improper) http response.
 
@@ -33,50 +35,50 @@ class HTTPHandler(BaseHTTPRequestHandler):
         :param server_version: set server version to be used in response header (Optional).
         :param sys_version: set sys version to be used in response header (Optional).
         """
-        #Parent class expects fileobjects
+        # Parent class expects fileobjects
         self.rfile = StringIO(str(request_string))
         self.wfile = StringIO()
         self.rfile.seek(0)
 
         self.client_address = client_address
 
-        self.requestline = ''
-        self.request_version = 'HTTP/1.0'
-        self.path = ''
-        self.command = ''
-        self.query = ''
-        self.raw_requestline = b''
+        self.requestline = ""
+        self.request_version = "HTTP/1.0"
+        self.path = ""
+        self.command = ""
+        self.query = ""
+        self.raw_requestline = b""
         self.close_connection = None
-        self.request_body = ''
-        self.http_host = ''
+        self.request_body = ""
+        self.http_host = ""
 
-        #parse the request
+        # parse the request
         self.handle_one_request()
 
-        #If not defined default values will be provided by parent.
+        # If not defined default values will be provided by parent.
         if server_version:
             self.server_version = server_version
         if sys_version:
             self.sys_version = sys_version
 
-        #The following instance variables ensures consistent naming.
+        # The following instance variables ensures consistent naming.
         url = urlparse(self.path)
-        #path +  parameters + query strign + fragment (ex: /mad.php;woot?a=c#beer.
+        # path +  parameters + query strign + fragment (ex: /mad.php;woot?a=c#beer.
         self.request_url = self.path
-        #the entire http request
+        # the entire http request
         self.request_raw = request_string
-        #parsed query dictionary. See http://docs.python.org/2/library/urlparse.html for the format.
+        # parsed query dictionary. See http://docs.python.org/2/library/urlparse.html for the format.
         self.request_query = parse_qs(url.query, True)
-        #parameters (no, this it NOT the query string!)
+        # parameters (no, this it NOT the query string!)
         self.request_params = url.params
-        #the clean path. (ex: /info.php)
+        # the clean path. (ex: /info.php)
         self.request_path = url.path
-        #GET, POST, DELETE, TRACE, etc.
+        # GET, POST, DELETE, TRACE, etc.
         self.request_verb = self.command
-        if hasattr(self, 'headers'):
+        if hasattr(self, "headers"):
             self.request_headers = self.headers
-            #http host from request
-            self.http_host = self.headers.get('Host')
+            # http host from request
+            self.http_host = self.headers.get("Host")
         else:
             self.request_headers = BaseHTTPRequestHandler.MessageClass
 
@@ -85,7 +87,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         Handles and parses the request.
         """
         self.raw_requestline = self.rfile.readline(65537)
-        print(str(self.raw_requestline))
+        print((str(self.raw_requestline)))
         if len(self.raw_requestline) > 65536:
             self.send_error(414)
         if not self.raw_requestline:
@@ -96,14 +98,16 @@ class HTTPHandler(BaseHTTPRequestHandler):
             # An error code has been sent, just return
             return
         # In the original implementation this method would had called the 'do_' + self.command method
-        if not self.command in ('PUT', 'GET', 'POST', 'HEAD', 'TRACE', 'OPTIONS'):
+        if not self.command in ("PUT", "GET", "POST", "HEAD", "TRACE", "OPTIONS"):
             self.send_error(501, "Unsupported method (%s)" % self.command)
 
         # At this point we have parsed the headers which means that
         # the rest of the request is the body
         self.request_body = self.rfile.read()
 
-    def set_response(self, body, http_code=200, headers=(('Content-type', 'text/html'),)):
+    def set_response(
+        self, body, http_code=200, headers=(("Content-type", "text/html"),)
+    ):
         """
         Sets body, response code and headers. Mapping between http_code and error text is handled
         by the parent class.
@@ -135,7 +139,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         :raise: HTTPError
         """
         BaseHTTPRequestHandler.send_error(self, code, message, explain)
-        #raise error so that we can make sure this request is not passed to attack handlers
+        # raise error so that we can make sure this request is not passed to attack handlers
         raise HTTPError(self.get_response())
 
     def get_response(self):
@@ -149,7 +153,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         Returns the http response header.
         """
         if "\r\n\r\n" in self.wfile.getvalue():
-            return self.wfile.getvalue().split('\r\n\r\n', 1)[0]
+            return self.wfile.getvalue().split("\r\n\r\n", 1)[0]
         else:
             return self.wfile.getvalue()
 
@@ -157,8 +161,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
         """
         Returns the http response body.
         """
-        if '\r\n\r\n' in self.wfile.getvalue():
-            return self.wfile.getvalue().split('\r\n\r\n', 1)[1]
+        if "\r\n\r\n" in self.wfile.getvalue():
+            return self.wfile.getvalue().split("\r\n\r\n", 1)[1]
         else:
             return self.wfile.getvalue()
 
@@ -170,7 +174,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         Return the server software version string.
         This will be included in the http response
         """
-        return self.server_version + ' ' + self.sys_version
+        return self.server_version + " " + self.sys_version
 
 
 class HTTPError(Exception):

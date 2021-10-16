@@ -45,6 +45,6 @@ class AttackEvent(object):
             "file_sha256": self.file_sha256,
             "version": self.version,
             "sensorid": self.sensorid,
-            "known_file": self.known_file
+            "known_file": self.known_file,
         }
         return event_dict

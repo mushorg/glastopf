@@ -37,7 +37,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         if os.path.isdir(self.tmpdir):
             shutil.rmtree(self.tmpdir)
 
-    @unittest.skip('disabled until mongodb is a real database')
+    @unittest.skip("disabled until mongodb is a real database")
     def test_honeypot_mongo(self):
         """Objective: Testing overall Honeypot integration.
         Input: Loads the honeypot module with mongodb as main database.
@@ -47,7 +47,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
         conn_string = helpers.create_mongo_database(fill=True)
         config_file = tempfile.mkstemp()[1]
 
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             f.writelines(helpers.gen_config(conn_string))
 
         try:
@@ -57,11 +57,11 @@ class TestHoneypotFunctionality(unittest.TestCase):
             GlastopfHoneypot.prepare_environment(self.tmpdir)
             self.glastopf = GlastopfHoneypot(work_dir=self.tmpdir, config=config_file)
             self.glastopf.options["enabled"] = "False"
-            print "Sending request: http://localhost:8080/"
+            print("Sending request: http://localhost:8080/")
 
-            response = self.glastopf.handle_request(raw_request,
-                                                    source_address,
-                                                    sensor_address)
+            response = self.glastopf.handle_request(
+                raw_request, source_address, sensor_address
+            )
             self.assertIsNot(response, None)
         finally:
             helpers.delete_mongo_testdata(conn_string)
@@ -81,7 +81,7 @@ class TestHoneypotFunctionality(unittest.TestCase):
 
         config_file = tempfile.mkstemp()[1]
 
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             f.writelines(helpers.gen_config(conn_string))
 
         try:
@@ -91,10 +91,10 @@ class TestHoneypotFunctionality(unittest.TestCase):
             GlastopfHoneypot.prepare_environment(self.tmpdir)
             self.glastopf = GlastopfHoneypot(work_dir=self.tmpdir, config=config_file)
             self.glastopf.options["enabled"] = "False"
-            print "Sending request: http://localhost:8080/"
-            response = self.glastopf.handle_request(raw_request,
-                                                    source_address,
-                                                    sensor_address)
+            print("Sending request: http://localhost:8080/")
+            response = self.glastopf.handle_request(
+                raw_request, source_address, sensor_address
+            )
             self.assertIsNot(response, None)
         finally:
             if os.path.isfile(config_file):
@@ -103,5 +103,5 @@ class TestHoneypotFunctionality(unittest.TestCase):
                 os.remove(db_file)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

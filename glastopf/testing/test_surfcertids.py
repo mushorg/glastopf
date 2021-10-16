@@ -43,13 +43,12 @@ class Test_Loggers(unittest.TestCase):
 
         try:
             attack_event = AttackEvent()
-            request = ("""GET /pub/WWW/TheProject.html HTTP/1.1
+            request = """GET /pub/WWW/TheProject.html HTTP/1.1
                 Host: www.evil.org
                 Referer: http://www.honeynet.org
                 User-Agent:  Mozilla 5
 
                 GET /beer"""
-            )
 
             attack_event.http_request = HTTPHandler(str.encode(request), "1.2.3.4")
             attack_event.source_addr = ("4.3.2.1", 41022)

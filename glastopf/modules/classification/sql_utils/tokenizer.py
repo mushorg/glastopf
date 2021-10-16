@@ -22,7 +22,6 @@ import pylibinjection
 
 
 class SQLiClassifier(object):
-
     def __init__(self):
         pass
 
@@ -46,12 +45,7 @@ if __name__ == "__main__":
             resp = None
         try:
             res = sqli_c.classify(query_str)
-            out[i] = {
-                "db": db,
-                "query": query_str,
-                "resp": resp,
-                "libinj": res
-            }
+            out[i] = {"db": db, "query": query_str, "resp": resp, "libinj": res}
         except UnicodeEncodeError:
             raise
         else:

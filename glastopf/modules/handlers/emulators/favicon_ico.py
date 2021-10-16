@@ -24,6 +24,8 @@ class FaviconHandler(base_emulator.BaseEmulator):
         super(FaviconHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        with open(os.path.join(self.data_dir, 'favicon/favicon.ico'), 'r') as favicon:
+        with open(os.path.join(self.data_dir, "favicon/favicon.ico"), "r") as favicon:
             data = favicon.read()
-            attack_event.http_request.set_response(data, headers=(('Content-Type, image/x-icon'),))
+            attack_event.http_request.set_response(
+                data, headers=(("Content-Type, image/x-icon"),)
+            )

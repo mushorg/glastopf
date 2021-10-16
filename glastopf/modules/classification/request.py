@@ -37,12 +37,12 @@ class RequestPattern(object):
 class Classifier(object):
     # FIXME: Error handling for errors in the xml file
 
-    def __init__(self, data_dir=os.path.join(os.getcwd(), 'data')):
+    def __init__(self, data_dir=os.path.join(os.getcwd(), "data")):
         # TODO: check if file exists
-        #ugly but it works...
-        requests_file = os.path.join(package_directory, '../../requests.xml')
+        # ugly but it works...
+        requests_file = os.path.join(package_directory, "../../requests.xml")
         self.tree = parse(requests_file)
-        self.server_files_path = os.path.join(data_dir, 'server_files')
+        self.server_files_path = os.path.join(data_dir, "server_files")
         if not os.path.isdir(self.server_files_path):
             os.mkdir(self.server_files_path, 770)
         self.sqli_c = sql.SQLiClassifier()
@@ -55,18 +55,26 @@ class Classifier(object):
     def getText(cls, nodelist):
         rc = []
         for node in nodelist:
-            if node.nodeType == node.TEXT_NODE or node.nodeType == node.CDATA_SECTION_NODE:
+            if (
+                node.nodeType == node.TEXT_NODE
+                or node.nodeType == node.CDATA_SECTION_NODE
+            ):
                 rc.append(node.data)
                 break
-        return ''.join(rc)
+        return "".join(rc)
 
     def parse_pattern(self, pattern):
         pattern_id = self.getText(pattern.getElementsByTagName("id")[0].childNodes)
-        pattern_string = self.getText(pattern.getElementsByTagName("patternString")[0].childNodes)
-        pattern_description = pattern.getElementsByTagName("patternDescription")[0].childNodes[0].data
+        pattern_string = self.getText(
+            pattern.getElementsByTagName("patternString")[0].childNodes
+        )
+        pattern_description = (
+            pattern.getElementsByTagName("patternDescription")[0].childNodes[0].data
+        )
         pattern_module = pattern.getElementsByTagName("module")[0].childNodes[0].data
-        parsed_pattern = RequestPattern(pattern_id, pattern_string,
-                                        pattern_description, pattern_module)
+        parsed_pattern = RequestPattern(
+            pattern_id, pattern_string, pattern_description, pattern_module
+        )
         return parsed_pattern
 
     @classmethod
@@ -82,10 +90,14 @@ class Classifier(object):
 
     def file_exists(self, http_request):
         request_path = urlparse.urlparse(http_request.path).path
-        requested_file = request_path.lstrip('/')
-        full_file_path = os.path.abspath(os.path.join(self.server_files_path, requested_file))
+        requested_file = request_path.lstrip("/")
+        full_file_path = os.path.abspath(
+            os.path.join(self.server_files_path, requested_file)
+        )
         # path traversal protection
-        if full_file_path.startswith(self.server_files_path) and os.path.isfile(full_file_path):
+        if full_file_path.startswith(self.server_files_path) and os.path.isfile(
+            full_file_path
+        ):
             return True
         return False
 
@@ -97,29 +109,29 @@ class Classifier(object):
         unquoted_url = unquote(http_request.request_url)
         # SQLi early exit
         ret = self.sqli_c.classify(unquoted_url)
-        if ret['sqli']:
+        if ret["sqli"]:
             return "sqli"
         for pattern in patterns:
             match = None
             parsed_pattern = self.parse_pattern(pattern)
             re_pattern = re.compile(parsed_pattern.string, re.I)
-            #TODO: Rules for specific method. We should add a tag in the
+            # TODO: Rules for specific method. We should add a tag in the
             # rule to identify which rule it applies.
             # And some forms would send data in GET and POST methods.
             if http_request.command == "GET":
                 match = re_pattern.search(unquoted_url)
             elif http_request.command == "POST":
                 match = re_pattern.search(unquoted_url)
-                if match == 'unknown':
+                if match == "unknown":
                     match = re_pattern.search(http_request.request_body)
             elif http_request.command == "HEAD":
-                parsed_pattern.module = 'head'
+                parsed_pattern.module = "head"
                 match = True
             elif http_request.command == "TRACE":
-                parsed_pattern.module = 'trace'
+                parsed_pattern.module = "trace"
                 match = True
             else:
-                parsed_pattern.module = 'unknown'
+                parsed_pattern.module = "unknown"
                 match = True
             if match:
                 matched_patterns.append(parsed_pattern.module)

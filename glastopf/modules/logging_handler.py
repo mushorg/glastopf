@@ -24,11 +24,10 @@ logger = logging.getLogger(__name__)
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
-def _get_logger_names(path=os.path.join(package_directory, 'reporting/auxiliary')):
+def _get_logger_names(path=os.path.join(package_directory, "reporting/auxiliary")):
     names = os.listdir(path)
     for name in reversed(names):
-        if (name == 'base_logger.py' or name == '.pyc'
-            or name == '__init__.py'):
+        if name == "base_logger.py" or name == ".pyc" or name == "__init__.py":
             names.remove(name)
     return names
 
@@ -38,7 +37,9 @@ def get_aux_loggers(data_dir, work_dir, create_tables=True):
     try:
         BaseLogger()
         for name in _get_logger_names():
-            module_name = "glastopf.modules.reporting.auxiliary." + name.split('.', 1)[0]
+            module_name = (
+                "glastopf.modules.reporting.auxiliary." + name.split(".", 1)[0]
+            )
             __import__(module_name, globals(), locals(), [], -1)
         logger_classes = BaseLogger.__subclasses__()
     except ImportError as e:
@@ -47,6 +48,6 @@ def get_aux_loggers(data_dir, work_dir, create_tables=True):
     else:
         for logger_class in logger_classes:
             logger_instance = logger_class(data_dir, work_dir)
-            if logger_instance.options['enabled']:
+            if logger_instance.options["enabled"]:
                 loggers.append(logger_instance)
         return loggers

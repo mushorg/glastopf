@@ -38,8 +38,11 @@ class LogMail(BaseLogger):
         }
 
     def _build_mail_body_event(self, attack_event):
-        mail_msg = 'New attack from %s with request %s' % (attack_event.source_addr[0], attack_event.http_request.request_url)
-        mail_msg += '\nComplete Request:\n\n'
+        mail_msg = "New attack from %s with request %s" % (
+            attack_event.source_addr[0],
+            attack_event.http_request.request_url,
+        )
+        mail_msg += "\nComplete Request:\n\n"
         mail_msg += attack_event.http_request.request_raw
 
         msg = MIMEText(mail_msg)
@@ -47,11 +50,13 @@ class LogMail(BaseLogger):
 
     def send_mail(self, attack_event):
         msg = self._build_mail_body_event(attack_event)
-        msg['Subject'] = 'Honeypot Update'
-        msg['From'] = self.options["mail_from"]
-        msg['To'] = self.options["mail_to"]
+        msg["Subject"] = "Honeypot Update"
+        msg["From"] = self.options["mail_from"]
+        msg["To"] = self.options["mail_to"]
 
-        server = smtplib.SMTP('%s:%s' % (self.options["smtp_host"], self.options["smtp_port"]))
+        server = smtplib.SMTP(
+            "%s:%s" % (self.options["smtp_host"], self.options["smtp_port"])
+        )
         server.ehlo_or_helo_if_needed()
         server.starttls()
         server.ehlo_or_helo_if_needed()
@@ -63,7 +68,7 @@ class LogMail(BaseLogger):
         patterns = self.options["patterns"]
 
         # if the wildcard '*' is used, every new event will be notified by email
-        if patterns == '*':
+        if patterns == "*":
             self.send_mail(attack_event)
             return
 

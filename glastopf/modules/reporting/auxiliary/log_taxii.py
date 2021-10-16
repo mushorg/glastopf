@@ -32,28 +32,32 @@ logger = logging.getLogger(__name__)
 
 
 class TaxiiLogger(BaseLogger):
-    def __init__(self, data_dir, work_dir, config='glastopf.cfg'):
+    def __init__(self, data_dir, work_dir, config="glastopf.cfg"):
         config = os.path.join(work_dir, config)
         BaseLogger.__init__(self, config)
-        self.options = {'enabled': self.config.getboolean('taxii', 'enabled')}
-        self.host = self.config.get('taxii', 'host')
-        self.port = self.config.getint('taxii', 'port')
-        self.inbox_path = self.config.get('taxii', 'inbox_path')
-        self.use_https = self.config.getboolean('taxii', 'use_https')
+        self.options = {"enabled": self.config.getboolean("taxii", "enabled")}
+        self.host = self.config.get("taxii", "host")
+        self.port = self.config.getint("taxii", "port")
+        self.inbox_path = self.config.get("taxii", "inbox_path")
+        self.use_https = self.config.getboolean("taxii", "use_https")
         self.client = HttpClient()
-        self.client.setProxy('noproxy')
+        self.client.setProxy("noproxy")
 
-        auth_credentials = {'username': self.config.get('taxii', 'auth_basic_username'),
-                            'password': self.config.get('taxii', 'auth_basic_password'),
-                            'key_file': self.config.get('taxii', 'auth_certificate_keyfile'),
-                            'cert_file': self.config.get('taxii', 'auth_certificate_certfile')}
+        auth_credentials = {
+            "username": self.config.get("taxii", "auth_basic_username"),
+            "password": self.config.get("taxii", "auth_basic_password"),
+            "key_file": self.config.get("taxii", "auth_certificate_keyfile"),
+            "cert_file": self.config.get("taxii", "auth_certificate_certfile"),
+        }
         self.client.setAuthCredentials(auth_credentials)
 
-        if self.config.getboolean('taxii', 'use_auth_basic'):
+        if self.config.getboolean("taxii", "use_auth_basic"):
             self.client.setAuthType(tc.HttpClient.AUTH_BASIC)
-        elif self.config.getboolean('taxii', 'use_auth_certificate'):
+        elif self.config.getboolean("taxii", "use_auth_certificate"):
             self.client.setAuthType(tc.HttpClient.AUTH_CERT)
-        elif self.config.getboolean('taxii', 'use_auth_basic') and self.config.getboolean('taxii', 'use_auth_certificate'):
+        elif self.config.getboolean(
+            "taxii", "use_auth_basic"
+        ) and self.config.getboolean("taxii", "use_auth_certificate"):
             self.client.setAuthType(tc.HttpClient.AUTH_CERT_BASIC)
         else:
             self.client.setAuthType(tc.HttpClient.AUTH_NONE)
@@ -65,18 +69,26 @@ class TaxiiLogger(BaseLogger):
         stix_package = self.stix_transformer.transform(event)
 
         # wrapping the stix message in a TAXII envelope
-        bytestream = bytes(bytearray(stix_package, encoding='utf-8'))
+        bytestream = bytes(bytearray(stix_package, encoding="utf-8"))
         content_block = ContentBlock(libtaxii.CB_STIX_XML_10, bytestream)
 
-        inbox_message = InboxMessage(message_id=generate_message_id(), content_blocks=[content_block])
+        inbox_message = InboxMessage(
+            message_id=generate_message_id(), content_blocks=[content_block]
+        )
         inbox_xml = inbox_message.to_xml()
 
         # the actual call to the TAXII web service
-        response = self.client.callTaxiiService2(self.host, self.inbox_path, libtaxii.VID_TAXII_XML_11, inbox_xml, self.port)
-        response_message = libtaxii.get_message_from_http_response(response, '0')
+        response = self.client.callTaxiiService2(
+            self.host, self.inbox_path, libtaxii.VID_TAXII_XML_11, inbox_xml, self.port
+        )
+        response_message = libtaxii.get_message_from_http_response(response, "0")
 
         if response_message.status_type != libtaxii.messages.ST_SUCCESS:
-            logger.error('Error while transmitting message to TAXII server: {0}'.format(response_message.status_detail))
+            logger.error(
+                "Error while transmitting message to TAXII server: {0}".format(
+                    response_message.status_detail
+                )
+            )
             return False
         else:
             return True

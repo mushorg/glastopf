@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 try:
     from pymongo import MongoClient, uri_parser
 except ImportError:
-    logger.warn('Unable to import module pymongo')
+    logger.warn("Unable to import module pymongo")
 
 
 class Database(object):
@@ -37,13 +37,13 @@ class Database(object):
     def __init__(self, connection_string):
 
         uri_dict = uri_parser.parse_uri(connection_string)
-        if not uri_dict['database']:
+        if not uri_dict["database"]:
             raise Exception("Invalid Mongo URI. Database name must be specified.")
 
         try:
             with warnings.catch_warnings(record=True):
                 self.client = MongoClient(connection_string)
-            self.db = self.client[uri_dict['database']]
+            self.db = self.client[uri_dict["database"]]
         except:
             logger.exception("Unable to connect to MongoDB service.")
             raise
@@ -54,14 +54,14 @@ class Database(object):
         """
         url_list = []
 
-        data = self.db.events.find({'pattern': pattern})
-        data = list(data.distinct('request_url'))
+        data = self.db.events.find({"pattern": pattern})
+        data = list(data.distinct("request_url"))
 
         self.num_distinct_results = len(data)
 
         for request in data:
             if request:
-                url = request.split('=', 1)[0]
+                url = request.split("=", 1)[0]
                 url_list.append(url)
         return url_list
 
@@ -70,7 +70,7 @@ class Database(object):
         Selects URL from main database filterned by name.
         """
         regx = re.compile(starts_with + ".*", re.IGNORECASE)
-        urls = list(self.db.events.find({'request_url': regx}))
+        urls = list(self.db.events.find({"request_url": regx}))
         return urls
 
     def insert_dorks(self, insert_list):
@@ -78,10 +78,12 @@ class Database(object):
             return
 
         for item in insert_list:
-            collection = item['table']
-            self.db[collection].update({'content': item['content']},
-                                       {'$set': {'lastime': datetime.now()},
-                                        '$inc': {'count': 1}}, upsert=True)
+            collection = item["table"]
+            self.db[collection].update(
+                {"content": item["content"]},
+                {"$set": {"lastime": datetime.now()}, "$inc": {"count": 1}},
+                upsert=True,
+            )
 
     def get_dork_list(self, collection, starts_with=None):
         """
@@ -89,13 +91,14 @@ class Database(object):
         """
         if starts_with:
             regx = re.compile(starts_with + "^{0}".format(starts_with), re.IGNORECASE)
-            dorks = list(self.db[collection].find({'content': regx},
-                                                  {'content': 1, '_id': 0}))
+            dorks = list(
+                self.db[collection].find({"content": regx}, {"content": 1, "_id": 0})
+            )
         else:
-            dorks = list(self.db[collection].find({}, {'content': 1, '_id': 0}))
+            dorks = list(self.db[collection].find({}, {"content": 1, "_id": 0}))
 
         return_list = []
         for item in dorks:
-            return_list.append(item['content'])
+            return_list.append(item["content"])
 
         return return_list

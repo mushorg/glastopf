@@ -5,8 +5,8 @@ Base = declarative_base()
 
 
 class IPProfile(Base):
-    __tablename__ = 'ip_profiles'
-    
+    __tablename__ = "ip_profiles"
+
     ip = Column(String(15), primary_key=True)
     as_number = Column(String(10))
     as_name = Column(String(120))
@@ -19,13 +19,22 @@ class IPProfile(Base):
     scan_time_period = Column(Float)
     last_event_time = Column(String(30))
     comments = Column(String(65535))
-       
+
     def __init__(
-            self, ip=None, as_number=None, as_name=None,
-            country_code=None, total_requests=0,
-            total_scans=0, bgp_prefix=None,
-            requests_per_scan=None, avg_scan_duration=1, 
-            scan_time_period=1, last_event_time=None, comments=None):
+        self,
+        ip=None,
+        as_number=None,
+        as_name=None,
+        country_code=None,
+        total_requests=0,
+        total_scans=0,
+        bgp_prefix=None,
+        requests_per_scan=None,
+        avg_scan_duration=1,
+        scan_time_period=1,
+        last_event_time=None,
+        comments=None,
+    ):
         self.ip = ip
         self.as_number = as_number
         self.as_name = as_name

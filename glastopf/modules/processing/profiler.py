@@ -1,5 +1,5 @@
 import collections
-import thread
+import _thread
 import time
 import subprocess
 from datetime import datetime, timedelta
@@ -31,38 +31,44 @@ class Profiler(object):
         self.cymru_min_timeout = 2
         self.cymru_timeout = 3
         # self.loggers = logging_handler.get_loggers()
-        thread.start_new_thread(self.run, ())
+        _thread.start_new_thread(self.run, ())
 
     # Reverse the IP address for querying origin.asn.cymru.com
     def reverse_ip(self, ip):
-        ipreg = re.compile("([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})"
-                                    "\.([0-9]{1,3})$")
+        ipreg = re.compile("([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})" "\.([0-9]{1,3})$")
         m = ipreg.match(ip)
         if m is not None:
-            return (m.group(4) + "." + m.group(3) + "." + m.group(2) +
-                    "." + m.group(1))
+            return m.group(4) + "." + m.group(3) + "." + m.group(2) + "." + m.group(1)
         else:
             return ""
 
     def handle_event(self, event):
-        source_ip = event.source_addr[0].split(',')[0]
+        source_ip = event.source_addr[0].split(",")[0]
         ip_profile = self.maindb.get_profile(source_ip)
         if ip_profile is None:
             ip_profile = self.create_new_profile(source_ip)
             self.maindb.insert_profile(ip_profile)
-            logger.info('Attack event occured from new IP source (%s). A new profile got stored in the database.',
-                        source_ip)
+            logger.info(
+                "Attack event occured from new IP source (%s). A new profile got stored in the database.",
+                source_ip,
+            )
         else:
-            waittime = lambda: self.profile_update_time - datetime.now() \
-                       if self.profile_update_time > datetime.now() else '0:00:00.000000'
-            logger.info('Attack event from known IP (%s). Profile updates will be provided in %s',
-                        source_ip, waittime() )
+            waittime = (
+                lambda: self.profile_update_time - datetime.now()
+                if self.profile_update_time > datetime.now()
+                else "0:00:00.000000"
+            )
+            logger.info(
+                "Attack event from known IP (%s). Profile updates will be provided in %s",
+                source_ip,
+                waittime(),
+            )
         self.events_deque.appendleft(event)
-        logger.info('Attack event added to a queue for processing.')
+        logger.info("Attack event added to a queue for processing.")
 
     @staticmethod
     def add_comment(ip_address, comment):
-        #=======================================================================
+        # =======================================================================
         # loggers = logging_handler.get_loggers(create_tables=False)
         # supported_loggers = []
         # for logger in loggers:
@@ -70,40 +76,44 @@ class Profiler(object):
         #        supported_loggers.append(logger)
         # for logger in supported_loggers:
         #    logger.add_comment(ip_address, comment)
-        #=======================================================================
+        # =======================================================================
         work_dir = os.getcwd()
-        data_dir = os.path.join(work_dir, 'data')
+        data_dir = os.path.join(work_dir, "data")
         loggers = logging_handler.get_aux_loggers(data_dir, work_dir)
         for _logger in loggers:
             if type(_logger) is LogProfiler:
                 _logger.add_comment(ip_address, comment)
                 break
         else:
-            logger.info('An issue occured with the dedicated logger. Please check the configuration file.')
+            logger.info(
+                "An issue occured with the dedicated logger. Please check the configuration file."
+            )
 
     @staticmethod
     def get_comments(ip_address):
-        #loggers = logging_handler.get_loggers(create_tables=False)
-        #supported_loggers = []
-        #for logger in loggers:
+        # loggers = logging_handler.get_loggers(create_tables=False)
+        # supported_loggers = []
+        # for logger in loggers:
         #    if logger.__class__.__name__ in ('LogPostgreSQL',):
         #        supported_loggers.append(logger)
-        #if len(supported_loggers) > 0:
+        # if len(supported_loggers) > 0:
         #    return supported_loggers[0].get_comments(ip_address)
-        #else:
+        # else:
         #    return ''
         work_dir = os.getcwd()
-        data_dir = os.path.join(work_dir, 'data')
+        data_dir = os.path.join(work_dir, "data")
         loggers = logging_handler.get_aux_loggers(data_dir, work_dir)
         for _logger in loggers:
             if type(_logger) is LogProfiler:
                 return _logger.get_comments(ip_address)
         else:
-            logger.info('An issue occured with the dedicated logger. Please check the configuration file.')
-            return ''
+            logger.info(
+                "An issue occured with the dedicated logger. Please check the configuration file."
+            )
+            return ""
 
     def update_scan(self, event):
-        source_ip = event.source_addr[0].split(',')[0]
+        source_ip = event.source_addr[0].split(",")[0]
         if source_ip is None:
             return
         scan = self.scans_table.get_current_scan(source_ip)
@@ -124,8 +134,14 @@ class Profiler(object):
 
     def fetch_as_number(self, ip_profile):
         cmd = subprocess.Popen(
-                    ['dig', '+short', self.reverse_ip(ip_profile.ip) +
-                    '.origin.asn.cymru.com', 'TXT'], stdout=subprocess.PIPE)
+            [
+                "dig",
+                "+short",
+                self.reverse_ip(ip_profile.ip) + ".origin.asn.cymru.com",
+                "TXT",
+            ],
+            stdout=subprocess.PIPE,
+        )
         time.sleep(self.cymru_min_timeout)
         if cmd.poll() is None:
             time.sleep(self.cymru_timeout)
@@ -137,7 +153,7 @@ class Profiler(object):
                 else:
                     return False
         as_info = cmd.stdout.readline()
-        as_info = as_info.strip().strip('"').split('|')
+        as_info = as_info.strip().strip('"').split("|")
         try:
             # .split()[0] is added to deal with multiple ASNs
             as_info = [word.strip().split()[0] for word in as_info]
@@ -151,8 +167,9 @@ class Profiler(object):
 
     def fetch_as_name(self, ip_profile):
         cmd = subprocess.Popen(
-                    ['dig', '+short', ('AS' + ip_profile.as_number +
-                     '.asn.cymru.com'), 'TXT'], stdout=subprocess.PIPE)
+            ["dig", "+short", ("AS" + ip_profile.as_number + ".asn.cymru.com"), "TXT"],
+            stdout=subprocess.PIPE,
+        )
         as_info = cmd.stdout.readline()
         time.sleep(self.cymru_min_timeout)
         if cmd.poll() is None:
@@ -164,8 +181,8 @@ class Profiler(object):
                     pass
                 else:
                     return
-#        as_name_info = cmd.stdout.readline()
-        as_name_info = as_info.strip().strip('"').split('|')
+        #        as_name_info = cmd.stdout.readline()
+        as_name_info = as_info.strip().strip('"').split("|")
         try:
             ip_profile.as_name = as_name_info[4].strip()
         except IndexError:
@@ -180,23 +197,23 @@ class Profiler(object):
     def update_profile_with_scan(self, profile, scan):
         profile.total_requests += scan.requests
         profile.total_scans += 1
-        profile.requests_per_scan = (profile.total_requests * 1.0 /
-                                     profile.total_scans)
+        profile.requests_per_scan = profile.total_requests * 1.0 / profile.total_scans
         profile.avg_scan_duration = (
-                ((profile.avg_scan_duration * (profile.total_scans - 1)) +
-                 (scan.last_event_time - scan.start_time).total_seconds()) /
-                (profile.total_scans))
+            (profile.avg_scan_duration * (profile.total_scans - 1))
+            + (scan.last_event_time - scan.start_time).total_seconds()
+        ) / (profile.total_scans)
         if profile.total_scans > 1:
-            prof_last_ev_time = datetime.strptime(profile.last_event_time,
-                                              "%Y-%m-%d %H:%M:%S")
+            prof_last_ev_time = datetime.strptime(
+                profile.last_event_time, "%Y-%m-%d %H:%M:%S"
+            )
             profile.scan_time_period = (
-                ((profile.scan_time_period * (profile.total_scans - 2)) +
-                (scan.start_time - prof_last_ev_time).total_seconds()) /
-                (profile.total_scans - 1))
+                (profile.scan_time_period * (profile.total_scans - 2))
+                + (scan.start_time - prof_last_ev_time).total_seconds()
+            ) / (profile.total_scans - 1)
         profile.last_event_time = scan.last_event_time.strftime("%Y-%m-%d %H:%M:%S")
 
     def update_profile_with_current_scan(self, profile, scan):
-        profile.total_requests += (scan.requests - scan.requests_posted)
+        profile.total_requests += scan.requests - scan.requests_posted
         scan.requests_posted = scan.requests
 
     def update_profiles(self):
@@ -206,10 +223,10 @@ class Profiler(object):
             if ip_profile is None:
                 ip_profile = self.create_new_profile(source_ip)
                 self.maindb.insert_profile(ip_profile)
-            for scan in self.scans_table.scans[source_ip]['closed']:
+            for scan in self.scans_table.scans[source_ip]["closed"]:
                 self.update_profile_with_scan(ip_profile, scan)
-            if 'current' in self.scans_table.scans[source_ip]:
-                scan = self.scans_table.scans[source_ip]['current']
+            if "current" in self.scans_table.scans[source_ip]:
+                scan = self.scans_table.scans[source_ip]["current"]
                 self.update_profile_with_current_scan(ip_profile, scan)
             self.maindb.update_db()
         self.scans_table.delete_closed_scans()
@@ -219,10 +236,12 @@ class Profiler(object):
             if len(self.events_deque) == 0:
                 if datetime.now() > self.profile_update_time:
                     self.update_profiles()
-                    #self.profile_update_time += timedelta(hours=24)
+                    # self.profile_update_time += timedelta(hours=24)
                     self.profile_update_time += timedelta(seconds=30)
-                    logger.info('Regular database profile updating finished. Next update will be at %s',
-                                self.profile_update_time)
+                    logger.info(
+                        "Regular database profile updating finished. Next update will be at %s",
+                        self.profile_update_time,
+                    )
                 time.sleep(self.deque_read_interval)
                 continue
             self.update_scan(self.events_deque.pop())

@@ -17,7 +17,7 @@
 
 import hashlib
 import os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from glastopf.modules.handlers import base_emulator
 
 import glastopf.sandbox.sandbox as sandbox
@@ -44,7 +44,7 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
 
     def __init__(self, data_dir):
         super(PHPCGIRCE, self).__init__(data_dir)
-        self.files_dir = os.path.join(self.data_dir, 'files/')
+        self.files_dir = os.path.join(self.data_dir, "files/")
         if not os.path.exists(self.files_dir):
             os.mkdir(self.files_dir)
 
@@ -56,7 +56,7 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
     def store_file(self, php_code):
         file_name = self.get_filename(php_code)
         if not os.path.exists(os.path.join(self.files_dir, file_name)):
-            with open(os.path.join(self.files_dir, file_name), 'w+') as local_file:
+            with open(os.path.join(self.files_dir, file_name), "w+") as local_file:
                 local_file.write(php_code)
         return file_name
 
@@ -70,22 +70,25 @@ class PHPCGIRCE(base_emulator.BaseEmulator):
 page = $_GET['page']; include(page); ?>"""
 
         query_dict = attack_event.http_request.request_query
-        url = urllib.unquote(attack_event.http_request.request_url).decode('utf8')
+        url = urllib.parse.unquote(attack_event.http_request.request_url).decode("utf8")
 
         # php -h
         #   -s   Output HTML syntax highlighted source.
         #   -w   Output source with stripped comments and whitespace.
-        if '-s' in query_dict or '-s+%3d' in query_dict:
+        if "-s" in query_dict or "-s+%3d" in query_dict:
             attack_event.http_request.set_raw_response(php_source_code_s)
             return attack_event
 
-        if '-w' in query_dict or '-w+%3d' in query_dict:
+        if "-w" in query_dict or "-w+%3d" in query_dict:
             attack_event.http_request.set_raw_response(php_source_code_w)
             return attack_event
 
         # Handle remote code execution
-        if attack_event.http_request.request_verb == "POST" and \
-           "auto_prepend_file=php://input" in url and '-d' in url:
+        if (
+            attack_event.http_request.request_verb == "POST"
+            and "auto_prepend_file=php://input" in url
+            and "-d" in url
+        ):
             # Read the PHP POST payload calculate the md5 checksum and save the file
             # Then call the PHP sandbox and return the expected results
             # TODO verify if it's a valid PHP code?

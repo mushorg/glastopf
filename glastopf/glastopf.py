@@ -17,6 +17,7 @@
 
 # TODO: Properly implement gevent in glastopf
 from gevent import monkey
+
 monkey.patch_all()
 
 import gevent
@@ -59,26 +60,32 @@ class GlastopfHoneypot(object):
         :param config: path to the glastopf configuration file.
             Default: glastopf.cfg
         """
-        logger.info('Initializing Glastopf {0} using "{1}" as work directory.'.format(__version__, work_dir))
+        logger.info(
+            'Initializing Glastopf {0} using "{1}" as work directory.'.format(
+                __version__, work_dir
+            )
+        )
         self.work_dir = work_dir
-        self.data_dir = os.path.join(self.work_dir, 'data')
+        self.data_dir = os.path.join(self.work_dir, "data")
         self.loggers = logging_handler.get_aux_loggers(self.data_dir, self.work_dir)
         self.config_path = os.path.join(self.work_dir, config)
 
         conf_parser = ConfigParser()
         conf_parser.read(self.config_path)
         self.options = {
-            "uid": conf_parser.get("webserver", "uid").encode('latin1'),
-            "gid": conf_parser.get("webserver", "gid").encode('latin1'),
-            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode('latin1'),
-            "banner": conf_parser.get("misc", "banner").encode('latin1'),
-            "sensorid": conf_parser.get("sensor", "sensorid").encode('latin1'),
+            "uid": conf_parser.get("webserver", "uid").encode("latin1"),
+            "gid": conf_parser.get("webserver", "gid").encode("latin1"),
+            "proxy_enabled": conf_parser.get("webserver", "proxy_enabled").encode(
+                "latin1"
+            ),
+            "banner": conf_parser.get("misc", "banner").encode("latin1"),
+            "sensorid": conf_parser.get("sensor", "sensorid").encode("latin1"),
         }
 
-        if self.options['sensorid'] == "None":
-            self.options['sensorid'] = str(uuid.uuid4())
-            conf_parser.set('sensor', 'sensorid', self.options['sensorid'])
-            with open((self.config_path), 'wb') as configfile:
+        if self.options["sensorid"] == "None":
+            self.options["sensorid"] = str(uuid.uuid4())
+            conf_parser.set("sensor", "sensorid", self.options["sensorid"])
+            with open((self.config_path), "wb") as configfile:
                 conf_parser.write(configfile)
 
         (self.maindb, self.dorkdb) = self.setup_main_database(conf_parser)
@@ -97,10 +104,10 @@ class GlastopfHoneypot(object):
         if self.profiler_available:
             self.profiler = profiler.Profiler(self.maindb)
 
-        #self.HTTP_parser = util.HTTPParser()
+        # self.HTTP_parser = util.HTTPParser()
         self.MethodHandlers = method_handler.HTTPMethods(self.data_dir)
 
-        #used for post processing (logging and analysis) of attack events
+        # used for post processing (logging and analysis) of attack events
         self.post_queue = queue.Queue()
         self.workers_enabled = False
 
@@ -108,11 +115,11 @@ class GlastopfHoneypot(object):
         """
         Starts background threads responsible for data processing and logging.
         """
-        privileges.drop(self.work_dir, self.options['uid'], self.options['gid'])
+        privileges.drop(self.work_dir, self.options["uid"], self.options["gid"])
         self.workers_enabled = True
         dork_worker = gevent.spawn(self.dork_generator.regular_generate_dork, 30)
         post_processor_worker = gevent.spawn(self.post_processer)
-        logger.info('Glastopf started and privileges dropped.')
+        logger.info("Glastopf started and privileges dropped.")
 
         return [dork_worker, post_processor_worker]
 
@@ -121,7 +128,7 @@ class GlastopfHoneypot(object):
         Notifies background threads that they are supposed to stop.
         This method does not guarantee that the threads actually stops.
         """
-        logger.info('Stopping Glastopf.')
+        logger.info("Stopping Glastopf.")
         self.dork_generator.enabled = False
         self.workers_enabled = False
 
@@ -137,34 +144,41 @@ class GlastopfHoneypot(object):
                 try:
                     _logger.insert(attack_event)
                 except Exception as ex:
-                    logger.exception('Error while logging using {0}: {1}'.format(_logger, ex))
+                    logger.exception(
+                        "Error while logging using {0}: {1}".format(_logger, ex)
+                    )
 
     def setup_dork_generator(self, conf_parser):
         file_processor = dork_file_processor.DorkFileProcessor(self.dorkdb)
 
         mnemosyne_service = None
-        if conf_parser.has_option('dork-db', 'mnem_service'):
-            if conf_parser.getboolean('dork-db', 'mnem_service'):
+        if conf_parser.has_option("dork-db", "mnem_service"):
+            if conf_parser.getboolean("dork-db", "mnem_service"):
                 mnemosyne_service = mnem_service.Mnem_Service()
 
-        return dork_page_generator.DorkPageGenerator(self.dorkdb,
-                                                     file_processor,
-                                                     data_dir=self.data_dir,
-                                                     conf_parser=conf_parser,
-                                                     mnem_service_instance=mnemosyne_service)
+        return dork_page_generator.DorkPageGenerator(
+            self.dorkdb,
+            file_processor,
+            data_dir=self.data_dir,
+            conf_parser=conf_parser,
+            mnem_service_instance=mnemosyne_service,
+        )
 
     @staticmethod
     def setup_main_database(conf_parser):
 
         if conf_parser.getboolean("main-database", "enabled"):
             connection_string = conf_parser.get("main-database", "connection_string")
-            logger.info("Connecting to main database with: {0}".format(connection_string))
+            logger.info(
+                "Connecting to main database with: {0}".format(connection_string)
+            )
             if connection_string.startswith("mongodb://"):
                 maindb = log_mongodb.Database(connection_string)
                 dorkdb = database_mongo.Database(connection_string)
                 return maindb, dorkdb
-            elif connection_string.startswith(("sqlite", "mysql",
-                                               "oracle", "postgresql")):
+            elif connection_string.startswith(
+                ("sqlite", "mysql", "oracle", "postgresql")
+            ):
                 sqla_engine = create_engine(connection_string)
                 maindb = log_sql.Database(sqla_engine)
                 dorkdb = database_sqla.Database(sqla_engine)
@@ -174,33 +188,37 @@ class GlastopfHoneypot(object):
                 sys.exit(1)
         else:
             default_db = "sqlite:///db/glastopf.db"
-            logger.info("Main database has been disabled, dorks will be stored in: {0}".format(default_db))
-            #db will only be used for dorks
+            logger.info(
+                "Main database has been disabled, dorks will be stored in: {0}".format(
+                    default_db
+                )
+            )
+            # db will only be used for dorks
             sqla_engine = create_engine(default_db)
-            #maindb = log_sql.Database(sqla_engine)
+            # maindb = log_sql.Database(sqla_engine)
             dorkdb = database_sqla.Database(sqla_engine)
-            #disable usage of main logging datbase
+            # disable usage of main logging datbase
             return None, dorkdb
 
     @staticmethod
     def prepare_sandbox(work_dir):
-        logger.info('Creating PHP sandbox')
-        #create sandbox
-        sandbox_dir = os.path.join(package_directory, 'sandbox')
-        #preserve old working dir
+        logger.info("Creating PHP sandbox")
+        # create sandbox
+        sandbox_dir = os.path.join(package_directory, "sandbox")
+        # preserve old working dir
         old_cwd = os.getcwd()
         os.chdir(sandbox_dir)
-        #execute makefile and output to self.workdir/data/apd_sandbox.php
-        sandbox_out = os.path.join(work_dir, 'data', 'sandbox.php')
-        check_call(['make', '-B', '-s', 'out={0}'.format(sandbox_out)])
-        #restore state of original working dir
+        # execute makefile and output to self.workdir/data/apd_sandbox.php
+        sandbox_out = os.path.join(work_dir, "data", "sandbox.php")
+        check_call(["make", "-B", "-s", "out={0}".format(sandbox_out)])
+        # restore state of original working dir
         os.chdir(old_cwd)
 
     @staticmethod
     def _ignore_copy_files(_, content):
         to_ignore = []
         for file_name in content:
-            if file_name in ('.placeholder', '.git'):
+            if file_name in (".placeholder", ".git"):
                 to_ignore.append(file_name)
         return to_ignore
 
@@ -220,33 +238,40 @@ class GlastopfHoneypot(object):
                           virtual_docs/
                           (and various other module data directories)
         """
-        logger.info('Preparing work environment.')
-        if not os.path.isfile(os.path.join(work_dir, 'glastopf.cfg')):
-            logger.info('Copying glastopf.cfg to work work_dir.')
-            shutil.copyfile(os.path.join(package_directory, 'glastopf.cfg.dist'),
-                            os.path.join(work_dir, 'glastopf.cfg'))
+        logger.info("Preparing work environment.")
+        if not os.path.isfile(os.path.join(work_dir, "glastopf.cfg")):
+            logger.info("Copying glastopf.cfg to work work_dir.")
+            shutil.copyfile(
+                os.path.join(package_directory, "glastopf.cfg.dist"),
+                os.path.join(work_dir, "glastopf.cfg"),
+            )
 
-        #copy emulator level data
-        emulator_data_dir = os.path.join(package_directory, 'modules/handlers/emulators/data/')
+        # copy emulator level data
+        emulator_data_dir = os.path.join(
+            package_directory, "modules/handlers/emulators/data/"
+        )
 
-        shutil.copytree(emulator_data_dir, os.path.join(work_dir, 'data/'),
-                        ignore=GlastopfHoneypot._ignore_copy_files)
+        shutil.copytree(
+            emulator_data_dir,
+            os.path.join(work_dir, "data/"),
+            ignore=GlastopfHoneypot._ignore_copy_files,
+        )
 
-        dirs = ('log', 'db', 'data')
+        dirs = ("log", "db", "data")
         for entry in dirs:
             dir_path = os.path.join(work_dir, entry)
             if not os.path.isdir(dir_path):
                 os.mkdir(dir_path)
         # Randomize the files in virtualdocs folder
-        vdocs.randomize_vdocs(os.path.join(work_dir, 'data/virtualdocs/'))
+        vdocs.randomize_vdocs(os.path.join(work_dir, "data/virtualdocs/"))
         GlastopfHoneypot.prepare_sandbox(work_dir)
 
     @staticmethod
     def _handle_proxy(attack_event, addr):
-        client_ip = attack_event.http_request.request_headers['X-Forwarded-For']
-        client_ip = client_ip.split(',')[-1]
-        if client_ip == 'unknown':
-            client_ip = '0.0.0.0'
+        client_ip = attack_event.http_request.request_headers["X-Forwarded-For"]
+        client_ip = client_ip.split(",")[-1]
+        if client_ip == "unknown":
+            client_ip = "0.0.0.0"
             # Note: the port number is not relevant in this case
         attack_event.source_addr = (client_ip, addr[1])
 
@@ -260,28 +285,33 @@ class GlastopfHoneypot(object):
         attack_event.version = __version__
 
         # Add sensor name
-        attack_event.sensorid = self.options['sensorid']
+        attack_event.sensorid = self.options["sensorid"]
 
-        attack_event.http_request = HTTPHandler(raw_request, addr, self.options['banner'], sys_version=' ')
+        attack_event.http_request = HTTPHandler(
+            raw_request, addr, self.options["banner"], sys_version=" "
+        )
 
         if self.options["proxy_enabled"] == "True":
             self._handle_proxy(attack_event, addr)
         else:
             attack_event.source_addr = addr
-        logger.info("{0} requested {1} {2} on {3}:{4}".format(
-            attack_event.source_addr[0],
-            attack_event.http_request.command,
-            attack_event.http_request.path,
-            attack_event.sensor_addr[0],
-            attack_event.sensor_addr[1]))
+        logger.info(
+            "{0} requested {1} {2} on {3}:{4}".format(
+                attack_event.source_addr[0],
+                attack_event.http_request.command,
+                attack_event.http_request.path,
+                attack_event.sensor_addr[0],
+                attack_event.sensor_addr[1],
+            )
+        )
         # Handle the HTTP request method
         attack_event.matched_pattern = getattr(
             self.MethodHandlers,
             attack_event.http_request.command,
-            self.MethodHandlers.GET
+            self.MethodHandlers.GET,
         )(attack_event.http_request)
         # Handle the request with the specific vulnerability module
-        request_handler = RequestHandler(os.path.join(self.work_dir, 'data/'))
+        request_handler = RequestHandler(os.path.join(self.work_dir, "data/"))
         emulator = request_handler.get_handler(attack_event.matched_pattern)
         emulator.handle(attack_event)
         # Logging the event

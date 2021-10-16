@@ -28,7 +28,9 @@ class TestMnemosyneService(unittest.TestCase):
         """
 
         sut = mnem_service.Mnem_Service()
-        dorks = sut.get_dorks(username='glastopf_test', password='glastopf_test', limit=10)
+        dorks = sut.get_dorks(
+            username="glastopf_test", password="glastopf_test", limit=10
+        )
         self.assertTrue(len(dorks) > 0)
 
     @unittest.skip("Mnemosyne service down until further notice")
@@ -38,11 +40,13 @@ class TestMnemosyneService(unittest.TestCase):
         The  mnemosyne module is designed to return an empty list on errors.
         """
 
-        #using wrong username/pass to simulate an error
+        # using wrong username/pass to simulate an error
         sut = mnem_service.Mnem_Service()
-        dorks = sut.get_dorks(username='glastopf_test_invalid', password='glastopf_test_invalid')
+        dorks = sut.get_dorks(
+            username="glastopf_test_invalid", password="glastopf_test_invalid"
+        )
         self.assertTrue(len(dorks) == 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

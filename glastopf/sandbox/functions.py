@@ -1,4 +1,4 @@
-from replacement import system, passthru, execute, getenv, shell_exec, ini_get, popen
+from .replacement import system, passthru, execute, getenv, shell_exec, ini_get, popen
 
 FUNCTIONS = {
     "disk_free_space;": "\treturn '%s';" % "36698988544",
@@ -15,7 +15,8 @@ FUNCTIONS = {
     "ini_get;$varname;": ini_get.call(),
     "is_writable;": "\treturn true;",
     "is_callable;": "\treturn true;",
-    "php_uname;": "\treturn '%s';" % "Linux Server 2.6.38-11-generic #49-Ubuntu SMP Mon Aug 29 20:47:58 UTC 2011 i686",
+    "php_uname;": "\treturn '%s';"
+    % "Linux Server 2.6.38-11-generic #49-Ubuntu SMP Mon Aug 29 20:47:58 UTC 2011 i686",
     "passthru;$cmd;$ret;": passthru.call(),
     "popen;$cmd;": popen.call(),
     "shell_exec;$cmd;": shell_exec.call(),
@@ -160,5 +161,5 @@ WHITELIST = [
     "echo",
     "print",
     "get_defined_functions",
-    "print_r"
+    "print_r",
 ]

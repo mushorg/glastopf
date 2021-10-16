@@ -25,8 +25,10 @@ class StyleHandler(base_emulator.BaseEmulator):
         super(StyleHandler, self).__init__(data_dir)
 
     def handle(self, attack_event):
-        css_file = os.path.join(self.data_dir, 'style/style.css')
-        with open(css_file, 'r') as style_file:
-            #attack_event.response = style_file.read()
-            attack_event.http_request.set_response(style_file.read(),  headers=(('Content-type', 'text/css'),))
+        css_file = os.path.join(self.data_dir, "style/style.css")
+        with open(css_file, "r") as style_file:
+            # attack_event.response = style_file.read()
+            attack_event.http_request.set_response(
+                style_file.read(), headers=(("Content-type", "text/css"),)
+            )
         return attack_event
